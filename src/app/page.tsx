@@ -4,6 +4,33 @@ export default function Home() {
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+        {/* Test Tailwind Theme Colors */}
+        <div className="w-full space-y-4">
+          <div className="bg-primary text-primary-foreground p-4 rounded-lg">
+            Primary Color Test
+          </div>
+          <div className="bg-secondary text-secondary-foreground p-4 rounded-lg">
+            Secondary Color Test
+          </div>
+          <div className="bg-accent text-accent-foreground p-4 rounded-lg">
+            Accent Color Test
+          </div>
+          <div className="bg-destructive text-destructive-foreground p-4 rounded-lg">
+            Destructive Color Test
+          </div>
+          <div className="card-base p-4">
+            Card Base Class Test
+          </div>
+          <div className="btn-primary p-4 rounded-lg inline-block cursor-pointer">
+            Button Primary Class Test
+          </div>
+          <div className="dark:bg-white dark:text-black p-4 rounded-lg">
+            Dark Mode Test (will change in dark mode)
+          </div>
+          <div className="font-mono p-4 border rounded-lg">
+            Monospace Font Test
+          </div>
+        </div>
         <Image
           className="dark:invert"
           src="/next.svg"
