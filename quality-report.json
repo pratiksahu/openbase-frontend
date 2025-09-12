@@ -1,0 +1,196 @@
+{
+  "timestamp": "2025-09-12T18:58:29.948Z",
+  "summary": {
+    "totalFiles": 130,
+    "linesOfCode": 12359,
+    "testCoverage": "N/A",
+    "totalDependencies": 98,
+    "bundleSize": 2598952,
+    "avgComplexity": 2
+  },
+  "details": {
+    "fileStats": {
+      "totalFiles": 130,
+      "totalLines": 12359,
+      "fileTypes": {
+        ".tsx": 87,
+        ".ts": 39,
+        ".css": 4
+      },
+      "largestFiles": [
+        {
+          "path": "src/app/test-forms/page.tsx",
+          "lines": 430
+        },
+        {
+          "path": "src/app/components-test/page.tsx",
+          "lines": 325
+        },
+        {
+          "path": "src/lib/auth-security.ts",
+          "lines": 293
+        },
+        {
+          "path": "src/app/settings/page.tsx",
+          "lines": 268
+        },
+        {
+          "path": "src/lib/api-security.ts",
+          "lines": 268
+        },
+        {
+          "path": "src/app/test-hooks/page.tsx",
+          "lines": 261
+        },
+        {
+          "path": "src/app/globals.css",
+          "lines": 221
+        },
+        {
+          "path": "src/app/pricing/page.tsx",
+          "lines": 219
+        },
+        {
+          "path": "src/lib/security-monitor.ts",
+          "lines": 219
+        },
+        {
+          "path": "src/components/ui/input.stories.tsx",
+          "lines": 212
+        }
+      ]
+    },
+    "dependencies": {
+      "production": 37,
+      "development": 61,
+      "total": 98
+    },
+    "bundleSize": {
+      "totalSize": 2598952,
+      "jsSize": 2375203,
+      "cssSize": 223749,
+      "chunks": [
+        {
+          "name": "8398-b14f2e82cfa87e3c.js",
+          "size": 857740,
+          "type": "js"
+        },
+        {
+          "name": "949fd6f9-945869aac790d881.js",
+          "size": 427506,
+          "type": "js"
+        },
+        {
+          "name": "framework-dd8328f0008e9946.js",
+          "size": 182738,
+          "type": "js"
+        },
+        {
+          "name": "4bd1b696-182b6b13bdad92e3.js",
+          "size": 173025,
+          "type": "js"
+        },
+        {
+          "name": "1255-de419e8b3760f9d4.js",
+          "size": 171662,
+          "type": "js"
+        },
+        {
+          "name": "bb872523dc8b334a.css",
+          "size": 155125,
+          "type": "css"
+        },
+        {
+          "name": "main-7fd6035f1a4374d7.js",
+          "size": 133707,
+          "type": "js"
+        },
+        {
+          "name": "polyfills-42372ed130431b0a.js",
+          "size": 112594,
+          "type": "js"
+        },
+        {
+          "name": "7349-bdb9b2f295dbcb95.js",
+          "size": 88608,
+          "type": "js"
+        },
+        {
+          "name": "4239f1d4010ef9c6.css",
+          "size": 68624,
+          "type": "css"
+        },
+        {
+          "name": "193-a1b7cda23e8c63c7.js",
+          "size": 62755,
+          "type": "js"
+        },
+        {
+          "name": "4226-616c7c2743c7fa3f.js",
+          "size": 35889,
+          "type": "js"
+        },
+        {
+          "name": "8720-0e0907f83a79bf8b.js",
+          "size": 33939,
+          "type": "js"
+        },
+        {
+          "name": "7398-c075cec2d928d340.js",
+          "size": 28152,
+          "type": "js"
+        },
+        {
+          "name": "4909-725bb5626f16c299.js",
+          "size": 24781,
+          "type": "js"
+        },
+        {
+          "name": "5239-cd208aa96777c355.js",
+          "size": 14226,
+          "type": "js"
+        },
+        {
+          "name": "2265-68d542b379d7b170.js",
+          "size": 11287,
+          "type": "js"
+        },
+        {
+          "name": "2619-04bc32f026a0d946.js",
+          "size": 8564,
+          "type": "js"
+        },
+        {
+          "name": "5476-d81915257d18f890.js",
+          "size": 3977,
+          "type": "js"
+        },
+        {
+          "name": "webpack-acea950c26a4a5d4.js",
+          "size": 3526,
+          "type": "js"
+        },
+        {
+          "name": "main-app-83b5c062830a7ede.js",
+          "size": 527,
+          "type": "js"
+        }
+      ]
+    },
+    "complexity": {
+      "averageComplexity": 2,
+      "totalComplexity": 331,
+      "functionCount": 180,
+      "complexFiles": [
+        {
+          "path": "src/lib/api-security.ts",
+          "complexity": 23
+        },
+        {
+          "path": "src/lib/auth-security.ts",
+          "complexity": 27
+        }
+      ]
+    }
+  }
+}

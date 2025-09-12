@@ -1,0 +1,41 @@
+
+CODE QUALITY REPORT
+==================
+Generated: 13/9/2025, 12:28:29 am
+
+SUMMARY
+-------
+📁 Total Files: 130
+📝 Lines of Code: 12,359
+📦 Dependencies: 98
+🧪 Test Coverage: N/A
+📊 Bundle Size: 2538 KB
+🔄 Avg Complexity: 2
+
+FILE BREAKDOWN
+--------------
+.tsx: 87 files
+.ts: 39 files
+.css: 4 files
+
+LARGEST FILES
+-------------
+430 lines: src/app/test-forms/page.tsx
+325 lines: src/app/components-test/page.tsx
+293 lines: src/lib/auth-security.ts
+268 lines: src/app/settings/page.tsx
+268 lines: src/lib/api-security.ts
+
+
+
+
+COMPLEX FILES (>20 complexity)
+-------------------------------
+23: src/lib/api-security.ts
+27: src/lib/auth-security.ts
+
+
+RECOMMENDATIONS
+---------------
+• Consider code splitting to reduce bundle size
+• Refactor complex files to improve maintainability
