@@ -37,7 +37,18 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:headed": "playwright test --headed",
     "test:all": "npm run test:ci && npm run test:e2e",
-    "playwright:install": "playwright install"
+    "playwright:install": "playwright install",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:preview": "./scripts/preview-deploy.sh",
+    "docker:build": "docker build -t openbase-v2 .",
+    "docker:run": "docker run -p 3000:3000 openbase-v2",
+    "docker:compose": "docker-compose up -d",
+    "docker:compose:down": "docker-compose down",
+    "vercel:login": "vercel login",
+    "vercel:deploy": "vercel deploy",
+    "vercel:prod": "vercel deploy --prod",
+    "env:check": "node scripts/validate-env.js",
+    "health:check": "curl -f http://localhost:3000/api/health || exit 1"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -110,6 +121,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4",
+    "tsx": "^4.20.5",
     "typescript": "^5",
     "webpack-bundle-analyzer": "^4.10.2"
   },
