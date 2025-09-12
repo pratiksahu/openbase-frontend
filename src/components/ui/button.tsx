@@ -35,16 +35,40 @@ const buttonVariants = cva(
   }
 );
 
+export interface ButtonProps
+  extends React.ComponentProps<'button'>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+/**
+ * A versatile button component with multiple variants and states
+ *
+ * @example
+ * ```tsx
+ * <Button variant="default" size="lg" onClick={handleClick}>
+ *   Click me
+ * </Button>
+ * ```
+ *
+ * @param props - The button component props
+ * @param props.variant - Visual style variant (default, destructive, outline, secondary, ghost, link)
+ * @param props.size - Button size (default, sm, lg, icon)
+ * @param props.asChild - Render as child component using Slot
+ * @param props.className - Additional CSS classes
+ * @param props.children - Button content
+ * @param props.onClick - Click handler function
+ * @param props.disabled - Whether the button is disabled
+ *
+ * @returns A styled button element
+ */
 function Button({
   className,
   variant,
   size,
   asChild = false,
   ...props
-}: React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
 
   return (

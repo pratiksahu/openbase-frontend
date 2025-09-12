@@ -2,7 +2,32 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
+export interface InputProps extends React.ComponentProps<'input'> {
+  // Additional props can be added here when needed
+}
+
+/**
+ * A flexible input component supporting various types and states
+ *
+ * @example
+ * ```tsx
+ * <Input 
+ *   type="email" 
+ *   placeholder="Enter your email..." 
+ *   onChange={handleChange}
+ * />
+ * ```
+ *
+ * @param props - The input component props
+ * @param props.type - Input type (text, email, password, number, etc.)
+ * @param props.placeholder - Placeholder text
+ * @param props.className - Additional CSS classes
+ * @param props.disabled - Whether the input is disabled
+ * @param props.onChange - Change handler function
+ *
+ * @returns A styled input element
+ */
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     return (
       <input
