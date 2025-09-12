@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "🔍 Running pre-commit checks..."
 
 # Run lint-staged
@@ -11,10 +8,11 @@ npm run lint:staged
 echo "🔧 Running type check..."
 npm run typecheck
 
-# Check for console.log statements in production
-echo "🧹 Checking for console statements..."
-if grep -r "console\." --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" src/ 2>/dev/null; then
-  echo "❌ Console statements found in source code. Please remove them before committing."
+# Check for console.log statements in production (allow console.error and console.warn)
+echo "🧹 Checking for console.log statements..."
+if grep -r "console\.log\|console\.info\|console\.debug" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" src/ 2>/dev/null; then
+  echo "❌ Console.log, console.info, or console.debug statements found in source code. Please remove them before committing."
+  echo "Note: console.error and console.warn are allowed for error handling."
   exit 1
 fi
 
