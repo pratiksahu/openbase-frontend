@@ -20,25 +20,37 @@ This ensures the development context remains current and helpful for ongoing wor
 
 This is a modern Next.js 15 application using App Router, TypeScript, shadcn/ui, and Tailwind CSS.
 
-## Key Commands
+## 📚 Setup & Development
 
-### Development
+**IMPORTANT: For detailed setup instructions and development workflow, refer to [README.md](./README.md)**
+
+The README.md contains comprehensive information about:
+- Installation and setup
+- Starting/stopping development servers
+- Running tests (Playwright, unit tests)
+- Storybook development
+- Port configuration
+- Development workflow for running multiple tools
+
+### Quick Reference
 
 ```bash
-npm run dev        # Start development server on http://localhost:3000
-npm run build      # Build for production
-npm run start      # Start production server
+# Start development (see README.md for full workflow)
+npm run dev        # Start Next.js dev server
+npm run storybook  # Start Storybook (separate terminal)
+npx playwright test --ui  # Run tests in UI mode (separate terminal)
+
+# Code quality
 npm run lint       # Run ESLint
 npm run format     # Format code with Prettier
 npm run typecheck  # Run TypeScript type checking
+
+# Production
+npm run build      # Build for production
+npm run start      # Start production server
 ```
 
-### Testing
-
-```bash
-npm run test       # Run unit tests
-npm run test:e2e   # Run E2E tests
-```
+**Note**: Always check README.md for the most up-to-date commands and port configurations.
 
 ## Code Standards
 

@@ -70,7 +70,68 @@ npm run lint
 
 # Format code
 npm run format
+
+# Type checking
+npm run typecheck
 ```
+
+## 🧪 Testing & Development Tools
+
+### Running Tests
+
+```bash
+# Run all Playwright E2E tests
+npx playwright test
+
+# Run Playwright tests in UI mode (opens browser)
+npx playwright test --ui
+
+# Run specific test file
+npx playwright test e2e/example.spec.ts
+
+# Run tests in headed mode (see browser)
+npx playwright test --headed
+
+# Run unit tests
+npm run test
+```
+
+### Storybook
+
+```bash
+# Start Storybook development server
+npm run storybook
+
+# Build Storybook for production
+npm run build-storybook
+```
+
+### Development Workflow
+
+1. **Start Next.js Development Server**
+   ```bash
+   npm run dev
+   ```
+   The app will be available at `http://localhost:3000` (or `3001` if port 3000 is in use)
+
+2. **Start Storybook** (in a separate terminal)
+   ```bash
+   npm run storybook
+   ```
+   Storybook will be available at `http://localhost:6006`
+
+3. **Run Tests**
+   ```bash
+   # In a separate terminal, with the dev server running
+   npx playwright test --ui
+   ```
+
+### Important Notes
+
+- **Port Configuration**: If your Next.js app runs on a different port (e.g., 3001), update the `playwright.config.ts` file to match:
+  - Change `baseURL` and `webServer.url` from `http://localhost:3000` to your actual port
+- **Test Prerequisites**: Ensure the development server is running before running Playwright tests in UI mode
+- **Parallel Development**: You can run Next.js, Storybook, and Playwright UI simultaneously in different terminal windows
 
 ## 🎨 Design System
 
