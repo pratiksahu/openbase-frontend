@@ -14,6 +14,7 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Features', href: '/features' },
   { name: 'Pricing', href: '/pricing' },
+  { name: 'Blog', href: '/blog' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
 ];
@@ -56,6 +57,14 @@ export function Header() {
         {/* Right side items */}
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
+            <div className="hidden items-center space-x-2 md:flex">
+              <Button variant="ghost" asChild>
+                <Link href="/login">Sign In</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/register">Get Started</Link>
+              </Button>
+            </div>
             <ThemeToggle />
 
             {/* Mobile menu button */}
@@ -91,6 +100,14 @@ export function Header() {
                       {item.name}
                     </Link>
                   ))}
+                  <div className="space-y-2 pt-4 pb-2">
+                    <Button variant="ghost" className="w-full justify-start" asChild>
+                      <Link href="/login" onClick={() => setIsOpen(false)}>Sign In</Link>
+                    </Button>
+                    <Button className="w-full justify-start" asChild>
+                      <Link href="/register" onClick={() => setIsOpen(false)}>Get Started</Link>
+                    </Button>
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>

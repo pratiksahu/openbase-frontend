@@ -1,128 +1,203 @@
-import Image from 'next/image';
+import {
+  CheckIcon,
+  StarIcon,
+  ArrowRightIcon,
+  PlayIcon,
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
-export default function Home() {
+import { Container } from '@/components/layout/Container';
+import { Section } from '@/components/layout/Section';
+import { Button } from '@/components/ui/button';
+import { OptimizedImage } from '@/components/ui/optimized-image';
+
+
+export default function HomePage() {
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-sans sm:p-20">
-      <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
-        {/* Test Tailwind Theme Colors */}
-        <div className="w-full space-y-4">
-          <div className="bg-primary text-primary-foreground rounded-lg p-4">
-            Primary Color Test
-          </div>
-          <div className="bg-secondary text-secondary-foreground rounded-lg p-4">
-            Secondary Color Test
-          </div>
-          <div className="bg-accent text-accent-foreground rounded-lg p-4">
-            Accent Color Test
-          </div>
-          <div className="bg-destructive text-destructive-foreground rounded-lg p-4">
-            Destructive Color Test
-          </div>
-          <div className="card-base p-4">Card Base Class Test</div>
-          <div className="btn-primary inline-block cursor-pointer rounded-lg p-4">
-            Button Primary Class Test
-          </div>
-          <div className="rounded-lg p-4 dark:bg-white dark:text-black">
-            Dark Mode Test (will change in dark mode)
-          </div>
-          <div className="rounded-lg border p-4 font-mono">
-            Monospace Font Test
-          </div>
-        </div>
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-center font-mono text-sm/6 sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{' '}
-            <code className="rounded bg-black/[.05] px-1 py-0.5 font-mono font-semibold dark:bg-white/[.06]">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
+      {/* Hero Section */}
+      <Section spacing="xl" data-testid="hero-section">
+        <Container>
+          <div className="space-y-8 text-center">
+            <div className="space-y-4">
+              <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+                Build Amazing Apps
+                <span className="text-primary block">Faster Than Ever</span>
+              </h1>
+              <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
+                A modern Next.js starter with everything you need to build
+                production-ready applications. TypeScript, Tailwind CSS,
+                testing, and more.
+              </p>
+            </div>
 
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
-          <a
-            className="bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="flex h-10 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm font-medium transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:w-auto sm:px-5 sm:text-base md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex flex-wrap items-center justify-center gap-[24px]">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Button size="lg" asChild data-testid="cta-button">
+                <Link href="/features">
+                  Get Started
+                  <ArrowRightIcon className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="#demo">
+                  <PlayIcon className="mr-2 h-4 w-4" />
+                  View Demo
+                </Link>
+              </Button>
+            </div>
+
+            <div className="text-muted-foreground flex items-center justify-center space-x-1 text-sm">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon
+                    key={i}
+                    className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                  />
+                ))}
+              </div>
+              <span className="ml-2">Trusted by 1000+ developers</span>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Features Overview */}
+      <Section variant="muted">
+        <Container>
+          <div className="space-y-12 text-center">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold">Everything You Need</h2>
+              <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
+                Built with modern tools and best practices to help you ship
+                faster and build better.
+              </p>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-3">
+              {features.map((feature, index) => (
+                <div key={index} className="space-y-4 text-center">
+                  <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-lg">
+                    <feature.icon className="text-primary h-6 w-6" />
+                  </div>
+                  <h3 className="text-xl font-semibold">{feature.title}</h3>
+                  <p className="text-muted-foreground">{feature.description}</p>
+                </div>
+              ))}
+            </div>
+
+            <Button asChild>
+              <Link href="/features">View All Features</Link>
+            </Button>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Social Proof */}
+      <Section>
+        <Container>
+          <div className="space-y-8 text-center">
+            <h2 className="text-2xl font-bold">Loved by Developers</h2>
+
+            <div className="grid gap-8 md:grid-cols-3">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="bg-card rounded-lg border p-6">
+                  <div className="mb-4 flex">
+                    {[...Array(5)].map((_, i) => (
+                      <StarIcon
+                        key={i}
+                        className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-muted-foreground mb-4">
+                    &quot;{testimonial.content}&quot;
+                  </p>
+                  <div className="flex items-center space-x-3">
+                    <OptimizedImage
+                      src={testimonial.avatar}
+                      alt={testimonial.author}
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                    <div>
+                      <p className="font-semibold">{testimonial.author}</p>
+                      <p className="text-muted-foreground text-sm">
+                        {testimonial.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* CTA Section */}
+      <Section variant="accent">
+        <Container>
+          <div className="space-y-6 text-center">
+            <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
+            <p className="text-muted-foreground mx-auto max-w-xl text-xl">
+              Join thousands of developers building amazing applications.
+            </p>
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
+              <Button size="lg" asChild>
+                <Link href="/register">Start Building</Link>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/contact">Contact Sales</Link>
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </>
   );
 }
+
+const features = [
+  {
+    icon: CheckIcon,
+    title: 'TypeScript Ready',
+    description:
+      'Built with TypeScript for better developer experience and type safety.',
+  },
+  {
+    icon: CheckIcon,
+    title: 'Modern UI',
+    description:
+      'Beautiful components built with Tailwind CSS and Radix UI primitives.',
+  },
+  {
+    icon: CheckIcon,
+    title: 'Production Ready',
+    description:
+      'Optimized builds, testing setup, and deployment configuration included.',
+  },
+];
+
+const testimonials = [
+  {
+    content:
+      'This starter saved me weeks of setup time. Everything just works!',
+    author: 'Sarah Johnson',
+    role: 'Frontend Developer',
+    avatar: '/avatars/sarah.jpg',
+  },
+  {
+    content:
+      "The best Next.js starter I've used. Great documentation and examples.",
+    author: 'Mike Chen',
+    role: 'Full Stack Developer',
+    avatar: '/avatars/mike.jpg',
+  },
+  {
+    content:
+      'Clean code, modern patterns, and excellent performance out of the box.',
+    author: 'Emma Davis',
+    role: 'Tech Lead',
+    avatar: '/avatars/emma.jpg',
+  },
+];
