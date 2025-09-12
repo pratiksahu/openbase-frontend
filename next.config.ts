@@ -1,5 +1,16 @@
 import type { NextConfig } from 'next';
 
+// Note: next-pwa doesn't export TypeScript declarations, so we use require for now
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+  register: true,
+  skipWaiting: true,
+  sw: 'sw.js',
+  customWorkerDir: 'worker',
+});
+
 const nextConfig: NextConfig = {
   images: {
     formats: ['image/webp', 'image/avif'],
@@ -27,13 +38,49 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  // PWA specific headers
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+      {
+        source: '/manifest.json',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/manifest+json',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+        ],
+      },
+    ];
+  },
   // Bundle analyzer (optional)
   ...(process.env.ANALYZE === 'true' && {
-    webpack: (config: any, { isServer }: { isServer: boolean }) => {
+    webpack: (config: unknown, { isServer }: { isServer: boolean }) => {
       if (!isServer) {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-        config.plugins.push(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (config as any).plugins.push(
           new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             openAnalyzer: false,
@@ -45,4 +92,4 @@ const nextConfig: NextConfig = {
   }),
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);

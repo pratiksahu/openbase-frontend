@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Roboto_Mono } from 'next/font/google';
 
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { InstallPrompt } from '@/components/pwa/InstallPrompt';
+import { PWAStatus } from '@/components/pwa/PWAStatus';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
@@ -27,6 +29,15 @@ export const metadata: Metadata = {
   keywords: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
   authors: [{ name: 'Your Name' }],
   creator: 'Your Company',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Modern Next.js App',
+  },
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -63,8 +74,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    shortcut: '/icons/favicon-16x16.png',
+    apple: [
+      {
+        url: '/icons/apple-touch-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
+    ],
   },
 };
 
@@ -73,6 +90,10 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -82,6 +103,36 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Modern Next.js App" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="msapplication-tap-highlight" content="no" />
+
+        {/* Apple touch icons */}
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
+        {/* Favicon */}
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/icons/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/icons/favicon-16x16.png"
+        />
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </head>
       <body className={`${inter.variable} ${robotoMono.variable} font-sans`}>
         <ThemeProvider
           attribute="class"
@@ -91,6 +142,8 @@ export default function RootLayout({
         >
           {children}
           <Toaster />
+          <InstallPrompt />
+          <PWAStatus />
         </ThemeProvider>
       </body>
     </html>

@@ -1,5 +1,4 @@
 import { OptimizedImage } from '@/components/ui/optimized-image';
-
 import { render, screen, fireEvent, waitFor } from '@/test-utils';
 
 // Mock Next.js Image component

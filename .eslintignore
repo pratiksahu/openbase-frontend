@@ -21,3 +21,7 @@ jest.setup.js
 # Generated files
 public/sw.js
 public/workbox-*.js
+worker/
+
+# PWA generated files
+public/*.js
