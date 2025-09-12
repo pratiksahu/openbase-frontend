@@ -1,3 +1,5 @@
+'use client';
+
 import { HomeIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -26,7 +28,7 @@ export default function NotFound() {
                 Go Home
               </Link>
             </Button>
-            <Button variant="outline" onClick={() => history.back()}>
+            <Button variant="outline" onClick={() => window.history.back()}>
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
               Go Back
             </Button>

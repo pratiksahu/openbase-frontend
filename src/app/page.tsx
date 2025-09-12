@@ -184,20 +184,20 @@ const testimonials = [
       'This starter saved me weeks of setup time. Everything just works!',
     author: 'Sarah Johnson',
     role: 'Frontend Developer',
-    avatar: '/avatars/sarah.jpg',
+    avatar: '/avatars/sarah.svg',
   },
   {
     content:
       "The best Next.js starter I've used. Great documentation and examples.",
     author: 'Mike Chen',
     role: 'Full Stack Developer',
-    avatar: '/avatars/mike.jpg',
+    avatar: '/avatars/mike.svg',
   },
   {
     content:
       'Clean code, modern patterns, and excellent performance out of the box.',
     author: 'Emma Davis',
     role: 'Tech Lead',
-    avatar: '/avatars/emma.jpg',
+    avatar: '/avatars/emma.svg',
   },
 ];
