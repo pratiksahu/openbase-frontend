@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output
+.next/
+dist/
+out/
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+
+# Jest configuration files
+jest.config.js
+jest.setup.js
+
+# Environment files
+.env*
+
+# Generated files
+public/sw.js
+public/workbox-*.js
