@@ -415,6 +415,17 @@ Before committing code, ensure:
 - [ ] Dark mode is properly supported
 - [ ] Responsive design works on mobile
 
+### Git Hooks Configuration
+
+**Note**: The pre-push hook has been removed to simplify the development workflow. While pre-commit hooks still run for code quality, pushes are no longer blocked by automated checks. This allows for more flexibility when pushing documentation changes or work-in-progress code.
+
+However, it's still recommended to manually run the quality checks before pushing:
+```bash
+npm run lint
+npm run typecheck
+npm run build
+```
+
 ## 📚 Important Project Files
 
 ### Feature Documentation
