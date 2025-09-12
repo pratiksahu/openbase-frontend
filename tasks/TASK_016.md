@@ -1,9 +1,11 @@
 # TASK_016: Documentation
 
 ## Overview
+
 Create comprehensive documentation for the Next.js application covering component library, API documentation, development guidelines, contributing instructions, and user guides. This task focuses on establishing clear, maintainable documentation that helps developers understand, contribute to, and use the application effectively.
 
 ## Objectives
+
 - Create component documentation with Storybook integration
 - Generate API documentation with OpenAPI/Swagger
 - Add comprehensive JSDoc comments throughout the codebase
@@ -50,10 +52,11 @@ const config: StorybookConfig = {
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
       shouldExtractLiteralValuesFromEnum: true,
-      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+      propFilter: prop =>
+        prop.parent ? !/node_modules/.test(prop.parent.fileName) : true,
     },
   },
-  webpackFinal: async (config) => {
+  webpackFinal: async config => {
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
@@ -138,7 +141,8 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A versatile button component with multiple variants, sizes, and states.',
+        component:
+          'A versatile button component with multiple variants, sizes, and states.',
       },
     },
   },
@@ -146,7 +150,14 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+      options: [
+        'default',
+        'destructive',
+        'outline',
+        'secondary',
+        'ghost',
+        'link',
+      ],
       description: 'The visual style variant of the button',
     },
     size: {
@@ -187,7 +198,7 @@ export const Default: Story = {
  */
 export const Variants: Story = {
   render: () => (
-    <div className="flex gap-4 flex-wrap">
+    <div className="flex flex-wrap gap-4">
       <Button variant="default">Default</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="outline">Outline</Button>
@@ -210,7 +221,7 @@ export const Variants: Story = {
  */
 export const Sizes: Story = {
   render: () => (
-    <div className="flex gap-4 items-center">
+    <div className="flex items-center gap-4">
       <Button size="sm">Small</Button>
       <Button size="default">Default</Button>
       <Button size="lg">Large</Button>
@@ -321,9 +332,9 @@ import 'swagger-ui-react/swagger-ui.css';
 
 export default function ApiDocsPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-bold mb-8">API Documentation</h1>
+        <h1 className="mb-8 text-3xl font-bold">API Documentation</h1>
         <SwaggerUI url="/api-docs" />
       </div>
     </div>
@@ -335,17 +346,17 @@ export default function ApiDocsPage() {
 
 Update components with comprehensive JSDoc:
 
-```typescript
+````typescript
 /**
  * A reusable button component with multiple variants and states
- * 
+ *
  * @example
  * ```tsx
  * <Button variant="primary" size="lg" onClick={handleClick}>
  *   Click me
  * </Button>
  * ```
- * 
+ *
  * @param props - The button component props
  * @param props.variant - Visual style variant
  * @param props.size - Button size
@@ -353,32 +364,42 @@ Update components with comprehensive JSDoc:
  * @param props.disabled - Whether the button is disabled
  * @param props.children - Button content
  * @param props.onClick - Click handler function
- * 
+ *
  * @returns A styled button element
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size = 'default', loading, disabled, ...props }, ref) => {
+  (
+    {
+      className,
+      variant = 'default',
+      size = 'default',
+      loading,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
     // Implementation...
   }
 );
 
 /**
  * Custom hook for managing local storage with React state synchronization
- * 
+ *
  * @template T - The type of the value stored
- * 
+ *
  * @param key - The localStorage key
  * @param initialValue - Default value if key doesn't exist in localStorage
- * 
+ *
  * @returns A tuple containing:
  * - `value`: Current value from localStorage
  * - `setValue`: Function to update the value
  * - `removeValue`: Function to remove the value from localStorage
- * 
+ *
  * @example
  * ```tsx
  * const [theme, setTheme, removeTheme] = useLocalStorage('theme', 'light');
- * 
+ *
  * const toggleTheme = () => {
  *   setTheme(theme === 'light' ? 'dark' : 'light');
  * };
@@ -390,13 +411,13 @@ export function useLocalStorage<T>(
 ): [T, (value: T | ((val: T) => T)) => void, () => void] {
   // Implementation...
 }
-```
+````
 
 ### 5. Create Style Guide
 
 Create `docs/STYLE_GUIDE.md`:
 
-```markdown
+````markdown
 # Style Guide
 
 ## Code Style
@@ -424,6 +445,7 @@ interface User {
   createdAt: Date;
 }
 ```
+````
 
 ### React Components
 
@@ -515,7 +537,7 @@ import { UserCard } from './UserCard';
 
 ```tsx
 const Card = ({ children }: { children: React.ReactNode }) => (
-  <div className="rounded-lg border bg-card">{children}</div>
+  <div className="bg-card rounded-lg border">{children}</div>
 );
 
 const CardHeader = ({ children }: { children: React.ReactNode }) => (
@@ -534,7 +556,7 @@ const CardContent = ({ children }: { children: React.ReactNode }) => (
   <CardContent>
     <p>Content</p>
   </CardContent>
-</Card>
+</Card>;
 ```
 
 ### Render Props Pattern
@@ -546,11 +568,11 @@ interface RenderProps<T> {
   error: string | null;
 }
 
-const DataFetcher = <T,>({ 
-  url, 
-  children 
-}: { 
-  url: string; 
+const DataFetcher = <T,>({
+  url,
+  children,
+}: {
+  url: string;
   children: (props: RenderProps<T>) => React.ReactNode;
 }) => {
   // Implementation...
@@ -607,10 +629,10 @@ describe('Button Component', () => {
   it('should handle click events', async () => {
     const handleClick = jest.fn();
     const user = userEvent.setup();
-    
+
     render(<Button onClick={handleClick}>Click me</Button>);
     await user.click(screen.getByText('Click me'));
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });
@@ -629,7 +651,7 @@ describe('Button Component', () => {
 <button
   aria-label="Close dialog"
   onClick={onClose}
-  className="p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  className="rounded-md p-2 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
 >
   <XIcon className="h-4 w-4" />
 </button>
@@ -653,7 +675,8 @@ const ExpensiveComponent = memo(({ data }: { data: ComplexData }) => {
   return <div>{/* Render processed data */}</div>;
 });
 ```
-```
+
+````
 
 ### 6. Create Contributing Guidelines
 
@@ -682,7 +705,7 @@ This project adheres to our [Code of Conduct](CODE_OF_CONDUCT.md). By participat
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - Git
 
@@ -693,7 +716,8 @@ This project adheres to our [Code of Conduct](CODE_OF_CONDUCT.md). By participat
    ```bash
    git clone https://github.com/your-username/project-name.git
    cd project-name
-   ```
+````
+
 3. Install dependencies:
    ```bash
    npm install
@@ -706,17 +730,20 @@ This project adheres to our [Code of Conduct](CODE_OF_CONDUCT.md). By participat
 ## Development Workflow
 
 1. **Start development server**
+
    ```bash
    npm run dev
    ```
 
 2. **Run tests**
+
    ```bash
    npm test
    npm run test:e2e
    ```
 
 3. **Check code quality**
+
    ```bash
    npm run lint
    npm run type-check
@@ -799,25 +826,31 @@ test: add unit tests for user service
    - List breaking changes if any
 
 3. **PR Template**
+
    ```markdown
    ## Description
+
    Brief description of changes
 
    ## Type of Change
+
    - [ ] Bug fix
    - [ ] New feature
    - [ ] Documentation update
    - [ ] Performance improvement
 
    ## Testing
+
    - [ ] Unit tests pass
    - [ ] E2E tests pass
    - [ ] Manual testing completed
 
    ## Screenshots (if applicable)
+
    Add screenshots here
 
    ## Breaking Changes
+
    List any breaking changes
    ```
 
@@ -831,6 +864,7 @@ test: add unit tests for user service
 ### Bug Reports
 
 Include:
+
 - Clear description of the issue
 - Steps to reproduce
 - Expected vs actual behavior
@@ -840,6 +874,7 @@ Include:
 ### Feature Requests
 
 Include:
+
 - Problem description
 - Proposed solution
 - Alternative solutions considered
@@ -848,6 +883,7 @@ Include:
 ### Issue Templates
 
 We provide issue templates for:
+
 - Bug reports
 - Feature requests
 - Documentation improvements
@@ -887,12 +923,14 @@ We provide issue templates for:
 ## Recognition
 
 Contributors will be:
+
 - Added to CONTRIBUTORS.md
 - Mentioned in release notes
 - Recognized in community channels
 
 Thank you for contributing! 🎉
-```
+
+````
 
 ### 7. Create Code of Conduct
 
@@ -952,7 +990,7 @@ promptly and fairly.
 This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org),
 version 2.0, available at
 https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
-```
+````
 
 ### 8. Set Up Changelog Management
 
@@ -992,6 +1030,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial project setup
 - Component library with Storybook
 - API documentation with OpenAPI
@@ -1000,6 +1039,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2024-01-XX
 
 ### Added
+
 - Initial release
 - Core components and functionality
 - Authentication system
@@ -1008,18 +1048,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Deployment configuration
 
 ### Changed
+
 - N/A
 
 ### Deprecated
+
 - N/A
 
 ### Removed
+
 - N/A
 
 ### Fixed
+
 - N/A
 
 ### Security
+
 - N/A
 ```
 
@@ -1037,9 +1082,11 @@ Welcome to Your App! This guide will help you get started and make the most of t
 ### Installation
 
 #### Web App
+
 Simply visit [yourapp.com](https://yourapp.com) in your web browser.
 
 #### Mobile App (PWA)
+
 1. Visit the web app on your mobile device
 2. Look for the "Add to Home Screen" prompt
 3. Follow the installation instructions
@@ -1068,11 +1115,13 @@ Simply visit [yourapp.com](https://yourapp.com) in your web browser.
 The dashboard is your central hub for managing your account and accessing features.
 
 #### Overview Section
+
 - Quick stats and metrics
 - Recent activity
 - Important notifications
 
 #### Navigation
+
 - Sidebar navigation for desktop
 - Bottom navigation for mobile
 - Search functionality
@@ -1080,12 +1129,14 @@ The dashboard is your central hub for managing your account and accessing featur
 ### User Management
 
 #### Profile Settings
+
 - Personal information
 - Profile picture
 - Account preferences
 - Privacy settings
 
 #### Security
+
 - Password management
 - Two-factor authentication
 - Login history
@@ -1094,12 +1145,14 @@ The dashboard is your central hub for managing your account and accessing featur
 ### Notifications
 
 #### Types
+
 - System notifications
 - Activity updates
 - Security alerts
 - Marketing messages (optional)
 
 #### Settings
+
 - Choose notification methods
 - Set preferences by type
 - Manage frequency
@@ -1108,12 +1161,12 @@ The dashboard is your central hub for managing your account and accessing featur
 
 ### Keyboard Shortcuts
 
-| Action | Shortcut |
-|--------|----------|
-| Search | `Ctrl/Cmd + K` |
+| Action   | Shortcut       |
+| -------- | -------------- |
+| Search   | `Ctrl/Cmd + K` |
 | New Item | `Ctrl/Cmd + N` |
 | Settings | `Ctrl/Cmd + ,` |
-| Help | `?` |
+| Help     | `?`            |
 
 ### Mobile Features
 
@@ -1134,18 +1187,21 @@ The dashboard is your central hub for managing your account and accessing featur
 ### Common Issues
 
 #### Can't Sign In
+
 1. Check your email and password
 2. Try password reset
 3. Clear browser cache
 4. Check for typos in email
 
 #### App Not Loading
+
 1. Check internet connection
 2. Refresh the page
 3. Clear browser cache
 4. Try different browser
 
 #### Missing Features
+
 1. Check if you're logged in
 2. Verify account permissions
 3. Check for app updates
@@ -1187,9 +1243,11 @@ A: Go to Settings > Account > Delete Account.
 We regularly update the app with new features and improvements. Updates are automatic for web users and available through app stores for mobile users.
 
 ### Release Notes
+
 Check [CHANGELOG.md](../CHANGELOG.md) for detailed release information.
 
 ### Beta Features
+
 Opt into beta features in Settings > Advanced to try new functionality early.
 ```
 
@@ -1230,23 +1288,23 @@ on:
 jobs:
   deploy-docs:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build Storybook
         run: npm run docs:build
-        
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -1270,6 +1328,7 @@ jobs:
 ## Testing Instructions
 
 ### 1. Test Storybook
+
 ```bash
 npm run docs:dev
 # Visit http://localhost:6006
@@ -1277,6 +1336,7 @@ npm run docs:dev
 ```
 
 ### 2. Test API Documentation
+
 ```bash
 npm run docs:api
 # Visit http://localhost:3000/api-docs
@@ -1284,6 +1344,7 @@ npm run docs:api
 ```
 
 ### 3. Test Documentation Build
+
 ```bash
 npm run docs:build
 npm run docs:serve
@@ -1291,6 +1352,7 @@ npm run docs:serve
 ```
 
 ### 4. Test Changelog
+
 ```bash
 npm run changelog:add
 # Follow prompts to add changelog entry
@@ -1300,18 +1362,21 @@ npm run changelog:version
 ## References and Dependencies
 
 ### Dependencies
+
 - `@storybook/nextjs`: Component documentation
 - `swagger-jsdoc`: API documentation
 - `@changesets/cli`: Changelog management
 - `typedoc`: TypeScript documentation
 
 ### Documentation
+
 - [Storybook Documentation](https://storybook.js.org/docs)
 - [OpenAPI Specification](https://swagger.io/specification/)
 - [JSDoc Documentation](https://jsdoc.app/)
 - [Keep a Changelog](https://keepachangelog.com/)
 
 ## Estimated Time
+
 **8-10 hours**
 
 - Storybook setup: 2-3 hours

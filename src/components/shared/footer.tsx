@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Facebook, Twitter, Github, Linkedin } from "lucide-react"
+import { Facebook, Twitter, Github, Linkedin } from 'lucide-react';
+import Link from 'next/link';
 
 export function Footer() {
   return (
@@ -11,17 +11,26 @@ export function Footer() {
             <h3 className="text-sm font-semibold">Company</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
-                <Link href="/about" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/about"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/careers"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Careers
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/contact"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Contact
                 </Link>
               </li>
@@ -33,17 +42,26 @@ export function Footer() {
             <h3 className="text-sm font-semibold">Product</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
-                <Link href="/features" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/features"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Features
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/pricing"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link href="/docs" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/docs"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Documentation
                 </Link>
               </li>
@@ -55,17 +73,26 @@ export function Footer() {
             <h3 className="text-sm font-semibold">Resources</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
-                <Link href="/blog" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/blog"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/guides" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/guides"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Guides
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/help"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Help Center
                 </Link>
               </li>
@@ -77,17 +104,26 @@ export function Footer() {
             <h3 className="text-sm font-semibold">Legal</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/privacy"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/terms"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="text-muted-foreground hover:text-foreground">
+                <Link
+                  href="/cookies"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Cookie Policy
                 </Link>
               </li>
@@ -98,28 +134,40 @@ export function Footer() {
         {/* Bottom section */}
         <div className="mt-8 border-t pt-8 md:flex md:items-center md:justify-between">
           <div className="flex space-x-6 md:order-2">
-            <Link href="#" className="text-muted-foreground hover:text-foreground">
+            <Link
+              href="#"
+              className="text-muted-foreground hover:text-foreground"
+            >
               <span className="sr-only">Facebook</span>
               <Facebook className="h-5 w-5" />
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-foreground">
+            <Link
+              href="#"
+              className="text-muted-foreground hover:text-foreground"
+            >
               <span className="sr-only">Twitter</span>
               <Twitter className="h-5 w-5" />
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-foreground">
+            <Link
+              href="#"
+              className="text-muted-foreground hover:text-foreground"
+            >
               <span className="sr-only">GitHub</span>
               <Github className="h-5 w-5" />
             </Link>
-            <Link href="#" className="text-muted-foreground hover:text-foreground">
+            <Link
+              href="#"
+              className="text-muted-foreground hover:text-foreground"
+            >
               <span className="sr-only">LinkedIn</span>
               <Linkedin className="h-5 w-5" />
             </Link>
           </div>
-          <p className="mt-8 text-sm text-muted-foreground md:order-1 md:mt-0">
+          <p className="text-muted-foreground mt-8 text-sm md:order-1 md:mt-0">
             © 2024 Your Company. All rights reserved.
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }

@@ -1,9 +1,11 @@
 # TASK_018: Security Implementation
 
 ## Overview
+
 Implement comprehensive security measures for the Next.js application including Content Security Policy, CORS configuration, rate limiting, input sanitization, environment variable validation, and security headers. This task focuses on protecting the application from common security threats and vulnerabilities.
 
 ## Objectives
+
 - Configure Content Security Policy (CSP) to prevent XSS attacks
 - Set up CORS headers for API security
 - Implement rate limiting to prevent abuse
@@ -26,7 +28,7 @@ import { env } from '@/lib/env';
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
-  
+
   // Content Security Policy
   const cspHeader = `
     default-src 'self';
@@ -41,21 +43,23 @@ export function middleware(request: NextRequest) {
     connect-src 'self' https://api.vercel.com https://vercel.live https://www.google-analytics.com;
     media-src 'self';
     worker-src 'self' blob:;
-  `.replace(/\\s{2,}/g, ' ').trim();
-  
+  `
+    .replace(/\\s{2,}/g, ' ')
+    .trim();
+
   if (env.NODE_ENV === 'production') {
     response.headers.set('Content-Security-Policy', cspHeader);
   } else {
     // More permissive CSP for development
     response.headers.set('Content-Security-Policy-Report-Only', cspHeader);
   }
-  
+
   // Security Headers
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'origin-when-cross-origin');
   response.headers.set('X-XSS-Protection', '1; mode=block');
-  
+
   // HSTS (only for HTTPS)
   if (request.nextUrl.protocol === 'https:') {
     response.headers.set(
@@ -63,24 +67,22 @@ export function middleware(request: NextRequest) {
       'max-age=63072000; includeSubDomains; preload'
     );
   }
-  
+
   // Permissions Policy
   response.headers.set(
     'Permissions-Policy',
     'camera=(), microphone=(), geolocation=(), interest-cohort=()'
   );
-  
+
   // Remove Server header for security
   response.headers.delete('Server');
   response.headers.delete('X-Powered-By');
-  
+
   return response;
 }
 
 export const config = {
-  matcher: [
-    '/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)',
-  ],
+  matcher: ['/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)'],
 };
 ```
 
@@ -117,11 +119,11 @@ const defaultOptions: CORSOptions = {
 
 export function corsHandler(options: CORSOptions = {}) {
   const corsOptions = { ...defaultOptions, ...options };
-  
+
   return async (request: NextRequest) => {
     const origin = request.headers.get('origin');
     const response = new NextResponse();
-    
+
     // Handle preflight requests
     if (request.method === 'OPTIONS') {
       return new NextResponse(null, {
@@ -129,14 +131,17 @@ export function corsHandler(options: CORSOptions = {}) {
         headers: getCorsHeaders(origin, corsOptions),
       });
     }
-    
+
     return response;
   };
 }
 
-function getCorsHeaders(origin: string | null, options: CORSOptions): Record<string, string> {
+function getCorsHeaders(
+  origin: string | null,
+  options: CORSOptions
+): Record<string, string> {
   const headers: Record<string, string> = {};
-  
+
   // Access-Control-Allow-Origin
   if (options.origin === true) {
     headers['Access-Control-Allow-Origin'] = origin || '*';
@@ -147,27 +152,27 @@ function getCorsHeaders(origin: string | null, options: CORSOptions): Record<str
       headers['Access-Control-Allow-Origin'] = origin;
     }
   }
-  
+
   // Access-Control-Allow-Methods
   if (options.methods) {
     headers['Access-Control-Allow-Methods'] = options.methods.join(', ');
   }
-  
+
   // Access-Control-Allow-Headers
   if (options.allowedHeaders) {
     headers['Access-Control-Allow-Headers'] = options.allowedHeaders.join(', ');
   }
-  
+
   // Access-Control-Allow-Credentials
   if (options.credentials) {
     headers['Access-Control-Allow-Credentials'] = 'true';
   }
-  
+
   // Access-Control-Max-Age
   if (options.maxAge) {
     headers['Access-Control-Max-Age'] = options.maxAge.toString();
   }
-  
+
   return headers;
 }
 
@@ -179,7 +184,7 @@ export function withCors(
   return async (request: NextRequest) => {
     const corsOptions = { ...defaultOptions, ...options };
     const origin = request.headers.get('origin');
-    
+
     // Handle preflight
     if (request.method === 'OPTIONS') {
       return new NextResponse(null, {
@@ -187,16 +192,16 @@ export function withCors(
         headers: getCorsHeaders(origin, corsOptions),
       });
     }
-    
+
     // Execute the handler
     const response = await handler(request);
-    
+
     // Add CORS headers to the response
     const corsHeaders = getCorsHeaders(origin, corsOptions);
     Object.entries(corsHeaders).forEach(([key, value]) => {
       response.headers.set(key, value);
     });
-    
+
     return response;
   };
 }
@@ -225,7 +230,7 @@ class RateLimiter {
 
   constructor(config: RateLimitConfig) {
     this.config = config;
-    
+
     // Clean up expired entries every minute
     setInterval(() => {
       const now = Date.now();
@@ -241,16 +246,16 @@ class RateLimiter {
     const now = Date.now();
     const windowStart = now;
     const windowEnd = windowStart + this.config.interval;
-    
+
     const current = this.cache.get(identifier);
-    
+
     if (!current || now > current.resetTime) {
       // First request in window or window has expired
       this.cache.set(identifier, {
         count: 1,
         resetTime: windowEnd,
       });
-      
+
       return {
         success: true,
         limit: this.config.uniqueTokenPerInterval,
@@ -258,7 +263,7 @@ class RateLimiter {
         reset: windowEnd,
       };
     }
-    
+
     if (current.count >= this.config.uniqueTokenPerInterval) {
       // Rate limit exceeded
       return {
@@ -268,11 +273,11 @@ class RateLimiter {
         reset: current.resetTime,
       };
     }
-    
+
     // Increment count
     current.count++;
     this.cache.set(identifier, current);
-    
+
     return {
       success: true,
       limit: this.config.uniqueTokenPerInterval,
@@ -303,19 +308,19 @@ export function getClientIP(request: Request): string {
   const forwarded = request.headers.get('x-forwarded-for');
   const realIP = request.headers.get('x-real-ip');
   const clientIP = request.headers.get('x-client-ip');
-  
+
   if (forwarded) {
     return forwarded.split(',')[0].trim();
   }
-  
+
   if (realIP) {
     return realIP;
   }
-  
+
   if (clientIP) {
     return clientIP;
   }
-  
+
   return '127.0.0.1'; // Fallback
 }
 
@@ -327,7 +332,7 @@ export function withRateLimit(
   return async (request: Request) => {
     const ip = getClientIP(request);
     const result = limiter.check(ip);
-    
+
     if (!result.success) {
       return new Response(
         JSON.stringify({
@@ -338,7 +343,9 @@ export function withRateLimit(
           status: 429,
           headers: {
             'Content-Type': 'application/json',
-            'Retry-After': Math.ceil((result.reset - Date.now()) / 1000).toString(),
+            'Retry-After': Math.ceil(
+              (result.reset - Date.now()) / 1000
+            ).toString(),
             'X-RateLimit-Limit': result.limit.toString(),
             'X-RateLimit-Remaining': result.remaining.toString(),
             'X-RateLimit-Reset': result.reset.toString(),
@@ -346,14 +353,14 @@ export function withRateLimit(
         }
       );
     }
-    
+
     const response = await handler(request);
-    
+
     // Add rate limit headers to successful responses
     response.headers.set('X-RateLimit-Limit', result.limit.toString());
     response.headers.set('X-RateLimit-Remaining', result.remaining.toString());
     response.headers.set('X-RateLimit-Reset', result.reset.toString());
-    
+
     return response;
   };
 }
@@ -420,13 +427,16 @@ export function sanitizeUrl(url: string): string {
 }
 
 // Comprehensive input sanitization
-export function sanitizeInput(input: unknown, type: 'string' | 'email' | 'phone' | 'url' | 'html' = 'string'): string {
+export function sanitizeInput(
+  input: unknown,
+  type: 'string' | 'email' | 'phone' | 'url' | 'html' = 'string'
+): string {
   if (typeof input !== 'string') {
     return '';
   }
-  
+
   let sanitized = input;
-  
+
   switch (type) {
     case 'email':
       sanitized = sanitizeEmail(sanitized);
@@ -444,13 +454,16 @@ export function sanitizeInput(input: unknown, type: 'string' | 'email' | 'phone'
       sanitized = sanitizeString(sanitized);
       break;
   }
-  
+
   return sanitized;
 }
 
 // Validation schemas with sanitization
-export const createSanitizedSchema = <T extends z.ZodTypeAny>(schema: T, type?: 'string' | 'email' | 'phone' | 'url' | 'html') => {
-  return z.preprocess((val) => {
+export const createSanitizedSchema = <T extends z.ZodTypeAny>(
+  schema: T,
+  type?: 'string' | 'email' | 'phone' | 'url' | 'html'
+) => {
+  return z.preprocess(val => {
     if (typeof val === 'string') {
       return sanitizeInput(val, type);
     }
@@ -461,7 +474,10 @@ export const createSanitizedSchema = <T extends z.ZodTypeAny>(schema: T, type?: 
 // Common sanitized schemas
 export const sanitizedString = (min?: number, max?: number) =>
   createSanitizedSchema(
-    z.string().min(min || 0).max(max || 1000),
+    z
+      .string()
+      .min(min || 0)
+      .max(max || 1000),
     'string'
   );
 
@@ -475,15 +491,9 @@ export const sanitizedPhone = createSanitizedSchema(
   'phone'
 );
 
-export const sanitizedUrl = createSanitizedSchema(
-  z.string().url(),
-  'url'
-);
+export const sanitizedUrl = createSanitizedSchema(z.string().url(), 'url');
 
-export const sanitizedHtml = createSanitizedSchema(
-  z.string(),
-  'html'
-);
+export const sanitizedHtml = createSanitizedSchema(z.string(), 'html');
 
 // Middleware for automatic sanitization
 export function withSanitization<T extends Record<string, unknown>>(
@@ -508,14 +518,11 @@ export function withSanitization<T extends Record<string, unknown>>(
           }
         );
       }
-      
-      return new Response(
-        JSON.stringify({ error: 'Invalid request data' }),
-        {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
+
+      return new Response(JSON.stringify({ error: 'Invalid request data' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
   };
 }
@@ -529,53 +536,63 @@ Update `src/lib/env.ts` with additional security validations:
 import { z } from 'zod';
 
 // Enhanced environment schema with security validations
-const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  NEXT_PUBLIC_SITE_URL: z.string().url(),
-  NEXT_PUBLIC_APP_NAME: z.string().min(1),
-  
-  // Security-related environment variables
-  JWT_SECRET: z.string().min(32).optional(),
-  ENCRYPTION_KEY: z.string().min(32).optional(),
-  SESSION_SECRET: z.string().min(32).optional(),
-  
-  // Database with security requirements
-  DATABASE_URL: z.string().url().optional(),
-  DATABASE_SSL: z.coerce.boolean().default(true),
-  
-  // API keys (should not be logged)
-  API_SECRET_KEY: z.string().min(20).optional(),
-  WEBHOOK_SECRET: z.string().min(20).optional(),
-  
-  // External service credentials
-  SMTP_PASSWORD: z.string().optional(),
-  STORAGE_SECRET_KEY: z.string().optional(),
-  
-  // Security features
-  ENABLE_RATE_LIMITING: z.coerce.boolean().default(true),
-  ENABLE_CORS: z.coerce.boolean().default(true),
-  SECURITY_HEADERS: z.coerce.boolean().default(true),
-  
-  // Monitoring
-  SECURITY_LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('warn'),
-  
-  // Development only
-  DISABLE_HTTPS_REDIRECT: z.coerce.boolean().default(false),
-}).refine((data) => {
-  // Production-specific validations
-  if (data.NODE_ENV === 'production') {
-    return data.JWT_SECRET && data.SESSION_SECRET && data.API_SECRET_KEY;
-  }
-  return true;
-}, {
-  message: 'Production environment requires JWT_SECRET, SESSION_SECRET, and API_SECRET_KEY',
-});
+const envSchema = z
+  .object({
+    NODE_ENV: z
+      .enum(['development', 'production', 'test'])
+      .default('development'),
+    NEXT_PUBLIC_SITE_URL: z.string().url(),
+    NEXT_PUBLIC_APP_NAME: z.string().min(1),
+
+    // Security-related environment variables
+    JWT_SECRET: z.string().min(32).optional(),
+    ENCRYPTION_KEY: z.string().min(32).optional(),
+    SESSION_SECRET: z.string().min(32).optional(),
+
+    // Database with security requirements
+    DATABASE_URL: z.string().url().optional(),
+    DATABASE_SSL: z.coerce.boolean().default(true),
+
+    // API keys (should not be logged)
+    API_SECRET_KEY: z.string().min(20).optional(),
+    WEBHOOK_SECRET: z.string().min(20).optional(),
+
+    // External service credentials
+    SMTP_PASSWORD: z.string().optional(),
+    STORAGE_SECRET_KEY: z.string().optional(),
+
+    // Security features
+    ENABLE_RATE_LIMITING: z.coerce.boolean().default(true),
+    ENABLE_CORS: z.coerce.boolean().default(true),
+    SECURITY_HEADERS: z.coerce.boolean().default(true),
+
+    // Monitoring
+    SECURITY_LOG_LEVEL: z
+      .enum(['error', 'warn', 'info', 'debug'])
+      .default('warn'),
+
+    // Development only
+    DISABLE_HTTPS_REDIRECT: z.coerce.boolean().default(false),
+  })
+  .refine(
+    data => {
+      // Production-specific validations
+      if (data.NODE_ENV === 'production') {
+        return data.JWT_SECRET && data.SESSION_SECRET && data.API_SECRET_KEY;
+      }
+      return true;
+    },
+    {
+      message:
+        'Production environment requires JWT_SECRET, SESSION_SECRET, and API_SECRET_KEY',
+    }
+  );
 
 // Parse and validate environment
 const parseEnv = () => {
   try {
     const env = envSchema.parse(process.env);
-    
+
     // Log security configuration (without secrets)
     if (env.NODE_ENV !== 'test') {
       console.log('Security Configuration:', {
@@ -587,7 +604,7 @@ const parseEnv = () => {
         DATABASE_SSL: env.DATABASE_SSL,
       });
     }
-    
+
     return env;
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -606,31 +623,28 @@ export type Env = z.infer<typeof envSchema>;
 
 // Utility to check if secrets are properly configured
 export function validateSecuritySecrets(): boolean {
-  const requiredSecrets = [
-    'JWT_SECRET',
-    'SESSION_SECRET',
-    'API_SECRET_KEY',
-  ];
-  
+  const requiredSecrets = ['JWT_SECRET', 'SESSION_SECRET', 'API_SECRET_KEY'];
+
   const missing = requiredSecrets.filter(secret => !process.env[secret]);
-  
+
   if (missing.length > 0) {
     console.error('❌ Missing required security secrets:', missing);
     return false;
   }
-  
+
   return true;
 }
 
 // Generate secure random string for development
 export function generateSecureSecret(length: number = 32): string {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+  const charset =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
   let result = '';
-  
+
   for (let i = 0; i < length; i++) {
     result += charset.charAt(Math.floor(Math.random() * charset.length));
   }
-  
+
   return result;
 }
 ```
@@ -664,39 +678,47 @@ export class PasswordSecurity {
     if (!password) {
       throw new Error('Password is required');
     }
-    
+
     if (password.length < this.MIN_LENGTH) {
-      throw new Error(`Password must be at least ${this.MIN_LENGTH} characters long`);
+      throw new Error(
+        `Password must be at least ${this.MIN_LENGTH} characters long`
+      );
     }
-    
+
     if (password.length > this.MAX_LENGTH) {
       throw new Error(`Password must not exceed ${this.MAX_LENGTH} characters`);
     }
-    
+
     // Check for common patterns
     const patterns = [
       /(.)\1{3,}/, // More than 3 repeated characters
       /^(password|123456|qwerty)/i, // Common passwords
       /^(.{1,2})\1+$/, // Repeating patterns
     ];
-    
+
     for (const pattern of patterns) {
       if (pattern.test(password)) {
         throw new Error('Password is too weak');
       }
     }
-    
+
     // Require complexity
     const hasLowerCase = /[a-z]/.test(password);
     const hasUpperCase = /[A-Z]/.test(password);
     const hasNumbers = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    
-    const complexityCount = [hasLowerCase, hasUpperCase, hasNumbers, hasSpecialChar]
-      .filter(Boolean).length;
-    
+
+    const complexityCount = [
+      hasLowerCase,
+      hasUpperCase,
+      hasNumbers,
+      hasSpecialChar,
+    ].filter(Boolean).length;
+
     if (complexityCount < 3) {
-      throw new Error('Password must contain at least 3 of: lowercase, uppercase, numbers, special characters');
+      throw new Error(
+        'Password must contain at least 3 of: lowercase, uppercase, numbers, special characters'
+      );
     }
   }
 
@@ -706,24 +728,24 @@ export class PasswordSecurity {
   } {
     const feedback: string[] = [];
     let score = 0;
-    
+
     if (password.length >= 8) score += 1;
     else feedback.push('Use at least 8 characters');
-    
+
     if (password.length >= 12) score += 1;
-    
+
     if (/[a-z]/.test(password)) score += 1;
     else feedback.push('Add lowercase letters');
-    
+
     if (/[A-Z]/.test(password)) score += 1;
     else feedback.push('Add uppercase letters');
-    
+
     if (/\d/.test(password)) score += 1;
     else feedback.push('Add numbers');
-    
+
     if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 1;
     else feedback.push('Add special characters');
-    
+
     return { score, feedback };
   }
 }
@@ -732,24 +754,24 @@ export class PasswordSecurity {
 export class JWTSecurity {
   private static readonly ALGORITHM = 'HS256';
   private static readonly ISSUER = env.NEXT_PUBLIC_APP_NAME;
-  
+
   static sign(payload: object, expiresIn: string = '1h'): string {
     if (!env.JWT_SECRET) {
       throw new Error('JWT_SECRET is not configured');
     }
-    
+
     return jwt.sign(payload, env.JWT_SECRET, {
       algorithm: this.ALGORITHM,
       expiresIn,
       issuer: this.ISSUER,
     });
   }
-  
+
   static verify<T = any>(token: string): T {
     if (!env.JWT_SECRET) {
       throw new Error('JWT_SECRET is not configured');
     }
-    
+
     try {
       return jwt.verify(token, env.JWT_SECRET, {
         algorithms: [this.ALGORITHM],
@@ -765,7 +787,7 @@ export class JWTSecurity {
       throw new Error('Token verification failed');
     }
   }
-  
+
   static decode(token: string): any {
     return jwt.decode(token);
   }
@@ -775,17 +797,17 @@ export class JWTSecurity {
 export class SessionSecurity {
   private static readonly MAX_AGE = 24 * 60 * 60 * 1000; // 24 hours
   private static readonly SECURE_COOKIES = env.NODE_ENV === 'production';
-  
+
   static createSessionToken(userId: string, additionalClaims?: object): string {
     const payload = {
       userId,
       sessionId: this.generateSessionId(),
       ...additionalClaims,
     };
-    
+
     return JWTSecurity.sign(payload, '24h');
   }
-  
+
   static verifySessionToken(token: string): {
     userId: string;
     sessionId: string;
@@ -793,11 +815,11 @@ export class SessionSecurity {
   } {
     return JWTSecurity.verify(token);
   }
-  
+
   static generateSessionId(): string {
     return Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
   }
-  
+
   static getCookieOptions() {
     return {
       maxAge: this.MAX_AGE,
@@ -813,69 +835,72 @@ export class SessionSecurity {
 export class AccountSecurity {
   private static readonly MAX_LOGIN_ATTEMPTS = 5;
   private static readonly LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
-  
-  private static attempts = new Map<string, {
-    count: number;
-    lockedUntil?: number;
-  }>();
-  
+
+  private static attempts = new Map<
+    string,
+    {
+      count: number;
+      lockedUntil?: number;
+    }
+  >();
+
   static recordLoginAttempt(identifier: string, success: boolean): void {
     const current = this.attempts.get(identifier) || { count: 0 };
-    
+
     if (success) {
       // Clear attempts on successful login
       this.attempts.delete(identifier);
       return;
     }
-    
+
     current.count++;
-    
+
     if (current.count >= this.MAX_LOGIN_ATTEMPTS) {
       current.lockedUntil = Date.now() + this.LOCKOUT_DURATION;
     }
-    
+
     this.attempts.set(identifier, current);
   }
-  
+
   static isAccountLocked(identifier: string): boolean {
     const attempt = this.attempts.get(identifier);
-    
+
     if (!attempt || !attempt.lockedUntil) {
       return false;
     }
-    
+
     if (Date.now() > attempt.lockedUntil) {
       // Lockout expired, clear the record
       this.attempts.delete(identifier);
       return false;
     }
-    
+
     return true;
   }
-  
+
   static getRemainingLockoutTime(identifier: string): number {
     const attempt = this.attempts.get(identifier);
-    
+
     if (!attempt || !attempt.lockedUntil) {
       return 0;
     }
-    
+
     return Math.max(0, attempt.lockedUntil - Date.now());
   }
-  
+
   static validateEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     if (!emailRegex.test(email)) {
       return false;
     }
-    
+
     // Additional checks
     const parts = email.split('@');
     if (parts[1].includes('..') || parts[0].includes('..')) {
       return false; // Consecutive dots
     }
-    
+
     return true;
   }
 }
@@ -884,34 +909,35 @@ export class AccountSecurity {
 export class CSRFSecurity {
   private static tokens = new Map<string, number>();
   private static readonly TOKEN_LIFETIME = 60 * 60 * 1000; // 1 hour
-  
+
   static generateToken(): string {
-    const token = Math.random().toString(36).substr(2, 15) + Date.now().toString(36);
+    const token =
+      Math.random().toString(36).substr(2, 15) + Date.now().toString(36);
     this.tokens.set(token, Date.now() + this.TOKEN_LIFETIME);
-    
+
     // Clean up expired tokens
     this.cleanupExpiredTokens();
-    
+
     return token;
   }
-  
+
   static verifyToken(token: string): boolean {
     const expiresAt = this.tokens.get(token);
-    
+
     if (!expiresAt) {
       return false;
     }
-    
+
     if (Date.now() > expiresAt) {
       this.tokens.delete(token);
       return false;
     }
-    
+
     // Token is valid, remove it (one-time use)
     this.tokens.delete(token);
     return true;
   }
-  
+
   private static cleanupExpiredTokens(): void {
     const now = Date.now();
     for (const [token, expiresAt] of this.tokens.entries()) {
@@ -969,20 +995,20 @@ class SecurityMonitor {
     };
 
     this.events.push(fullEvent);
-    
+
     // Log to console in development
     if (env.NODE_ENV === 'development') {
       console.warn('🚨 Security Event:', fullEvent);
     }
-    
+
     // Send to monitoring service in production
     if (env.NODE_ENV === 'production') {
       this.sendToMonitoringService(fullEvent);
     }
-    
+
     // Check for alert conditions
     this.checkAlertConditions(fullEvent);
-    
+
     // Keep only recent events (last 1000)
     if (this.events.length > 1000) {
       this.events = this.events.slice(-1000);
@@ -1004,7 +1030,10 @@ class SecurityMonitor {
         }).catch(console.error);
       }
     } catch (error) {
-      console.error('Failed to send security event to monitoring service:', error);
+      console.error(
+        'Failed to send security event to monitoring service:',
+        error
+      );
     }
   }
 
@@ -1014,8 +1043,9 @@ class SecurityMonitor {
 
     // Count recent events of the same type
     const recentEvents = this.events.filter(
-      e => e.type === event.type &&
-      Date.now() - e.timestamp.getTime() < 60 * 60 * 1000 // Last hour
+      e =>
+        e.type === event.type &&
+        Date.now() - e.timestamp.getTime() < 60 * 60 * 1000 // Last hour
     );
 
     if (recentEvents.length >= threshold) {
@@ -1032,7 +1062,7 @@ class SecurityMonitor {
     };
 
     console.error('🚨 SECURITY ALERT:', alert);
-    
+
     // Send alert to administrators
     if (env.NODE_ENV === 'production') {
       this.sendToMonitoringService(alert as any);
@@ -1045,7 +1075,10 @@ class SecurityMonitor {
       .slice(0, limit);
   }
 
-  getEventsByType(type: SecurityEventType, hours: number = 24): SecurityEvent[] {
+  getEventsByType(
+    type: SecurityEventType,
+    hours: number = 24
+  ): SecurityEvent[] {
     const since = Date.now() - hours * 60 * 60 * 1000;
     return this.events.filter(
       e => e.type === type && e.timestamp.getTime() > since
@@ -1054,14 +1087,16 @@ class SecurityMonitor {
 
   getSecurityMetrics(): Record<string, number> {
     const last24Hours = Date.now() - 24 * 60 * 60 * 1000;
-    const recentEvents = this.events.filter(e => e.timestamp.getTime() > last24Hours);
-    
+    const recentEvents = this.events.filter(
+      e => e.timestamp.getTime() > last24Hours
+    );
+
     const metrics: Record<string, number> = {};
-    
+
     Object.values(SecurityEventType).forEach(type => {
       metrics[type] = recentEvents.filter(e => e.type === type).length;
     });
-    
+
     return metrics;
   }
 }
@@ -1127,15 +1162,15 @@ export const logSQLInjectionAttempt = (req: Request, input: string) => {
 function getIP(req: Request): string {
   const forwarded = req.headers.get('x-forwarded-for');
   const realIP = req.headers.get('x-real-ip');
-  
+
   if (forwarded) {
     return forwarded.split(',')[0].trim();
   }
-  
+
   if (realIP) {
     return realIP;
   }
-  
+
   return '127.0.0.1';
 }
 ```
@@ -1166,26 +1201,26 @@ export function withSecurity(
     try {
       // Security checks
       await performSecurityChecks(request);
-      
+
       // Apply rate limiting
       if (options.rateLimiter) {
         const rateLimitedHandler = withRateLimit(
-          async (req) => handler(req as NextRequest),
+          async req => handler(req as NextRequest),
           options.rateLimiter
         );
         return await rateLimitedHandler(request);
       }
-      
+
       // Apply CORS
       if (options.cors) {
-        const corsHandler = withCors(async (req) => handler(req as NextRequest));
+        const corsHandler = withCors(async req => handler(req as NextRequest));
         return await corsHandler(request);
       }
-      
+
       return await handler(request);
     } catch (error) {
       console.error('Security middleware error:', error);
-      
+
       return new NextResponse(
         JSON.stringify({ error: 'Internal server error' }),
         {
@@ -1201,16 +1236,16 @@ export function withSecurity(
 async function performSecurityChecks(request: NextRequest): Promise<void> {
   const url = new URL(request.url);
   const userAgent = request.headers.get('user-agent') || '';
-  
+
   // Check for suspicious patterns
   checkSuspiciousPatterns(request, url.pathname);
-  
+
   // Check user agent
   checkUserAgent(request, userAgent);
-  
+
   // Check for malicious headers
   checkMaliciousHeaders(request);
-  
+
   // Check request size
   checkRequestSize(request);
 }
@@ -1228,13 +1263,16 @@ function checkSuspiciousPatterns(request: NextRequest, pathname: string): void {
     // Common attack paths
     /\/(wp-admin|phpmyadmin|admin|login\.php|config\.php)/i,
   ];
-  
+
   const queryString = request.nextUrl.searchParams.toString();
   const testString = pathname + '?' + queryString;
-  
+
   for (const pattern of suspiciousPatterns) {
     if (pattern.test(testString)) {
-      logSuspiciousRequest(request, `Suspicious pattern detected: ${pattern.source}`);
+      logSuspiciousRequest(
+        request,
+        `Suspicious pattern detected: ${pattern.source}`
+      );
       throw new Error('Suspicious request detected');
     }
   }
@@ -1246,7 +1284,7 @@ function checkUserAgent(request: NextRequest, userAgent: string): void {
     logSuspiciousRequest(request, 'Empty user agent');
     throw new Error('Invalid user agent');
   }
-  
+
   // Block suspicious user agents
   const suspiciousUAs = [
     /bot/i,
@@ -1257,7 +1295,7 @@ function checkUserAgent(request: NextRequest, userAgent: string): void {
     /wget/i,
     /python/i,
   ];
-  
+
   // Allow legitimate bots
   const legitimateBots = [
     /googlebot/i,
@@ -1271,10 +1309,12 @@ function checkUserAgent(request: NextRequest, userAgent: string): void {
     /linkedinbot/i,
     /whatsapp/i,
   ];
-  
-  const isLegitimateBot = legitimateBots.some(pattern => pattern.test(userAgent));
+
+  const isLegitimateBot = legitimateBots.some(pattern =>
+    pattern.test(userAgent)
+  );
   const isSuspicious = suspiciousUAs.some(pattern => pattern.test(userAgent));
-  
+
   if (isSuspicious && !isLegitimateBot) {
     logSuspiciousRequest(request, `Suspicious user agent: ${userAgent}`);
   }
@@ -1282,7 +1322,7 @@ function checkUserAgent(request: NextRequest, userAgent: string): void {
 
 function checkMaliciousHeaders(request: NextRequest): void {
   const headers = request.headers;
-  
+
   // Check for injection attempts in headers
   const suspiciousHeaderValues = [
     /<script/i,
@@ -1291,23 +1331,23 @@ function checkMaliciousHeaders(request: NextRequest): void {
     /onload=/i,
     /onerror=/i,
   ];
-  
+
   for (const [name, value] of headers.entries()) {
     if (suspiciousHeaderValues.some(pattern => pattern.test(value))) {
       logSuspiciousRequest(request, `Malicious header detected: ${name}`);
       throw new Error('Malicious headers detected');
     }
   }
-  
+
   // Check for unusual header combinations
   const referer = headers.get('referer');
   const origin = headers.get('origin');
-  
+
   if (referer && origin) {
     try {
       const refererUrl = new URL(referer);
       const originUrl = new URL(origin);
-      
+
       if (refererUrl.hostname !== originUrl.hostname) {
         logSuspiciousRequest(request, 'Referer/Origin mismatch');
       }
@@ -1320,11 +1360,11 @@ function checkMaliciousHeaders(request: NextRequest): void {
 
 function checkRequestSize(request: NextRequest): void {
   const contentLength = request.headers.get('content-length');
-  
+
   if (contentLength) {
     const size = parseInt(contentLength, 10);
     const maxSize = 10 * 1024 * 1024; // 10MB
-    
+
     if (size > maxSize) {
       logSuspiciousRequest(request, `Request too large: ${size} bytes`);
       throw new Error('Request too large');
@@ -1336,23 +1376,23 @@ function checkRequestSize(request: NextRequest): void {
 class IPFilter {
   private blacklist = new Set<string>();
   private whitelist = new Set<string>();
-  
+
   addToBlacklist(ip: string): void {
     this.blacklist.add(ip);
   }
-  
+
   addToWhitelist(ip: string): void {
     this.whitelist.add(ip);
   }
-  
+
   isBlocked(ip: string): boolean {
     if (this.whitelist.size > 0 && !this.whitelist.has(ip)) {
       return true;
     }
-    
+
     return this.blacklist.has(ip);
   }
-  
+
   removeFromBlacklist(ip: string): void {
     this.blacklist.delete(ip);
   }
@@ -1364,32 +1404,32 @@ export const ipFilter = new IPFilter();
 class TemporaryBlocking {
   private blocked = new Map<string, number>();
   private readonly BLOCK_DURATION = 60 * 60 * 1000; // 1 hour
-  
+
   block(ip: string, duration: number = this.BLOCK_DURATION): void {
     this.blocked.set(ip, Date.now() + duration);
     console.warn(`🚫 Temporarily blocked IP: ${ip}`);
   }
-  
+
   isBlocked(ip: string): boolean {
     const blockedUntil = this.blocked.get(ip);
-    
+
     if (!blockedUntil) {
       return false;
     }
-    
+
     if (Date.now() > blockedUntil) {
       this.blocked.delete(ip);
       return false;
     }
-    
+
     return true;
   }
-  
+
   unblock(ip: string): void {
     this.blocked.delete(ip);
     console.info(`✅ Unblocked IP: ${ip}`);
   }
-  
+
   cleanup(): void {
     const now = Date.now();
     for (const [ip, blockedUntil] of this.blocked.entries()) {
@@ -1403,9 +1443,12 @@ class TemporaryBlocking {
 export const temporaryBlocking = new TemporaryBlocking();
 
 // Clean up expired blocks every 10 minutes
-setInterval(() => {
-  temporaryBlocking.cleanup();
-}, 10 * 60 * 1000);
+setInterval(
+  () => {
+    temporaryBlocking.cleanup();
+  },
+  10 * 60 * 1000
+);
 ```
 
 ### 9. Update Contact API with Security
@@ -1423,11 +1466,23 @@ import { z } from 'zod';
 
 // Sanitized contact schema
 const sanitizedContactSchema = z.object({
-  name: z.preprocess((val) => sanitizeInput(val, 'string'), z.string().min(2).max(100)),
-  email: z.preprocess((val) => sanitizeInput(val, 'email'), z.string().email()),
-  subject: z.preprocess((val) => sanitizeInput(val, 'string'), z.string().min(5).max(200)),
-  message: z.preprocess((val) => sanitizeInput(val, 'string'), z.string().min(10).max(1000)),
-  phone: z.preprocess((val) => sanitizeInput(val, 'phone'), z.string().optional()),
+  name: z.preprocess(
+    val => sanitizeInput(val, 'string'),
+    z.string().min(2).max(100)
+  ),
+  email: z.preprocess(val => sanitizeInput(val, 'email'), z.string().email()),
+  subject: z.preprocess(
+    val => sanitizeInput(val, 'string'),
+    z.string().min(5).max(200)
+  ),
+  message: z.preprocess(
+    val => sanitizeInput(val, 'string'),
+    z.string().min(10).max(1000)
+  ),
+  phone: z.preprocess(
+    val => sanitizeInput(val, 'phone'),
+    z.string().optional()
+  ),
   newsletter: z.boolean().optional(),
 });
 
@@ -1435,15 +1490,18 @@ export const POST = withSecurity(
   async (request: NextRequest) => {
     try {
       const body = await request.json();
-      
+
       // Validate and sanitize input
       const validatedData = sanitizedContactSchema.parse(body);
-      
+
       // Additional security checks
       const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
-      
+
       // Check for spam patterns
-      if (isSpamContent(validatedData.message) || isSpamContent(validatedData.subject)) {
+      if (
+        isSpamContent(validatedData.message) ||
+        isSpamContent(validatedData.subject)
+      ) {
         securityMonitor.logEvent({
           type: SecurityEventType.SUSPICIOUS_REQUEST,
           severity: 'medium',
@@ -1451,44 +1509,43 @@ export const POST = withSecurity(
           metadata: { email: validatedData.email },
           ip,
         });
-        
+
         return NextResponse.json(
           { error: 'Message appears to be spam' },
           { status: 400 }
         );
       }
-      
+
       // Process the contact form (send email, save to database, etc.)
       await processContactForm(validatedData);
-      
+
       // Log successful submission
       console.log('Contact form submitted:', {
         email: validatedData.email,
         subject: validatedData.subject,
         ip,
       });
-      
+
       return NextResponse.json(
-        { 
+        {
           message: 'Message sent successfully',
-          id: `contact-${Date.now()}`
+          id: `contact-${Date.now()}`,
         },
         { status: 200 }
       );
-      
     } catch (error) {
       console.error('Contact API error:', error);
-      
+
       if (error instanceof z.ZodError) {
         return NextResponse.json(
-          { 
+          {
             error: 'Validation error',
-            details: error.errors 
+            details: error.errors,
           },
           { status: 400 }
         );
       }
-      
+
       return NextResponse.json(
         { error: 'Internal server error' },
         { status: 500 }
@@ -1509,11 +1566,13 @@ function isSpamContent(content: string): boolean {
     /free gift|congratulations|winner/i,
     /(https?:\/\/[^\s]+){3,}/i, // Multiple URLs
   ];
-  
+
   return spamPatterns.some(pattern => pattern.test(content));
 }
 
-async function processContactForm(data: z.infer<typeof sanitizedContactSchema>) {
+async function processContactForm(
+  data: z.infer<typeof sanitizedContactSchema>
+) {
   // Implement your contact form processing logic here
   // e.g., send email, save to database, etc.
   console.log('Processing contact form:', data);
@@ -1524,7 +1583,7 @@ async function processContactForm(data: z.infer<typeof sanitizedContactSchema>) 
 
 Create `docs/SECURITY.md`:
 
-```markdown
+````markdown
 # Security Guide
 
 ## Overview
@@ -1534,27 +1593,32 @@ This document outlines the security measures implemented in the application and 
 ## Security Features
 
 ### 1. Content Security Policy (CSP)
+
 - Prevents XSS attacks by controlling resource loading
 - Configured in `src/middleware.ts`
 - Different policies for development and production
 
 ### 2. Rate Limiting
+
 - Prevents abuse and DoS attacks
 - Different limits for various endpoints
 - IP-based tracking with automatic cleanup
 
 ### 3. Input Sanitization
+
 - All user inputs are sanitized and validated
 - Uses Zod for schema validation
 - DOMPurify for HTML sanitization
 
 ### 4. Authentication Security
+
 - Password strength requirements
 - Account lockout after failed attempts
 - Secure session management
 - JWT with proper expiration
 
 ### 5. Security Headers
+
 - X-Frame-Options: DENY
 - X-Content-Type-Options: nosniff
 - X-XSS-Protection: 1; mode=block
@@ -1564,13 +1628,16 @@ This document outlines the security measures implemented in the application and 
 ## Environment Variables
 
 ### Required Security Variables
+
 ```bash
 JWT_SECRET=your-jwt-secret-32-chars-min
 SESSION_SECRET=your-session-secret-32-chars-min
 API_SECRET_KEY=your-api-secret-20-chars-min
 ```
+````
 
 ### Optional Security Variables
+
 ```bash
 WEBHOOK_SECRET=your-webhook-secret
 ENCRYPTION_KEY=your-encryption-key
@@ -1580,26 +1647,31 @@ SECURITY_WEBHOOK_URL=https://your-monitoring-service.com/webhook
 ## Best Practices
 
 ### 1. Input Validation
+
 - Always validate and sanitize user inputs
 - Use Zod schemas for validation
 - Never trust client-side validation alone
 
 ### 2. Authentication
+
 - Implement strong password requirements
 - Use secure session management
 - Implement account lockout mechanisms
 
 ### 3. Authorization
+
 - Check permissions for every request
 - Use role-based access control
 - Validate user permissions server-side
 
 ### 4. Data Protection
+
 - Encrypt sensitive data at rest
 - Use HTTPS for all communications
 - Implement proper CORS policies
 
 ### 5. Monitoring
+
 - Log security events
 - Monitor for suspicious patterns
 - Set up alerts for critical events
@@ -1619,16 +1691,19 @@ SECURITY_WEBHOOK_URL=https://your-monitoring-service.com/webhook
 ## Incident Response
 
 ### 1. Detection
+
 - Monitor security logs
 - Watch for unusual patterns
 - Check monitoring alerts
 
 ### 2. Response
+
 - Block malicious IPs temporarily
 - Investigate the incident
 - Document findings
 
 ### 3. Recovery
+
 - Fix identified vulnerabilities
 - Update security measures
 - Review and improve processes
@@ -1643,7 +1718,8 @@ SECURITY_WEBHOOK_URL=https://your-monitoring-service.com/webhook
 ## Contact
 
 For security issues, contact: security@yourapp.com
-```
+
+````
 
 ## Acceptance Criteria
 
@@ -1665,9 +1741,10 @@ For security issues, contact: security@yourapp.com
 # Check CSP headers in browser developer tools
 # Try loading external scripts (should be blocked)
 # Verify inline scripts work in development
-```
+````
 
 ### 2. Test Rate Limiting
+
 ```bash
 # Make rapid requests to API endpoints
 # Verify 429 responses after limit
@@ -1675,6 +1752,7 @@ For security issues, contact: security@yourapp.com
 ```
 
 ### 3. Test Input Sanitization
+
 ```bash
 # Submit forms with malicious input
 # Verify XSS attempts are blocked
@@ -1682,6 +1760,7 @@ For security issues, contact: security@yourapp.com
 ```
 
 ### 4. Test Security Headers
+
 ```bash
 # Check response headers
 curl -I https://yourapp.com/
@@ -1689,6 +1768,7 @@ curl -I https://yourapp.com/
 ```
 
 ### 5. Test Security Monitoring
+
 ```bash
 # Trigger security events
 # Check logs for proper recording
@@ -1698,17 +1778,20 @@ curl -I https://yourapp.com/
 ## References and Dependencies
 
 ### Dependencies
+
 - `isomorphic-dompurify`: HTML sanitization
 - `bcryptjs`: Password hashing
 - `jsonwebtoken`: JWT handling
 - `zod`: Input validation
 
 ### Documentation
+
 - [OWASP Security Guidelines](https://owasp.org/www-project-top-ten/)
 - [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
 - [Security Headers](https://securityheaders.com/)
 
 ## Estimated Time
+
 **10-12 hours**
 
 - CSP and headers configuration: 2-3 hours

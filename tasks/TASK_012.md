@@ -1,9 +1,11 @@
 # TASK_012: Performance Optimization
 
 ## Overview
+
 Implement comprehensive performance optimization techniques for the Next.js application, focusing on image optimization, code splitting, SEO enhancements, and monitoring. This task ensures the application loads quickly, ranks well in search engines, and provides an excellent user experience.
 
 ## Objectives
+
 - Configure Next.js Image optimization for responsive and lazy-loaded images
 - Implement dynamic imports for code splitting and reduced bundle sizes
 - Create comprehensive SEO component with meta tags and Open Graph support
@@ -121,7 +123,7 @@ const OptimizedImage = ({
   };
 
   return (
-    <div 
+    <div
       className={cn(
         'relative overflow-hidden',
         aspectRatio !== 'auto' && aspectRatioClasses[aspectRatio],
@@ -130,9 +132,9 @@ const OptimizedImage = ({
     >
       {/* Loading skeleton */}
       {isLoading && showSkeleton && (
-        <div className="absolute inset-0 bg-muted animate-pulse" />
+        <div className="bg-muted absolute inset-0 animate-pulse" />
       )}
-      
+
       {/* Image */}
       <Image
         src={imageSrc}
@@ -140,18 +142,20 @@ const OptimizedImage = ({
         className={cn(
           'transition-opacity duration-300',
           isLoading ? 'opacity-0' : 'opacity-100',
-          hasError && 'filter grayscale',
+          hasError && 'grayscale filter',
           className
         )}
         onLoad={handleLoad}
         onError={handleError}
         {...props}
       />
-      
+
       {/* Error state overlay */}
       {hasError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted">
-          <span className="text-xs text-muted-foreground">Failed to load image</span>
+        <div className="bg-muted absolute inset-0 flex items-center justify-center">
+          <span className="text-muted-foreground text-xs">
+            Failed to load image
+          </span>
         </div>
       )}
     </div>
@@ -172,7 +176,7 @@ import { ComponentProps } from 'react';
 // Loading component
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center p-8">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    <div className="border-primary h-8 w-8 animate-spin rounded-full border-b-2"></div>
   </div>
 );
 
@@ -195,7 +199,9 @@ export const DynamicDataTable = dynamic(
 export const DynamicModal = dynamic(
   () => import('@/components/ui/Modal').then(mod => mod.Modal),
   {
-    loading: () => <div className="fixed inset-0 bg-background/80 backdrop-blur-sm" />,
+    loading: () => (
+      <div className="bg-background/80 fixed inset-0 backdrop-blur-sm" />
+    ),
   }
 );
 
@@ -203,7 +209,7 @@ export const DynamicCodeEditor = dynamic(
   () => import('@/components/editors/CodeEditor').then(mod => mod.CodeEditor),
   {
     loading: () => (
-      <div className="h-96 bg-muted rounded-lg flex items-center justify-center">
+      <div className="bg-muted flex h-96 items-center justify-center rounded-lg">
         <LoadingSpinner />
       </div>
     ),
@@ -222,7 +228,7 @@ export const DynamicDashboardAnalytics = dynamic(
 export const DynamicFileUploader = dynamic(
   () => import('@/components/forms/FileUploader').then(mod => mod.FileUploader),
   {
-    loading: () => <div className="h-32 bg-muted rounded-lg animate-pulse" />,
+    loading: () => <div className="bg-muted h-32 animate-pulse rounded-lg" />,
   }
 );
 
@@ -294,19 +300,17 @@ const SEO = ({
   canonical,
 }: SEOProps) => {
   const router = useRouter();
-  
+
   // Construct full URL
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourapp.com';
   const fullUrl = url || `${baseUrl}${router.asPath}`;
   const canonicalUrl = canonical || fullUrl;
-  
+
   // Construct full image URL
   const fullImageUrl = image.startsWith('http') ? image : `${baseUrl}${image}`;
-  
+
   // Construct page title
-  const pageTitle = title 
-    ? `${title} | ${siteName}`
-    : defaultSEO.title;
+  const pageTitle = title ? `${title} | ${siteName}` : defaultSEO.title;
 
   return (
     <Head>
@@ -315,18 +319,18 @@ const SEO = ({
       <meta name="description" content={description} />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="canonical" href={canonicalUrl} />
-      
+
       {/* Robots */}
       {noindex && <meta name="robots" content="noindex,nofollow" />}
-      
+
       {/* Author */}
       {author && <meta name="author" content={author} />}
-      
+
       {/* Keywords */}
       {tags && tags.length > 0 && (
         <meta name="keywords" content={tags.join(', ')} />
       )}
-      
+
       {/* Open Graph */}
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content={siteName} />
@@ -337,7 +341,7 @@ const SEO = ({
       <meta property="og:image:alt" content={title || siteName} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      
+
       {/* Article specific */}
       {type === 'article' && (
         <>
@@ -348,27 +352,32 @@ const SEO = ({
             <meta property="article:modified_time" content={modifiedTime} />
           )}
           {author && <meta property="article:author" content={author} />}
-          {tags && tags.map(tag => (
-            <meta key={tag} property="article:tag" content={tag} />
-          ))}
+          {tags &&
+            tags.map(tag => (
+              <meta key={tag} property="article:tag" content={tag} />
+            ))}
         </>
       )}
-      
+
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title || defaultSEO.title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImageUrl} />
       <meta name="twitter:url" content={fullUrl} />
-      
+
       {/* Additional Meta */}
       <meta name="theme-color" content="#000000" />
       <meta name="msapplication-TileColor" content="#000000" />
-      
+
       {/* Preconnect to external domains for performance */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="anonymous"
+      />
+
       {/* Structured Data */}
       <script
         type="application/ld+json"
@@ -404,7 +413,14 @@ import path from 'path';
 interface SitemapEntry {
   loc: string;
   lastmod?: string;
-  changefreq?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+  changefreq?:
+    | 'always'
+    | 'hourly'
+    | 'daily'
+    | 'weekly'
+    | 'monthly'
+    | 'yearly'
+    | 'never';
   priority?: number;
 }
 
@@ -478,7 +494,7 @@ import { generateSitemap } from '@/lib/sitemap';
 export async function GET(request: NextRequest) {
   try {
     const sitemap = await generateSitemap();
-    
+
     return new NextResponse(sitemap, {
       status: 200,
       headers: {
@@ -502,7 +518,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://yourapp.com';
-  
+
   const robotsContent = `User-agent: *
 Allow: /
 
@@ -566,11 +582,13 @@ export function reportWebVitals(metric: any) {
     event('web_vitals', {
       event_category: 'Web Vitals',
       event_label: metric.name,
-      value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+      value: Math.round(
+        metric.name === 'CLS' ? metric.value * 1000 : metric.value
+      ),
       non_interaction: true,
     });
   }
-  
+
   // Also log to console in development
   if (process.env.NODE_ENV === 'development') {
     console.log(`[Web Vitals] ${metric.name}:`, metric);
@@ -584,12 +602,17 @@ export function observePerformance() {
   }
 
   // Largest Contentful Paint
-  const lcpObserver = new PerformanceObserver((list) => {
+  const lcpObserver = new PerformanceObserver(list => {
     for (const entry of list.getEntries()) {
       event('performance_metric', {
         metric_name: 'LCP',
         metric_value: entry.startTime,
-        metric_rating: entry.startTime < 2500 ? 'good' : entry.startTime < 4000 ? 'needs-improvement' : 'poor',
+        metric_rating:
+          entry.startTime < 2500
+            ? 'good'
+            : entry.startTime < 4000
+              ? 'needs-improvement'
+              : 'poor',
       });
     }
   });
@@ -601,13 +624,17 @@ export function observePerformance() {
   }
 
   // First Input Delay
-  const fidObserver = new PerformanceObserver((list) => {
+  const fidObserver = new PerformanceObserver(list => {
     for (const entry of list.getEntries()) {
       event('performance_metric', {
         metric_name: 'FID',
         metric_value: entry.processingStart - entry.startTime,
-        metric_rating: entry.processingStart - entry.startTime < 100 ? 'good' : 
-                      entry.processingStart - entry.startTime < 300 ? 'needs-improvement' : 'poor',
+        metric_rating:
+          entry.processingStart - entry.startTime < 100
+            ? 'good'
+            : entry.processingStart - entry.startTime < 300
+              ? 'needs-improvement'
+              : 'poor',
       });
     }
   });
@@ -626,7 +653,8 @@ export function trackBundleSize() {
   }
 
   const connection = (navigator as any).connection;
-  const bundleSize = performance.getEntriesByType('navigation')[0]?.transferSize || 0;
+  const bundleSize =
+    performance.getEntriesByType('navigation')[0]?.transferSize || 0;
 
   event('bundle_performance', {
     bundle_size: bundleSize,
@@ -743,9 +771,7 @@ export default function RootLayout({
         )}
       </head>
       <body className={inter.className}>
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
@@ -784,6 +810,7 @@ Add these scripts to `package.json`:
 ## Testing Instructions
 
 ### 1. Test Image Optimization
+
 ```bash
 # Check image formats in browser network tab
 # Verify WebP/AVIF formats are served
@@ -792,6 +819,7 @@ Add these scripts to `package.json`:
 ```
 
 ### 2. Test Code Splitting
+
 ```bash
 # Run bundle analyzer: npm run analyze
 # Check network tab for dynamic chunk loading
@@ -799,6 +827,7 @@ Add these scripts to `package.json`:
 ```
 
 ### 3. Test SEO Implementation
+
 ```bash
 # Visit pages and check meta tags in browser inspector
 # Test Open Graph tags with social media validators
@@ -806,6 +835,7 @@ Add these scripts to `package.json`:
 ```
 
 ### 4. Test Performance
+
 ```bash
 # Run Lighthouse audit: npm run lighthouse
 # Check Core Web Vitals in PageSpeed Insights
@@ -813,6 +843,7 @@ Add these scripts to `package.json`:
 ```
 
 ### 5. Test Sitemap and Robots
+
 ```bash
 # Visit /sitemap.xml and verify content
 # Check /robots.txt accessibility
@@ -822,17 +853,20 @@ Add these scripts to `package.json`:
 ## References and Dependencies
 
 ### Dependencies
+
 - `next/image`: Image optimization
 - `next/dynamic`: Dynamic imports
 - `@next/bundle-analyzer`: Bundle analysis
 
 ### Documentation
+
 - [Next.js Image Optimization](https://nextjs.org/docs/basic-features/image-optimization)
 - [Next.js Dynamic Imports](https://nextjs.org/docs/advanced-features/dynamic-import)
 - [Core Web Vitals](https://web.dev/vitals/)
 - [Lighthouse Performance](https://developers.google.com/web/tools/lighthouse)
 
 ## Estimated Time
+
 **8-10 hours**
 
 - Image optimization setup: 2-3 hours

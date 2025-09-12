@@ -1,9 +1,11 @@
 # TASK_014: PWA Features
 
 ## Overview
+
 Implement Progressive Web App (PWA) functionality to enhance user experience with offline support, installability, and native app-like features. This task focuses on creating a web manifest, service worker implementation, offline capabilities, and install prompt functionality.
 
 ## Objectives
+
 - Configure PWA web manifest with proper metadata and icons
 - Implement service worker for caching and offline functionality
 - Add offline support with fallback pages and data synchronization
@@ -198,7 +200,11 @@ Create `worker/sw.js`:
 ```javascript
 import { precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
 import { registerRoute, NavigationRoute } from 'workbox-routing';
-import { StaleWhileRevalidate, CacheFirst, NetworkFirst } from 'workbox-strategies';
+import {
+  StaleWhileRevalidate,
+  CacheFirst,
+  NetworkFirst,
+} from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { BackgroundSyncPlugin } from 'workbox-background-sync';
 import { Queue } from 'workbox-background-sync';
@@ -307,7 +313,7 @@ const formSubmissionQueue = new Queue('form-submissions', {
 
 // Handle offline form submissions
 registerRoute(
-  ({ url, request }) => 
+  ({ url, request }) =>
     url.pathname.startsWith('/api/contact') && request.method === 'POST',
   async ({ event }) => {
     try {
@@ -316,9 +322,9 @@ registerRoute(
     } catch (error) {
       await formSubmissionQueue.pushRequest({ request: event.request });
       return new Response(
-        JSON.stringify({ 
-          message: 'Form submitted offline. Will sync when online.', 
-          offline: true 
+        JSON.stringify({
+          message: 'Form submitted offline. Will sync when online.',
+          offline: true,
         }),
         {
           status: 202,
@@ -330,7 +336,7 @@ registerRoute(
 );
 
 // Fallback for offline pages
-const navigationHandler = async (params) => {
+const navigationHandler = async params => {
   try {
     return await new NetworkFirst({
       cacheName: 'navigations',
@@ -345,9 +351,9 @@ const navigationRoute = new NavigationRoute(navigationHandler);
 registerRoute(navigationRoute);
 
 // Install event - cache essential resources
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_NAME).then(cache => {
       return cache.addAll([
         '/',
         OFFLINE_PAGE,
@@ -357,29 +363,29 @@ self.addEventListener('install', (event) => {
       ]);
     })
   );
-  
+
   // Skip waiting to activate the new service worker immediately
   self.skipWaiting();
 });
 
 // Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames
-          .filter((cacheName) => cacheName !== CACHE_NAME)
-          .map((cacheName) => caches.delete(cacheName))
+          .filter(cacheName => cacheName !== CACHE_NAME)
+          .map(cacheName => caches.delete(cacheName))
       );
     })
   );
-  
+
   // Take control of all pages
   self.clients.claim();
 });
 
 // Handle push notifications
-self.addEventListener('push', (event) => {
+self.addEventListener('push', event => {
   const options = {
     body: event.data?.text() || 'New notification',
     icon: '/icons/icon-192x192.png',
@@ -402,25 +408,23 @@ self.addEventListener('push', (event) => {
       },
     ],
   };
-  
+
   event.waitUntil(
     self.registration.showNotification('App Notification', options)
   );
 });
 
 // Handle notification clicks
-self.addEventListener('notificationclick', (event) => {
+self.addEventListener('notificationclick', event => {
   event.notification.close();
-  
+
   if (event.action === 'explore') {
-    event.waitUntil(
-      clients.openWindow('/')
-    );
+    event.waitUntil(clients.openWindow('/'));
   }
 });
 
 // Sync event for background sync
-self.addEventListener('sync', (event) => {
+self.addEventListener('sync', event => {
   if (event.tag === 'background-sync') {
     event.waitUntil(backgroundSync());
   }
@@ -479,42 +483,44 @@ export default function OfflinePage() {
   };
 
   return (
-    <Section className="min-h-screen flex items-center justify-center">
+    <Section className="flex min-h-screen items-center justify-center">
       <Container size="md" className="text-center">
         <div className="space-y-6">
           {/* Offline Icon */}
           <div className="flex justify-center">
             <div className="relative">
-              <WifiIcon className="h-24 w-24 text-muted-foreground" />
+              <WifiIcon className="text-muted-foreground h-24 w-24" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-8 h-1 bg-destructive transform rotate-45"></div>
+                <div className="bg-destructive h-1 w-8 rotate-45 transform"></div>
               </div>
             </div>
           </div>
 
           {/* Title and Description */}
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-foreground text-3xl font-bold">
               You're offline
             </h1>
-            <p className="text-lg text-muted-foreground max-w-md mx-auto">
-              It looks like you've lost your internet connection. Don't worry, 
+            <p className="text-muted-foreground mx-auto max-w-md text-lg">
+              It looks like you've lost your internet connection. Don't worry,
               you can still browse cached content.
             </p>
           </div>
 
           {/* Status */}
-          <div className="bg-muted/50 rounded-lg p-4 max-w-sm mx-auto">
+          <div className="bg-muted/50 mx-auto max-w-sm rounded-lg p-4">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Status:</span>
-              <span className={`font-medium ${
-                isOnline ? 'text-green-600' : 'text-destructive'
-              }`}>
+              <span
+                className={`font-medium ${
+                  isOnline ? 'text-green-600' : 'text-destructive'
+                }`}
+              >
                 {isOnline ? 'Online' : 'Offline'}
               </span>
             </div>
             {lastUpdate && (
-              <div className="flex items-center justify-between text-sm mt-2">
+              <div className="mt-2 flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Last update:</span>
                 <span className="font-medium">{lastUpdate}</span>
               </div>
@@ -522,8 +528,8 @@ export default function OfflinePage() {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button
               onClick={handleRetry}
               disabled={!isOnline}
               className="flex items-center space-x-2"
@@ -531,19 +537,16 @@ export default function OfflinePage() {
               <ArrowPathIcon className="h-4 w-4" />
               <span>Try Again</span>
             </Button>
-            
-            <Button 
-              variant="outline"
-              onClick={() => window.history.back()}
-            >
+
+            <Button variant="outline" onClick={() => window.history.back()}>
               Go Back
             </Button>
           </div>
 
           {/* Cached Content Info */}
-          <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-sm">
-            <h3 className="font-semibold mb-2">Available offline:</h3>
-            <ul className="space-y-1 text-muted-foreground">
+          <div className="mt-8 rounded-lg bg-blue-50 p-4 text-sm dark:bg-blue-900/20">
+            <h3 className="mb-2 font-semibold">Available offline:</h3>
+            <ul className="text-muted-foreground space-y-1">
               <li>• Recently visited pages</li>
               <li>• Cached images and resources</li>
               <li>• Form submissions (will sync when online)</li>
@@ -577,7 +580,8 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const InstallPrompt = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
 
@@ -591,7 +595,7 @@ const InstallPrompt = () => {
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      
+
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setShowInstallPrompt(true);
     };
@@ -606,7 +610,10 @@ const InstallPrompt = () => {
     window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt
+      );
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, []);
@@ -619,7 +626,7 @@ const InstallPrompt = () => {
 
     // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
     } else {
@@ -647,37 +654,37 @@ const InstallPrompt = () => {
   if (dismissed) {
     const dismissedTime = parseInt(dismissed);
     const dayInMs = 24 * 60 * 60 * 1000;
-    if (Date.now() - dismissedTime < dayInMs * 7) { // Don't show for 7 days
+    if (Date.now() - dismissedTime < dayInMs * 7) {
+      // Don't show for 7 days
       return null;
     }
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-sm">
-      <div className="bg-card border border-border rounded-lg shadow-lg p-4">
+    <div className="fixed right-4 bottom-4 left-4 z-50 mx-auto max-w-sm">
+      <div className="bg-card border-border rounded-lg border p-4 shadow-lg">
         <div className="flex items-start space-x-3">
           <div className="flex-shrink-0">
-            <ArrowDownTrayIcon className="h-6 w-6 text-primary" />
+            <ArrowDownTrayIcon className="text-primary h-6 w-6" />
           </div>
-          
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium text-foreground">
-              Install App
-            </h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              Install our app for a better experience with offline support and quick access.
+
+          <div className="min-w-0 flex-1">
+            <h3 className="text-foreground text-sm font-medium">Install App</h3>
+            <p className="text-muted-foreground mt-1 text-xs">
+              Install our app for a better experience with offline support and
+              quick access.
             </p>
           </div>
-          
+
           <button
             onClick={handleDismiss}
-            className="flex-shrink-0 text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground flex-shrink-0"
             aria-label="Close install prompt"
           >
             <XMarkIcon className="h-4 w-4" />
           </button>
         </div>
-        
+
         <div className="mt-3 flex space-x-2">
           <Button
             size="sm"
@@ -748,8 +755,8 @@ const PWAStatus = () => {
     <div className="fixed top-4 right-4 z-40 flex flex-col space-y-2">
       {/* Online/Offline indicator */}
       {!isOnline && (
-        <div 
-          className="bg-destructive text-destructive-foreground px-3 py-2 rounded-md shadow-md flex items-center space-x-2 text-sm"
+        <div
+          className="bg-destructive text-destructive-foreground flex items-center space-x-2 rounded-md px-3 py-2 text-sm shadow-md"
           data-testid="offline-indicator"
         >
           <WifiSlashIcon className="h-4 w-4" />
@@ -759,11 +766,11 @@ const PWAStatus = () => {
 
       {/* Update available indicator */}
       {updateAvailable && (
-        <div className="bg-blue-600 text-white px-3 py-2 rounded-md shadow-md flex items-center space-x-2 text-sm">
+        <div className="flex items-center space-x-2 rounded-md bg-blue-600 px-3 py-2 text-sm text-white shadow-md">
           <span>Update available</span>
           <button
             onClick={handleRefresh}
-            className="ml-2 bg-white text-blue-600 px-2 py-1 rounded text-xs font-medium hover:bg-gray-100"
+            className="ml-2 rounded bg-white px-2 py-1 text-xs font-medium text-blue-600 hover:bg-gray-100"
           >
             Refresh
           </button>
@@ -803,59 +810,64 @@ export const supportsPWAInstall = (): boolean => {
 };
 
 // Register service worker
-export const registerServiceWorker = async (): Promise<ServiceWorkerRegistration | null> => {
-  if (!('serviceWorker' in navigator)) {
-    console.warn('Service Worker is not supported');
-    return null;
-  }
+export const registerServiceWorker =
+  async (): Promise<ServiceWorkerRegistration | null> => {
+    if (!('serviceWorker' in navigator)) {
+      console.warn('Service Worker is not supported');
+      return null;
+    }
 
-  try {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-    });
+    try {
+      const registration = await navigator.serviceWorker.register('/sw.js', {
+        scope: '/',
+      });
 
-    console.log('Service Worker registered successfully:', registration);
+      console.log('Service Worker registered successfully:', registration);
 
-    // Handle updates
-    registration.addEventListener('updatefound', () => {
-      const newWorker = registration.installing;
-      if (newWorker) {
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // New update available
-            console.log('New service worker version available');
-            
-            // Dispatch custom event for UI to handle
-            window.dispatchEvent(new CustomEvent('sw-update-available'));
-          }
-        });
-      }
-    });
+      // Handle updates
+      registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing;
+        if (newWorker) {
+          newWorker.addEventListener('statechange', () => {
+            if (
+              newWorker.state === 'installed' &&
+              navigator.serviceWorker.controller
+            ) {
+              // New update available
+              console.log('New service worker version available');
 
-    return registration;
-  } catch (error) {
-    console.error('Service Worker registration failed:', error);
-    return null;
-  }
-};
+              // Dispatch custom event for UI to handle
+              window.dispatchEvent(new CustomEvent('sw-update-available'));
+            }
+          });
+        }
+      });
+
+      return registration;
+    } catch (error) {
+      console.error('Service Worker registration failed:', error);
+      return null;
+    }
+  };
 
 // Request notification permission
-export const requestNotificationPermission = async (): Promise<NotificationPermission> => {
-  if (!('Notification' in window)) {
-    throw new Error('Notifications are not supported');
-  }
+export const requestNotificationPermission =
+  async (): Promise<NotificationPermission> => {
+    if (!('Notification' in window)) {
+      throw new Error('Notifications are not supported');
+    }
 
-  if (Notification.permission === 'granted') {
-    return 'granted';
-  }
+    if (Notification.permission === 'granted') {
+      return 'granted';
+    }
 
-  if (Notification.permission !== 'denied') {
-    const permission = await Notification.requestPermission();
-    return permission;
-  }
+    if (Notification.permission !== 'denied') {
+      const permission = await Notification.requestPermission();
+      return permission;
+    }
 
-  return 'denied';
-};
+    return 'denied';
+  };
 
 // Show notification
 export const showNotification = (
@@ -886,7 +898,7 @@ export const showNotification = (
     };
 
     notification.onshow = () => resolve();
-    notification.onerror = (error) => reject(error);
+    notification.onerror = error => reject(error);
   });
 };
 
@@ -910,9 +922,10 @@ export const subscribeToPushNotifications = async (
 
 // Get network information
 export const getNetworkInfo = () => {
-  const connection = (navigator as any).connection || 
-                    (navigator as any).mozConnection || 
-                    (navigator as any).webkitConnection;
+  const connection =
+    (navigator as any).connection ||
+    (navigator as any).mozConnection ||
+    (navigator as any).webkitConnection;
 
   if (!connection) {
     return { effectiveType: 'unknown', downlink: 0 };
@@ -970,7 +983,11 @@ export const metadata = {
   icons: {
     shortcut: '/favicon.ico',
     apple: [
-      { url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      {
+        url: '/icons/apple-touch-icon.png',
+        sizes: '180x180',
+        type: 'image/png',
+      },
     ],
   },
 };
@@ -1001,13 +1018,23 @@ export default function RootLayout({
         <meta name="msapplication-config" content="/browserconfig.xml" />
         <meta name="msapplication-TileColor" content="#000000" />
         <meta name="msapplication-tap-highlight" content="no" />
-        
+
         {/* Apple touch icons */}
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-        
+
         {/* Favicon */}
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/icons/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/icons/favicon-16x16.png"
+        />
         <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
@@ -1077,6 +1104,7 @@ Create `public/browserconfig.xml`:
 ## Testing Instructions
 
 ### 1. Test PWA Installation
+
 ```bash
 # Use Chrome DevTools
 # 1. Open Application tab
@@ -1086,6 +1114,7 @@ Create `public/browserconfig.xml`:
 ```
 
 ### 2. Test Offline Functionality
+
 ```bash
 # In DevTools Network tab:
 # 1. Set to "Offline"
@@ -1095,6 +1124,7 @@ Create `public/browserconfig.xml`:
 ```
 
 ### 3. Test Service Worker
+
 ```bash
 # In DevTools Application tab:
 # 1. Check service worker status
@@ -1103,6 +1133,7 @@ Create `public/browserconfig.xml`:
 ```
 
 ### 4. Run PWA Audit
+
 ```bash
 # Run Lighthouse PWA audit
 npx lighthouse http://localhost:3000 --view --preset=pwa
@@ -1111,16 +1142,19 @@ npx lighthouse http://localhost:3000 --view --preset=pwa
 ## References and Dependencies
 
 ### Dependencies
+
 - `next-pwa`: PWA configuration for Next.js
 - `workbox-webpack-plugin`: Advanced service worker features
 
 ### Documentation
+
 - [PWA Documentation](https://web.dev/progressive-web-apps/)
 - [Web App Manifest](https://web.dev/add-manifest/)
 - [Service Workers](https://web.dev/service-workers-cache-storage/)
 - [Workbox](https://developers.google.com/web/tools/workbox)
 
 ## Estimated Time
+
 **8-10 hours**
 
 - Manifest and icons setup: 2-3 hours

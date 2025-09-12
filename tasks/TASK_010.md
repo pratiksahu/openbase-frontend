@@ -1,9 +1,11 @@
 # TASK_010: Custom Hooks
 
 ## Overview
+
 Develop a collection of reusable custom React hooks that encapsulate common functionality and stateful logic across the application. These hooks will provide consistent behavior for media queries, debouncing, local storage, and theme management while following React best practices.
 
 ## Objectives
+
 - Create useMediaQuery hook for responsive design logic
 - Implement useDebounce hook for input optimization
 - Build useLocalStorage hook for persistent state
@@ -71,14 +73,15 @@ export function useMediaQuery(
 
 // Predefined breakpoint hooks for convenience
 export const useIsMobile = () => useMediaQuery('(max-width: 767px)');
-export const useIsTablet = () => useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
+export const useIsTablet = () =>
+  useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
 export const useIsDesktop = () => useMediaQuery('(min-width: 1024px)');
 export const useIsLargeScreen = () => useMediaQuery('(min-width: 1280px)');
 
 // Preference-based queries
-export const usePrefersReducedMotion = () => 
+export const usePrefersReducedMotion = () =>
   useMediaQuery('(prefers-reduced-motion: reduce)');
-export const usePrefersDarkMode = () => 
+export const usePrefersDarkMode = () =>
   useMediaQuery('(prefers-color-scheme: dark)');
 ```
 
@@ -126,9 +129,7 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
   delay: number,
   deps: React.DependencyList = []
 ): T {
-  const [debouncedCallback, setDebouncedCallback] = useState<T>(
-    () => callback
-  );
+  const [debouncedCallback, setDebouncedCallback] = useState<T>(() => callback);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -149,7 +150,10 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
  * @param delay - Debounce delay in milliseconds
  * @returns Object with search value, debounced value, and setter
  */
-export function useDebouncedSearch(initialValue: string = '', delay: number = 300) {
+export function useDebouncedSearch(
+  initialValue: string = '',
+  delay: number = 300
+) {
   const [searchValue, setSearchValue] = useState(initialValue);
   const debouncedSearchValue = useDebounce(searchValue, delay);
 
@@ -201,11 +205,12 @@ export function useLocalStorage<T>(
   const setValue = (value: SetValue<T>) => {
     try {
       // Allow value to be a function so we have the same API as useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+
       // Save state
       setStoredValue(valueToStore);
-      
+
       // Save to localStorage
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(valueToStore));
@@ -306,8 +311,8 @@ export function ThemeProvider({
   const systemPrefersDark = useMediaQuery('(prefers-color-scheme: dark)');
 
   // Calculate resolved theme
-  const resolvedTheme: ResolvedTheme = 
-    theme === 'system' 
+  const resolvedTheme: ResolvedTheme =
+    theme === 'system'
       ? systemPrefersDark ? 'dark' : 'light'
       : theme === 'dark' ? 'dark' : 'light';
 
@@ -328,7 +333,7 @@ export function ThemeProvider({
     if (!mounted) return;
 
     const root = window.document.documentElement;
-    
+
     if (attribute === 'class') {
       root.classList.remove('light', 'dark');
       root.classList.add(resolvedTheme);
@@ -379,11 +384,11 @@ export function useTheme(): ThemeContextValue {
  */
 export function useSimpleTheme(storageKey: string = 'simple-theme') {
   const [theme, setTheme] = useLocalStorage<ResolvedTheme>('light', 'light');
-  
+
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    
+
     // Update DOM
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(newTheme);
@@ -453,11 +458,11 @@ export function useToggle(
   initialValue: boolean = false
 ): [boolean, () => void, (value: boolean) => void] {
   const [value, setValue] = useState<boolean>(initialValue);
-  
+
   const toggle = useCallback(() => {
     setValue(prev => !prev);
   }, []);
-  
+
   return [value, toggle, setValue];
 }
 ```
@@ -476,7 +481,7 @@ import { useState } from 'react';
 export function useCopyToClipboard(): [
   (text: string) => Promise<boolean>,
   boolean,
-  string | null
+  string | null,
 ] {
   const [copied, setCopied] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -491,10 +496,10 @@ export function useCopyToClipboard(): [
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setError(null);
-      
+
       // Reset copied state after 2 seconds
       setTimeout(() => setCopied(false), 2000);
-      
+
       return true;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Copy failed');
@@ -539,28 +544,30 @@ describe('useMediaQuery', () => {
 
   it('should return false when media query does not match', () => {
     mockMatchMedia(false);
-    
+
     const { result } = renderHook(() => useMediaQuery('(min-width: 768px)'));
-    
+
     expect(result.current).toBe(false);
   });
 
   it('should return true when media query matches', () => {
     mockMatchMedia(true);
-    
+
     const { result } = renderHook(() => useMediaQuery('(min-width: 768px)'));
-    
+
     expect(result.current).toBe(true);
   });
 
   it('should return default value when window is undefined', () => {
     const originalWindow = global.window;
     delete (global as any).window;
-    
-    const { result } = renderHook(() => useMediaQuery('(min-width: 768px)', true));
-    
+
+    const { result } = renderHook(() =>
+      useMediaQuery('(min-width: 768px)', true)
+    );
+
     expect(result.current).toBe(true);
-    
+
     global.window = originalWindow;
   });
 });
@@ -571,8 +578,17 @@ describe('useMediaQuery', () => {
 Create `src/hooks/index.ts`:
 
 ```typescript
-export { useMediaQuery, useIsMobile, useIsTablet, useIsDesktop } from './useMediaQuery';
-export { useDebounce, useDebouncedCallback, useDebouncedSearch } from './useDebounce';
+export {
+  useMediaQuery,
+  useIsMobile,
+  useIsTablet,
+  useIsDesktop,
+} from './useMediaQuery';
+export {
+  useDebounce,
+  useDebouncedCallback,
+  useDebouncedSearch,
+} from './useDebounce';
 export { useLocalStorage, useSyncedLocalStorage } from './useLocalStorage';
 export { useTheme, ThemeProvider, useSimpleTheme } from './useTheme';
 export { useClickOutside } from './useClickOutside';
@@ -600,20 +616,20 @@ import {
 export default function TestHooksPage() {
   const [inputValue, setInputValue] = useState('');
   const debouncedValue = useDebounce(inputValue, 500);
-  
+
   const [storedValue, setStoredValue] = useLocalStorage('test-key', '');
   const [showModal, toggleModal] = useToggle();
-  
+
   const isDesktop = useMediaQuery('(min-width: 1024px)');
   const isMobile = useMediaQuery('(max-width: 767px)');
-  
+
   const { theme, toggleTheme } = useTheme();
   const [copyToClipboard, copied] = useCopyToClipboard();
 
   return (
-    <div className="container mx-auto p-8 space-y-8">
+    <div className="container mx-auto space-y-8 p-8">
       <h1 className="text-3xl font-bold">Hook Testing Page</h1>
-      
+
       {/* Media Query Hook */}
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">Media Query Hook</h2>
@@ -628,9 +644,9 @@ export default function TestHooksPage() {
           data-testid="debounce-input"
           type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={e => setInputValue(e.target.value)}
           placeholder="Type something..."
-          className="border p-2 rounded"
+          className="rounded border p-2"
         />
         <p>Input: {inputValue}</p>
         <p data-testid="debounce-output">Debounced: {debouncedValue}</p>
@@ -642,7 +658,7 @@ export default function TestHooksPage() {
         <button
           data-testid="localstorage-set"
           onClick={() => setStoredValue('test-value-' + Date.now())}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="rounded bg-blue-500 px-4 py-2 text-white"
         >
           Set Local Storage Value
         </button>
@@ -655,7 +671,7 @@ export default function TestHooksPage() {
         <button
           data-testid="theme-toggle-hook"
           onClick={toggleTheme}
-          className="bg-gray-500 text-white px-4 py-2 rounded"
+          className="rounded bg-gray-500 px-4 py-2 text-white"
         >
           Toggle Theme
         </button>
@@ -667,7 +683,7 @@ export default function TestHooksPage() {
         <h2 className="text-xl font-semibold">Toggle Hook</h2>
         <button
           onClick={toggleModal}
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          className="rounded bg-green-500 px-4 py-2 text-white"
         >
           Toggle Modal: {showModal ? 'Open' : 'Closed'}
         </button>
@@ -678,7 +694,7 @@ export default function TestHooksPage() {
         <h2 className="text-xl font-semibold">Copy to Clipboard Hook</h2>
         <button
           onClick={() => copyToClipboard('Hello, World!')}
-          className="bg-purple-500 text-white px-4 py-2 rounded"
+          className="rounded bg-purple-500 px-4 py-2 text-white"
         >
           {copied ? 'Copied!' : 'Copy Text'}
         </button>
@@ -704,28 +720,33 @@ export default function TestHooksPage() {
 ## Testing Instructions
 
 ### 1. Test useMediaQuery Hook
+
 - Resize browser window to test responsive breakpoints
 - Check console for any errors during resize
 - Verify cleanup of event listeners
 
 ### 2. Test useDebounce Hook
+
 - Type rapidly in input field
 - Verify debounced value updates after delay
 - Test with different delay values
 
 ### 3. Test useLocalStorage Hook
+
 - Set values and refresh page
 - Check browser localStorage in dev tools
 - Test with invalid JSON values
 - Test cross-tab synchronization
 
 ### 4. Test useTheme Hook
+
 - Toggle between light/dark themes
 - Check system preference detection
 - Verify DOM class updates
 - Test localStorage persistence
 
 ### 5. Test Error Handling
+
 - Test hooks with invalid parameters
 - Test SSR behavior
 - Verify graceful degradation
@@ -733,16 +754,19 @@ export default function TestHooksPage() {
 ## References and Dependencies
 
 ### Dependencies
+
 - React: Core hooks functionality
 - TypeScript: Type definitions
 
 ### Documentation
+
 - [React Hooks Rules](https://reactjs.org/docs/rules-of-hooks.html)
 - [Custom Hooks](https://reactjs.org/docs/hooks-custom.html)
 - [Media Query API](https://developer.mozilla.org/en-US/docs/Web/API/MediaQueryList)
 - [Local Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 
 ## Estimated Time
+
 **6-8 hours**
 
 - Hook implementation: 4-5 hours

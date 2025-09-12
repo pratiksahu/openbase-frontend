@@ -1,9 +1,11 @@
 # TASK_011: React Hook Form and Zod Integration
 
 ## Overview
+
 Implement a robust form management system using React Hook Form for form state management and Zod for schema validation. This task focuses on creating reusable form components, validation patterns, and error handling that can be used consistently throughout the application.
 
 ## Objectives
+
 - Install and configure React Hook Form with TypeScript support
 - Integrate Zod for runtime type checking and validation
 - Create reusable form field components
@@ -51,29 +53,30 @@ interface FormFieldProps {
 }
 
 const FormField = forwardRef<HTMLDivElement, FormFieldProps>(
-  ({ label, error, description, required, className, children, ...props }, ref) => {
+  (
+    { label, error, description, required, className, children, ...props },
+    ref
+  ) => {
     const errorMessage = typeof error === 'string' ? error : error?.message;
 
     return (
       <div ref={ref} className={cn('space-y-2', className)} {...props}>
         {label && (
-          <label className="text-sm font-medium text-foreground flex items-center">
+          <label className="text-foreground flex items-center text-sm font-medium">
             {label}
             {required && <span className="text-destructive ml-1">*</span>}
           </label>
         )}
-        
+
         {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-muted-foreground text-sm">{description}</p>
         )}
-        
-        <div className="relative">
-          {children}
-        </div>
-        
+
+        <div className="relative">{children}</div>
+
         {errorMessage && (
-          <p 
-            className="text-sm text-destructive flex items-center"
+          <p
+            className="text-destructive flex items-center text-sm"
             role="alert"
             aria-live="polite"
           >
@@ -114,7 +117,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
           hasError && 'border-destructive focus-visible:ring-destructive',
           className
         )}
@@ -149,14 +152,17 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 }
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ 
-    className, 
-    error, 
-    autoResize = false, 
-    minRows = 3, 
-    maxRows = 10,
-    ...props 
-  }, ref) => {
+  (
+    {
+      className,
+      error,
+      autoResize = false,
+      minRows = 3,
+      maxRows = 10,
+      ...props
+    },
+    ref
+  ) => {
     const hasError = Boolean(error);
 
     const baseClassName = cn(
@@ -227,7 +233,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
       <div className="relative">
         <select
           className={cn(
-            'flex h-10 w-full appearance-none rounded-md border border-input bg-background px-3 py-2 pr-8 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+            'border-input bg-background ring-offset-background focus-visible:ring-ring flex h-10 w-full appearance-none rounded-md border px-3 py-2 pr-8 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
             hasError && 'border-destructive focus-visible:ring-destructive',
             className
           )}
@@ -240,7 +246,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
               {placeholder}
             </option>
           )}
-          {options.map((option) => (
+          {options.map(option => (
             <option
               key={option.value}
               value={option.value}
@@ -251,7 +257,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ))}
           {children}
         </select>
-        <ChevronDownIcon className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+        <ChevronDownIcon className="text-muted-foreground pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2" />
       </div>
     );
   }
@@ -274,7 +280,8 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 import { forwardRef, InputHTMLAttributes, ReactNode } from 'react';
 import { FieldError } from 'react-hook-form';
 
-interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+interface CheckboxProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   error?: FieldError | string;
   label?: ReactNode;
   description?: string;
@@ -290,32 +297,34 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           <input
             type="checkbox"
             className={cn(
-              'peer h-4 w-4 shrink-0 rounded-sm border border-input bg-background ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+              'peer border-input bg-background ring-offset-background focus-visible:ring-ring h-4 w-4 shrink-0 rounded-sm border focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
               hasError && 'border-destructive',
               className
             )}
             ref={ref}
             aria-invalid={hasError}
-            aria-describedby={description ? `${props.id}-description` : undefined}
+            aria-describedby={
+              description ? `${props.id}-description` : undefined
+            }
             {...props}
           />
-          <CheckIcon className="absolute inset-0 h-4 w-4 text-background opacity-0 peer-checked:opacity-100 pointer-events-none" />
+          <CheckIcon className="text-background pointer-events-none absolute inset-0 h-4 w-4 opacity-0 peer-checked:opacity-100" />
         </div>
-        
+
         {(label || description) && (
           <div className="grid gap-1.5 leading-none">
             {label && (
-              <label 
+              <label
                 htmlFor={props.id}
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                className="cursor-pointer text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {label}
               </label>
             )}
             {description && (
-              <p 
+              <p
                 id={`${props.id}-description`}
-                className="text-xs text-muted-foreground"
+                className="text-muted-foreground text-xs"
               >
                 {description}
               </p>
@@ -343,7 +352,8 @@ import { cn } from '@/lib/utils';
 import { FormHTMLAttributes, ReactNode } from 'react';
 import { FieldValues, FormProvider, UseFormReturn } from 'react-hook-form';
 
-interface FormProps<T extends FieldValues> extends FormHTMLAttributes<HTMLFormElement> {
+interface FormProps<T extends FieldValues>
+  extends FormHTMLAttributes<HTMLFormElement> {
   form: UseFormReturn<T>;
   onSubmit: (data: T) => void | Promise<void>;
   children: ReactNode;
@@ -405,7 +415,10 @@ export const passwordSchema = z
   .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
   .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
   .regex(/[0-9]/, 'Password must contain at least one number')
-  .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character');
+  .regex(
+    /[^A-Za-z0-9]/,
+    'Password must contain at least one special character'
+  );
 
 export const phoneSchema = z
   .string()
@@ -436,7 +449,7 @@ export const contactSchema = z.object({
   phone: z
     .string()
     .optional()
-    .refine((val) => !val || phoneSchema.safeParse(val).success, {
+    .refine(val => !val || phoneSchema.safeParse(val).success, {
       message: 'Please enter a valid phone number',
     }),
   newsletter: z.boolean().optional(),
@@ -445,25 +458,27 @@ export const contactSchema = z.object({
 export type ContactFormData = z.infer<typeof contactSchema>;
 
 // User registration schema
-export const registerSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, 'First name is required')
-    .max(50, 'First name must be less than 50 characters'),
-  lastName: z
-    .string()
-    .min(1, 'Last name is required')
-    .max(50, 'Last name must be less than 50 characters'),
-  email: emailSchema,
-  password: passwordSchema,
-  confirmPassword: z.string().min(1, 'Please confirm your password'),
-  terms: z.boolean().refine((val) => val === true, {
-    message: 'You must accept the terms and conditions',
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
+export const registerSchema = z
+  .object({
+    firstName: z
+      .string()
+      .min(1, 'First name is required')
+      .max(50, 'First name must be less than 50 characters'),
+    lastName: z
+      .string()
+      .min(1, 'Last name is required')
+      .max(50, 'Last name must be less than 50 characters'),
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
+    terms: z.boolean().refine(val => val === true, {
+      message: 'You must accept the terms and conditions',
+    }),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -581,8 +596,8 @@ const ContactForm = ({ onSubmit, className }: ContactFormProps) => {
     } catch (error) {
       console.error('Contact form error:', error);
       setSubmitError(
-        error instanceof Error 
-          ? error.message 
+        error instanceof Error
+          ? error.message
           : 'An unexpected error occurred. Please try again.'
       );
     } finally {
@@ -592,11 +607,11 @@ const ContactForm = ({ onSubmit, className }: ContactFormProps) => {
 
   if (submitSuccess) {
     return (
-      <div 
-        className="text-center p-8 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
+      <div
+        className="rounded-lg border border-green-200 bg-green-50 p-8 text-center dark:border-green-800 dark:bg-green-900/20"
         data-testid="success-message"
       >
-        <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-2">
+        <h3 className="mb-2 text-lg font-semibold text-green-800 dark:text-green-200">
           Message Sent Successfully!
         </h3>
         <p className="text-green-700 dark:text-green-300">
@@ -608,18 +623,14 @@ const ContactForm = ({ onSubmit, className }: ContactFormProps) => {
 
   return (
     <div className={className}>
-      <Form 
-        form={form} 
+      <Form
+        form={form}
         onSubmit={handleSubmit}
         loading={isSubmitting}
         data-testid="contact-form"
       >
         <div className="grid gap-6 sm:grid-cols-2">
-          <FormField
-            label="Name"
-            error={form.formState.errors.name}
-            required
-          >
+          <FormField label="Name" error={form.formState.errors.name} required>
             <Input
               id="name"
               placeholder="Your full name"
@@ -628,11 +639,7 @@ const ContactForm = ({ onSubmit, className }: ContactFormProps) => {
             />
           </FormField>
 
-          <FormField
-            label="Email"
-            error={form.formState.errors.email}
-            required
-          >
+          <FormField label="Email" error={form.formState.errors.email} required>
             <Input
               id="email"
               type="email"
@@ -644,10 +651,7 @@ const ContactForm = ({ onSubmit, className }: ContactFormProps) => {
           </FormField>
         </div>
 
-        <FormField
-          label="Phone (optional)"
-          error={form.formState.errors.phone}
-        >
+        <FormField label="Phone (optional)" error={form.formState.errors.phone}>
           <Input
             id="phone"
             type="tel"
@@ -697,11 +701,13 @@ const ContactForm = ({ onSubmit, className }: ContactFormProps) => {
         </FormField>
 
         {submitError && (
-          <div 
-            className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
+          <div
+            className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-800 dark:bg-red-900/20"
             data-testid="form-error"
           >
-            <p className="text-red-800 dark:text-red-200 text-sm">{submitError}</p>
+            <p className="text-sm text-red-800 dark:text-red-200">
+              {submitError}
+            </p>
           </div>
         )}
 
@@ -733,40 +739,40 @@ import { z } from 'zod';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     // Validate request body
     const validatedData = contactSchema.parse(body);
-    
+
     // TODO: Implement your email service here
     // For now, we'll just log the data
     console.log('Contact form submission:', validatedData);
-    
+
     // Simulate processing time
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // TODO: Send email using your preferred service
     // Examples: SendGrid, Nodemailer, AWS SES, etc.
-    
+
     return NextResponse.json(
-      { 
+      {
         message: 'Message sent successfully',
-        id: `contact-${Date.now()}`
+        id: `contact-${Date.now()}`,
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Contact API error:', error);
-    
+
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { 
+        {
           message: 'Validation error',
-          errors: error.errors 
+          errors: error.errors,
         },
         { status: 400 }
       );
     }
-    
+
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }
@@ -805,6 +811,7 @@ export { ContactForm } from './ContactForm';
 ## Testing Instructions
 
 ### 1. Test Form Validation
+
 ```bash
 # Navigate to contact form
 # Try submitting empty form - should show validation errors
@@ -813,6 +820,7 @@ export { ContactForm } from './ContactForm';
 ```
 
 ### 2. Test Form Submission
+
 ```bash
 # Fill valid data and submit
 # Verify loading state appears
@@ -821,6 +829,7 @@ export { ContactForm } from './ContactForm';
 ```
 
 ### 3. Test Error Handling
+
 ```bash
 # Mock API error in network tab
 # Submit form and verify error display
@@ -828,6 +837,7 @@ export { ContactForm } from './ContactForm';
 ```
 
 ### 4. Test Accessibility
+
 ```bash
 # Navigate form using only keyboard
 # Verify screen reader compatibility
@@ -838,17 +848,20 @@ export { ContactForm } from './ContactForm';
 ## References and Dependencies
 
 ### Dependencies
+
 - `react-hook-form`: Form state management
 - `zod`: Schema validation
 - `@hookform/resolvers`: Zod integration
 - `react-textarea-autosize`: Auto-resizing textarea
 
 ### Documentation
+
 - [React Hook Form](https://react-hook-form.com/)
 - [Zod Documentation](https://zod.dev/)
 - [Web Accessibility Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 
 ## Estimated Time
+
 **6-8 hours**
 
 - Form components development: 3-4 hours

@@ -27,6 +27,9 @@ const eslintConfig = [
       'dist/**',
       'next-env.d.ts',
       '*.config.js',
+      '*.config.mjs',
+      'commitlint.config.js',
+      '.lintstagedrc.js',
     ],
   },
 

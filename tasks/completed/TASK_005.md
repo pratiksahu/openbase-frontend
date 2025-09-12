@@ -1,9 +1,11 @@
 # TASK_005: Create Core Layout Components
 
 ## 📋 Task Overview
+
 Build the core layout components including header, footer, navigation, and responsive mobile menu.
 
 ## 🎯 Objectives
+
 - Create responsive header with navigation
 - Build footer component
 - Implement mobile navigation with hamburger menu
@@ -12,6 +14,7 @@ Build the core layout components including header, footer, navigation, and respo
 ## 📝 Implementation Steps
 
 ### 1. Create Header Component (components/shared/header.tsx)
+
 ```typescript
 "use client"
 
@@ -66,7 +69,7 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
             <ThemeToggle />
-            
+
             {/* Mobile menu button */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild className="md:hidden">
@@ -106,6 +109,7 @@ export function Header() {
 ```
 
 ### 2. Create Footer Component (components/shared/footer.tsx)
+
 ```typescript
 import Link from "next/link"
 import { Facebook, Twitter, Github, Linkedin } from "lucide-react"
@@ -235,6 +239,7 @@ export function Footer() {
 ```
 
 ### 3. Create Main Layout Wrapper (components/shared/layout-wrapper.tsx)
+
 ```typescript
 import { Header } from "@/components/shared/header"
 import { Footer } from "@/components/shared/footer"
@@ -255,6 +260,7 @@ export function LayoutWrapper({ children }: LayoutWrapperProps) {
 ```
 
 ### 4. Create Container Component (components/shared/container.tsx)
+
 ```typescript
 import { cn } from "@/lib/utils"
 
@@ -265,7 +271,7 @@ interface ContainerProps {
 
 export function Container({ children, className }: ContainerProps) {
   return (
-    <div 
+    <div
       className={cn("container mx-auto px-4 sm:px-6 lg:px-8", className)}
       data-testid="container"
     >
@@ -276,6 +282,7 @@ export function Container({ children, className }: ContainerProps) {
 ```
 
 ### 5. Create Section Component (components/shared/section.tsx)
+
 ```typescript
 import { cn } from "@/lib/utils"
 
@@ -287,7 +294,7 @@ interface SectionProps {
 
 export function Section({ children, className, id }: SectionProps) {
   return (
-    <section 
+    <section
       id={id}
       className={cn("py-12 md:py-24 lg:py-32", className)}
       data-testid="section"
@@ -299,6 +306,7 @@ export function Section({ children, className, id }: SectionProps) {
 ```
 
 ### 6. Create Page Header Component (components/shared/page-header.tsx)
+
 ```typescript
 interface PageHeaderProps {
   title: string
@@ -322,6 +330,7 @@ export function PageHeader({ title, description }: PageHeaderProps) {
 ```
 
 ### 7. Update Root Layout to Use Layout Wrapper (app/layout.tsx)
+
 ```typescript
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -363,6 +372,7 @@ export default function RootLayout({
 ```
 
 ### 8. Create Test Page (app/layout-test/page.tsx)
+
 ```typescript
 import { Container } from "@/components/shared/container"
 import { Section } from "@/components/shared/section"
@@ -373,7 +383,7 @@ export default function LayoutTest() {
   return (
     <>
       <Container>
-        <PageHeader 
+        <PageHeader
           title="Layout Components Test"
           description="Testing all layout components for proper rendering and responsiveness"
         />
@@ -429,6 +439,7 @@ export default function LayoutTest() {
 ```
 
 ## ✅ Acceptance Criteria
+
 - [ ] Header component renders with navigation
 - [ ] Mobile menu works on small screens
 - [ ] Footer displays all sections properly
@@ -440,6 +451,7 @@ export default function LayoutTest() {
 - [ ] Navigation highlights active page
 
 ## 🧪 Testing
+
 ```bash
 # Run development server
 npm run dev
@@ -456,20 +468,25 @@ npm run dev
 ```
 
 ## 📚 References
+
 - [Next.js Layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts)
 - [Responsive Design Patterns](https://web.dev/responsive-web-design-basics/)
 - [Accessible Navigation](https://www.w3.org/WAI/ARIA/apg/patterns/navigation/)
 
 ## 🏷️ Tags
+
 `layout` `navigation` `header` `footer` `responsive`
 
 ## ⏱️ Estimated Time
+
 2-3 hours
 
 ## 🔗 Dependencies
+
 - TASK_001 (Project initialization)
 - TASK_003 (shadcn/ui components)
 - TASK_004 (Theme provider)
 
 ## 🚀 Next Steps
+
 After completing this task, proceed to TASK_006 (Create Loading and Error States)

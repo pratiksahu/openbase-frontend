@@ -5,23 +5,27 @@ A production-ready Next.js application built with the latest technologies and be
 ## 🚀 Tech Stack
 
 ### Core
+
 - **Next.js 15** - Latest React framework with App Router
 - **React 19** - Latest React with Server Components
 - **TypeScript** - Type safety and better DX
 
 ### UI & Styling
+
 - **shadcn/ui** - Modern, accessible component library built on Radix UI
 - **Tailwind CSS** - Utility-first CSS framework
 - **Radix UI** - Unstyled, accessible UI primitives
 - **Lucide Icons** - Beautiful, consistent icon set
 
 ### Design System
+
 - **CSS Variables** - Dynamic theming support
 - **Dark Mode** - Built-in light/dark theme switching
 - **Responsive Design** - Mobile-first approach
 - **Accessibility** - WCAG compliant components
 
 ### Developer Experience
+
 - **ESLint** - Code linting with Next.js config
 - **Prettier** - Code formatting
 - **Husky** - Git hooks for code quality
@@ -71,18 +75,23 @@ npm run format
 ## 🎨 Design System
 
 ### Colors
+
 The application uses a semantic color system with CSS variables that adapt to light/dark themes:
+
 - Primary, Secondary, Accent colors
 - Semantic colors (success, warning, error)
 - Neutral grays for UI elements
 
 ### Typography
+
 - System font stack for optimal performance
 - Responsive font sizing
 - Consistent spacing scale
 
 ### Components
+
 All components follow these principles:
+
 - Accessibility first (keyboard navigation, ARIA labels)
 - Responsive by default
 - Themeable via CSS variables
@@ -91,14 +100,18 @@ All components follow these principles:
 ## 🔧 Configuration
 
 ### Environment Variables
+
 Create a `.env.local` file:
+
 ```env
 # Add your environment variables here
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ### VS Code Settings
+
 Recommended extensions:
+
 - ESLint
 - Prettier
 - Tailwind CSS IntelliSense
@@ -129,6 +142,7 @@ Recommended extensions:
 ## 🚀 Deployment
 
 The application is optimized for deployment on:
+
 - Vercel (recommended)
 - Netlify
 - AWS Amplify

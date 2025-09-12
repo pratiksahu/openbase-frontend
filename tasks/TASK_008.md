@@ -1,9 +1,11 @@
 # TASK_008: Husky and Git Hooks
 
 ## Overview
+
 Implement automated code quality checks and enforcement using Husky for Git hooks and lint-staged for running checks on staged files. This ensures code quality is maintained consistently across all commits and prevents issues from entering the repository.
 
 ## Objectives
+
 - Install and configure Husky for Git hook management
 - Set up lint-staged for efficient file processing
 - Create pre-commit hooks for code quality checks
@@ -58,16 +60,9 @@ Add these scripts to `package.json`:
     "build:check": "next build"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{json,md,yml,yaml}": [
-      "prettier --write"
-    ],
-    "*.{css,scss}": [
-      "prettier --write"
-    ]
+    "*.{js,jsx,ts,tsx}": ["eslint --fix", "prettier --write"],
+    "*.{json,md,yml,yaml}": ["prettier --write"],
+    "*.{css,scss}": ["prettier --write"]
   },
   "config": {
     "commitizen": {
@@ -158,23 +153,27 @@ module.exports = {
       2,
       'always',
       [
-        'feat',     // New features
-        'fix',      // Bug fixes
-        'docs',     // Documentation changes
-        'style',    // Code style changes (formatting, missing semicolons, etc)
+        'feat', // New features
+        'fix', // Bug fixes
+        'docs', // Documentation changes
+        'style', // Code style changes (formatting, missing semicolons, etc)
         'refactor', // Code refactoring
-        'perf',     // Performance improvements
-        'test',     // Adding or updating tests
-        'build',    // Changes to build system or dependencies
-        'ci',       // Changes to CI configuration
-        'chore',    // Other changes that don't modify src or test files
-        'revert',   // Reverting previous commits
+        'perf', // Performance improvements
+        'test', // Adding or updating tests
+        'build', // Changes to build system or dependencies
+        'ci', // Changes to CI configuration
+        'chore', // Other changes that don't modify src or test files
+        'revert', // Reverting previous commits
       ],
     ],
     'type-case': [2, 'always', 'lower-case'],
     'type-empty': [2, 'never'],
     'scope-case': [2, 'always', 'lower-case'],
-    'subject-case': [2, 'never', ['sentence-case', 'start-case', 'pascal-case', 'upper-case']],
+    'subject-case': [
+      2,
+      'never',
+      ['sentence-case', 'start-case', 'pascal-case', 'upper-case'],
+    ],
     'subject-empty': [2, 'never'],
     'subject-full-stop': [2, 'never', '.'],
     'header-max-length': [2, 'always', 100],
@@ -263,33 +262,21 @@ module.exports = {
     'prettier --write',
     () => 'tsc --noEmit', // Type check all files
   ],
-  
+
   // Style files
-  '*.{css,scss,sass}': [
-    'prettier --write',
-  ],
-  
+  '*.{css,scss,sass}': ['prettier --write'],
+
   // Configuration and data files
-  '*.{json,yaml,yml}': [
-    'prettier --write',
-  ],
-  
+  '*.{json,yaml,yml}': ['prettier --write'],
+
   // Markdown files
-  '*.md': [
-    'prettier --write',
-    'markdownlint --fix',
-  ],
-  
+  '*.md': ['prettier --write', 'markdownlint --fix'],
+
   // Package.json
-  'package.json': [
-    'sort-package-json',
-    'prettier --write',
-  ],
-  
+  'package.json': ['sort-package-json', 'prettier --write'],
+
   // Run tests related to staged files
-  '*.{js,jsx,ts,tsx}': [
-    'jest --bail --findRelatedTests --passWithNoTests',
-  ],
+  '*.{js,jsx,ts,tsx}': ['jest --bail --findRelatedTests --passWithNoTests'],
 };
 ```
 
@@ -326,6 +313,7 @@ Add helper scripts to `package.json`:
 ## Testing Instructions
 
 ### 1. Test Pre-commit Hook
+
 ```bash
 # Make changes to a file
 echo "console.log('test');" >> src/test.ts
@@ -343,6 +331,7 @@ git commit -m "test: remove test file"
 ```
 
 ### 2. Test Commit Message Validation
+
 ```bash
 # Test invalid commit message
 git commit --allow-empty -m "bad commit message"
@@ -354,6 +343,7 @@ git commit --allow-empty -m "feat: add new feature"
 ```
 
 ### 3. Test Pre-push Hook
+
 ```bash
 # Create a branch with code issues
 git checkout -b test-branch
@@ -374,12 +364,14 @@ git push origin test-branch
 ```
 
 ### 4. Test Lint-staged
+
 ```bash
 # Test lint-staged directly
 npm run lint:staged
 ```
 
 ### 5. Test Interactive Commits
+
 ```bash
 # Use commitizen for guided commits
 npm run commit
@@ -388,6 +380,7 @@ npm run commit
 ## References and Dependencies
 
 ### Dependencies
+
 - `husky`: Git hooks management
 - `lint-staged`: Run commands on staged files
 - `@commitlint/cli`: Commit message linting
@@ -395,12 +388,14 @@ npm run commit
 - `commitizen`: Interactive commit tool
 
 ### Documentation
+
 - [Husky Documentation](https://typicode.github.io/husky/)
 - [lint-staged Documentation](https://github.com/okonet/lint-staged)
 - [Commitlint Documentation](https://commitlint.js.org/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
 
 ## Estimated Time
+
 **3-4 hours**
 
 - Husky setup and configuration: 1-2 hours
@@ -413,6 +408,7 @@ npm run commit
 ### Common Issues
 
 1. **Hooks not running**
+
    ```bash
    # Reinstall Husky
    npx husky uninstall
@@ -421,6 +417,7 @@ npm run commit
    ```
 
 2. **Permission denied errors**
+
    ```bash
    # Make hooks executable
    chmod +x .husky/pre-commit
@@ -429,10 +426,11 @@ npm run commit
    ```
 
 3. **Bypassing hooks in emergencies**
+
    ```bash
    # Skip pre-commit hook
    git commit -m "emergency fix" --no-verify
-   
+
    # Skip pre-push hook
    git push --no-verify
    ```

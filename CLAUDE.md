@@ -3,7 +3,9 @@
 This document provides specific instructions for AI assistants working on this Next.js project.
 
 ## 🔄 IMPORTANT: Keep This File Updated
+
 **After completing any significant development activity, update this CLAUDE.md file with:**
+
 - New commands or scripts added
 - Project structure changes
 - New patterns or conventions established
@@ -15,11 +17,13 @@ This document provides specific instructions for AI assistants working on this N
 This ensures the development context remains current and helpful for ongoing work.
 
 ## Project Overview
+
 This is a modern Next.js 15 application using App Router, TypeScript, shadcn/ui, and Tailwind CSS.
 
 ## Key Commands
 
 ### Development
+
 ```bash
 npm run dev        # Start development server on http://localhost:3000
 npm run build      # Build for production
@@ -30,6 +34,7 @@ npm run typecheck  # Run TypeScript type checking
 ```
 
 ### Testing
+
 ```bash
 npm run test       # Run unit tests
 npm run test:e2e   # Run E2E tests
@@ -38,12 +43,14 @@ npm run test:e2e   # Run E2E tests
 ## Code Standards
 
 ### File Naming Conventions
+
 - Components: PascalCase (e.g., `Button.tsx`, `NavigationBar.tsx`)
 - Utilities: camelCase (e.g., `formatDate.ts`, `useDebounce.ts`)
 - Types: PascalCase with `.types.ts` extension (e.g., `User.types.ts`)
 - Constants: UPPER_SNAKE_CASE in `.constants.ts` files
 
 ### Component Structure
+
 ```typescript
 // Always use TypeScript
 // Define interfaces for props
@@ -59,6 +66,7 @@ export function Component({ title, onClick }: ComponentProps): JSX.Element {
 ```
 
 ### Import Order
+
 1. React/Next.js imports
 2. Third-party libraries
 3. UI components (from @/components/ui)
@@ -68,6 +76,7 @@ export function Component({ title, onClick }: ComponentProps): JSX.Element {
 7. Styles
 
 Example:
+
 ```typescript
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -81,11 +90,13 @@ import type { User } from '@/types/User.types';
 ## shadcn/ui Components
 
 ### Installing New Components
+
 ```bash
 npx shadcn@latest add [component-name]
 ```
 
 Common components to use:
+
 - `button`, `card`, `dialog`, `dropdown-menu`
 - `form`, `input`, `label`, `textarea`
 - `select`, `checkbox`, `radio-group`
@@ -93,7 +104,9 @@ Common components to use:
 - `table`, `tabs`, `accordion`
 
 ### Component Usage
+
 Always prefer shadcn/ui components over custom implementations:
+
 ```typescript
 // Good
 import { Button } from '@/components/ui/button';
@@ -104,11 +117,13 @@ import { Button } from '@/components/ui/button';
 ## Styling Guidelines
 
 ### Tailwind CSS
+
 - Use Tailwind utilities for all styling
 - Follow mobile-first responsive design: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
 - Use semantic color classes from the theme
 
 ### Theme Colors
+
 ```css
 /* Use these CSS variables */
 --primary
@@ -121,6 +136,7 @@ import { Button } from '@/components/ui/button';
 ```
 
 Example:
+
 ```tsx
 <div className="bg-background text-foreground">
   <Button variant="default">Primary Action</Button>
@@ -130,6 +146,7 @@ Example:
 ```
 
 ### Dark Mode
+
 - All components should support dark mode
 - Use Tailwind's dark mode classes: `dark:bg-gray-800`
 - Test both light and dark themes
@@ -137,6 +154,7 @@ Example:
 ## Project Structure
 
 ### App Router Conventions
+
 ```
 app/
 ├── layout.tsx           # Root layout with providers
@@ -154,6 +172,7 @@ app/
 ```
 
 ### Component Organization
+
 ```
 components/
 ├── ui/               # shadcn/ui components (don't modify)
@@ -171,18 +190,20 @@ components/
 ## Data Fetching
 
 ### Server Components (default)
+
 ```typescript
 // app/page.tsx
 async function Page() {
   const data = await fetch('https://api.example.com/data', {
     next: { revalidate: 3600 } // Cache for 1 hour
   });
-  
+
   return <div>{/* Render data */}</div>;
 }
 ```
 
 ### Client Components
+
 ```typescript
 'use client';
 
@@ -190,11 +211,11 @@ import { useState, useEffect } from 'react';
 
 export function ClientComponent() {
   const [data, setData] = useState(null);
-  
+
   useEffect(() => {
     // Client-side data fetching
   }, []);
-  
+
   return <div>{/* Render data */}</div>;
 }
 ```
@@ -202,6 +223,7 @@ export function ClientComponent() {
 ## Forms
 
 ### Using React Hook Form + Zod
+
 ```typescript
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -218,7 +240,7 @@ export function LoginForm() {
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
   });
-  
+
   // Use shadcn/ui Form components
 }
 ```
@@ -226,38 +248,42 @@ export function LoginForm() {
 ## Performance Best Practices
 
 1. **Image Optimization**
+
    ```tsx
    import Image from 'next/image';
-   
+
    <Image
      src="/hero.jpg"
      alt="Hero"
      width={1920}
      height={1080}
      priority // For above-fold images
-   />
+   />;
    ```
 
 2. **Code Splitting**
+
    ```typescript
    import dynamic from 'next/dynamic';
-   
+
    const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
      loading: () => <Skeleton />,
    });
    ```
 
 3. **Fonts**
+
    ```typescript
    // app/layout.tsx
    import { Inter } from 'next/font/google';
-   
+
    const inter = Inter({ subsets: ['latin'] });
    ```
 
 ## Error Handling
 
 ### Error Boundaries
+
 ```typescript
 // app/error.tsx
 'use client';
@@ -279,6 +305,7 @@ export default function Error({
 ```
 
 ### Loading States
+
 ```typescript
 // app/loading.tsx
 import { Skeleton } from '@/components/ui/skeleton';
@@ -291,10 +318,12 @@ export default function Loading() {
 ## Environment Variables
 
 ### Naming Convention
+
 - Public variables: `NEXT_PUBLIC_*`
 - Server-only variables: No prefix
 
 ### Usage
+
 ```typescript
 // Client-side
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -306,21 +335,23 @@ const secretKey = process.env.SECRET_KEY;
 ## Common Patterns
 
 ### Authentication Check
+
 ```typescript
 import { redirect } from 'next/navigation';
 
 async function ProtectedPage() {
   const session = await getSession();
-  
+
   if (!session) {
     redirect('/login');
   }
-  
+
   return <div>Protected content</div>;
 }
 ```
 
 ### Metadata
+
 ```typescript
 import type { Metadata } from 'next';
 
@@ -341,12 +372,14 @@ export const metadata: Metadata = {
 ## 🧪 Testing Requirements
 
 **CRITICAL: Every feature added to the project MUST:**
+
 1. Have corresponding Playwright tests written
 2. Pass all new tests before marking as complete
 3. Ensure ALL existing tests continue to pass
 4. Run the full test suite: `npx playwright test`
 
 **Testing Workflow:**
+
 ```bash
 # Before marking any feature as done:
 npx playwright test                    # Run all tests
@@ -359,6 +392,7 @@ If any test fails after adding new code, fix the issue before proceeding.
 ## Pre-commit Checklist
 
 Before committing code, ensure:
+
 - [ ] `npm run lint` passes without errors
 - [ ] `npm run typecheck` passes
 - [ ] `npm run build` succeeds
@@ -372,17 +406,20 @@ Before committing code, ensure:
 ## 📚 Important Project Files
 
 ### Feature Documentation
-- **FEATURES.md** - Contains detailed documentation of all implemented features, their usage, and examples
-- **TODO_*.md** - Phased implementation checklists with Playwright test verification
 
-### Testing Documentation  
+- **FEATURES.md** - Contains detailed documentation of all implemented features, their usage, and examples
+- **TODO\_\*.md** - Phased implementation checklists with Playwright test verification
+
+### Testing Documentation
+
 - **TESTING.md** - Comprehensive testing strategy including unit tests, integration tests, and E2E tests
 - **tests/** - Directory containing all Playwright test specifications
 
 ### Keep these files updated when:
+
 - Adding new features → Update FEATURES.md
 - Implementing test cases → Update TESTING.md
-- Completing TODO items → Mark as complete in TODO_*.md files
+- Completing TODO items → Mark as complete in TODO\_\*.md files
 - Discovering patterns → Document in relevant section
 
 ## Useful Resources

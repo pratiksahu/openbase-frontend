@@ -1,14 +1,14 @@
-import { Container } from "@/components/shared/container"
-import { Section } from "@/components/shared/section"
-import { PageHeader } from "@/components/shared/page-header"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { LayoutWrapper } from "@/components/shared/layout-wrapper"
+import { Container } from '@/components/shared/container';
+import { LayoutWrapper } from '@/components/shared/layout-wrapper';
+import { PageHeader } from '@/components/shared/page-header';
+import { Section } from '@/components/shared/section';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function LayoutTest() {
   return (
     <LayoutWrapper>
       <Container>
-        <PageHeader 
+        <PageHeader
           title="Layout Components Test"
           description="Testing all layout components for proper rendering and responsiveness"
         />
@@ -21,8 +21,9 @@ export default function LayoutTest() {
               <CardTitle>Section with Container</CardTitle>
             </CardHeader>
             <CardContent>
-              This demonstrates the Section and Container components working together.
-              The section provides vertical spacing while the container manages horizontal padding.
+              This demonstrates the Section and Container components working
+              together. The section provides vertical spacing while the
+              container manages horizontal padding.
             </CardContent>
           </Card>
         </Container>
@@ -35,29 +36,23 @@ export default function LayoutTest() {
               <CardHeader>
                 <CardTitle>Card 1</CardTitle>
               </CardHeader>
-              <CardContent>
-                Responsive grid layout
-              </CardContent>
+              <CardContent>Responsive grid layout</CardContent>
             </Card>
             <Card>
               <CardHeader>
                 <CardTitle>Card 2</CardTitle>
               </CardHeader>
-              <CardContent>
-                Works on all screen sizes
-              </CardContent>
+              <CardContent>Works on all screen sizes</CardContent>
             </Card>
             <Card>
               <CardHeader>
                 <CardTitle>Card 3</CardTitle>
               </CardHeader>
-              <CardContent>
-                Mobile-first approach
-              </CardContent>
+              <CardContent>Mobile-first approach</CardContent>
             </Card>
           </div>
         </Container>
       </Section>
     </LayoutWrapper>
-  )
+  );
 }

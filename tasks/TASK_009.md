@@ -1,9 +1,11 @@
 # TASK_009: Shared Components
 
 ## Overview
+
 Create a comprehensive library of reusable shared components that form the foundation of the application's UI architecture. These components will provide consistent styling, behavior, and structure across all pages while maintaining flexibility for customization.
 
 ## Objectives
+
 - Build essential layout components (Container, Section, PageHeader, Breadcrumb)
 - Implement authentication and dashboard layout groups
 - Create utility functions for consistent styling
@@ -92,14 +94,17 @@ interface SectionProps extends HTMLAttributes<HTMLElement> {
 }
 
 const Section = forwardRef<HTMLElement, SectionProps>(
-  ({ 
-    className, 
-    variant = 'default', 
-    spacing = 'md', 
-    as: Component = 'section',
-    children, 
-    ...props 
-  }, ref) => {
+  (
+    {
+      className,
+      variant = 'default',
+      spacing = 'md',
+      as: Component = 'section',
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const variantClasses = {
       default: 'bg-background',
       muted: 'bg-muted/50',
@@ -183,7 +188,7 @@ const PageHeader = ({
   return (
     <div
       className={cn(
-        'flex flex-col space-y-4 pb-8 border-b border-border',
+        'border-border flex flex-col space-y-4 border-b pb-8',
         sizeClasses[size],
         className
       )}
@@ -191,33 +196,33 @@ const PageHeader = ({
       {...props}
     >
       {breadcrumb && (
-        <div className="flex items-center space-x-2">
-          {breadcrumb}
-        </div>
+        <div className="flex items-center space-x-2">{breadcrumb}</div>
       )}
-      
+
       <div className="flex items-start justify-between">
         <div className="space-y-2">
-          <h1 className={cn(
-            'tracking-tight text-foreground',
-            titleSizeClasses[size]
-          )}>
+          <h1
+            className={cn(
+              'text-foreground tracking-tight',
+              titleSizeClasses[size]
+            )}
+          >
             {title}
           </h1>
           {description && (
-            <p className={cn(
-              'text-muted-foreground',
-              descriptionSizeClasses[size]
-            )}>
+            <p
+              className={cn(
+                'text-muted-foreground',
+                descriptionSizeClasses[size]
+              )}
+            >
               {description}
             </p>
           )}
         </div>
-        
+
         {actions && (
-          <div className="flex items-center space-x-2">
-            {actions}
-          </div>
+          <div className="flex items-center space-x-2">{actions}</div>
         )}
       </div>
     </div>
@@ -249,21 +254,24 @@ interface BreadcrumbProps {
   className?: string;
 }
 
-const Breadcrumb = ({ 
-  items, 
+const Breadcrumb = ({
+  items,
   separator = <ChevronRightIcon className="h-4 w-4" />,
-  className 
+  className,
 }: BreadcrumbProps) => {
   return (
-    <nav 
-      className={cn('flex items-center space-x-1 text-sm text-muted-foreground', className)}
+    <nav
+      className={cn(
+        'text-muted-foreground flex items-center space-x-1 text-sm',
+        className
+      )}
       data-testid="breadcrumb"
       aria-label="Breadcrumb"
     >
       <ol className="flex items-center space-x-1">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
-          
+
           return (
             <Fragment key={index}>
               <li
@@ -271,11 +279,9 @@ const Breadcrumb = ({
                 data-testid="breadcrumb-item"
               >
                 {item.icon && (
-                  <span className="flex-shrink-0">
-                    {item.icon}
-                  </span>
+                  <span className="flex-shrink-0">{item.icon}</span>
                 )}
-                
+
                 {item.href && !isLast ? (
                   <Link
                     href={item.href}
@@ -284,21 +290,13 @@ const Breadcrumb = ({
                     {item.label}
                   </Link>
                 ) : (
-                  <span 
-                    className={cn(
-                      isLast && 'text-foreground font-medium'
-                    )}
-                  >
+                  <span className={cn(isLast && 'text-foreground font-medium')}>
                     {item.label}
                   </span>
                 )}
               </li>
-              
-              {!isLast && (
-                <li className="flex items-center">
-                  {separator}
-                </li>
-              )}
+
+              {!isLast && <li className="flex items-center">{separator}</li>}
             </Fragment>
           );
         })}
@@ -324,13 +322,13 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div 
-      className="min-h-screen bg-background flex items-center justify-center p-4"
+    <div
+      className="bg-background flex min-h-screen items-center justify-center p-4"
       data-testid="auth-layout"
     >
       <Container size="sm" padding="md">
-        <div className="w-full max-w-md mx-auto">
-          <div className="bg-card border border-border rounded-lg shadow-sm p-6">
+        <div className="mx-auto w-full max-w-md">
+          <div className="bg-card border-border rounded-lg border p-6 shadow-sm">
             {children}
           </div>
         </div>
@@ -349,13 +347,13 @@ Create `src/components/layout/DashboardLayout.tsx`:
 
 import { cn } from '@/lib/utils';
 import { ReactNode, useState } from 'react';
-import { 
-  Bars3Icon, 
+import {
+  Bars3Icon,
   XMarkIcon,
   HomeIcon,
   UserIcon,
   CogIcon,
-  ChartBarIcon 
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -373,10 +371,26 @@ interface DashboardLayoutProps {
 }
 
 const defaultNavigation: NavigationItem[] = [
-  { name: 'Dashboard', href: '/dashboard', icon: <HomeIcon className="h-5 w-5" /> },
-  { name: 'Analytics', href: '/dashboard/analytics', icon: <ChartBarIcon className="h-5 w-5" /> },
-  { name: 'Profile', href: '/dashboard/profile', icon: <UserIcon className="h-5 w-5" /> },
-  { name: 'Settings', href: '/dashboard/settings', icon: <CogIcon className="h-5 w-5" /> },
+  {
+    name: 'Dashboard',
+    href: '/dashboard',
+    icon: <HomeIcon className="h-5 w-5" />,
+  },
+  {
+    name: 'Analytics',
+    href: '/dashboard/analytics',
+    icon: <ChartBarIcon className="h-5 w-5" />,
+  },
+  {
+    name: 'Profile',
+    href: '/dashboard/profile',
+    icon: <UserIcon className="h-5 w-5" />,
+  },
+  {
+    name: 'Settings',
+    href: '/dashboard/settings',
+    icon: <CogIcon className="h-5 w-5" />,
+  },
 ];
 
 const DashboardLayout = ({ children, sidebar }: DashboardLayoutProps) => {
@@ -389,37 +403,36 @@ const DashboardLayout = ({ children, sidebar }: DashboardLayoutProps) => {
   }));
 
   return (
-    <div 
-      className="min-h-screen bg-background"
-      data-testid="dashboard-layout"
-    >
+    <div className="bg-background min-h-screen" data-testid="dashboard-layout">
       {/* Mobile sidebar */}
-      <div className={cn(
-        'fixed inset-0 z-50 lg:hidden',
-        sidebarOpen ? 'block' : 'hidden'
-      )}>
-        <div 
-          className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+      <div
+        className={cn(
+          'fixed inset-0 z-50 lg:hidden',
+          sidebarOpen ? 'block' : 'hidden'
+        )}
+      >
+        <div
+          className="bg-background/80 fixed inset-0 backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         />
-        <div className="fixed inset-y-0 left-0 w-64 bg-card border-r border-border">
+        <div className="bg-card border-border fixed inset-y-0 left-0 w-64 border-r">
           <div className="flex h-16 items-center justify-between px-4">
             <span className="text-lg font-semibold">Dashboard</span>
             <button
               type="button"
-              className="p-2 rounded-md hover:bg-accent"
+              className="hover:bg-accent rounded-md p-2"
               onClick={() => setSidebarOpen(false)}
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
           </div>
-          <nav className="px-4 space-y-2">
-            {navigation.map((item) => (
+          <nav className="space-y-2 px-4">
+            {navigation.map(item => (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
+                  'flex items-center space-x-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
                   item.current
                     ? 'bg-accent text-accent-foreground'
                     : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
@@ -435,20 +448,20 @@ const DashboardLayout = ({ children, sidebar }: DashboardLayoutProps) => {
       </div>
 
       {/* Desktop sidebar */}
-      <div 
-        className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:w-64 lg:bg-card lg:border-r lg:border-border"
+      <div
+        className="lg:bg-card lg:border-border hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:w-64 lg:border-r"
         data-testid="dashboard-sidebar"
       >
-        <div className="flex h-16 items-center px-4 border-b border-border">
+        <div className="border-border flex h-16 items-center border-b px-4">
           <span className="text-lg font-semibold">Dashboard</span>
         </div>
-        <nav className="px-4 py-4 space-y-2">
-          {navigation.map((item) => (
+        <nav className="space-y-2 px-4 py-4">
+          {navigation.map(item => (
             <Link
               key={item.name}
               href={item.href}
               className={cn(
-                'flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
+                'flex items-center space-x-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
                 item.current
                   ? 'bg-accent text-accent-foreground'
                   : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
@@ -460,7 +473,7 @@ const DashboardLayout = ({ children, sidebar }: DashboardLayoutProps) => {
           ))}
         </nav>
         {sidebar && (
-          <div className="px-4 py-4 border-t border-border mt-auto">
+          <div className="border-border mt-auto border-t px-4 py-4">
             {sidebar}
           </div>
         )}
@@ -469,10 +482,10 @@ const DashboardLayout = ({ children, sidebar }: DashboardLayoutProps) => {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top bar */}
-        <div className="sticky top-0 z-30 flex h-16 items-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border px-4">
+        <div className="bg-background/95 supports-[backdrop-filter]:bg-background/60 border-border sticky top-0 z-30 flex h-16 items-center border-b px-4 backdrop-blur">
           <button
             type="button"
-            className="p-2 rounded-md hover:bg-accent lg:hidden"
+            className="hover:bg-accent rounded-md p-2 lg:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <Bars3Icon className="h-5 w-5" />
@@ -482,10 +495,7 @@ const DashboardLayout = ({ children, sidebar }: DashboardLayoutProps) => {
         </div>
 
         {/* Page content */}
-        <main 
-          className="p-4 sm:p-6 lg:p-8"
-          data-testid="dashboard-content"
-        >
+        <main className="p-4 sm:p-6 lg:p-8" data-testid="dashboard-content">
           {children}
         </main>
       </div>
@@ -506,8 +516,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   try {
     return NextResponse.json(
-      { 
-        status: 'healthy', 
+      {
+        status: 'healthy',
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV,
       },
@@ -653,6 +663,7 @@ export * from './ui';
 ## Testing Instructions
 
 ### 1. Test Container Component
+
 ```tsx
 // Test different sizes and padding options
 <Container size="sm" padding="lg">
@@ -661,6 +672,7 @@ export * from './ui';
 ```
 
 ### 2. Test Section Component
+
 ```tsx
 // Test different variants and spacing
 <Section variant="muted" spacing="xl">
@@ -671,26 +683,33 @@ export * from './ui';
 ```
 
 ### 3. Test PageHeader Component
+
 ```tsx
 // Test with all props
 <PageHeader
   title="Test Page"
   description="This is a test page description"
-  breadcrumb={<Breadcrumb items={[
-    { label: 'Home', href: '/' },
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Test' }
-  ]} />}
+  breadcrumb={
+    <Breadcrumb
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Dashboard', href: '/dashboard' },
+        { label: 'Test' },
+      ]}
+    />
+  }
   actions={<Button>Action Button</Button>}
 />
 ```
 
 ### 4. Test Responsive Behavior
+
 - Resize browser window to test responsive layouts
 - Test on mobile devices
 - Verify sidebar behavior in dashboard layout
 
 ### 5. Test API Routes
+
 ```bash
 curl http://localhost:3000/api/health
 ```
@@ -698,22 +717,25 @@ curl http://localhost:3000/api/health
 ## References and Dependencies
 
 ### Dependencies
+
 - `@heroicons/react`: Icons for UI components
 - `clsx`: Conditional classname utility
 - `tailwind-merge`: Tailwind CSS class merging
 - `next`: Next.js framework
 
 ### Documentation
+
 - [Next.js App Router](https://nextjs.org/docs/app)
 - [Tailwind CSS](https://tailwindcss.com/docs)
 - [Heroicons](https://heroicons.com/)
 - [React Accessibility](https://reactjs.org/docs/accessibility.html)
 
 ## Estimated Time
+
 **8-10 hours**
 
 - Component development: 4-5 hours
-- Layout implementation: 2-3 hours  
+- Layout implementation: 2-3 hours
 - Utility functions: 1-2 hours
 - Testing and refinement: 2-3 hours
 - Documentation: 1 hour

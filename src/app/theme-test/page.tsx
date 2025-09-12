@@ -1,20 +1,26 @@
-"use client"
+'use client';
 
-import { useThemeConfig } from "@/hooks/use-theme-config"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { useThemeConfig } from '@/hooks/use-theme-config';
 
 export default function ThemeTest() {
-  const { theme, isLight, isDark, mounted } = useThemeConfig()
+  const { theme, isLight, isDark, mounted } = useThemeConfig();
 
   if (!mounted) {
-    return <div>Loading theme...</div>
+    return <div>Loading theme...</div>;
   }
 
   return (
-    <div className="container mx-auto p-8 space-y-8">
+    <div className="container mx-auto space-y-8 p-8">
       <h1 className="text-3xl font-bold">Theme Test Page</h1>
-      
+
       <Card>
         <CardHeader>
           <CardTitle>Current Theme</CardTitle>
@@ -23,13 +29,13 @@ export default function ThemeTest() {
         <CardContent>
           <div className="space-y-4">
             <div>
-              <Badge variant="outline" className="text-lg p-2">
+              <Badge variant="outline" className="p-2 text-lg">
                 Current theme: {theme}
               </Badge>
             </div>
             <div className="flex gap-4">
-              <span>Is Light: {isLight ? "✅" : "❌"}</span>
-              <span>Is Dark: {isDark ? "✅" : "❌"}</span>
+              <span>Is Light: {isLight ? '✅' : '❌'}</span>
+              <span>Is Dark: {isDark ? '✅' : '❌'}</span>
             </div>
           </div>
         </CardContent>
@@ -39,28 +45,24 @@ export default function ThemeTest() {
         <CardHeader>
           <CardTitle>Primary Color</CardTitle>
         </CardHeader>
-        <CardContent>
-          This card uses primary colors
-        </CardContent>
+        <CardContent>This card uses primary colors</CardContent>
       </Card>
 
       <Card className="bg-secondary text-secondary-foreground">
         <CardHeader>
           <CardTitle>Secondary Color</CardTitle>
         </CardHeader>
-        <CardContent>
-          This card uses secondary colors
-        </CardContent>
+        <CardContent>This card uses secondary colors</CardContent>
       </Card>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="p-4 bg-background text-foreground border rounded">
+        <div className="bg-background text-foreground rounded border p-4">
           Background / Foreground
         </div>
-        <div className="p-4 bg-muted text-muted-foreground rounded">
+        <div className="bg-muted text-muted-foreground rounded p-4">
           Muted / Muted Foreground
         </div>
       </div>
     </div>
-  )
+  );
 }

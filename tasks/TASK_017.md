@@ -1,9 +1,11 @@
 # TASK_017: Example Pages
 
 ## Overview
+
 Create a comprehensive set of example pages that showcase the application's capabilities, demonstrate design patterns, and provide practical examples for developers. This task focuses on building real-world pages including landing, features, pricing, about, contact, blog, dashboard, and error pages.
 
 ## Objectives
+
 - Build a compelling landing page with hero section and features showcase
 - Create features and pricing pages for marketing
 - Implement about and contact pages with working forms
@@ -25,11 +27,11 @@ import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { OptimizedImage } from '@/components/ui/OptimizedImage';
-import { 
-  CheckIcon, 
+import {
+  CheckIcon,
   StarIcon,
   ArrowRightIcon,
-  PlayIcon 
+  PlayIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -39,20 +41,20 @@ export default function HomePage() {
       {/* Hero Section */}
       <Section spacing="xl" data-testid="hero-section">
         <Container>
-          <div className="text-center space-y-8">
+          <div className="space-y-8 text-center">
             <div className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
+              <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
                 Build Amazing Apps
-                <span className="block text-primary">Faster Than Ever</span>
+                <span className="text-primary block">Faster Than Ever</span>
               </h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                A modern Next.js starter with everything you need to build 
-                production-ready applications. TypeScript, Tailwind CSS, 
+              <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
+                A modern Next.js starter with everything you need to build
+                production-ready applications. TypeScript, Tailwind CSS,
                 testing, and more.
               </p>
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Button size="lg" asChild data-testid="cta-button">
                 <Link href="/features">
                   Get Started
@@ -66,11 +68,14 @@ export default function HomePage() {
                 </Link>
               </Button>
             </div>
-            
-            <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground">
+
+            <div className="text-muted-foreground flex items-center justify-center space-x-1 text-sm">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
-                  <StarIcon key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  <StarIcon
+                    key={i}
+                    className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                  />
                 ))}
               </div>
               <span className="ml-2">Trusted by 1000+ developers</span>
@@ -82,27 +87,27 @@ export default function HomePage() {
       {/* Features Overview */}
       <Section variant="muted">
         <Container>
-          <div className="text-center space-y-12">
+          <div className="space-y-12 text-center">
             <div className="space-y-4">
               <h2 className="text-3xl font-bold">Everything You Need</h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Built with modern tools and best practices to help you 
-                ship faster and build better.
+              <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
+                Built with modern tools and best practices to help you ship
+                faster and build better.
               </p>
             </div>
-            
-            <div className="grid md:grid-cols-3 gap-8">
+
+            <div className="grid gap-8 md:grid-cols-3">
               {features.map((feature, index) => (
-                <div key={index} className="text-center space-y-4">
-                  <div className="mx-auto w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <feature.icon className="h-6 w-6 text-primary" />
+                <div key={index} className="space-y-4 text-center">
+                  <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-lg">
+                    <feature.icon className="text-primary h-6 w-6" />
                   </div>
                   <h3 className="text-xl font-semibold">{feature.title}</h3>
                   <p className="text-muted-foreground">{feature.description}</p>
                 </div>
               ))}
             </div>
-            
+
             <Button asChild>
               <Link href="/features">View All Features</Link>
             </Button>
@@ -113,18 +118,23 @@ export default function HomePage() {
       {/* Social Proof */}
       <Section>
         <Container>
-          <div className="text-center space-y-8">
+          <div className="space-y-8 text-center">
             <h2 className="text-2xl font-bold">Loved by Developers</h2>
-            
-            <div className="grid md:grid-cols-3 gap-8">
+
+            <div className="grid gap-8 md:grid-cols-3">
               {testimonials.map((testimonial, index) => (
-                <div key={index} className="bg-card p-6 rounded-lg border">
-                  <div className="flex mb-4">
+                <div key={index} className="bg-card rounded-lg border p-6">
+                  <div className="mb-4 flex">
                     {[...Array(5)].map((_, i) => (
-                      <StarIcon key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <StarIcon
+                        key={i}
+                        className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                      />
                     ))}
                   </div>
-                  <p className="text-muted-foreground mb-4">"{testimonial.content}"</p>
+                  <p className="text-muted-foreground mb-4">
+                    "{testimonial.content}"
+                  </p>
                   <div className="flex items-center space-x-3">
                     <OptimizedImage
                       src={testimonial.avatar}
@@ -135,7 +145,9 @@ export default function HomePage() {
                     />
                     <div>
                       <p className="font-semibold">{testimonial.author}</p>
-                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      <p className="text-muted-foreground text-sm">
+                        {testimonial.role}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -148,12 +160,12 @@ export default function HomePage() {
       {/* CTA Section */}
       <Section variant="accent">
         <Container>
-          <div className="text-center space-y-6">
+          <div className="space-y-6 text-center">
             <h2 className="text-3xl font-bold">Ready to Get Started?</h2>
-            <p className="text-xl text-muted-foreground max-w-xl mx-auto">
+            <p className="text-muted-foreground mx-auto max-w-xl text-xl">
               Join thousands of developers building amazing applications.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
               <Button size="lg" asChild>
                 <Link href="/register">Start Building</Link>
               </Button>
@@ -171,40 +183,46 @@ export default function HomePage() {
 const features = [
   {
     icon: CheckIcon,
-    title: "TypeScript Ready",
-    description: "Built with TypeScript for better developer experience and type safety."
+    title: 'TypeScript Ready',
+    description:
+      'Built with TypeScript for better developer experience and type safety.',
   },
   {
     icon: CheckIcon,
-    title: "Modern UI",
-    description: "Beautiful components built with Tailwind CSS and Radix UI primitives."
+    title: 'Modern UI',
+    description:
+      'Beautiful components built with Tailwind CSS and Radix UI primitives.',
   },
   {
     icon: CheckIcon,
-    title: "Production Ready",
-    description: "Optimized builds, testing setup, and deployment configuration included."
-  }
+    title: 'Production Ready',
+    description:
+      'Optimized builds, testing setup, and deployment configuration included.',
+  },
 ];
 
 const testimonials = [
   {
-    content: "This starter saved me weeks of setup time. Everything just works!",
-    author: "Sarah Johnson",
-    role: "Frontend Developer",
-    avatar: "/avatars/sarah.jpg"
+    content:
+      'This starter saved me weeks of setup time. Everything just works!',
+    author: 'Sarah Johnson',
+    role: 'Frontend Developer',
+    avatar: '/avatars/sarah.jpg',
   },
   {
-    content: "The best Next.js starter I've used. Great documentation and examples.",
-    author: "Mike Chen",
-    role: "Full Stack Developer", 
-    avatar: "/avatars/mike.jpg"
+    content:
+      "The best Next.js starter I've used. Great documentation and examples.",
+    author: 'Mike Chen',
+    role: 'Full Stack Developer',
+    avatar: '/avatars/mike.jpg',
   },
   {
-    content: "Clean code, modern patterns, and excellent performance out of the box.",
-    author: "Emma Davis",
-    role: "Tech Lead",
-    avatar: "/avatars/emma.jpg"
-  }
+    content:
+      'Clean code, modern patterns, and excellent performance out of the box.',
+    author: 'Emma Davis',
+    role: 'Tech Lead',
+    avatar: '/avatars/emma.jpg',
+  },
 ];
 ```
 
@@ -217,13 +235,13 @@ import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Breadcrumb } from '@/components/navigation/Breadcrumb';
-import { 
+import {
   CodeBracketIcon,
   PaintBrushIcon,
   ShieldCheckIcon,
   RocketLaunchIcon,
   CogIcon,
-  ChartBarIcon 
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 
 export default function FeaturesPage() {
@@ -235,46 +253,43 @@ export default function FeaturesPage() {
           description="Everything you need to build modern web applications"
           breadcrumb={
             <Breadcrumb
-              items={[
-                { label: 'Home', href: '/' },
-                { label: 'Features' }
-              ]}
+              items={[{ label: 'Home', href: '/' }, { label: 'Features' }]}
             />
           }
         />
-        
+
         <div className="grid gap-12 lg:gap-16" data-testid="features-grid">
           {featureGroups.map((group, groupIndex) => (
             <div key={groupIndex} className="space-y-8">
-              <div className="text-center space-y-4">
+              <div className="space-y-4 text-center">
                 <h2 className="text-2xl font-bold">{group.title}</h2>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-muted-foreground mx-auto max-w-2xl">
                   {group.description}
                 </p>
               </div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {group.features.map((feature, featureIndex) => (
-                  <div 
-                    key={featureIndex} 
-                    className="bg-card p-6 rounded-lg border hover:shadow-md transition-shadow"
+                  <div
+                    key={featureIndex}
+                    className="bg-card rounded-lg border p-6 transition-shadow hover:shadow-md"
                     data-testid="feature-card"
                   >
                     <div className="space-y-4">
-                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <feature.icon 
-                          className="h-5 w-5 text-primary" 
+                      <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
+                        <feature.icon
+                          className="text-primary h-5 w-5"
                           data-testid="feature-icon"
                         />
                       </div>
                       <div className="space-y-2">
-                        <h3 
-                          className="text-lg font-semibold" 
+                        <h3
+                          className="text-lg font-semibold"
                           data-testid="feature-title"
                         >
                           {feature.title}
                         </h3>
-                        <p 
+                        <p
                           className="text-muted-foreground text-sm"
                           data-testid="feature-description"
                         >
@@ -286,7 +301,7 @@ export default function FeaturesPage() {
                           {feature.tags.map((tag, tagIndex) => (
                             <span
                               key={tagIndex}
-                              className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
+                              className="bg-secondary text-secondary-foreground rounded-md px-2 py-1 text-xs"
                             >
                               {tag}
                             </span>
@@ -307,77 +322,89 @@ export default function FeaturesPage() {
 
 const featureGroups = [
   {
-    title: "Developer Experience",
-    description: "Tools and workflows that make development enjoyable and productive.",
+    title: 'Developer Experience',
+    description:
+      'Tools and workflows that make development enjoyable and productive.',
     features: [
       {
         icon: CodeBracketIcon,
-        title: "TypeScript",
-        description: "Full TypeScript support with strict mode enabled for better code quality and developer experience.",
-        tags: ["TypeScript", "IntelliSense", "Type Safety"]
+        title: 'TypeScript',
+        description:
+          'Full TypeScript support with strict mode enabled for better code quality and developer experience.',
+        tags: ['TypeScript', 'IntelliSense', 'Type Safety'],
       },
       {
         icon: CogIcon,
-        title: "ESLint & Prettier",
-        description: "Configured linting and formatting with popular rule sets and automatic fixes on save.",
-        tags: ["ESLint", "Prettier", "Code Quality"]
+        title: 'ESLint & Prettier',
+        description:
+          'Configured linting and formatting with popular rule sets and automatic fixes on save.',
+        tags: ['ESLint', 'Prettier', 'Code Quality'],
       },
       {
         icon: RocketLaunchIcon,
-        title: "Hot Module Reload",
-        description: "Fast refresh for instant feedback during development with Next.js built-in HMR.",
-        tags: ["HMR", "Fast Refresh", "Development"]
-      }
-    ]
+        title: 'Hot Module Reload',
+        description:
+          'Fast refresh for instant feedback during development with Next.js built-in HMR.',
+        tags: ['HMR', 'Fast Refresh', 'Development'],
+      },
+    ],
   },
   {
-    title: "UI & Styling",
-    description: "Modern styling solutions and component libraries for beautiful interfaces.",
+    title: 'UI & Styling',
+    description:
+      'Modern styling solutions and component libraries for beautiful interfaces.',
     features: [
       {
         icon: PaintBrushIcon,
-        title: "Tailwind CSS",
-        description: "Utility-first CSS framework with custom design system and dark mode support.",
-        tags: ["Tailwind CSS", "Dark Mode", "Responsive"]
+        title: 'Tailwind CSS',
+        description:
+          'Utility-first CSS framework with custom design system and dark mode support.',
+        tags: ['Tailwind CSS', 'Dark Mode', 'Responsive'],
       },
       {
         icon: CodeBracketIcon,
-        title: "Component Library",
-        description: "Pre-built components with consistent design patterns and accessibility features.",
-        tags: ["Components", "Accessibility", "Storybook"]
+        title: 'Component Library',
+        description:
+          'Pre-built components with consistent design patterns and accessibility features.',
+        tags: ['Components', 'Accessibility', 'Storybook'],
       },
       {
         icon: PaintBrushIcon,
-        title: "Icons",
-        description: "Beautiful icon sets from Heroicons with consistent styling and sizing.",
-        tags: ["Icons", "Heroicons", "SVG"]
-      }
-    ]
+        title: 'Icons',
+        description:
+          'Beautiful icon sets from Heroicons with consistent styling and sizing.',
+        tags: ['Icons', 'Heroicons', 'SVG'],
+      },
+    ],
   },
   {
-    title: "Performance & SEO",
-    description: "Optimizations and features for fast loading and search engine visibility.",
+    title: 'Performance & SEO',
+    description:
+      'Optimizations and features for fast loading and search engine visibility.',
     features: [
       {
         icon: RocketLaunchIcon,
-        title: "Image Optimization",
-        description: "Automatic image optimization with WebP/AVIF support and lazy loading.",
-        tags: ["Images", "WebP", "Lazy Loading"]
+        title: 'Image Optimization',
+        description:
+          'Automatic image optimization with WebP/AVIF support and lazy loading.',
+        tags: ['Images', 'WebP', 'Lazy Loading'],
       },
       {
         icon: ChartBarIcon,
-        title: "Bundle Splitting",
-        description: "Automatic code splitting and dynamic imports for optimal performance.",
-        tags: ["Code Splitting", "Performance", "Optimization"]
+        title: 'Bundle Splitting',
+        description:
+          'Automatic code splitting and dynamic imports for optimal performance.',
+        tags: ['Code Splitting', 'Performance', 'Optimization'],
       },
       {
         icon: ShieldCheckIcon,
-        title: "SEO Ready",
-        description: "Meta tags, structured data, and sitemap generation for better search rankings.",
-        tags: ["SEO", "Meta Tags", "Sitemap"]
-      }
-    ]
-  }
+        title: 'SEO Ready',
+        description:
+          'Meta tags, structured data, and sitemap generation for better search rankings.',
+        tags: ['SEO', 'Meta Tags', 'Sitemap'],
+      },
+    ],
+  },
 ];
 ```
 
@@ -401,46 +428,49 @@ export default function PricingPage() {
           title="Simple, Transparent Pricing"
           description="Choose the plan that fits your needs. Upgrade or downgrade at any time."
         />
-        
+
         <div className="space-y-8">
           {/* Pricing Toggle */}
           <div className="flex justify-center">
-            <div className="bg-muted p-1 rounded-lg">
+            <div className="bg-muted rounded-lg p-1">
               <div className="grid grid-cols-2">
-                <button className="px-4 py-2 rounded-md bg-background text-foreground text-sm font-medium">
+                <button className="bg-background text-foreground rounded-md px-4 py-2 text-sm font-medium">
                   Monthly
                 </button>
-                <button className="px-4 py-2 rounded-md text-muted-foreground text-sm font-medium">
+                <button className="text-muted-foreground rounded-md px-4 py-2 text-sm font-medium">
                   Yearly
                 </button>
               </div>
             </div>
           </div>
-          
+
           {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-8" data-testid="pricing-section">
+          <div
+            className="grid gap-8 md:grid-cols-3"
+            data-testid="pricing-section"
+          >
             {plans.map((plan, index) => (
-              <div 
+              <div
                 key={index}
-                className={`bg-card p-8 rounded-lg border relative ${
-                  plan.popular ? 'ring-2 ring-primary' : ''
+                className={`bg-card relative rounded-lg border p-8 ${
+                  plan.popular ? 'ring-primary ring-2' : ''
                 }`}
                 data-testid="pricing-card"
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-primary text-primary-foreground rounded-full px-3 py-1 text-sm font-medium">
                       Most Popular
                     </span>
                   </div>
                 )}
-                
+
                 <div className="space-y-6">
                   <div className="space-y-2">
                     <h3 className="text-xl font-semibold">{plan.name}</h3>
                     <p className="text-muted-foreground">{plan.description}</p>
                   </div>
-                  
+
                   <div className="space-y-1">
                     <div className="flex items-baseline">
                       <span className="text-3xl font-bold" data-testid="price">
@@ -451,37 +481,51 @@ export default function PricingPage() {
                       </span>
                     </div>
                     {plan.originalPrice && (
-                      <p className="text-sm text-muted-foreground">
-                        <span className="line-through">${plan.originalPrice}/mo</span>
-                        <span className="ml-2 text-green-600 font-medium">
-                          Save {Math.round((1 - plan.price / plan.originalPrice) * 100)}%
+                      <p className="text-muted-foreground text-sm">
+                        <span className="line-through">
+                          ${plan.originalPrice}/mo
+                        </span>
+                        <span className="ml-2 font-medium text-green-600">
+                          Save{' '}
+                          {Math.round(
+                            (1 - plan.price / plan.originalPrice) * 100
+                          )}
+                          %
                         </span>
                       </p>
                     )}
                   </div>
-                  
-                  <Button 
-                    className="w-full" 
-                    variant={plan.popular ? "default" : "outline"}
+
+                  <Button
+                    className="w-full"
+                    variant={plan.popular ? 'default' : 'outline'}
                   >
                     {plan.cta}
                   </Button>
-                  
+
                   <div className="space-y-4">
-                    <p className="text-sm font-medium" data-testid="features-list">
+                    <p
+                      className="text-sm font-medium"
+                      data-testid="features-list"
+                    >
                       What's included:
                     </p>
                     <ul className="space-y-3">
                       {plan.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-start space-x-3">
+                        <li
+                          key={featureIndex}
+                          className="flex items-start space-x-3"
+                        >
                           {feature.included ? (
-                            <CheckIcon className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                            <CheckIcon className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />
                           ) : (
-                            <XMarkIcon className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                            <XMarkIcon className="text-muted-foreground mt-0.5 h-5 w-5 flex-shrink-0" />
                           )}
-                          <span 
+                          <span
                             className={`text-sm ${
-                              feature.included ? 'text-foreground' : 'text-muted-foreground'
+                              feature.included
+                                ? 'text-foreground'
+                                : 'text-muted-foreground'
                             }`}
                           >
                             {feature.name}
@@ -494,14 +538,14 @@ export default function PricingPage() {
               </div>
             ))}
           </div>
-          
+
           {/* FAQ Section */}
           <div className="mt-16 space-y-8">
             <div className="text-center">
               <h2 className="text-2xl font-bold">Frequently Asked Questions</h2>
             </div>
-            
-            <div className="grid md:grid-cols-2 gap-8">
+
+            <div className="grid gap-8 md:grid-cols-2">
               {faqs.map((faq, index) => (
                 <div key={index} className="space-y-2">
                   <h3 className="font-semibold">{faq.question}</h3>
@@ -518,71 +562,75 @@ export default function PricingPage() {
 
 const plans = [
   {
-    name: "Starter",
-    description: "Perfect for individuals and small projects",
+    name: 'Starter',
+    description: 'Perfect for individuals and small projects',
     price: 0,
-    billing: "/month",
-    cta: "Get Started",
+    billing: '/month',
+    cta: 'Get Started',
     features: [
-      { name: "Up to 3 projects", included: true },
-      { name: "Basic components", included: true },
-      { name: "Community support", included: true },
-      { name: "Advanced features", included: false },
-      { name: "Priority support", included: false },
-      { name: "Custom integrations", included: false }
-    ]
+      { name: 'Up to 3 projects', included: true },
+      { name: 'Basic components', included: true },
+      { name: 'Community support', included: true },
+      { name: 'Advanced features', included: false },
+      { name: 'Priority support', included: false },
+      { name: 'Custom integrations', included: false },
+    ],
   },
   {
-    name: "Pro",
-    description: "Great for growing teams and businesses",
+    name: 'Pro',
+    description: 'Great for growing teams and businesses',
     price: 29,
     originalPrice: 39,
-    billing: "/month",
-    cta: "Start Free Trial",
+    billing: '/month',
+    cta: 'Start Free Trial',
     popular: true,
     features: [
-      { name: "Unlimited projects", included: true },
-      { name: "All components", included: true },
-      { name: "Priority support", included: true },
-      { name: "Advanced features", included: true },
-      { name: "Analytics dashboard", included: true },
-      { name: "Custom integrations", included: false }
-    ]
+      { name: 'Unlimited projects', included: true },
+      { name: 'All components', included: true },
+      { name: 'Priority support', included: true },
+      { name: 'Advanced features', included: true },
+      { name: 'Analytics dashboard', included: true },
+      { name: 'Custom integrations', included: false },
+    ],
   },
   {
-    name: "Enterprise",
-    description: "For large organizations with custom needs",
+    name: 'Enterprise',
+    description: 'For large organizations with custom needs',
     price: 99,
-    billing: "/month",
-    cta: "Contact Sales",
+    billing: '/month',
+    cta: 'Contact Sales',
     features: [
-      { name: "Everything in Pro", included: true },
-      { name: "Custom integrations", included: true },
-      { name: "Dedicated support", included: true },
-      { name: "SLA guarantee", included: true },
-      { name: "Custom training", included: true },
-      { name: "White-label options", included: true }
-    ]
-  }
+      { name: 'Everything in Pro', included: true },
+      { name: 'Custom integrations', included: true },
+      { name: 'Dedicated support', included: true },
+      { name: 'SLA guarantee', included: true },
+      { name: 'Custom training', included: true },
+      { name: 'White-label options', included: true },
+    ],
+  },
 ];
 
 const faqs = [
   {
-    question: "Can I change plans anytime?",
-    answer: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately."
+    question: 'Can I change plans anytime?',
+    answer:
+      'Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.',
   },
   {
-    question: "Is there a free trial?",
-    answer: "Yes, we offer a 14-day free trial for all paid plans. No credit card required."
+    question: 'Is there a free trial?',
+    answer:
+      'Yes, we offer a 14-day free trial for all paid plans. No credit card required.',
   },
   {
-    question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards, PayPal, and bank transfers for enterprise customers."
+    question: 'What payment methods do you accept?',
+    answer:
+      'We accept all major credit cards, PayPal, and bank transfers for enterprise customers.',
   },
   {
-    question: "Can I cancel anytime?",
-    answer: "Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your billing period."
-  }
+    question: 'Can I cancel anytime?',
+    answer:
+      "Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your billing period.",
+  },
 ];
 ```
 
@@ -595,11 +643,11 @@ import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { OptimizedImage } from '@/components/ui/OptimizedImage';
-import { 
+import {
   UserGroupIcon,
   GlobeAltIcon,
   HeartIcon,
-  LightBulbIcon 
+  LightBulbIcon,
 } from '@heroicons/react/24/outline';
 
 export default function AboutPage() {
@@ -611,37 +659,43 @@ export default function AboutPage() {
             title="About Us"
             description="We're on a mission to help developers build better applications faster"
           />
-          
+
           <div className="space-y-16">
             {/* Mission Section */}
-            <div data-testid="mission-section" className="text-center space-y-6">
+            <div
+              data-testid="mission-section"
+              className="space-y-6 text-center"
+            >
               <h2 className="text-2xl font-bold">Our Mission</h2>
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                We believe that great software should be accessible to everyone. Our goal is to 
-                provide developers with the tools, components, and patterns they need to build 
-                amazing applications without reinventing the wheel every time.
+              <p className="text-muted-foreground mx-auto max-w-3xl text-lg">
+                We believe that great software should be accessible to everyone.
+                Our goal is to provide developers with the tools, components,
+                and patterns they need to build amazing applications without
+                reinventing the wheel every time.
               </p>
             </div>
-            
+
             {/* Values */}
             <div className="space-y-8">
               <div className="text-center">
                 <h2 className="text-2xl font-bold">Our Values</h2>
               </div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
                 {values.map((value, index) => (
-                  <div key={index} className="text-center space-y-4">
-                    <div className="mx-auto w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                      <value.icon className="h-6 w-6 text-primary" />
+                  <div key={index} className="space-y-4 text-center">
+                    <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-lg">
+                      <value.icon className="text-primary h-6 w-6" />
                     </div>
                     <h3 className="text-lg font-semibold">{value.title}</h3>
-                    <p className="text-muted-foreground text-sm">{value.description}</p>
+                    <p className="text-muted-foreground text-sm">
+                      {value.description}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
-            
+
             {/* Team Section */}
             <div className="space-y-8" data-testid="team-section">
               <div className="text-center">
@@ -650,10 +704,14 @@ export default function AboutPage() {
                   The people behind the product
                 </p>
               </div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {team.map((member, index) => (
-                  <div key={index} className="text-center space-y-4" data-testid="team-member">
+                  <div
+                    key={index}
+                    className="space-y-4 text-center"
+                    data-testid="team-member"
+                  >
                     <OptimizedImage
                       src={member.avatar}
                       alt={member.name}
@@ -664,20 +722,26 @@ export default function AboutPage() {
                     <div className="space-y-1">
                       <h3 className="font-semibold">{member.name}</h3>
                       <p className="text-muted-foreground">{member.role}</p>
-                      <p className="text-sm text-muted-foreground">{member.bio}</p>
+                      <p className="text-muted-foreground text-sm">
+                        {member.bio}
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-            
+
             {/* Stats */}
             <div className="bg-muted/50 rounded-lg p-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
                 {stats.map((stat, index) => (
                   <div key={index} className="space-y-2">
-                    <div className="text-2xl font-bold text-primary">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    <div className="text-primary text-2xl font-bold">
+                      {stat.value}
+                    </div>
+                    <div className="text-muted-foreground text-sm">
+                      {stat.label}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -692,52 +756,56 @@ export default function AboutPage() {
 const values = [
   {
     icon: LightBulbIcon,
-    title: "Innovation",
-    description: "We constantly explore new technologies and patterns to stay ahead of the curve."
+    title: 'Innovation',
+    description:
+      'We constantly explore new technologies and patterns to stay ahead of the curve.',
   },
   {
     icon: HeartIcon,
-    title: "Quality",
-    description: "We believe in shipping code that we're proud of, with attention to every detail."
+    title: 'Quality',
+    description:
+      "We believe in shipping code that we're proud of, with attention to every detail.",
   },
   {
     icon: UserGroupIcon,
-    title: "Community",
-    description: "We build for developers, by developers, and we listen to our community."
+    title: 'Community',
+    description:
+      'We build for developers, by developers, and we listen to our community.',
   },
   {
     icon: GlobeAltIcon,
-    title: "Accessibility",
-    description: "We create tools that are accessible to developers of all skill levels and backgrounds."
-  }
+    title: 'Accessibility',
+    description:
+      'We create tools that are accessible to developers of all skill levels and backgrounds.',
+  },
 ];
 
 const team = [
   {
-    name: "Sarah Johnson",
-    role: "Founder & CEO",
-    bio: "Full-stack developer with 10+ years building web applications.",
-    avatar: "/team/sarah.jpg"
+    name: 'Sarah Johnson',
+    role: 'Founder & CEO',
+    bio: 'Full-stack developer with 10+ years building web applications.',
+    avatar: '/team/sarah.jpg',
   },
   {
-    name: "Mike Chen",
-    role: "CTO",
-    bio: "Former Google engineer passionate about developer experience and performance.",
-    avatar: "/team/mike.jpg"
+    name: 'Mike Chen',
+    role: 'CTO',
+    bio: 'Former Google engineer passionate about developer experience and performance.',
+    avatar: '/team/mike.jpg',
   },
   {
-    name: "Emma Davis",
-    role: "Design Lead",
-    bio: "UI/UX designer focused on creating beautiful and functional interfaces.",
-    avatar: "/team/emma.jpg"
-  }
+    name: 'Emma Davis',
+    role: 'Design Lead',
+    bio: 'UI/UX designer focused on creating beautiful and functional interfaces.',
+    avatar: '/team/emma.jpg',
+  },
 ];
 
 const stats = [
-  { value: "1000+", label: "Developers" },
-  { value: "50K+", label: "Downloads" },
-  { value: "99.9%", label: "Uptime" },
-  { value: "24/7", label: "Support" }
+  { value: '1000+', label: 'Developers' },
+  { value: '50K+', label: 'Downloads' },
+  { value: '99.9%', label: 'Uptime' },
+  { value: '24/7', label: 'Support' },
 ];
 ```
 
@@ -750,11 +818,11 @@ import { Container } from '@/components/layout/Container';
 import { Section } from '@/components/layout/Section';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { ContactForm } from '@/components/forms/ContactForm';
-import { 
+import {
   EnvelopeIcon,
   PhoneIcon,
   MapPinIcon,
-  ClockIcon 
+  ClockIcon,
 } from '@heroicons/react/24/outline';
 
 export default function ContactPage() {
@@ -765,33 +833,35 @@ export default function ContactPage() {
           title="Contact Us"
           description="Get in touch with our team. We'd love to hear from you!"
         />
-        
-        <div className="grid lg:grid-cols-2 gap-12">
+
+        <div className="grid gap-12 lg:grid-cols-2">
           {/* Contact Form */}
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold mb-4">Send us a message</h2>
+              <h2 className="mb-4 text-xl font-semibold">Send us a message</h2>
               <ContactForm />
             </div>
           </div>
-          
+
           {/* Contact Information */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-xl font-semibold mb-6">Get in touch</h2>
+              <h2 className="mb-6 text-xl font-semibold">Get in touch</h2>
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-start space-x-4">
-                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <info.icon className="h-5 w-5 text-primary" />
+                    <div className="bg-primary/10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg">
+                      <info.icon className="text-primary h-5 w-5" />
                     </div>
                     <div className="space-y-1">
                       <h3 className="font-medium">{info.title}</h3>
-                      <p className="text-muted-foreground text-sm">{info.description}</p>
+                      <p className="text-muted-foreground text-sm">
+                        {info.description}
+                      </p>
                       {info.link && (
-                        <a 
-                          href={info.link} 
-                          className="text-primary hover:underline text-sm font-medium"
+                        <a
+                          href={info.link}
+                          className="text-primary text-sm font-medium hover:underline"
                         >
                           {info.linkText}
                         </a>
@@ -801,11 +871,11 @@ export default function ContactPage() {
                 ))}
               </div>
             </div>
-            
+
             {/* Office Hours */}
             <div className="bg-muted/50 rounded-lg p-6">
-              <h3 className="font-semibold mb-4 flex items-center">
-                <ClockIcon className="h-5 w-5 mr-2 text-primary" />
+              <h3 className="mb-4 flex items-center font-semibold">
+                <ClockIcon className="text-primary mr-2 h-5 w-5" />
                 Office Hours
               </h3>
               <div className="space-y-2 text-sm">
@@ -823,16 +893,17 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* FAQ Link */}
-            <div className="bg-card border rounded-lg p-6">
-              <h3 className="font-semibold mb-2">Frequently Asked Questions</h3>
-              <p className="text-muted-foreground text-sm mb-4">
-                Looking for quick answers? Check out our FAQ section for common questions.
+            <div className="bg-card rounded-lg border p-6">
+              <h3 className="mb-2 font-semibold">Frequently Asked Questions</h3>
+              <p className="text-muted-foreground mb-4 text-sm">
+                Looking for quick answers? Check out our FAQ section for common
+                questions.
               </p>
-              <a 
-                href="/faq" 
-                className="text-primary hover:underline text-sm font-medium"
+              <a
+                href="/faq"
+                className="text-primary text-sm font-medium hover:underline"
               >
                 View FAQ →
               </a>
@@ -847,24 +918,24 @@ export default function ContactPage() {
 const contactInfo = [
   {
     icon: EnvelopeIcon,
-    title: "Email",
+    title: 'Email',
     description: "Send us an email and we'll get back to you within 24 hours.",
-    link: "mailto:hello@yourapp.com",
-    linkText: "hello@yourapp.com"
+    link: 'mailto:hello@yourapp.com',
+    linkText: 'hello@yourapp.com',
   },
   {
     icon: PhoneIcon,
-    title: "Phone",
-    description: "Call us during business hours for immediate assistance.",
-    link: "tel:+1-555-123-4567",
-    linkText: "+1 (555) 123-4567"
+    title: 'Phone',
+    description: 'Call us during business hours for immediate assistance.',
+    link: 'tel:+1-555-123-4567',
+    linkText: '+1 (555) 123-4567',
   },
   {
     icon: MapPinIcon,
-    title: "Office",
-    description: "Visit us at our headquarters in San Francisco.",
-    linkText: "123 Main St, San Francisco, CA 94105"
-  }
+    title: 'Office',
+    description: 'Visit us at our headquarters in San Francisco.',
+    linkText: '123 Main St, San Francisco, CA 94105',
+  },
 ];
 ```
 
@@ -888,12 +959,15 @@ export default function BlogPage() {
           title="Blog"
           description="Latest news, tutorials, and insights from our team"
         />
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="blog-grid">
+
+        <div
+          className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+          data-testid="blog-grid"
+        >
           {posts.map((post, index) => (
-            <article 
-              key={index} 
-              className="bg-card border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+            <article
+              key={index}
+              className="bg-card overflow-hidden rounded-lg border transition-shadow hover:shadow-md"
               data-testid="blog-card"
             >
               <OptimizedImage
@@ -901,11 +975,11 @@ export default function BlogPage() {
                 alt={post.title}
                 width={400}
                 height={200}
-                className="w-full h-48 object-cover"
+                className="h-48 w-full object-cover"
               />
-              
-              <div className="p-6 space-y-4">
-                <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+
+              <div className="space-y-4 p-6">
+                <div className="text-muted-foreground flex items-center space-x-4 text-sm">
                   <div className="flex items-center space-x-1">
                     <CalendarIcon className="h-4 w-4" />
                     <time dateTime={post.date} data-testid="post-date">
@@ -917,21 +991,27 @@ export default function BlogPage() {
                     <span>{post.readTime}</span>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <h2 className="text-xl font-semibold" data-testid="post-title">
-                    <Link 
+                  <h2
+                    className="text-xl font-semibold"
+                    data-testid="post-title"
+                  >
+                    <Link
                       href={`/blog/${post.slug}`}
                       className="hover:text-primary transition-colors"
                     >
                       {post.title}
                     </Link>
                   </h2>
-                  <p className="text-muted-foreground" data-testid="post-excerpt">
+                  <p
+                    className="text-muted-foreground"
+                    data-testid="post-excerpt"
+                  >
                     {post.excerpt}
                   </p>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <OptimizedImage
@@ -941,16 +1021,16 @@ export default function BlogPage() {
                       height={24}
                       className="rounded-full"
                     />
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-muted-foreground text-sm">
                       {post.author.name}
                     </span>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-2">
                     {post.tags.slice(0, 2).map((tag, tagIndex) => (
                       <span
                         key={tagIndex}
-                        className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-md"
+                        className="bg-secondary text-secondary-foreground rounded-md px-2 py-1 text-xs"
                       >
                         {tag}
                       </span>
@@ -961,10 +1041,10 @@ export default function BlogPage() {
             </article>
           ))}
         </div>
-        
+
         {/* Load More Button */}
-        <div className="text-center mt-12">
-          <button className="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">
+        <div className="mt-12 text-center">
+          <button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-6 py-2 transition-colors">
             Load More Posts
           </button>
         </div>
@@ -975,51 +1055,54 @@ export default function BlogPage() {
 
 const posts = [
   {
-    title: "Getting Started with Next.js 14",
-    slug: "getting-started-nextjs-14",
-    excerpt: "Learn how to build modern web applications with the latest features in Next.js 14.",
-    image: "/blog/nextjs-14.jpg",
-    date: "2024-01-15",
-    readTime: "5 min read",
+    title: 'Getting Started with Next.js 14',
+    slug: 'getting-started-nextjs-14',
+    excerpt:
+      'Learn how to build modern web applications with the latest features in Next.js 14.',
+    image: '/blog/nextjs-14.jpg',
+    date: '2024-01-15',
+    readTime: '5 min read',
     author: {
-      name: "Sarah Johnson",
-      avatar: "/authors/sarah.jpg"
+      name: 'Sarah Johnson',
+      avatar: '/authors/sarah.jpg',
     },
-    tags: ["Next.js", "React", "Tutorial"]
+    tags: ['Next.js', 'React', 'Tutorial'],
   },
   {
-    title: "Building Accessible Components",
-    slug: "building-accessible-components", 
-    excerpt: "Best practices for creating components that work for everyone, including users with disabilities.",
-    image: "/blog/accessibility.jpg",
-    date: "2024-01-10",
-    readTime: "8 min read",
+    title: 'Building Accessible Components',
+    slug: 'building-accessible-components',
+    excerpt:
+      'Best practices for creating components that work for everyone, including users with disabilities.',
+    image: '/blog/accessibility.jpg',
+    date: '2024-01-10',
+    readTime: '8 min read',
     author: {
-      name: "Mike Chen",
-      avatar: "/authors/mike.jpg"
+      name: 'Mike Chen',
+      avatar: '/authors/mike.jpg',
     },
-    tags: ["Accessibility", "React", "Best Practices"]
+    tags: ['Accessibility', 'React', 'Best Practices'],
   },
   {
-    title: "Optimizing Performance with React",
-    slug: "optimizing-performance-react",
-    excerpt: "Techniques and patterns for building fast React applications that scale.",
-    image: "/blog/performance.jpg", 
-    date: "2024-01-05",
-    readTime: "12 min read",
+    title: 'Optimizing Performance with React',
+    slug: 'optimizing-performance-react',
+    excerpt:
+      'Techniques and patterns for building fast React applications that scale.',
+    image: '/blog/performance.jpg',
+    date: '2024-01-05',
+    readTime: '12 min read',
     author: {
-      name: "Emma Davis",
-      avatar: "/authors/emma.jpg"
+      name: 'Emma Davis',
+      avatar: '/authors/emma.jpg',
     },
-    tags: ["Performance", "React", "Optimization"]
-  }
+    tags: ['Performance', 'React', 'Optimization'],
+  },
 ];
 
 function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
 }
 ```
@@ -1051,21 +1134,21 @@ export default function BlogPost({ params }: BlogPostProps) {
     <Section>
       <Container size="md">
         <article>
-          <header className="space-y-6 mb-8">
+          <header className="mb-8 space-y-6">
             <Breadcrumb
               items={[
                 { label: 'Home', href: '/' },
                 { label: 'Blog', href: '/blog' },
-                { label: post.title }
+                { label: post.title },
               ]}
             />
-            
+
             <div className="space-y-4">
               <h1 className="text-4xl font-bold tracking-tight">
                 {post.title}
               </h1>
-              
-              <div className="flex items-center space-x-6 text-muted-foreground">
+
+              <div className="text-muted-foreground flex items-center space-x-6">
                 <div className="flex items-center space-x-2">
                   <OptimizedImage
                     src={post.author.avatar}
@@ -1076,50 +1159,48 @@ export default function BlogPost({ params }: BlogPostProps) {
                   />
                   <span>{post.author.name}</span>
                 </div>
-                
+
                 <div className="flex items-center space-x-1">
                   <CalendarIcon className="h-4 w-4" />
-                  <time dateTime={post.date}>
-                    {formatDate(post.date)}
-                  </time>
+                  <time dateTime={post.date}>{formatDate(post.date)}</time>
                 </div>
-                
+
                 <div className="flex items-center space-x-1">
                   <ClockIcon className="h-4 w-4" />
                   <span>{post.readTime}</span>
                 </div>
               </div>
-              
+
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-secondary text-secondary-foreground text-sm rounded-md"
+                    className="bg-secondary text-secondary-foreground rounded-md px-3 py-1 text-sm"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
-            
+
             <OptimizedImage
               src={post.image}
               alt={post.title}
               width={800}
               height={400}
-              className="w-full h-64 md:h-96 object-cover rounded-lg"
+              className="h-64 w-full rounded-lg object-cover md:h-96"
             />
           </header>
-          
-          <div 
+
+          <div
             className="prose prose-gray dark:prose-invert max-w-none"
             data-testid="post-content"
           >
             <div dangerouslySetInnerHTML={{ __html: post.content }} />
           </div>
-          
-          <footer className="mt-12 pt-8 border-t border-border">
-            <div 
+
+          <footer className="border-border mt-12 border-t pt-8">
+            <div
               className="bg-muted/50 rounded-lg p-6"
               data-testid="author-info"
             >
@@ -1149,26 +1230,26 @@ export default function BlogPost({ params }: BlogPostProps) {
 // Mock function - in real app, this would fetch from CMS/database
 function getBlogPost(slug: string) {
   const posts = {
-    "getting-started-nextjs-14": {
-      title: "Getting Started with Next.js 14",
-      date: "2024-01-15",
-      readTime: "5 min read",
-      image: "/blog/nextjs-14.jpg",
+    'getting-started-nextjs-14': {
+      title: 'Getting Started with Next.js 14',
+      date: '2024-01-15',
+      readTime: '5 min read',
+      image: '/blog/nextjs-14.jpg',
       author: {
-        name: "Sarah Johnson",
-        avatar: "/authors/sarah.jpg",
-        bio: "Full-stack developer with 10+ years building web applications."
+        name: 'Sarah Johnson',
+        avatar: '/authors/sarah.jpg',
+        bio: 'Full-stack developer with 10+ years building web applications.',
       },
-      tags: ["Next.js", "React", "Tutorial"],
+      tags: ['Next.js', 'React', 'Tutorial'],
       content: `
         <p>Next.js 14 brings exciting new features and improvements...</p>
         <h2>App Router</h2>
         <p>The new App Router provides better performance...</p>
         <!-- More content -->
-      `
-    }
+      `,
+    },
   };
-  
+
   return posts[slug as keyof typeof posts] || null;
 }
 
@@ -1176,7 +1257,7 @@ function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
 }
 ```
@@ -1190,11 +1271,11 @@ Create `src/app/dashboard/page.tsx`:
 
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Container } from '@/components/layout/Container';
-import { 
+import {
   ChartBarIcon,
   UsersIcon,
   CurrencyDollarIcon,
-  TrendingUpIcon 
+  TrendingUpIcon,
 } from '@heroicons/react/24/outline';
 
 export default function DashboardPage() {
@@ -1203,63 +1284,71 @@ export default function DashboardPage() {
       <div className="space-y-8" data-testid="dashboard">
         <div>
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's what's happening.</p>
+          <p className="text-muted-foreground">
+            Welcome back! Here's what's happening.
+          </p>
         </div>
-        
+
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
-            <div 
-              key={index} 
-              className="bg-card p-6 rounded-lg border"
+            <div
+              key={index}
+              className="bg-card rounded-lg border p-6"
               data-testid="dashboard-widget"
             >
               <div className="flex items-center justify-between">
                 <div className="space-y-2">
                   <p className="text-muted-foreground text-sm">{stat.label}</p>
                   <p className="text-2xl font-bold">{stat.value}</p>
-                  <p className={`text-xs flex items-center ${
-                    stat.change.startsWith('+') ? 'text-green-600' : 'text-red-600'
-                  }`}>
-                    <TrendingUpIcon className="h-3 w-3 mr-1" />
+                  <p
+                    className={`flex items-center text-xs ${
+                      stat.change.startsWith('+')
+                        ? 'text-green-600'
+                        : 'text-red-600'
+                    }`}
+                  >
+                    <TrendingUpIcon className="mr-1 h-3 w-3" />
                     {stat.change} from last month
                   </p>
                 </div>
-                <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                  <stat.icon className="h-5 w-5 text-primary" />
+                <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg">
+                  <stat.icon className="text-primary h-5 w-5" />
                 </div>
               </div>
             </div>
           ))}
         </div>
-        
+
         {/* Charts Row */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          <div className="bg-card p-6 rounded-lg border">
-            <h3 className="font-semibold mb-4">Revenue Overview</h3>
-            <div className="h-64 flex items-center justify-center text-muted-foreground">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div className="bg-card rounded-lg border p-6">
+            <h3 className="mb-4 font-semibold">Revenue Overview</h3>
+            <div className="text-muted-foreground flex h-64 items-center justify-center">
               Chart Component Placeholder
             </div>
           </div>
-          
-          <div className="bg-card p-6 rounded-lg border">
-            <h3 className="font-semibold mb-4">User Activity</h3>
-            <div className="h-64 flex items-center justify-center text-muted-foreground">
+
+          <div className="bg-card rounded-lg border p-6">
+            <h3 className="mb-4 font-semibold">User Activity</h3>
+            <div className="text-muted-foreground flex h-64 items-center justify-center">
               Chart Component Placeholder
             </div>
           </div>
         </div>
-        
+
         {/* Recent Activity */}
-        <div className="bg-card p-6 rounded-lg border">
-          <h3 className="font-semibold mb-4">Recent Activity</h3>
+        <div className="bg-card rounded-lg border p-6">
+          <h3 className="mb-4 font-semibold">Recent Activity</h3>
           <div className="space-y-4">
             {activities.map((activity, index) => (
               <div key={index} className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                <div className="bg-primary h-2 w-2 rounded-full"></div>
                 <div className="flex-1">
                   <p className="text-sm">{activity.description}</p>
-                  <p className="text-xs text-muted-foreground">{activity.time}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {activity.time}
+                  </p>
                 </div>
               </div>
             ))}
@@ -1272,48 +1361,48 @@ export default function DashboardPage() {
 
 const stats = [
   {
-    label: "Total Users",
-    value: "1,234",
-    change: "+12%",
-    icon: UsersIcon
+    label: 'Total Users',
+    value: '1,234',
+    change: '+12%',
+    icon: UsersIcon,
   },
   {
-    label: "Revenue",
-    value: "$12,345",
-    change: "+8%",
-    icon: CurrencyDollarIcon
+    label: 'Revenue',
+    value: '$12,345',
+    change: '+8%',
+    icon: CurrencyDollarIcon,
   },
   {
-    label: "Conversions",
-    value: "23.5%",
-    change: "+2.4%",
-    icon: TrendingUpIcon
+    label: 'Conversions',
+    value: '23.5%',
+    change: '+2.4%',
+    icon: TrendingUpIcon,
   },
   {
-    label: "Page Views",
-    value: "45,678",
-    change: "+15%",
-    icon: ChartBarIcon
-  }
+    label: 'Page Views',
+    value: '45,678',
+    change: '+15%',
+    icon: ChartBarIcon,
+  },
 ];
 
 const activities = [
   {
-    description: "New user registered: john.doe@example.com",
-    time: "2 minutes ago"
+    description: 'New user registered: john.doe@example.com',
+    time: '2 minutes ago',
   },
   {
-    description: "Payment received from customer #1234",
-    time: "15 minutes ago"
+    description: 'Payment received from customer #1234',
+    time: '15 minutes ago',
   },
   {
-    description: "System backup completed successfully",
-    time: "1 hour ago"
+    description: 'System backup completed successfully',
+    time: '1 hour ago',
   },
   {
-    description: "New feature deployed to production",
-    time: "2 hours ago"
-  }
+    description: 'New feature deployed to production',
+    time: '2 hours ago',
+  },
 ];
 ```
 
@@ -1337,23 +1426,23 @@ export default function SettingsPage() {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
-      avatar: ''
+      avatar: '',
     },
     notifications: {
       email: true,
       push: false,
-      marketing: true
+      marketing: true,
     },
     privacy: {
       profileVisibility: 'public',
       showEmail: false,
-      showPhone: false
+      showPhone: false,
     },
     preferences: {
       theme: 'system',
       language: 'en',
-      timezone: 'UTC'
-    }
+      timezone: 'UTC',
+    },
   });
 
   return (
@@ -1361,101 +1450,144 @@ export default function SettingsPage() {
       <div className="space-y-8">
         <div>
           <h1 className="text-2xl font-bold">Settings</h1>
-          <p className="text-muted-foreground">Manage your account preferences</p>
+          <p className="text-muted-foreground">
+            Manage your account preferences
+          </p>
         </div>
-        
+
         <form className="space-y-8" data-testid="settings-form">
           {/* Profile Settings */}
-          <div className="bg-card p-6 rounded-lg border" data-testid="settings-profile">
-            <h2 className="text-lg font-semibold mb-4">Profile Information</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+          <div
+            className="bg-card rounded-lg border p-6"
+            data-testid="settings-profile"
+          >
+            <h2 className="mb-4 text-lg font-semibold">Profile Information</h2>
+            <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium mb-2">First Name</label>
-                <Input 
+                <label className="mb-2 block text-sm font-medium">
+                  First Name
+                </label>
+                <Input
                   value={settings.profile.firstName}
-                  onChange={(e) => setSettings(prev => ({
-                    ...prev,
-                    profile: { ...prev.profile, firstName: e.target.value }
-                  }))}
+                  onChange={e =>
+                    setSettings(prev => ({
+                      ...prev,
+                      profile: { ...prev.profile, firstName: e.target.value },
+                    }))
+                  }
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Last Name</label>
-                <Input 
+                <label className="mb-2 block text-sm font-medium">
+                  Last Name
+                </label>
+                <Input
                   value={settings.profile.lastName}
-                  onChange={(e) => setSettings(prev => ({
-                    ...prev,
-                    profile: { ...prev.profile, lastName: e.target.value }
-                  }))}
+                  onChange={e =>
+                    setSettings(prev => ({
+                      ...prev,
+                      profile: { ...prev.profile, lastName: e.target.value },
+                    }))
+                  }
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-2">Email</label>
-                <Input 
+                <label className="mb-2 block text-sm font-medium">Email</label>
+                <Input
                   type="email"
                   value={settings.profile.email}
-                  onChange={(e) => setSettings(prev => ({
-                    ...prev,
-                    profile: { ...prev.profile, email: e.target.value }
-                  }))}
+                  onChange={e =>
+                    setSettings(prev => ({
+                      ...prev,
+                      profile: { ...prev.profile, email: e.target.value },
+                    }))
+                  }
                 />
               </div>
             </div>
           </div>
-          
+
           {/* Notifications */}
-          <div className="bg-card p-6 rounded-lg border" data-testid="settings-notifications">
-            <h2 className="text-lg font-semibold mb-4">Notifications</h2>
+          <div
+            className="bg-card rounded-lg border p-6"
+            data-testid="settings-notifications"
+          >
+            <h2 className="mb-4 text-lg font-semibold">Notifications</h2>
             <div className="space-y-4">
               <Checkbox
                 id="email-notifications"
                 label="Email notifications"
                 description="Receive notifications via email"
                 checked={settings.notifications.email}
-                onChange={(e) => setSettings(prev => ({
-                  ...prev,
-                  notifications: { ...prev.notifications, email: e.target.checked }
-                }))}
+                onChange={e =>
+                  setSettings(prev => ({
+                    ...prev,
+                    notifications: {
+                      ...prev.notifications,
+                      email: e.target.checked,
+                    },
+                  }))
+                }
               />
               <Checkbox
                 id="push-notifications"
                 label="Push notifications"
                 description="Receive push notifications in your browser"
                 checked={settings.notifications.push}
-                onChange={(e) => setSettings(prev => ({
-                  ...prev,
-                  notifications: { ...prev.notifications, push: e.target.checked }
-                }))}
+                onChange={e =>
+                  setSettings(prev => ({
+                    ...prev,
+                    notifications: {
+                      ...prev.notifications,
+                      push: e.target.checked,
+                    },
+                  }))
+                }
               />
               <Checkbox
                 id="marketing-notifications"
                 label="Marketing emails"
                 description="Receive promotional emails and updates"
                 checked={settings.notifications.marketing}
-                onChange={(e) => setSettings(prev => ({
-                  ...prev,
-                  notifications: { ...prev.notifications, marketing: e.target.checked }
-                }))}
+                onChange={e =>
+                  setSettings(prev => ({
+                    ...prev,
+                    notifications: {
+                      ...prev.notifications,
+                      marketing: e.target.checked,
+                    },
+                  }))
+                }
               />
             </div>
           </div>
-          
+
           {/* Privacy */}
-          <div className="bg-card p-6 rounded-lg border" data-testid="settings-privacy">
-            <h2 className="text-lg font-semibold mb-4">Privacy Settings</h2>
+          <div
+            className="bg-card rounded-lg border p-6"
+            data-testid="settings-privacy"
+          >
+            <h2 className="mb-4 text-lg font-semibold">Privacy Settings</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-2">Profile Visibility</label>
+                <label className="mb-2 block text-sm font-medium">
+                  Profile Visibility
+                </label>
                 <Select
                   value={settings.privacy.profileVisibility}
-                  onChange={(e) => setSettings(prev => ({
-                    ...prev,
-                    privacy: { ...prev.privacy, profileVisibility: e.target.value }
-                  }))}
+                  onChange={e =>
+                    setSettings(prev => ({
+                      ...prev,
+                      privacy: {
+                        ...prev.privacy,
+                        profileVisibility: e.target.value,
+                      },
+                    }))
+                  }
                   options={[
                     { value: 'public', label: 'Public' },
                     { value: 'private', label: 'Private' },
-                    { value: 'friends', label: 'Friends Only' }
+                    { value: 'friends', label: 'Friends Only' },
                   ]}
                 />
               </div>
@@ -1463,60 +1595,79 @@ export default function SettingsPage() {
                 id="show-email"
                 label="Show email publicly"
                 checked={settings.privacy.showEmail}
-                onChange={(e) => setSettings(prev => ({
-                  ...prev,
-                  privacy: { ...prev.privacy, showEmail: e.target.checked }
-                }))}
+                onChange={e =>
+                  setSettings(prev => ({
+                    ...prev,
+                    privacy: { ...prev.privacy, showEmail: e.target.checked },
+                  }))
+                }
               />
               <Checkbox
                 id="show-phone"
                 label="Show phone number publicly"
                 checked={settings.privacy.showPhone}
-                onChange={(e) => setSettings(prev => ({
-                  ...prev,
-                  privacy: { ...prev.privacy, showPhone: e.target.checked }
-                }))}
+                onChange={e =>
+                  setSettings(prev => ({
+                    ...prev,
+                    privacy: { ...prev.privacy, showPhone: e.target.checked },
+                  }))
+                }
               />
             </div>
           </div>
-          
+
           {/* Account */}
-          <div className="bg-card p-6 rounded-lg border" data-testid="settings-account">
-            <h2 className="text-lg font-semibold mb-4">Account Settings</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+          <div
+            className="bg-card rounded-lg border p-6"
+            data-testid="settings-account"
+          >
+            <h2 className="mb-4 text-lg font-semibold">Account Settings</h2>
+            <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium mb-2">Theme</label>
+                <label className="mb-2 block text-sm font-medium">Theme</label>
                 <Select
                   value={settings.preferences.theme}
-                  onChange={(e) => setSettings(prev => ({
-                    ...prev,
-                    preferences: { ...prev.preferences, theme: e.target.value }
-                  }))}
+                  onChange={e =>
+                    setSettings(prev => ({
+                      ...prev,
+                      preferences: {
+                        ...prev.preferences,
+                        theme: e.target.value,
+                      },
+                    }))
+                  }
                   options={[
                     { value: 'light', label: 'Light' },
                     { value: 'dark', label: 'Dark' },
-                    { value: 'system', label: 'System' }
+                    { value: 'system', label: 'System' },
                   ]}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Language</label>
+                <label className="mb-2 block text-sm font-medium">
+                  Language
+                </label>
                 <Select
                   value={settings.preferences.language}
-                  onChange={(e) => setSettings(prev => ({
-                    ...prev,
-                    preferences: { ...prev.preferences, language: e.target.value }
-                  }))}
+                  onChange={e =>
+                    setSettings(prev => ({
+                      ...prev,
+                      preferences: {
+                        ...prev.preferences,
+                        language: e.target.value,
+                      },
+                    }))
+                  }
                   options={[
                     { value: 'en', label: 'English' },
                     { value: 'es', label: 'Spanish' },
-                    { value: 'fr', label: 'French' }
+                    { value: 'fr', label: 'French' },
                   ]}
                 />
               </div>
             </div>
           </div>
-          
+
           <div className="flex justify-end">
             <Button type="submit" data-testid="save-settings">
               Save Changes
@@ -1542,19 +1693,19 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <Section className="min-h-screen flex items-center justify-center">
+    <Section className="flex min-h-screen items-center justify-center">
       <Container className="text-center" data-testid="404-page">
         <div className="space-y-6">
           <div className="space-y-2">
-            <h1 className="text-6xl font-bold text-muted-foreground">404</h1>
+            <h1 className="text-muted-foreground text-6xl font-bold">404</h1>
             <h2 className="text-2xl font-semibold">Page Not Found</h2>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              Sorry, we couldn't find the page you're looking for. 
-              It might have been moved, deleted, or you entered the wrong URL.
+            <p className="text-muted-foreground mx-auto max-w-md">
+              Sorry, we couldn't find the page you're looking for. It might have
+              been moved, deleted, or you entered the wrong URL.
             </p>
           </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button asChild>
               <Link href="/">
                 <HomeIcon className="mr-2 h-4 w-4" />
@@ -1566,9 +1717,9 @@ export default function NotFound() {
               Go Back
             </Button>
           </div>
-          
+
           <div className="mt-8">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               If you think this is an error, please{' '}
               <Link href="/contact" className="text-primary hover:underline">
                 contact our support team
@@ -1611,21 +1762,21 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 border-b backdrop-blur">
       <Container>
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="font-bold text-xl">
+          <Link href="/" className="text-xl font-bold">
             YourApp
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {navigation.map((item) => (
+          <nav className="hidden items-center space-x-6 md:flex">
+            {navigation.map(item => (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary',
+                  'hover:text-primary text-sm font-medium transition-colors',
                   pathname === item.href
                     ? 'text-foreground'
                     : 'text-muted-foreground'
@@ -1637,7 +1788,7 @@ export function Header() {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-2">
+            <div className="hidden items-center space-x-2 md:flex">
               <Button variant="ghost" asChild>
                 <Link href="/login">Sign In</Link>
               </Button>
@@ -1663,13 +1814,13 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-2" data-testid="mobile-menu">
-            {navigation.map((item) => (
+          <div className="space-y-2 py-4 md:hidden" data-testid="mobile-menu">
+            {navigation.map(item => (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  'block px-3 py-2 text-base font-medium transition-colors hover:text-primary',
+                  'hover:text-primary block px-3 py-2 text-base font-medium transition-colors',
                   pathname === item.href
                     ? 'text-foreground bg-muted'
                     : 'text-muted-foreground'
@@ -1679,7 +1830,7 @@ export function Header() {
                 {item.name}
               </Link>
             ))}
-            <div className="pt-4 pb-2 space-y-2">
+            <div className="space-y-2 pt-4 pb-2">
               <Button variant="ghost" className="w-full justify-start" asChild>
                 <Link href="/login">Sign In</Link>
               </Button>
@@ -1713,6 +1864,7 @@ export function Header() {
 ## Testing Instructions
 
 ### 1. Test Page Navigation
+
 ```bash
 # Navigate through all pages
 # Check breadcrumbs and active states
@@ -1720,6 +1872,7 @@ export function Header() {
 ```
 
 ### 2. Test Responsive Design
+
 ```bash
 # Test on different screen sizes
 # Check mobile menu functionality
@@ -1727,6 +1880,7 @@ export function Header() {
 ```
 
 ### 3. Test Forms
+
 ```bash
 # Test contact form submission
 # Check form validation
@@ -1734,6 +1888,7 @@ export function Header() {
 ```
 
 ### 4. Test Dashboard
+
 ```bash
 # Check dashboard layout
 # Test sidebar navigation
@@ -1743,16 +1898,19 @@ export function Header() {
 ## References and Dependencies
 
 ### Dependencies
+
 - All previously established components and utilities
 - Next.js app router for routing
 - Heroicons for consistent iconography
 
 ### Documentation
+
 - [Next.js App Router](https://nextjs.org/docs/app)
 - [Responsive Design](https://tailwindcss.com/docs/responsive-design)
 - [Accessibility Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 
 ## Estimated Time
+
 **10-12 hours**
 
 - Landing and marketing pages: 3-4 hours

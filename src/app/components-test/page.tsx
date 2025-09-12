@@ -1,29 +1,42 @@
-'use client'
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
-import { toast } from "sonner"
-import { Bell, Home, Settings, User } from "lucide-react"
-import { Switch } from "@/components/ui/switch"
-import { Checkbox } from "@/components/ui/checkbox"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Progress } from "@/components/ui/progress"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Separator } from "@/components/ui/separator"
+import { Bell, Home, Settings, User } from 'lucide-react';
+import { toast } from 'sonner';
+
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function ComponentsTest() {
   return (
-    <div className="container mx-auto p-8 space-y-8">
-      <h1 className="text-4xl font-bold mb-8">Component Library Test</h1>
-      
+    <div className="container mx-auto space-y-8 p-8">
+      <h1 className="mb-8 text-4xl font-bold">Component Library Test</h1>
+
       {/* Buttons */}
       <Card>
         <CardHeader>
@@ -54,7 +67,9 @@ export default function ComponentsTest() {
           <User className="h-6 w-6" />
           <Settings className="h-6 w-6" />
           <Bell className="h-6 w-6" />
-          <Button size="icon"><Settings className="h-4 w-4" /></Button>
+          <Button size="icon">
+            <Settings className="h-4 w-4" />
+          </Button>
         </CardContent>
       </Card>
 
@@ -69,7 +84,7 @@ export default function ComponentsTest() {
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="Enter your email" />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="message">Message</Label>
             <Textarea id="message" placeholder="Type your message here..." />
@@ -145,19 +160,25 @@ export default function ComponentsTest() {
             <TabsContent value="account">
               <div className="space-y-2">
                 <h3 className="font-medium">Account Settings</h3>
-                <p className="text-sm text-muted-foreground">Make changes to your account here.</p>
+                <p className="text-muted-foreground text-sm">
+                  Make changes to your account here.
+                </p>
               </div>
             </TabsContent>
             <TabsContent value="password">
               <div className="space-y-2">
                 <h3 className="font-medium">Password Settings</h3>
-                <p className="text-sm text-muted-foreground">Change your password here.</p>
+                <p className="text-muted-foreground text-sm">
+                  Change your password here.
+                </p>
               </div>
             </TabsContent>
             <TabsContent value="settings">
               <div className="space-y-2">
                 <h3 className="font-medium">General Settings</h3>
-                <p className="text-sm text-muted-foreground">Manage your general preferences.</p>
+                <p className="text-muted-foreground text-sm">
+                  Manage your general preferences.
+                </p>
               </div>
             </TabsContent>
           </Tabs>
@@ -252,14 +273,16 @@ export default function ComponentsTest() {
       <Card>
         <CardHeader>
           <CardTitle>Toast Notifications</CardTitle>
-          <CardDescription>Click buttons to show different toast types</CardDescription>
+          <CardDescription>
+            Click buttons to show different toast types
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-2">
           <Button
             onClick={() => {
-              toast("Default Notification", {
-                description: "This is a default toast message.",
-              })
+              toast('Default Notification', {
+                description: 'This is a default toast message.',
+              });
             }}
           >
             Show Default Toast
@@ -267,9 +290,9 @@ export default function ComponentsTest() {
           <Button
             variant="secondary"
             onClick={() => {
-              toast.success("Success!", {
-                description: "Your action was completed successfully.",
-              })
+              toast.success('Success!', {
+                description: 'Your action was completed successfully.',
+              });
             }}
           >
             Show Success Toast
@@ -277,9 +300,9 @@ export default function ComponentsTest() {
           <Button
             variant="destructive"
             onClick={() => {
-              toast.error("Error!", {
-                description: "Something went wrong. Please try again.",
-              })
+              toast.error('Error!', {
+                description: 'Something went wrong. Please try again.',
+              });
             }}
           >
             Show Error Toast
@@ -287,9 +310,9 @@ export default function ComponentsTest() {
           <Button
             variant="outline"
             onClick={() => {
-              toast.info("Information", {
+              toast.info('Information', {
                 description: "Here's some helpful information for you.",
-              })
+              });
             }}
           >
             Show Info Toast
@@ -297,5 +320,5 @@ export default function ComponentsTest() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

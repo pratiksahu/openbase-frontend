@@ -1,9 +1,11 @@
 # TASK_001: Initialize Next.js Project with TypeScript
 
 ## 📋 Task Overview
+
 Set up a new Next.js 15 project with TypeScript and configure the initial project structure.
 
 ## 🎯 Objectives
+
 - Initialize a new Next.js 15 project with TypeScript support
 - Configure TypeScript settings for strict type checking
 - Set up the recommended project folder structure
@@ -12,19 +14,22 @@ Set up a new Next.js 15 project with TypeScript and configure the initial projec
 ## 📝 Implementation Steps
 
 ### 1. Initialize Next.js Project
+
 ```bash
 npx create-next-app@latest . --typescript --app --tailwind --eslint
 ```
 
 Choose the following options:
+
 - ✅ Would you like to use TypeScript? → Yes
 - ✅ Would you like to use ESLint? → Yes
 - ✅ Would you like to use Tailwind CSS? → Yes
 - ✅ Would you like to use `src/` directory? → No
 - ✅ Would you like to use App Router? → Yes
-- ✅ Would you like to customize the default import alias? → Yes (use @/*)
+- ✅ Would you like to customize the default import alias? → Yes (use @/\*)
 
 ### 2. Configure TypeScript (tsconfig.json)
+
 ```json
 {
   "compilerOptions": {
@@ -56,6 +61,7 @@ Choose the following options:
 ```
 
 ### 3. Create Project Structure
+
 ```bash
 # Create folder structure
 mkdir -p app/api
@@ -77,6 +83,7 @@ mkdir -p public/fonts
 ### 4. Create Initial Files
 
 #### app/layout.tsx
+
 ```typescript
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -103,32 +110,37 @@ export default function RootLayout({
 ```
 
 #### lib/utils.ts
+
 ```typescript
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 ```
 
 ### 5. Install Required Dependencies
+
 ```bash
 npm install clsx tailwind-merge
 npm install -D @types/node
 ```
 
 ## ✅ Acceptance Criteria
+
 - [ ] Next.js 15 project initialized with TypeScript
 - [ ] TypeScript configured with strict mode
 - [ ] Project structure created with all required folders
-- [ ] Path aliases configured and working (@/*)
+- [ ] Path aliases configured and working (@/\*)
 - [ ] Initial layout and utility files created
 - [ ] Project runs without errors: `npm run dev`
 - [ ] TypeScript compilation successful: `npx tsc --noEmit`
 
 ## 🧪 Testing
+
 Run the following commands to verify setup:
+
 ```bash
 # Start development server
 npm run dev
@@ -144,18 +156,23 @@ npm run build
 ```
 
 ## 📚 References
+
 - [Next.js Documentation](https://nextjs.org/docs)
 - [TypeScript Configuration](https://www.typescriptlang.org/tsconfig)
 - [Next.js App Router](https://nextjs.org/docs/app)
 
 ## 🏷️ Tags
+
 `setup` `initialization` `typescript` `structure`
 
 ## ⏱️ Estimated Time
+
 1-2 hours
 
 ## 🔗 Dependencies
+
 None - This is the first task
 
 ## 🚀 Next Steps
+
 After completing this task, proceed to TASK_002 (Tailwind CSS Configuration)

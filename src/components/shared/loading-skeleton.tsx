@@ -1,5 +1,5 @@
-import { Skeleton } from "@/components/ui/skeleton"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function CardSkeleton() {
   return (
@@ -16,7 +16,7 @@ export function CardSkeleton() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function TableSkeleton() {
@@ -39,7 +39,7 @@ export function TableSkeleton() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function ContentSkeleton() {
@@ -53,5 +53,5 @@ export function ContentSkeleton() {
         <Skeleton className="h-32 w-full" />
       </div>
     </div>
-  )
+  );
 }

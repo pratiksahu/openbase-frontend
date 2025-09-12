@@ -1,9 +1,11 @@
 # TASK_002: Configure Tailwind CSS and Design System
 
 ## 📋 Task Overview
+
 Set up Tailwind CSS with custom configuration, CSS variables for theming, and establish the design system foundation.
 
 ## 🎯 Objectives
+
 - Configure Tailwind CSS with custom settings
 - Set up CSS variables for dynamic theming
 - Create global styles with Tailwind directives
@@ -12,11 +14,12 @@ Set up Tailwind CSS with custom configuration, CSS variables for theming, and es
 ## 📝 Implementation Steps
 
 ### 1. Update Tailwind Configuration (tailwind.config.ts)
+
 ```typescript
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  darkMode: ["class"],
+  darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -26,74 +29,75 @@ const config: Config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: '2rem',
       screens: {
-        "2xl": "1400px",
+        '2xl': '1400px',
       },
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
         },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
         },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-}
-export default config
+  plugins: [require('tailwindcss-animate')],
+};
+export default config;
 ```
 
 ### 2. Create Global CSS with Variables (app/globals.css)
+
 ```css
 @tailwind base;
 @tailwind components;
@@ -157,11 +161,13 @@ export default config
 ```
 
 ### 3. Install Required Packages
+
 ```bash
 npm install tailwindcss-animate
 ```
 
 ### 4. Configure Font System (app/layout.tsx)
+
 ```typescript
 import { Inter, Roboto_Mono } from 'next/font/google'
 
@@ -182,6 +188,7 @@ const robotoMono = Roboto_Mono({
 ```
 
 ### 5. Update Tailwind Config for Custom Fonts
+
 ```typescript
 // In tailwind.config.ts extend section:
 fontFamily: {
@@ -191,24 +198,26 @@ fontFamily: {
 ```
 
 ### 6. Create CSS Utility Classes (optional)
+
 ```css
 /* Add to globals.css */
 @layer components {
   .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
-  
+
   .btn-primary {
     @apply bg-primary text-primary-foreground hover:bg-primary/90;
   }
-  
+
   .card-base {
-    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+    @apply bg-card text-card-foreground rounded-lg border shadow-sm;
   }
 }
 ```
 
 ## ✅ Acceptance Criteria
+
 - [ ] Tailwind CSS configured with custom theme
 - [ ] CSS variables defined for light/dark themes
 - [ ] Global styles applied correctly
@@ -218,6 +227,7 @@ fontFamily: {
 - [ ] Build process includes Tailwind CSS
 
 ## 🧪 Testing
+
 ```bash
 # Test Tailwind compilation
 npm run dev
@@ -231,6 +241,7 @@ npm run dev
 ```
 
 Test dark mode by adding to app/page.tsx:
+
 ```typescript
 <div className="bg-primary text-primary-foreground p-4">
   Primary Color Test
@@ -241,18 +252,23 @@ Test dark mode by adding to app/page.tsx:
 ```
 
 ## 📚 References
+
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [CSS Variables with Tailwind](https://tailwindcss.com/docs/customizing-colors#using-css-variables)
 - [Next.js Font Optimization](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
 
 ## 🏷️ Tags
+
 `styling` `tailwind` `css` `theming` `design-system`
 
 ## ⏱️ Estimated Time
+
 1-2 hours
 
 ## 🔗 Dependencies
+
 - TASK_001 (Project initialization must be complete)
 
 ## 🚀 Next Steps
+
 After completing this task, proceed to TASK_003 (Install and Configure shadcn/ui)

@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "📝 Validating commit message..."
+npx --no -- commitlint --edit ${1}
+
+if [ $? -eq 0 ]; then
+  echo "✅ Commit message is valid!"
+else
+  echo "❌ Invalid commit message format!"
+  echo ""
+  echo "Format: <type>[optional scope]: <description>"
+  echo ""
+  echo "Examples:"
+  echo "  feat: add user authentication"
+  echo "  fix(ui): resolve button alignment issue"
+  echo "  docs: update installation guide"
+  echo ""
+  exit 1
+fi

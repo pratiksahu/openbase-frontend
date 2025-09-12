@@ -1,8 +1,8 @@
-import { Header } from "@/components/shared/header"
-import { Footer } from "@/components/shared/footer"
+import { Footer } from '@/components/shared/footer';
+import { Header } from '@/components/shared/header';
 
 interface LayoutWrapperProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function LayoutWrapper({ children }: LayoutWrapperProps) {
@@ -12,5 +12,5 @@ export function LayoutWrapper({ children }: LayoutWrapperProps) {
       <main className="flex-1">{children}</main>
       <Footer />
     </div>
-  )
+  );
 }

@@ -1,9 +1,11 @@
 # TASK_006: Create Loading, Error, and Not Found Pages
 
 ## 📋 Task Overview
+
 Implement loading states, error boundaries, and not found pages for better user experience and error handling.
 
 ## 🎯 Objectives
+
 - Create loading.tsx for loading states
 - Implement error.tsx for error boundaries
 - Create not-found.tsx for 404 pages
@@ -13,6 +15,7 @@ Implement loading states, error boundaries, and not found pages for better user 
 ## 📝 Implementation Steps
 
 ### 1. Create Root Loading State (app/loading.tsx)
+
 ```typescript
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -25,7 +28,7 @@ export default function Loading() {
           <Skeleton className="h-12 w-[300px]" />
           <Skeleton className="h-4 w-[500px]" />
         </div>
-        
+
         {/* Content skeleton */}
         <div className="space-y-4">
           <Skeleton className="h-32 w-full" />
@@ -39,6 +42,7 @@ export default function Loading() {
 ```
 
 ### 2. Create Root Error Boundary (app/error.tsx)
+
 ```typescript
 'use client'
 
@@ -81,6 +85,7 @@ export default function Error({
 ```
 
 ### 3. Create Global Error Page (app/global-error.tsx)
+
 ```typescript
 'use client'
 
@@ -112,6 +117,7 @@ export default function GlobalError({
 ```
 
 ### 4. Create Not Found Page (app/not-found.tsx)
+
 ```typescript
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -145,6 +151,7 @@ export default function NotFound() {
 ```
 
 ### 5. Create Custom 404 Page (app/404/page.tsx)
+
 ```typescript
 import NotFound from '@/app/not-found'
 
@@ -154,6 +161,7 @@ export default function Custom404() {
 ```
 
 ### 6. Create Loading Skeleton Components (components/shared/loading-skeleton.tsx)
+
 ```typescript
 import { Skeleton } from "@/components/ui/skeleton"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -215,6 +223,7 @@ export function ContentSkeleton() {
 ```
 
 ### 7. Create Loading Spinner Component (components/shared/loading-spinner.tsx)
+
 ```typescript
 import { Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -240,15 +249,17 @@ export function LoadingSpinner({ className, size = "md" }: LoadingSpinnerProps) 
 ```
 
 ### 8. Update Metadata Configuration (app/layout.tsx)
+
 ```typescript
-import type { Metadata, Viewport } from 'next'
+import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
   title: {
     default: 'Modern Next.js App',
-    template: '%s | Modern Next.js App'
+    template: '%s | Modern Next.js App',
   },
-  description: 'Production-ready Next.js application with TypeScript and Tailwind CSS',
+  description:
+    'Production-ready Next.js application with TypeScript and Tailwind CSS',
   keywords: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
   authors: [{ name: 'Your Name' }],
   creator: 'Your Company',
@@ -291,17 +302,18 @@ export const metadata: Metadata = {
     shortcut: '/favicon-16x16.png',
     apple: '/apple-touch-icon.png',
   },
-}
+};
 
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
-}
+};
 ```
 
 ### 9. Create Test Page for States (app/states-test/page.tsx)
+
 ```typescript
 'use client'
 
@@ -400,6 +412,7 @@ export default function StatesTest() {
 ```
 
 ## ✅ Acceptance Criteria
+
 - [ ] Loading states display during page loads
 - [ ] Error boundary catches and displays errors
 - [ ] Not found page shows for invalid routes
@@ -410,6 +423,7 @@ export default function StatesTest() {
 - [ ] All states are accessible
 
 ## 🧪 Testing
+
 ```bash
 # Run development server
 npm run dev
@@ -436,19 +450,24 @@ npm run dev
 ```
 
 ## 📚 References
+
 - [Next.js Loading UI](https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming)
 - [Next.js Error Handling](https://nextjs.org/docs/app/building-your-application/routing/error-handling)
 - [Next.js Metadata](https://nextjs.org/docs/app/building-your-application/optimizing/metadata)
 
 ## 🏷️ Tags
+
 `loading` `error-handling` `404` `metadata` `ux`
 
 ## ⏱️ Estimated Time
+
 2 hours
 
 ## 🔗 Dependencies
+
 - TASK_001 (Project initialization)
 - TASK_003 (shadcn/ui components)
 
 ## 🚀 Next Steps
+
 Phase 1-3 complete! Proceed to TASK_007 (Developer Experience Setup) from Phase 4

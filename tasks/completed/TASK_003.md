@@ -1,9 +1,11 @@
 # TASK_003: Install and Configure shadcn/ui Components
 
 ## 📋 Task Overview
+
 Set up shadcn/ui component library and install all essential UI components for the application.
 
 ## 🎯 Objectives
+
 - Initialize shadcn/ui in the project
 - Install all essential UI components
 - Configure component styling
@@ -12,16 +14,19 @@ Set up shadcn/ui component library and install all essential UI components for t
 ## 📝 Implementation Steps
 
 ### 1. Initialize shadcn/ui
+
 ```bash
 npx shadcn@latest init
 ```
 
 Choose the following options:
+
 - Style: Default
 - Base color: Slate
 - CSS variables: Yes
 
 ### 2. Install Essential Components
+
 Run these commands to install all required components:
 
 ```bash
@@ -60,26 +65,74 @@ npx shadcn@latest add alert-dialog
 ```
 
 ### 3. Install Lucide React Icons
+
 ```bash
 npm install lucide-react
 ```
 
 ### 4. Create Component Index File (components/ui/index.ts)
+
 ```typescript
 // Export all UI components from a single file
-export { Button, buttonVariants } from './button'
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from './card'
-export { Input } from './input'
-export { Label } from './label'
-export { Select, SelectGroup, SelectValue, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectSeparator, SelectScrollUpButton, SelectScrollDownButton } from './select'
-export { Dialog, DialogPortal, DialogOverlay, DialogClose, DialogTrigger, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from './dialog'
-export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuGroup, DropdownMenuPortal, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuRadioGroup } from './dropdown-menu'
-export { useToast, toast } from './use-toast'
-export { Toaster } from './toaster'
+export { Button, buttonVariants } from './button';
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from './card';
+export { Input } from './input';
+export { Label } from './label';
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+  SelectScrollUpButton,
+  SelectScrollDownButton,
+} from './select';
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from './dialog';
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuRadioGroup,
+} from './dropdown-menu';
+export { useToast, toast } from './use-toast';
+export { Toaster } from './toaster';
 // Add more exports as needed
 ```
 
 ### 5. Set Up Toast Provider (app/layout.tsx)
+
 ```typescript
 import { Toaster } from "@/components/ui/toaster"
 
@@ -100,6 +153,7 @@ export default function RootLayout({
 ```
 
 ### 6. Create Example Component Page (app/components-test/page.tsx)
+
 ```typescript
 'use client'
 
@@ -118,7 +172,7 @@ export default function ComponentsTest() {
   return (
     <div className="container mx-auto p-8 space-y-8">
       <h1 className="text-3xl font-bold">Component Library Test</h1>
-      
+
       {/* Buttons */}
       <Card>
         <CardHeader>
@@ -210,6 +264,7 @@ export default function ComponentsTest() {
 ```
 
 ### 7. Update components.json (if needed)
+
 ```json
 {
   "$schema": "https://ui.shadcn.com/schema.json",
@@ -231,6 +286,7 @@ export default function ComponentsTest() {
 ```
 
 ## ✅ Acceptance Criteria
+
 - [ ] shadcn/ui initialized successfully
 - [ ] All essential components installed
 - [ ] Components rendering correctly
@@ -241,6 +297,7 @@ export default function ComponentsTest() {
 - [ ] Components follow design system colors
 
 ## 🧪 Testing
+
 ```bash
 # Run development server
 npm run dev
@@ -252,19 +309,24 @@ npm run dev
 ```
 
 ## 📚 References
+
 - [shadcn/ui Documentation](https://ui.shadcn.com)
 - [Lucide Icons](https://lucide.dev)
 - [Radix UI Primitives](https://www.radix-ui.com)
 
 ## 🏷️ Tags
+
 `ui` `components` `shadcn` `design-system`
 
 ## ⏱️ Estimated Time
+
 2-3 hours
 
 ## 🔗 Dependencies
+
 - TASK_001 (Project initialization)
 - TASK_002 (Tailwind CSS configuration)
 
 ## 🚀 Next Steps
+
 After completing this task, proceed to TASK_004 (Create Theme Provider and Dark Mode)

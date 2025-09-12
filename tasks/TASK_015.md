@@ -1,9 +1,11 @@
 # TASK_015: Deployment Configuration
 
 ## Overview
+
 Set up comprehensive deployment configuration for the Next.js application with support for multiple environments, automated CI/CD pipelines, and production-ready hosting. This task covers environment management, GitHub Actions workflows, Vercel deployment, Docker containerization, and deployment documentation.
 
 ## Objectives
+
 - Create environment variables template and configuration
 - Set up GitHub Actions workflows for CI/CD
 - Configure Vercel deployment with custom domains
@@ -74,47 +76,49 @@ import { z } from 'zod';
 
 // Define environment schema
 const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'production', 'test'])
+    .default('development'),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
   NEXT_PUBLIC_APP_NAME: z.string().default('Your App'),
   NEXT_PUBLIC_APP_VERSION: z.string().default('1.0.0'),
-  
+
   // Database
   DATABASE_URL: z.string().optional(),
   DIRECT_URL: z.string().optional(),
-  
+
   // Authentication
   NEXTAUTH_URL: z.string().url().optional(),
   NEXTAUTH_SECRET: z.string().min(1).optional(),
-  
+
   // APIs
   NEXT_PUBLIC_API_URL: z.string().url().optional(),
   API_SECRET_KEY: z.string().optional(),
-  
+
   // Analytics
   NEXT_PUBLIC_GA_ID: z.string().optional(),
   NEXT_PUBLIC_ANALYTICS_ID: z.string().optional(),
-  
+
   // Error Tracking
   SENTRY_DSN: z.string().optional(),
   NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
-  
+
   // Email
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.coerce.number().optional(),
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
-  
+
   // Storage
   NEXT_PUBLIC_STORAGE_URL: z.string().url().optional(),
   STORAGE_ACCESS_KEY: z.string().optional(),
   STORAGE_SECRET_KEY: z.string().optional(),
-  
+
   // Feature Flags
   NEXT_PUBLIC_ENABLE_ANALYTICS: z.coerce.boolean().default(false),
   NEXT_PUBLIC_ENABLE_PWA: z.coerce.boolean().default(true),
   NEXT_PUBLIC_ENABLE_NOTIFICATIONS: z.coerce.boolean().default(false),
-  
+
   // Deployment
   VERCEL: z.coerce.boolean().optional(),
   VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
@@ -127,7 +131,9 @@ const parseEnv = () => {
   } catch (error) {
     if (error instanceof z.ZodError) {
       const missingVars = error.errors.map(e => e.path.join('.')).join(', ');
-      throw new Error(`Missing or invalid environment variables: ${missingVars}`);
+      throw new Error(
+        `Missing or invalid environment variables: ${missingVars}`
+      );
     }
     throw error;
   }
@@ -160,49 +166,49 @@ jobs:
   lint-and-type-check:
     name: Lint and Type Check
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Run ESLint
         run: npm run lint
-        
+
       - name: Run type check
         run: npm run type-check
-        
+
       - name: Check formatting
         run: npm run format:check
 
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Run unit tests
         run: npm run test:ci
-        
+
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:
@@ -213,29 +219,29 @@ jobs:
   e2e-test:
     name: E2E Tests
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-        
+
       - name: Build application
         run: npm run build
-        
+
       - name: Run E2E tests
         run: npm run test:e2e
-        
+
       - name: Upload test results
         uses: actions/upload-artifact@v3
         if: always()
@@ -248,25 +254,25 @@ jobs:
     name: Build Application
     runs-on: ubuntu-latest
     needs: [lint-and-type-check, test]
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Build application
         run: npm run build
         env:
           NODE_ENV: production
-          
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -277,23 +283,23 @@ jobs:
   security-audit:
     name: Security Audit
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Run security audit
         run: npm audit --audit-level=moderate
-        
+
       - name: Run Snyk security scan
         uses: snyk/actions/node@master
         continue-on-error: true
@@ -307,11 +313,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, e2e-test]
     if: github.event_name == 'pull_request'
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Deploy to Vercel Preview
         uses: amondnet/vercel-action@v25
         with:
@@ -319,7 +325,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           scope: ${{ secrets.VERCEL_ORG_ID }}
-          
+
       - name: Comment PR with preview URL
         uses: actions/github-script@v6
         with:
@@ -329,7 +335,7 @@ jobs:
               repo: context.repo.repo,
               ref: context.sha
             });
-            
+
             if (deployments.length > 0) {
               const deployment = deployments[0];
               const previewUrl = `https://${context.repo.repo}-${context.sha.substring(0, 7)}-${context.actor}.vercel.app`;
@@ -347,14 +353,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, e2e-test]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: 
+    environment:
       name: production
       url: https://yourapp.com
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Deploy to Vercel Production
         uses: amondnet/vercel-action@v25
         with:
@@ -363,22 +369,22 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
           scope: ${{ secrets.VERCEL_ORG_ID }}
-          
+
       - name: Notify deployment success
         uses: 8398a7/action-slack@v3
         if: success()
         with:
           status: success
-          text: "🚀 Production deployment successful!"
+          text: '🚀 Production deployment successful!'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-          
+
       - name: Notify deployment failure
         uses: 8398a7/action-slack@v3
         if: failure()
         with:
           status: failure
-          text: "❌ Production deployment failed!"
+          text: '❌ Production deployment failed!'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 ```
@@ -595,7 +601,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_SITE_URL=http://localhost:3000
@@ -603,7 +609,7 @@ services:
       - ./public:/app/public:ro
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/api/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -620,7 +626,6 @@ services:
   #     - postgres_data:/var/lib/postgresql/data
   #   ports:
   #     - "5432:5432"
-
 # volumes:
 #   postgres_data:
 ```
@@ -782,7 +787,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(healthCheck, { status: 200 });
   } catch (error) {
     console.error('Health check failed:', error);
-    
+
     return NextResponse.json(
       {
         status: 'unhealthy',
@@ -837,7 +842,11 @@ export const trackDeployment = (version: string) => {
 };
 
 // Custom metrics
-export const trackMetric = (name: string, value: number, tags?: Record<string, string>) => {
+export const trackMetric = (
+  name: string,
+  value: number,
+  tags?: Record<string, string>
+) => {
   // Send metrics to monitoring service
   if (env.NODE_ENV === 'production') {
     console.log(`Metric: ${name} = ${value}`, tags);
@@ -870,7 +879,7 @@ Add to `package.json`:
 
 Create `docs/DEPLOYMENT.md`:
 
-```markdown
+````markdown
 # Deployment Guide
 
 ## Prerequisites
@@ -892,6 +901,7 @@ Create `docs/DEPLOYMENT.md`:
 npm install
 npm run dev
 ```
+````
 
 ## Production Deployment
 
@@ -952,7 +962,8 @@ npm run docker:compose
 2. Review GitHub Actions workflow logs
 3. Test locally with production build: `npm run build && npm start`
 4. Check health endpoint: `curl /api/health`
-```
+
+````
 
 ### 10. Create Environment-Specific Configurations
 
@@ -1004,7 +1015,7 @@ export const getCurrentConfig = () => {
   const environment = env.NODE_ENV;
   return config[environment] || config.development;
 };
-```
+````
 
 ## Acceptance Criteria
 
@@ -1022,23 +1033,27 @@ export const getCurrentConfig = () => {
 ## Testing Instructions
 
 ### 1. Test Environment Configuration
+
 ```bash
 npm run env:check
 ```
 
 ### 2. Test GitHub Actions
+
 ```bash
 # Create PR and check workflow runs
 # Push to main and verify production deployment
 ```
 
 ### 3. Test Vercel Deployment
+
 ```bash
 npm run vercel:deploy
 curl https://your-preview-url.vercel.app/api/health
 ```
 
 ### 4. Test Docker Build
+
 ```bash
 npm run docker:build
 npm run docker:run
@@ -1046,6 +1061,7 @@ curl http://localhost:3000/api/health
 ```
 
 ### 5. Test Health Endpoint
+
 ```bash
 npm run health:check
 ```
@@ -1053,17 +1069,20 @@ npm run health:check
 ## References and Dependencies
 
 ### Dependencies
+
 - `vercel`: Deployment platform
 - `@vercel/analytics`: Performance monitoring
 - `zod`: Environment validation
 
 ### Documentation
+
 - [Vercel Deployment](https://vercel.com/docs/deployments)
 - [GitHub Actions](https://docs.github.com/en/actions)
 - [Docker Documentation](https://docs.docker.com/)
 - [Next.js Deployment](https://nextjs.org/docs/deployment)
 
 ## Estimated Time
+
 **6-8 hours**
 
 - Environment setup: 2-3 hours

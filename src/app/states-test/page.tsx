@@ -1,21 +1,26 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { LoadingSpinner } from '@/components/shared/loading-spinner'
-import { CardSkeleton, TableSkeleton, ContentSkeleton } from '@/components/shared/loading-skeleton'
+import { useState } from 'react';
+
+import {
+  CardSkeleton,
+  TableSkeleton,
+  ContentSkeleton,
+} from '@/components/shared/loading-skeleton';
+import { LoadingSpinner } from '@/components/shared/loading-spinner';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function StatesTest() {
-  const [showError, setShowError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [showError, setShowError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (showError) {
-    throw new Error('This is a test error!')
+    throw new Error('This is a test error!');
   }
 
   return (
-    <div className="container mx-auto py-8 space-y-8">
+    <div className="container mx-auto space-y-8 py-8">
       <h1 className="text-3xl font-bold">Loading & Error States Test</h1>
 
       {/* Error trigger */}
@@ -24,10 +29,7 @@ export default function StatesTest() {
           <CardTitle>Error Boundary Test</CardTitle>
         </CardHeader>
         <CardContent>
-          <Button
-            variant="destructive"
-            onClick={() => setShowError(true)}
-          >
+          <Button variant="destructive" onClick={() => setShowError(true)}>
             Trigger Error Boundary
           </Button>
         </CardContent>
@@ -73,8 +75,8 @@ export default function StatesTest() {
         <CardContent>
           <Button
             onClick={() => {
-              setIsLoading(true)
-              setTimeout(() => setIsLoading(false), 3000)
+              setIsLoading(true);
+              setTimeout(() => setIsLoading(false), 3000);
             }}
             disabled={isLoading}
           >
@@ -90,5 +92,5 @@ export default function StatesTest() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

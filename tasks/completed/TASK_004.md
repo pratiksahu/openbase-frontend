@@ -1,9 +1,11 @@
 # TASK_004: Implement Theme Provider and Dark Mode
 
 ## 📋 Task Overview
+
 Create a theme provider for dark mode support with system preference detection and manual toggle functionality.
 
 ## 🎯 Objectives
+
 - Implement theme provider using next-themes
 - Create theme toggle component
 - Set up system preference detection
@@ -12,11 +14,13 @@ Create a theme provider for dark mode support with system preference detection a
 ## 📝 Implementation Steps
 
 ### 1. Install Dependencies
+
 ```bash
 npm install next-themes
 ```
 
 ### 2. Create Theme Provider (components/providers/theme-provider.tsx)
+
 ```typescript
 "use client"
 
@@ -30,6 +34,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 ```
 
 ### 3. Create Theme Toggle Component (components/shared/theme-toggle.tsx)
+
 ```typescript
 "use client"
 
@@ -51,8 +56,8 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           size="icon"
           data-testid="theme-toggle"
         >
@@ -78,6 +83,7 @@ export function ThemeToggle() {
 ```
 
 ### 4. Create Simple Toggle Button (components/shared/theme-toggle-simple.tsx)
+
 ```typescript
 "use client"
 
@@ -114,6 +120,7 @@ export function ThemeToggleSimple() {
 ```
 
 ### 5. Update Root Layout (app/layout.tsx)
+
 ```typescript
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -152,33 +159,35 @@ export default function RootLayout({
 ```
 
 ### 6. Create useTheme Hook (hooks/use-theme-config.ts)
-```typescript
-"use client"
 
-import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+```typescript
+'use client';
+
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 export function useThemeConfig() {
-  const { theme, setTheme, systemTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const { theme, setTheme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
-  const currentTheme = theme === "system" ? systemTheme : theme
+  const currentTheme = theme === 'system' ? systemTheme : theme;
 
   return {
     theme: mounted ? currentTheme : undefined,
     setTheme,
     mounted,
-    isLight: currentTheme === "light",
-    isDark: currentTheme === "dark",
-  }
+    isLight: currentTheme === 'light',
+    isDark: currentTheme === 'dark',
+  };
 }
 ```
 
 ### 7. Create Header with Theme Toggle (components/shared/header.tsx)
+
 ```typescript
 import Link from "next/link"
 import { ThemeToggle } from "@/components/shared/theme-toggle"
@@ -222,6 +231,7 @@ export function Header() {
 ```
 
 ### 8. Create Theme Test Page (app/theme-test/page.tsx)
+
 ```typescript
 "use client"
 
@@ -240,7 +250,7 @@ export default function ThemeTest() {
   return (
     <div className="container mx-auto p-8 space-y-8">
       <h1 className="text-3xl font-bold">Theme Test Page</h1>
-      
+
       <Card>
         <CardHeader>
           <CardTitle>Current Theme</CardTitle>
@@ -293,6 +303,7 @@ export default function ThemeTest() {
 ```
 
 ## ✅ Acceptance Criteria
+
 - [ ] Theme provider integrated with Next.js
 - [ ] Theme toggle component working
 - [ ] Dark mode switching without flicker
@@ -303,6 +314,7 @@ export default function ThemeTest() {
 - [ ] Smooth transitions between themes
 
 ## 🧪 Testing
+
 ```bash
 # Run development server
 npm run dev
@@ -317,20 +329,25 @@ npm run dev
 ```
 
 ## 📚 References
+
 - [next-themes Documentation](https://github.com/pacocoursey/next-themes)
 - [Dark Mode Best Practices](https://web.dev/prefers-color-scheme/)
 - [Avoiding Flicker](https://www.joshwcomeau.com/react/dark-mode/)
 
 ## 🏷️ Tags
+
 `theme` `dark-mode` `provider` `ui`
 
 ## ⏱️ Estimated Time
+
 1-2 hours
 
 ## 🔗 Dependencies
+
 - TASK_001 (Project initialization)
 - TASK_002 (Tailwind CSS configuration)
 - TASK_003 (shadcn/ui components)
 
 ## 🚀 Next Steps
+
 After completing this task, proceed to TASK_005 (Create Core Layout Components)

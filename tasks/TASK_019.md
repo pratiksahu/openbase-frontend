@@ -1,9 +1,11 @@
 # TASK_019: Final Checklist
 
 ## Overview
+
 Perform comprehensive final validation and quality assurance of the complete Next.js application before launch. This task involves running all tests, validating performance metrics, ensuring accessibility compliance, checking cross-browser compatibility, and performing final deployment verification.
 
 ## Objectives
+
 - Execute comprehensive testing across all components and features
 - Validate performance metrics and optimization
 - Ensure WCAG accessibility compliance
@@ -56,7 +58,7 @@ echo "========================"
 # Check Node.js version
 node_version=$(node -v | cut -d'v' -f2)
 required_version="18.0.0"
-if [ "$(printf '%s\n' "$required_version" "$node_version" | sort -V | head -n1)" = "$required_version" ]; then 
+if [ "$(printf '%s\n' "$required_version" "$node_version" | sort -V | head -n1)" = "$required_version" ]; then
     print_status "Node.js version ($node_version)" 0
 else
     print_status "Node.js version ($node_version - required: $required_version)" 1
@@ -246,21 +248,27 @@ const chromeLauncher = require('chrome-launcher');
 const fs = require('fs');
 
 async function runPerformanceAudit() {
-  const chrome = await chromeLauncher.launch({chromeFlags: ['--headless']});
-  
+  const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless'] });
+
   const options = {
     logLevel: 'info',
     output: 'json',
-    onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo', 'pwa'],
+    onlyCategories: [
+      'performance',
+      'accessibility',
+      'best-practices',
+      'seo',
+      'pwa',
+    ],
     port: chrome.port,
   };
-  
+
   console.log('🔍 Running Lighthouse performance audit...');
-  
+
   const runnerResult = await lighthouse('http://localhost:3000', options);
-  
+
   await chrome.kill();
-  
+
   // Extract scores
   const lhr = runnerResult.lhr;
   const scores = {
@@ -270,7 +278,7 @@ async function runPerformanceAudit() {
     seo: Math.round(lhr.categories.seo.score * 100),
     pwa: Math.round(lhr.categories.pwa.score * 100),
   };
-  
+
   console.log('\n📊 Lighthouse Scores:');
   console.log('===================');
   console.log(`Performance: ${scores.performance}/100`);
@@ -278,7 +286,7 @@ async function runPerformanceAudit() {
   console.log(`Best Practices: ${scores.bestPractices}/100`);
   console.log(`SEO: ${scores.seo}/100`);
   console.log(`PWA: ${scores.pwa}/100`);
-  
+
   // Check thresholds
   const thresholds = {
     performance: 90,
@@ -287,51 +295,59 @@ async function runPerformanceAudit() {
     seo: 95,
     pwa: 80,
   };
-  
+
   let allPassed = true;
-  
+
   Object.entries(thresholds).forEach(([category, threshold]) => {
-    const score = scores[category] || scores[category.replace(/([A-Z])/g, '-$1').toLowerCase()];
+    const score =
+      scores[category] ||
+      scores[category.replace(/([A-Z])/g, '-$1').toLowerCase()];
     if (score < threshold) {
-      console.error(`❌ ${category} score (${score}) below threshold (${threshold})`);
+      console.error(
+        `❌ ${category} score (${score}) below threshold (${threshold})`
+      );
       allPassed = false;
     } else {
       console.log(`✅ ${category} score meets threshold`);
     }
   });
-  
+
   // Save detailed report
   const reportHtml = runnerResult.report;
   fs.writeFileSync('./lighthouse-report.html', reportHtml);
   console.log('\n📋 Detailed report saved to lighthouse-report.html');
-  
+
   // Core Web Vitals
   const audits = lhr.audits;
   console.log('\n⚡ Core Web Vitals:');
   console.log('==================');
-  
+
   if (audits['largest-contentful-paint']) {
     const lcp = audits['largest-contentful-paint'].displayValue;
     console.log(`LCP: ${lcp}`);
   }
-  
+
   if (audits['first-input-delay']) {
     const fid = audits['first-input-delay'].displayValue || 'N/A';
     console.log(`FID: ${fid}`);
   }
-  
+
   if (audits['cumulative-layout-shift']) {
     const cls = audits['cumulative-layout-shift'].displayValue;
     console.log(`CLS: ${cls}`);
   }
-  
+
   return allPassed;
 }
 
 // Run the audit
 runPerformanceAudit()
   .then(passed => {
-    console.log(passed ? '\n🎉 Performance audit passed!' : '\n⚠️ Performance audit failed!');
+    console.log(
+      passed
+        ? '\n🎉 Performance audit passed!'
+        : '\n⚠️ Performance audit failed!'
+    );
     process.exit(passed ? 0 : 1);
   })
   .catch(err => {
@@ -350,36 +366,36 @@ const { injectAxe, checkA11y, getViolations } = require('axe-playwright');
 
 async function runAccessibilityAudit() {
   console.log('♿ Running accessibility audit...');
-  
+
   const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
-  
+
   // Pages to test
   const pagesToTest = [
     '/',
     '/features',
-    '/pricing', 
+    '/pricing',
     '/about',
     '/contact',
     '/blog',
     '/dashboard',
     '/settings',
   ];
-  
+
   let totalViolations = 0;
   const violations = {};
-  
+
   for (const pagePath of pagesToTest) {
     try {
       console.log(`\nTesting: ${pagePath}`);
-      
+
       await page.goto(`http://localhost:3000${pagePath}`);
       await page.waitForLoadState('networkidle');
-      
+
       // Inject axe
       await injectAxe(page);
-      
+
       // Run accessibility check
       const results = await checkA11y(page, null, {
         detailedReport: true,
@@ -392,21 +408,26 @@ async function runAccessibilityAudit() {
             'focus-management': { enabled: true },
             'aria-labels': { enabled: true },
             'semantic-markup': { enabled: true },
-          }
-        }
+          },
+        },
       });
-      
+
       const pageViolations = await getViolations(page);
-      
+
       if (pageViolations.length > 0) {
         violations[pagePath] = pageViolations;
         totalViolations += pageViolations.length;
-        
-        console.log(`❌ Found ${pageViolations.length} violations on ${pagePath}`);
-        
+
+        console.log(
+          `❌ Found ${pageViolations.length} violations on ${pagePath}`
+        );
+
         // Log critical violations
         pageViolations.forEach(violation => {
-          if (violation.impact === 'critical' || violation.impact === 'serious') {
+          if (
+            violation.impact === 'critical' ||
+            violation.impact === 'serious'
+          ) {
             console.log(`  - ${violation.id}: ${violation.description}`);
             console.log(`    Impact: ${violation.impact}`);
             console.log(`    Help: ${violation.helpUrl}`);
@@ -415,54 +436,71 @@ async function runAccessibilityAudit() {
       } else {
         console.log(`✅ No accessibility violations found on ${pagePath}`);
       }
-      
     } catch (error) {
       console.error(`Error testing ${pagePath}:`, error.message);
     }
   }
-  
+
   await browser.close();
-  
+
   // Summary
   console.log('\n📋 Accessibility Audit Summary:');
   console.log('==============================');
   console.log(`Total violations: ${totalViolations}`);
   console.log(`Pages tested: ${pagesToTest.length}`);
   console.log(`Pages with violations: ${Object.keys(violations).length}`);
-  
+
   // Detailed breakdown by impact
   const impactCounts = { critical: 0, serious: 0, moderate: 0, minor: 0 };
-  
-  Object.values(violations).flat().forEach(violation => {
-    impactCounts[violation.impact] = (impactCounts[violation.impact] || 0) + 1;
-  });
-  
+
+  Object.values(violations)
+    .flat()
+    .forEach(violation => {
+      impactCounts[violation.impact] =
+        (impactCounts[violation.impact] || 0) + 1;
+    });
+
   console.log('\nViolations by impact:');
   Object.entries(impactCounts).forEach(([impact, count]) => {
     if (count > 0) {
-      const emoji = impact === 'critical' ? '🔴' : impact === 'serious' ? '🟠' : impact === 'moderate' ? '🟡' : '⚪';
+      const emoji =
+        impact === 'critical'
+          ? '🔴'
+          : impact === 'serious'
+            ? '🟠'
+            : impact === 'moderate'
+              ? '🟡'
+              : '⚪';
       console.log(`${emoji} ${impact}: ${count}`);
     }
   });
-  
+
   // Save detailed report
   if (totalViolations > 0) {
     const fs = require('fs');
-    fs.writeFileSync('./accessibility-report.json', JSON.stringify(violations, null, 2));
+    fs.writeFileSync(
+      './accessibility-report.json',
+      JSON.stringify(violations, null, 2)
+    );
     console.log('\n📄 Detailed report saved to accessibility-report.json');
   }
-  
+
   // Return success if only minor violations or no violations
-  const hasBlockingViolations = Object.values(violations).flat()
+  const hasBlockingViolations = Object.values(violations)
+    .flat()
     .some(v => v.impact === 'critical' || v.impact === 'serious');
-  
+
   return !hasBlockingViolations;
 }
 
 // Run the audit
 runAccessibilityAudit()
   .then(passed => {
-    console.log(passed ? '\n🎉 Accessibility audit passed!' : '\n⚠️ Accessibility audit has blocking violations!');
+    console.log(
+      passed
+        ? '\n🎉 Accessibility audit passed!'
+        : '\n⚠️ Accessibility audit has blocking violations!'
+    );
     process.exit(passed ? 0 : 1);
   })
   .catch(err => {
@@ -480,23 +518,23 @@ const { chromium, firefox, webkit } = require('playwright');
 
 async function runCrossBrowserTests() {
   console.log('🌐 Running cross-browser compatibility tests...');
-  
+
   const browsers = [
     { name: 'Chromium', launcher: chromium },
     { name: 'Firefox', launcher: firefox },
     { name: 'WebKit', launcher: webkit },
   ];
-  
+
   const testResults = {};
-  
+
   for (const browserInfo of browsers) {
     console.log(`\nTesting with ${browserInfo.name}...`);
-    
+
     try {
       const browser = await browserInfo.launcher.launch();
       const context = await browser.newContext();
       const page = await context.newPage();
-      
+
       // Collect console errors
       const consoleErrors = [];
       page.on('console', msg => {
@@ -504,126 +542,143 @@ async function runCrossBrowserTests() {
           consoleErrors.push(msg.text());
         }
       });
-      
+
       // Collect JavaScript errors
       const jsErrors = [];
       page.on('pageerror', error => {
         jsErrors.push(error.message);
       });
-      
+
       // Test critical pages
-      const pagesToTest = [
-        '/',
-        '/features',
-        '/contact',
-        '/dashboard',
-      ];
-      
+      const pagesToTest = ['/', '/features', '/contact', '/dashboard'];
+
       const pageResults = {};
-      
+
       for (const pagePath of pagesToTest) {
         try {
-          await page.goto(`http://localhost:3000${pagePath}`, { 
+          await page.goto(`http://localhost:3000${pagePath}`, {
             waitUntil: 'networkidle',
-            timeout: 30000 
+            timeout: 30000,
           });
-          
+
           // Basic functionality tests
           const tests = {
             pageLoads: true,
-            titlePresent: await page.title() !== '',
+            titlePresent: (await page.title()) !== '',
             bodyVisible: await page.locator('body').isVisible(),
-            navigationPresent: await page.locator('nav, [role="navigation"]').count() > 0,
+            navigationPresent:
+              (await page.locator('nav, [role="navigation"]').count()) > 0,
             consoleErrors: consoleErrors.length === 0,
             jsErrors: jsErrors.length === 0,
           };
-          
+
           // Test specific functionality based on page
           if (pagePath === '/') {
-            tests.heroSection = await page.locator('[data-testid="hero-section"]').isVisible();
-            tests.ctaButton = await page.locator('[data-testid="cta-button"]').isVisible();
+            tests.heroSection = await page
+              .locator('[data-testid="hero-section"]')
+              .isVisible();
+            tests.ctaButton = await page
+              .locator('[data-testid="cta-button"]')
+              .isVisible();
           }
-          
+
           if (pagePath === '/contact') {
-            tests.contactForm = await page.locator('form[data-testid="contact-form"]').isVisible();
-            tests.formInputs = await page.locator('input[name="email"]').isVisible();
+            tests.contactForm = await page
+              .locator('form[data-testid="contact-form"]')
+              .isVisible();
+            tests.formInputs = await page
+              .locator('input[name="email"]')
+              .isVisible();
           }
-          
+
           if (pagePath === '/dashboard') {
-            tests.dashboardLayout = await page.locator('[data-testid="dashboard"]').isVisible();
-            tests.sidebar = await page.locator('[data-testid="dashboard-sidebar"]').isVisible();
+            tests.dashboardLayout = await page
+              .locator('[data-testid="dashboard"]')
+              .isVisible();
+            tests.sidebar = await page
+              .locator('[data-testid="dashboard-sidebar"]')
+              .isVisible();
           }
-          
+
           pageResults[pagePath] = tests;
-          
+
           const passedTests = Object.values(tests).filter(Boolean).length;
           const totalTests = Object.keys(tests).length;
-          
-          console.log(`  ${pagePath}: ${passedTests}/${totalTests} tests passed`);
-          
+
+          console.log(
+            `  ${pagePath}: ${passedTests}/${totalTests} tests passed`
+          );
+
           if (consoleErrors.length > 0) {
             console.log(`    Console errors: ${consoleErrors.length}`);
           }
           if (jsErrors.length > 0) {
             console.log(`    JS errors: ${jsErrors.length}`);
           }
-          
         } catch (error) {
           console.log(`  ${pagePath}: Failed to load - ${error.message}`);
           pageResults[pagePath] = { error: error.message };
         }
-        
+
         // Clear errors for next page
         consoleErrors.length = 0;
         jsErrors.length = 0;
       }
-      
+
       testResults[browserInfo.name] = pageResults;
       await browser.close();
-      
     } catch (error) {
       console.error(`Failed to test ${browserInfo.name}:`, error.message);
       testResults[browserInfo.name] = { error: error.message };
     }
   }
-  
+
   // Generate summary report
   console.log('\n📊 Cross-Browser Test Summary:');
   console.log('=============================');
-  
+
   let overallSuccess = true;
-  
+
   Object.entries(testResults).forEach(([browser, results]) => {
     if (results.error) {
       console.log(`❌ ${browser}: Failed to test`);
       overallSuccess = false;
       return;
     }
-    
+
     const pageCount = Object.keys(results).length;
-    const successfulPages = Object.values(results).filter(page => 
-      !page.error && Object.values(page).every(test => test === true)
+    const successfulPages = Object.values(results).filter(
+      page => !page.error && Object.values(page).every(test => test === true)
     ).length;
-    
-    console.log(`${successfulPages === pageCount ? '✅' : '⚠️'} ${browser}: ${successfulPages}/${pageCount} pages passed all tests`);
-    
+
+    console.log(
+      `${successfulPages === pageCount ? '✅' : '⚠️'} ${browser}: ${successfulPages}/${pageCount} pages passed all tests`
+    );
+
     if (successfulPages !== pageCount) {
       overallSuccess = false;
     }
   });
-  
+
   // Save detailed results
   const fs = require('fs');
-  fs.writeFileSync('./cross-browser-results.json', JSON.stringify(testResults, null, 2));
+  fs.writeFileSync(
+    './cross-browser-results.json',
+    JSON.stringify(testResults, null, 2)
+  );
   console.log('\n📄 Detailed results saved to cross-browser-results.json');
-  
+
   return overallSuccess;
 }
 
 // Run tests
 runCrossBrowserTests()
   .then(success => {
-    console.log(success ? '\n🎉 Cross-browser tests passed!' : '\n⚠️ Cross-browser tests have issues!');
+    console.log(
+      success
+        ? '\n🎉 Cross-browser tests passed!'
+        : '\n⚠️ Cross-browser tests have issues!'
+    );
     process.exit(success ? 0 : 1);
   })
   .catch(err => {
@@ -685,7 +740,7 @@ for var in "${required_vars[@]}"; do
     fi
 done
 
-# 2. Build Verification  
+# 2. Build Verification
 echo ""
 echo "2. Production Build Verification"
 echo "==============================="
@@ -783,7 +838,7 @@ echo "===================="
 # Check for optimized images
 if find public -name "*.jpg" -o -name "*.png" | head -1 > /dev/null; then
     print_status "Image assets found" 0
-    
+
     # Check if images are optimized (basic check)
     large_images=$(find public -name "*.jpg" -o -name "*.png" -size +500k)
     if [ -n "$large_images" ]; then
@@ -822,7 +877,7 @@ echo "==================="
 
 if [ -f "public/manifest.json" ]; then
     print_status "PWA manifest found" 0
-    
+
     # Check service worker
     if [ -f "public/sw.js" ]; then
         print_status "Service worker found" 0
@@ -870,34 +925,37 @@ const path = require('path');
 
 async function generateQualityReport() {
   console.log('📊 Generating code quality report...');
-  
+
   const report = {
     timestamp: new Date().toISOString(),
     summary: {},
     details: {},
   };
-  
+
   // 1. File statistics
   const fileStats = await getFileStatistics();
   report.details.fileStats = fileStats;
   report.summary.totalFiles = fileStats.totalFiles;
   report.summary.linesOfCode = fileStats.totalLines;
-  
+
   // 2. Test coverage (if available)
   try {
-    const coverageData = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+    const coverageData = JSON.parse(
+      fs.readFileSync('coverage/coverage-summary.json', 'utf8')
+    );
     report.details.coverage = coverageData.total;
     report.summary.testCoverage = Math.round(coverageData.total.lines.pct);
   } catch (error) {
     console.log('No coverage data found');
     report.summary.testCoverage = 'N/A';
   }
-  
+
   // 3. Dependencies analysis
   const depsAnalysis = await analyzeDependencies();
   report.details.dependencies = depsAnalysis;
-  report.summary.totalDependencies = depsAnalysis.production + depsAnalysis.development;
-  
+  report.summary.totalDependencies =
+    depsAnalysis.production + depsAnalysis.development;
+
   // 4. Bundle analysis (if build exists)
   try {
     const bundleStats = await analyzeBundleSize();
@@ -906,19 +964,19 @@ async function generateQualityReport() {
   } catch (error) {
     console.log('No build found for bundle analysis');
   }
-  
+
   // 5. Code complexity (basic analysis)
   const complexityStats = await analyzeComplexity();
   report.details.complexity = complexityStats;
   report.summary.avgComplexity = complexityStats.averageComplexity;
-  
+
   // Generate report
   const reportPath = './quality-report.json';
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-  
+
   // Generate human-readable summary
   generateReadableReport(report);
-  
+
   console.log(`📋 Quality report saved to ${reportPath}`);
   return report;
 }
@@ -930,48 +988,54 @@ async function getFileStatistics() {
     fileTypes: {},
     largestFiles: [],
   };
-  
-  const walkDir = (dir) => {
+
+  const walkDir = dir => {
     const files = fs.readdirSync(dir);
-    
+
     files.forEach(file => {
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
-      
-      if (stat.isDirectory() && !file.startsWith('.') && file !== 'node_modules') {
+
+      if (
+        stat.isDirectory() &&
+        !file.startsWith('.') &&
+        file !== 'node_modules'
+      ) {
         walkDir(filePath);
       } else if (stat.isFile()) {
         const ext = path.extname(file);
-        
-        if (['.ts', '.tsx', '.js', '.jsx', '.css', '.scss', '.md'].includes(ext)) {
+
+        if (
+          ['.ts', '.tsx', '.js', '.jsx', '.css', '.scss', '.md'].includes(ext)
+        ) {
           stats.totalFiles++;
-          
+
           const content = fs.readFileSync(filePath, 'utf8');
           const lines = content.split('\n').length;
           stats.totalLines += lines;
-          
+
           // Track file types
           stats.fileTypes[ext] = (stats.fileTypes[ext] || 0) + 1;
-          
+
           // Track largest files
           stats.largestFiles.push({ path: filePath, lines });
         }
       }
     });
   };
-  
+
   walkDir('./src');
-  
+
   // Sort largest files
   stats.largestFiles.sort((a, b) => b.lines - a.lines);
   stats.largestFiles = stats.largestFiles.slice(0, 10);
-  
+
   return stats;
 }
 
 async function analyzeDependencies() {
   const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-  
+
   return {
     production: Object.keys(packageJson.dependencies || {}).length,
     development: Object.keys(packageJson.devDependencies || {}).length,
@@ -986,49 +1050,49 @@ async function analyzeBundleSize() {
   if (!fs.existsSync('.next')) {
     throw new Error('No build found');
   }
-  
+
   const stats = {
     totalSize: 0,
     jsSize: 0,
     cssSize: 0,
     chunks: [],
   };
-  
+
   // Analyze JS chunks
   const chunksDir = '.next/static/chunks';
   if (fs.existsSync(chunksDir)) {
     const chunks = fs.readdirSync(chunksDir);
-    
+
     chunks.forEach(chunk => {
       if (chunk.endsWith('.js')) {
         const chunkPath = path.join(chunksDir, chunk);
         const size = fs.statSync(chunkPath).size;
-        
+
         stats.jsSize += size;
         stats.chunks.push({ name: chunk, size, type: 'js' });
       }
     });
   }
-  
+
   // Analyze CSS
   const cssDir = '.next/static/css';
   if (fs.existsSync(cssDir)) {
     const cssFiles = fs.readdirSync(cssDir);
-    
+
     cssFiles.forEach(cssFile => {
       const cssPath = path.join(cssDir, cssFile);
       const size = fs.statSync(cssPath).size;
-      
+
       stats.cssSize += size;
       stats.chunks.push({ name: cssFile, size, type: 'css' });
     });
   }
-  
+
   stats.totalSize = stats.jsSize + stats.cssSize;
-  
+
   // Sort chunks by size
   stats.chunks.sort((a, b) => b.size - a.size);
-  
+
   return stats;
 }
 
@@ -1036,37 +1100,38 @@ async function analyzeComplexity() {
   let totalComplexity = 0;
   let functionCount = 0;
   const complexFiles = [];
-  
-  const analyzeFile = (filePath) => {
+
+  const analyzeFile = filePath => {
     if (!filePath.match(/\.(ts|tsx|js|jsx)$/)) return;
-    
+
     try {
       const content = fs.readFileSync(filePath, 'utf8');
-      
+
       // Simple complexity analysis
-      const functions = content.match(/function\s+\w+|const\s+\w+\s*=\s*\([^)]*\)\s*=>/g) || [];
-      const conditionals = content.match(/if\s*\(|switch\s*\(|for\s*\(|while\s*\(/g) || [];
+      const functions =
+        content.match(/function\s+\w+|const\s+\w+\s*=\s*\([^)]*\)\s*=>/g) || [];
+      const conditionals =
+        content.match(/if\s*\(|switch\s*\(|for\s*\(|while\s*\(/g) || [];
       const complexity = functions.length + conditionals.length;
-      
+
       if (complexity > 20) {
         complexFiles.push({ path: filePath, complexity });
       }
-      
+
       totalComplexity += complexity;
       functionCount += functions.length;
-      
     } catch (error) {
       // Skip files that can't be read
     }
   };
-  
-  const walkDir = (dir) => {
+
+  const walkDir = dir => {
     const files = fs.readdirSync(dir);
-    
+
     files.forEach(file => {
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
-      
+
       if (stat.isDirectory() && !file.startsWith('.')) {
         walkDir(filePath);
       } else if (stat.isFile()) {
@@ -1074,11 +1139,12 @@ async function analyzeComplexity() {
       }
     });
   };
-  
+
   walkDir('./src');
-  
+
   return {
-    averageComplexity: functionCount > 0 ? Math.round(totalComplexity / functionCount) : 0,
+    averageComplexity:
+      functionCount > 0 ? Math.round(totalComplexity / functionCount) : 0,
     totalComplexity,
     functionCount,
     complexFiles: complexFiles.slice(0, 5),
@@ -1113,55 +1179,66 @@ ${report.details.fileStats.largestFiles
   .map(file => `${file.lines} lines: ${file.path}`)
   .join('\n')}
 
-${report.details.coverage ? `
+${
+  report.details.coverage
+    ? `
 TEST COVERAGE
 -------------
 Lines: ${report.details.coverage.lines.pct}%
 Statements: ${report.details.coverage.statements.pct}%
 Functions: ${report.details.coverage.functions.pct}%
 Branches: ${report.details.coverage.branches.pct}%
-` : ''}
+`
+    : ''
+}
 
-${report.details.complexity.complexFiles.length > 0 ? `
+${
+  report.details.complexity.complexFiles.length > 0
+    ? `
 COMPLEX FILES (>20 complexity)
 -------------------------------
 ${report.details.complexity.complexFiles
   .map(file => `${file.complexity}: ${file.path}`)
   .join('\n')}
-` : ''}
+`
+    : ''
+}
 
 RECOMMENDATIONS
 ---------------
 ${generateRecommendations(report)}
 `;
-  
+
   fs.writeFileSync('./quality-report.txt', readable);
   console.log('\n' + readable);
 }
 
 function generateRecommendations(report) {
   const recommendations = [];
-  
-  if (report.summary.testCoverage < 80 && typeof report.summary.testCoverage === 'number') {
+
+  if (
+    report.summary.testCoverage < 80 &&
+    typeof report.summary.testCoverage === 'number'
+  ) {
     recommendations.push('• Increase test coverage to at least 80%');
   }
-  
+
   if (report.summary.bundleSize > 500 * 1024) {
     recommendations.push('• Consider code splitting to reduce bundle size');
   }
-  
+
   if (report.details.complexity.complexFiles.length > 0) {
     recommendations.push('• Refactor complex files to improve maintainability');
   }
-  
+
   if (report.summary.totalDependencies > 100) {
     recommendations.push('• Review dependencies and remove unused packages');
   }
-  
+
   if (recommendations.length === 0) {
     recommendations.push('• Code quality looks good! 🎉');
   }
-  
+
   return recommendations.join('\n');
 }
 
@@ -1180,7 +1257,7 @@ generateQualityReport()
 
 Create `LAUNCH_CHECKLIST.md`:
 
-```markdown
+````markdown
 # 🚀 Launch Checklist
 
 Use this checklist to ensure everything is ready for production deployment.
@@ -1188,6 +1265,7 @@ Use this checklist to ensure everything is ready for production deployment.
 ## Pre-Launch Validation
 
 ### 🧪 Testing
+
 - [ ] All unit tests passing (`npm run test:ci`)
 - [ ] E2E tests passing (`npm run test:e2e`)
 - [ ] Cross-browser testing completed
@@ -1198,6 +1276,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Load testing performed (if applicable)
 
 ### 🔧 Code Quality
+
 - [ ] TypeScript compilation successful (`npm run type-check`)
 - [ ] ESLint passes without errors (`npm run lint`)
 - [ ] Code formatting consistent (`npm run format:check`)
@@ -1207,6 +1286,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Code complexity within acceptable limits
 
 ### 🏗️ Build & Deployment
+
 - [ ] Production build successful (`npm run build`)
 - [ ] Bundle size optimized (<500KB JS, <50KB CSS)
 - [ ] Static assets properly optimized
@@ -1217,6 +1297,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] CDN configuration verified
 
 ### 🔒 Security
+
 - [ ] HTTPS enabled and configured
 - [ ] Security headers implemented
 - [ ] Content Security Policy configured
@@ -1227,6 +1308,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Security monitoring enabled
 
 ### 📊 Performance
+
 - [ ] Core Web Vitals optimized (LCP <2.5s, FID <100ms, CLS <0.1)
 - [ ] Images lazy loaded and optimized
 - [ ] Code splitting implemented
@@ -1235,6 +1317,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Database queries optimized (if applicable)
 
 ### 🔍 SEO & Analytics
+
 - [ ] Meta tags configured for all pages
 - [ ] Open Graph tags implemented
 - [ ] Sitemap.xml accessible
@@ -1245,6 +1328,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Search console verification
 
 ### ♿ Accessibility
+
 - [ ] WCAG 2.1 AA compliance verified
 - [ ] Keyboard navigation functional
 - [ ] Screen reader compatibility tested
@@ -1254,6 +1338,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Semantic HTML structure
 
 ### 📱 Progressive Web App (if applicable)
+
 - [ ] Web manifest configured
 - [ ] Service worker registered
 - [ ] Offline functionality tested
@@ -1262,6 +1347,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] App icons for all platforms
 
 ### 🌐 Cross-Platform Compatibility
+
 - [ ] Chrome/Chromium tested
 - [ ] Firefox tested
 - [ ] Safari tested
@@ -1271,6 +1357,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Internet Explorer 11 (if required)
 
 ### 📚 Documentation
+
 - [ ] README.md updated
 - [ ] API documentation complete
 - [ ] Component documentation (Storybook)
@@ -1280,6 +1367,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] User documentation complete
 
 ### 🔄 Monitoring & Maintenance
+
 - [ ] Health check endpoint functional
 - [ ] Uptime monitoring configured
 - [ ] Error tracking active
@@ -1289,6 +1377,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Incident response plan ready
 
 ### 📋 Business Requirements
+
 - [ ] All acceptance criteria met
 - [ ] Stakeholder approval received
 - [ ] User acceptance testing completed
@@ -1300,6 +1389,7 @@ Use this checklist to ensure everything is ready for production deployment.
 ## Deployment Steps
 
 ### 1. Pre-Deployment
+
 - [ ] Create deployment branch
 - [ ] Final code review completed
 - [ ] All tests passing in CI/CD
@@ -1308,6 +1398,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Rollback plan documented
 
 ### 2. Production Deployment
+
 - [ ] DNS configuration ready
 - [ ] SSL certificates installed
 - [ ] Environment variables configured
@@ -1317,6 +1408,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Health checks passing
 
 ### 3. Post-Deployment
+
 - [ ] Smoke tests completed
 - [ ] User flows validated
 - [ ] Analytics tracking verified
@@ -1327,6 +1419,7 @@ Use this checklist to ensure everything is ready for production deployment.
 ## Emergency Procedures
 
 ### Rollback Plan
+
 - [ ] Rollback procedure documented
 - [ ] Database rollback plan ready
 - [ ] DNS rollback configured
@@ -1334,6 +1427,7 @@ Use this checklist to ensure everything is ready for production deployment.
 - [ ] Incident communication plan ready
 
 ### Monitoring Setup
+
 - [ ] Alert thresholds configured
 - [ ] On-call schedule established
 - [ ] Escalation procedures documented
@@ -1342,28 +1436,31 @@ Use this checklist to ensure everything is ready for production deployment.
 ## Sign-Off
 
 ### Technical Lead
+
 - [ ] Code quality approved
 - [ ] Security review completed
 - [ ] Performance benchmarks met
 - [ ] Technical documentation complete
 
-**Signature:** _________________ **Date:** _________
+**Signature:** **\*\*\*\***\_**\*\*\*\*** **Date:** \***\*\_\*\***
 
 ### Product Owner
+
 - [ ] Business requirements satisfied
 - [ ] User acceptance criteria met
 - [ ] Content and design approved
 - [ ] Launch strategy confirmed
 
-**Signature:** _________________ **Date:** _________
+**Signature:** **\*\*\*\***\_**\*\*\*\*** **Date:** \***\*\_\*\***
 
 ### DevOps/Infrastructure
+
 - [ ] Deployment pipeline tested
 - [ ] Monitoring configured
 - [ ] Scaling plan documented
 - [ ] Backup procedures verified
 
-**Signature:** _________________ **Date:** _________
+**Signature:** **\*\*\*\***\_**\*\*\*\*** **Date:** \***\*\_\*\***
 
 ---
 
@@ -1387,13 +1484,15 @@ npm run cross-browser-test
 # Deployment readiness check
 npm run deployment-check
 ```
+````
 
 **All checks passing:** ✅
 
-**Launch approved by:** _________________ **Date:** _________
+**Launch approved by:** **\*\*\*\***\_**\*\*\*\*** **Date:** \***\*\_\*\***
 
 🎉 **Ready for Production Launch!**
-```
+
+````
 
 ### 8. Update Package.json Scripts
 
@@ -1404,7 +1503,7 @@ Add final testing scripts to `package.json`:
   "scripts": {
     "final-tests": "./scripts/final-tests.sh",
     "performance-audit": "node scripts/performance-audit.js",
-    "accessibility-audit": "node scripts/accessibility-audit.js", 
+    "accessibility-audit": "node scripts/accessibility-audit.js",
     "cross-browser-test": "node scripts/cross-browser-test.js",
     "deployment-check": "./scripts/deployment-check.sh",
     "quality-report": "node scripts/quality-report.js",
@@ -1412,7 +1511,7 @@ Add final testing scripts to `package.json`:
     "launch-ready": "npm run pre-launch && npm run deployment-check"
   }
 }
-```
+````
 
 ## Acceptance Criteria
 
@@ -1430,11 +1529,13 @@ Add final testing scripts to `package.json`:
 ## Testing Instructions
 
 ### 1. Run Comprehensive Test Suite
+
 ```bash
 npm run final-tests
 ```
 
-### 2. Performance Validation  
+### 2. Performance Validation
+
 ```bash
 npm run performance-audit
 # Review lighthouse-report.html
@@ -1442,13 +1543,15 @@ npm run performance-audit
 ```
 
 ### 3. Accessibility Testing
+
 ```bash
-npm run accessibility-audit  
+npm run accessibility-audit
 # Review accessibility-report.json
 # Test with screen readers
 ```
 
 ### 4. Cross-Browser Testing
+
 ```bash
 npm run cross-browser-test
 # Review cross-browser-results.json
@@ -1456,6 +1559,7 @@ npm run cross-browser-test
 ```
 
 ### 5. Deployment Readiness
+
 ```bash
 npm run deployment-check
 # Review all warnings and errors
@@ -1463,6 +1567,7 @@ npm run deployment-check
 ```
 
 ### 6. Quality Assessment
+
 ```bash
 npm run quality-report
 # Review quality-report.txt
@@ -1470,6 +1575,7 @@ npm run quality-report
 ```
 
 ### 7. Complete Launch Checklist
+
 ```bash
 # Work through LAUNCH_CHECKLIST.md systematically
 # Get required sign-offs
@@ -1479,17 +1585,20 @@ npm run quality-report
 ## References and Dependencies
 
 ### Dependencies
+
 - `lighthouse`: Performance auditing
 - `axe-playwright`: Accessibility testing
 - `playwright`: Cross-browser testing
 - All previously established testing tools
 
 ### Documentation
+
 - [Web Vitals](https://web.dev/vitals/)
 - [WCAG Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 - [Lighthouse Documentation](https://developers.google.com/web/tools/lighthouse)
 
 ## Estimated Time
+
 **8-10 hours**
 
 - Test script development: 3-4 hours
