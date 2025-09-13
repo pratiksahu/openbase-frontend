@@ -3,11 +3,11 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="border-t">
+    <footer className="border-t" data-testid="footer">
       <div className="container py-8 md:py-12">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           {/* Company */}
-          <div>
+          <div data-testid="footer-company">
             <h3 className="text-sm font-semibold">Company</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
@@ -38,7 +38,7 @@ export function Footer() {
           </div>
 
           {/* Product */}
-          <div>
+          <div data-testid="footer-product">
             <h3 className="text-sm font-semibold">Product</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
@@ -69,7 +69,7 @@ export function Footer() {
           </div>
 
           {/* Resources */}
-          <div>
+          <div data-testid="footer-resources">
             <h3 className="text-sm font-semibold">Resources</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
@@ -100,7 +100,7 @@ export function Footer() {
           </div>
 
           {/* Legal */}
-          <div>
+          <div data-testid="footer-legal">
             <h3 className="text-sm font-semibold">Legal</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
@@ -133,7 +133,10 @@ export function Footer() {
 
         {/* Bottom section */}
         <div className="mt-8 border-t pt-8 md:flex md:items-center md:justify-between">
-          <div className="flex space-x-6 md:order-2">
+          <div
+            className="flex space-x-6 md:order-2"
+            data-testid="footer-social"
+          >
             <Link
               href="#"
               className="text-muted-foreground hover:text-foreground"
@@ -163,8 +166,11 @@ export function Footer() {
               <Linkedin className="h-5 w-5" />
             </Link>
           </div>
-          <p className="text-muted-foreground mt-8 text-sm md:order-1 md:mt-0">
-            © 2024 Your Company. All rights reserved.
+          <p
+            className="text-muted-foreground mt-8 text-sm md:order-1 md:mt-0"
+            data-testid="footer-copyright"
+          >
+            © 2024 OpenBase V2. All rights reserved.
           </p>
         </div>
       </div>

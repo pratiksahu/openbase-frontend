@@ -1,12 +1,32 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="1" errors="0" time="2.7798430000001098">
-<testsuite name="example.spec.ts" timestamp="2025-09-13T09:09:58.108Z" hostname="chromium" tests="1" failures="0" skipped="1" time="1.584" errors="0">
-<testcase name="Theme Switching › should toggle between light and dark themes" classname="example.spec.ts" time="1.584">
-<properties>
-<property name="skip" value="Theme toggle not found on page">
-</property>
-</properties>
-<skipped>
-</skipped>
+<testsuites id="" name="" tests="14" failures="0" skipped="0" errors="0" time="7.694733">
+<testsuite name="example.spec.ts" timestamp="2025-09-13T09:22:30.209Z" hostname="chromium" tests="14" failures="0" skipped="0" time="29.182" errors="0">
+<testcase name="Homepage › should display the homepage correctly" classname="example.spec.ts" time="2.464">
+</testcase>
+<testcase name="Homepage › should have working navigation" classname="example.spec.ts" time="3.687">
+</testcase>
+<testcase name="Theme Switching › should have a working theme toggle button" classname="example.spec.ts" time="2.529">
+</testcase>
+<testcase name="Components Test Page › should display components correctly" classname="example.spec.ts" time="3.717">
+</testcase>
+<testcase name="Form Testing › should handle form interactions on test-forms page" classname="example.spec.ts" time="3.72">
+</testcase>
+<testcase name="Responsive Design › should work on mobile devices" classname="example.spec.ts" time="1.155">
+</testcase>
+<testcase name="Responsive Design › should work on tablet devices" classname="example.spec.ts" time="1.15">
+</testcase>
+<testcase name="Footer › should display footer with all sections" classname="example.spec.ts" time="1.741">
+</testcase>
+<testcase name="Footer › should have working footer links" classname="example.spec.ts" time="1.716">
+</testcase>
+<testcase name="Footer › should display social media links" classname="example.spec.ts" time="1.682">
+</testcase>
+<testcase name="Footer › should display copyright notice" classname="example.spec.ts" time="1.646">
+</testcase>
+<testcase name="Footer › should be responsive on mobile" classname="example.spec.ts" time="1.634">
+</testcase>
+<testcase name="Accessibility › should have proper heading hierarchy" classname="example.spec.ts" time="1.146">
+</testcase>
+<testcase name="Accessibility › should have alt text for images" classname="example.spec.ts" time="1.195">
 </testcase>
 </testsuite>
 </testsuites>
