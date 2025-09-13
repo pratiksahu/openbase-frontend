@@ -1,0 +1,397 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+    - navigation "Global" [ref=e6]:
+        - generic [ref=e9]:
+            - generic [ref=e10]:
+                - generic [ref=e11]:
+                    - link "Skip to canvas" [ref=e12] [cursor=pointer]:
+                        - /url: '#storybook-preview-wrapper'
+                    - link "Storybook" [ref=e14] [cursor=pointer]:
+                        - /url: ./
+                        - img "Storybook" [ref=e15] [cursor=pointer]
+                    - button "Shortcuts" [ref=e21] [cursor=pointer]:
+                        - img [ref=e22] [cursor=pointer]
+                - generic [ref=e25]: Search for components
+                - generic [ref=e26]:
+                    - combobox "Search for components" [ref=e27]:
+                        - generic:
+                            - img
+                        - searchbox "Search for components" [ref=e28]
+                        - code:
+                            - generic: ⌘
+                            - text: K
+                        - button "Tag filters" [ref=e32] [cursor=pointer]:
+                            - img [ref=e33] [cursor=pointer]
+                    - button "Create a new story" [ref=e36] [cursor=pointer]:
+                        - img [ref=e37] [cursor=pointer]
+                - generic [ref=e43]:
+                    - img
+                    - button "Components" [active] [ref=e45] [cursor=pointer]:
+                        - img [ref=e47] [cursor=pointer]
+                        - text: Components
+                    - generic [ref=e49]:
+                        - button "Shared" [expanded] [ref=e50] [cursor=pointer]:
+                            - img [ref=e52] [cursor=pointer]
+                            - text: Shared
+                        - button "Collapse" [ref=e54] [cursor=pointer]:
+                            - img [ref=e55] [cursor=pointer]
+                    - button "LoadingSpinner" [ref=e58] [cursor=pointer]:
+                        - generic [ref=e59] [cursor=pointer]:
+                            - img [ref=e61] [cursor=pointer]
+                            - img [ref=e63] [cursor=pointer]
+                        - text: LoadingSpinner
+                    - button "ThemeToggle" [ref=e66] [cursor=pointer]:
+                        - generic [ref=e67] [cursor=pointer]:
+                            - img [ref=e69] [cursor=pointer]
+                            - img [ref=e71] [cursor=pointer]
+                        - text: ThemeToggle
+                    - generic [ref=e73]:
+                        - button "Example" [expanded] [ref=e74] [cursor=pointer]:
+                            - img [ref=e76] [cursor=pointer]
+                            - text: Example
+                        - button "Collapse" [ref=e78] [cursor=pointer]:
+                            - img [ref=e79] [cursor=pointer]
+                    - button "Button" [ref=e82] [cursor=pointer]:
+                        - generic [ref=e83] [cursor=pointer]:
+                            - img [ref=e85] [cursor=pointer]
+                            - img [ref=e87] [cursor=pointer]
+                        - text: Button
+                    - button "Header" [ref=e90] [cursor=pointer]:
+                        - generic [ref=e91] [cursor=pointer]:
+                            - img [ref=e93] [cursor=pointer]
+                            - img [ref=e95] [cursor=pointer]
+                        - text: Header
+                    - button "Page" [ref=e98] [cursor=pointer]:
+                        - generic [ref=e99] [cursor=pointer]:
+                            - img [ref=e101] [cursor=pointer]
+                            - img [ref=e103] [cursor=pointer]
+                        - text: Page
+            - generic [ref=e107]:
+                - generic [ref=e108] [cursor=pointer]:
+                    - button "Run tests" [ref=e111] [cursor=pointer]:
+                        - img [ref=e112] [cursor=pointer]
+                        - generic [ref=e115] [cursor=pointer]: Run tests
+                    - button "Expand testing module" [ref=e118] [cursor=pointer]:
+                        - img [ref=e119] [cursor=pointer]
+                - generic [ref=e121]:
+                    - generic [ref=e124]:
+                        - generic [ref=e125]: Visual tests
+                        - generic [ref=e128]: Set up visual tests
+                    - generic [ref=e130]:
+                        - generic [ref=e131]:
+                            - generic [ref=e132]:
+                                - generic [ref=e133]: Run component tests
+                                - generic [ref=e134]: Not run
+                            - generic [ref=e135]:
+                                - button [ref=e137] [cursor=pointer]:
+                                    - img [ref=e138] [cursor=pointer]
+                                - button [ref=e142] [cursor=pointer]:
+                                    - img [ref=e143] [cursor=pointer]
+                        - generic [ref=e145]:
+                            - generic [ref=e146]:
+                                - generic [ref=e147]:
+                                    - checkbox [checked] [disabled] [ref=e149]
+                                    - generic [ref=e151]: Interactions
+                                - button [disabled] [ref=e153]
+                            - generic [ref=e155]:
+                                - generic [ref=e156] [cursor=pointer]:
+                                    - checkbox [ref=e158] [cursor=pointer]
+                                    - generic [ref=e160] [cursor=pointer]: Coverage
+                                - button [disabled] [ref=e162]
+                            - generic [ref=e164]:
+                                - generic [ref=e165] [cursor=pointer]:
+                                    - checkbox [ref=e167] [cursor=pointer]
+                                    - generic [ref=e169] [cursor=pointer]: Accessibility
+                                - button [disabled] [ref=e171]
+    - main [ref=e174]:
+        - region "Toolbar" [ref=e175]:
+            - generic [ref=e176]: Toolbar
+            - generic [ref=e177]:
+                - generic [ref=e178]:
+                    - button "Remount component" [ref=e179] [cursor=pointer]:
+                        - img [ref=e180] [cursor=pointer]
+                    - button "Zoom in" [ref=e182] [cursor=pointer]:
+                        - img [ref=e183] [cursor=pointer]
+                    - button "Zoom out" [ref=e186] [cursor=pointer]:
+                        - img [ref=e187] [cursor=pointer]
+                    - button "Reset zoom" [ref=e190] [cursor=pointer]:
+                        - img [ref=e191] [cursor=pointer]
+                    - button "Apply a grid to the preview" [ref=e194] [cursor=pointer]:
+                        - img [ref=e195] [cursor=pointer]
+                    - button "Change the background of the preview" [ref=e198] [cursor=pointer]:
+                        - img [ref=e199] [cursor=pointer]
+                    - button "Enable measure" [ref=e202] [cursor=pointer]:
+                        - img [ref=e203] [cursor=pointer]
+                    - button "Apply outlines to the preview" [ref=e206] [cursor=pointer]:
+                        - img [ref=e207] [cursor=pointer]
+                    - button "Change the size of the preview" [ref=e210] [cursor=pointer]:
+                        - img [ref=e211] [cursor=pointer]
+                    - button "Vision simulator" [ref=e216] [cursor=pointer]:
+                        - img [ref=e217] [cursor=pointer]
+                    - generic:
+                        - img
+                    - button "light" [ref=e223] [cursor=pointer]:
+                        - img [ref=e224] [cursor=pointer]
+                        - text: light
+                - generic [ref=e226]:
+                    - button "Go full screen" [ref=e227] [cursor=pointer]:
+                        - img [ref=e228] [cursor=pointer]
+                    - link "Open canvas in new tab" [ref=e230] [cursor=pointer]:
+                        - /url: iframe.html?args=&globals=&id=components-breakdowntree--default
+                        - img [ref=e231] [cursor=pointer]
+                    - button "Copy canvas link" [ref=e234] [cursor=pointer]:
+                        - img [ref=e235] [cursor=pointer]
+        - generic [ref=e240]:
+            - link "Skip to sidebar" [ref=e241] [cursor=pointer]:
+                - /url: '#components-breakdowntree--default'
+            - iframe [ref=e242]:
+                - generic [ref=f1e3]:
+                    - generic [ref=f1e4]:
+                        - generic [ref=f1e5]:
+                            - generic [ref=f1e6]:
+                                - img [ref=f1e7]
+                                - textbox "Search nodes..." [ref=f1e10]
+                            - button "Filters" [ref=f1e13]:
+                                - img
+                                - text: Filters
+                        - generic [ref=f1e14]:
+                            - generic [ref=f1e15]:
+                                - button "Expand All" [ref=f1e16]:
+                                    - img
+                                    - text: Expand All
+                                - button "Collapse All" [ref=f1e17]:
+                                    - img
+                                    - text: Collapse All
+                            - generic [ref=f1e19]: 8 of 8 nodes
+                    - generic [ref=f1e23]:
+                        - tree [ref=f1e24]:
+                            - button "Collapse Launch Product Beta active Successfully launch the beta version of our new product 75% More actions" [ref=f1e25]:
+                                - treeitem "Collapse Launch Product Beta active Successfully launch the beta version of our new product 75% More actions" [expanded] [level=1] [ref=f1e26]:
+                                    - img [ref=f1e28]
+                                    - button "Collapse" [ref=f1e36]:
+                                        - img
+                                    - img [ref=f1e38]
+                                    - generic [ref=f1e42]:
+                                        - generic [ref=f1e43]:
+                                            - heading "Launch Product Beta" [level=4] [ref=f1e44]
+                                            - generic [ref=f1e45]: active
+                                        - paragraph [ref=f1e46]: Successfully launch the beta version of our new product
+                                        - generic [ref=f1e47]:
+                                            - progressbar [ref=f1e48]
+                                            - generic [ref=f1e50]: 75%
+                                    - button "More actions" [ref=f1e52]:
+                                        - img
+                            - button "Set up CI/CD Pipeline in progress Configure automated build and deployment pipeline 60% More actions" [ref=f1e53]:
+                                - treeitem "Set up CI/CD Pipeline in progress Configure automated build and deployment pipeline 60% More actions" [level=2] [ref=f1e54]:
+                                    - img [ref=f1e56]
+                                    - img [ref=f1e66]
+                                    - generic [ref=f1e69]:
+                                        - generic [ref=f1e70]:
+                                            - heading "Set up CI/CD Pipeline" [level=4] [ref=f1e71]
+                                            - generic [ref=f1e72]: in progress
+                                        - paragraph [ref=f1e73]: Configure automated build and deployment pipeline
+                                        - generic [ref=f1e74]:
+                                            - progressbar [ref=f1e75]
+                                            - generic [ref=f1e77]: 60%
+                                    - button "More actions" [ref=f1e79]:
+                                        - img
+                            - button "Create Landing Page completed Design and implement beta signup landing page 100% More actions" [ref=f1e80]:
+                                - treeitem "Create Landing Page completed Design and implement beta signup landing page 100% More actions" [level=2] [ref=f1e81]:
+                                    - img [ref=f1e83]
+                                    - img [ref=f1e93]
+                                    - generic [ref=f1e96]:
+                                        - generic [ref=f1e97]:
+                                            - heading "Create Landing Page" [level=4] [ref=f1e98]
+                                            - generic [ref=f1e99]: completed
+                                        - paragraph [ref=f1e100]: Design and implement beta signup landing page
+                                        - generic [ref=f1e101]:
+                                            - progressbar [ref=f1e102]
+                                            - generic [ref=f1e104]: 100%
+                                    - button "More actions" [ref=f1e106]:
+                                        - img
+                            - button "MVP Ready for Testing active Core features implemented and ready for internal testing 80% More actions" [ref=f1e107]:
+                                - treeitem "MVP Ready for Testing active Core features implemented and ready for internal testing 80% More actions" [level=2] [ref=f1e108]:
+                                    - img [ref=f1e110]
+                                    - img [ref=f1e120]
+                                    - generic [ref=f1e122]:
+                                        - generic [ref=f1e123]:
+                                            - heading "MVP Ready for Testing" [level=4] [ref=f1e124]
+                                            - generic [ref=f1e125]: active
+                                        - paragraph [ref=f1e126]: Core features implemented and ready for internal testing
+                                        - generic [ref=f1e127]:
+                                            - progressbar [ref=f1e128]
+                                            - generic [ref=f1e130]: 80%
+                                    - button "More actions" [ref=f1e132]:
+                                        - img
+                            - button "Increased user engagement by 25% active More actions" [ref=f1e133]:
+                                - treeitem "Increased user engagement by 25% active More actions" [level=2] [ref=f1e134]:
+                                    - img [ref=f1e136]
+                                    - img [ref=f1e146]
+                                    - generic [ref=f1e149]:
+                                        - heading "Increased user engagement by 25%" [level=4] [ref=f1e150]
+                                        - generic [ref=f1e151]: active
+                                    - button "More actions" [ref=f1e153]:
+                                        - img
+                            - button "Collapse Improve User Onboarding active Enhance the user onboarding experience to increase retention 30% More actions" [ref=f1e154]:
+                                - treeitem "Collapse Improve User Onboarding active Enhance the user onboarding experience to increase retention 30% More actions" [expanded] [level=1] [ref=f1e155]:
+                                    - img [ref=f1e157]
+                                    - button "Collapse" [ref=f1e165]:
+                                        - img
+                                    - img [ref=f1e167]
+                                    - generic [ref=f1e171]:
+                                        - generic [ref=f1e172]:
+                                            - heading "Improve User Onboarding" [level=4] [ref=f1e173]
+                                            - generic [ref=f1e174]: active
+                                        - paragraph [ref=f1e175]: Enhance the user onboarding experience to increase retention
+                                        - generic [ref=f1e176]:
+                                            - progressbar [ref=f1e177]
+                                            - generic [ref=f1e179]: 30%
+                                    - button "More actions" [ref=f1e181]:
+                                        - img
+                            - button "Redesign Onboarding Flow todo Create new user-friendly onboarding wireframes More actions" [ref=f1e182]:
+                                - treeitem "Redesign Onboarding Flow todo Create new user-friendly onboarding wireframes More actions" [level=2] [ref=f1e183]:
+                                    - img [ref=f1e185]
+                                    - img [ref=f1e195]
+                                    - generic [ref=f1e198]:
+                                        - generic [ref=f1e199]:
+                                            - heading "Redesign Onboarding Flow" [level=4] [ref=f1e200]
+                                            - generic [ref=f1e201]: todo
+                                        - paragraph [ref=f1e202]: Create new user-friendly onboarding wireframes
+                                    - button "More actions" [ref=f1e204]:
+                                        - img
+                            - button "Reduced support tickets by 30% active More actions" [ref=f1e205]:
+                                - treeitem "Reduced support tickets by 30% active More actions" [level=2] [ref=f1e206]:
+                                    - img [ref=f1e208]
+                                    - img [ref=f1e218]
+                                    - generic [ref=f1e221]:
+                                        - heading "Reduced support tickets by 30%" [level=4] [ref=f1e222]
+                                        - generic [ref=f1e223]: active
+                                    - button "More actions" [ref=f1e225]:
+                                        - img
+                        - status [ref=f1e226]
+    - generic [ref=e245]:
+        - generic [ref=e247]:
+            - tablist [ref=e249]:
+                - tab "Controls 5" [ref=e250] [cursor=pointer]:
+                    - generic [ref=e251] [cursor=pointer]:
+                        - generic [ref=e252] [cursor=pointer]: Controls
+                        - generic [ref=e253] [cursor=pointer]: '5'
+                - tab "Actions" [ref=e254] [cursor=pointer]:
+                    - generic [ref=e256] [cursor=pointer]: Actions
+                - tab "Interactions" [ref=e257] [cursor=pointer]:
+                    - generic [ref=e259] [cursor=pointer]: Interactions
+                - tab "Accessibility 5" [ref=e260] [cursor=pointer]:
+                    - generic [ref=e261] [cursor=pointer]:
+                        - generic [ref=e262] [cursor=pointer]: Accessibility
+                        - generic [ref=e263] [cursor=pointer]: '5'
+                - tab "Visual tests" [ref=e264] [cursor=pointer]
+            - generic [ref=e267]:
+                - button "Change addon orientation [⌥ D]" [ref=e268] [cursor=pointer]:
+                    - img [ref=e269] [cursor=pointer]
+                - button "Hide addons [⌥ A]" [ref=e272] [cursor=pointer]:
+                    - img [ref=e273] [cursor=pointer]
+        - generic [ref=e280]:
+            - button "Reset controls" [ref=e282] [cursor=pointer]:
+                - img [ref=e283] [cursor=pointer]
+            - table [ref=e285]:
+                - rowgroup [ref=e286]:
+                    - row "Name Control" [ref=e287]:
+                        - cell "Name" [ref=e288]:
+                            - generic [ref=e289]: Name
+                        - cell "Control" [ref=e290]:
+                            - generic [ref=e291]: Control
+                - rowgroup [ref=e292]:
+                    - row "initialData -" [ref=e293]:
+                        - cell "initialData" [ref=e294]:
+                            - generic [ref=e295]: initialData
+                        - cell "-" [ref=e296]
+                    - 'row "config Edit the config properties in text format config : { add a new property to the object ''config'' selectionMode : \"single\" remove the property ''selectionMode'' with value ''single'' from ''undefined'' enableDragDrop : true remove the property ''enableDragDrop'' with value ''true'' from ''undefined'' enableSearch : true remove the property ''enableSearch'' with value ''true'' from ''undefined'' enableFilters : true remove the property ''enableFilters'' with value ''true'' from ''undefined'' enableKeyboardNavigation : true remove the property ''enableKeyboardNavigation'' with value ''true'' from ''undefined'' showConnectionLines : true remove the property ''showConnectionLines'' with value ''true'' from ''undefined'' } remove the object ''config''" [ref=e297]':
+                        - cell "config" [ref=e298]:
+                            - generic [ref=e299]: config
+                        - 'cell "Edit the config properties in text format config : { add a new property to the object ''config'' selectionMode : \"single\" remove the property ''selectionMode'' with value ''single'' from ''undefined'' enableDragDrop : true remove the property ''enableDragDrop'' with value ''true'' from ''undefined'' enableSearch : true remove the property ''enableSearch'' with value ''true'' from ''undefined'' enableFilters : true remove the property ''enableFilters'' with value ''true'' from ''undefined'' enableKeyboardNavigation : true remove the property ''enableKeyboardNavigation'' with value ''true'' from ''undefined'' showConnectionLines : true remove the property ''showConnectionLines'' with value ''true'' from ''undefined'' } remove the object ''config''" [ref=e300]':
+                            - generic [ref=e301]:
+                                - switch "Edit the config properties in text format" [ref=e302] [cursor=pointer]:
+                                    - img [ref=e303] [cursor=pointer]
+                                    - generic [ref=e306] [cursor=pointer]: RAW
+                                - generic [ref=e308]:
+                                    - button "config :" [expanded] [ref=e309]
+                                    - region "config :" [ref=e310]:
+                                        - generic [ref=e311]: '{'
+                                        - button "add a new property to the object 'config'" [ref=e312] [cursor=pointer]:
+                                            - img [ref=e313] [cursor=pointer]
+                                        - list [ref=e316]:
+                                            - listitem [ref=e317]:
+                                                - generic [ref=e318]: 'selectionMode :'
+                                                - generic [ref=e319]: '"single"'
+                                                - button "remove the property 'selectionMode' with value 'single' from 'undefined'" [ref=e320] [cursor=pointer]:
+                                                    - img [ref=e321] [cursor=pointer]
+                                            - listitem [ref=e324]:
+                                                - generic [ref=e325]: 'enableDragDrop :'
+                                                - generic [ref=e326]: 'true'
+                                                - button "remove the property 'enableDragDrop' with value 'true' from 'undefined'" [ref=e327] [cursor=pointer]:
+                                                    - img [ref=e328] [cursor=pointer]
+                                            - listitem [ref=e331]:
+                                                - generic [ref=e332]: 'enableSearch :'
+                                                - generic [ref=e333]: 'true'
+                                                - button "remove the property 'enableSearch' with value 'true' from 'undefined'" [ref=e334] [cursor=pointer]:
+                                                    - img [ref=e335] [cursor=pointer]
+                                            - listitem [ref=e338]:
+                                                - generic [ref=e339]: 'enableFilters :'
+                                                - generic [ref=e340]: 'true'
+                                                - button "remove the property 'enableFilters' with value 'true' from 'undefined'" [ref=e341] [cursor=pointer]:
+                                                    - img [ref=e342] [cursor=pointer]
+                                            - listitem [ref=e345]:
+                                                - generic [ref=e346]: 'enableKeyboardNavigation :'
+                                                - generic [ref=e347]: 'true'
+                                                - button "remove the property 'enableKeyboardNavigation' with value 'true' from 'undefined'" [ref=e348] [cursor=pointer]:
+                                                    - img [ref=e349] [cursor=pointer]
+                                            - listitem [ref=e352]:
+                                                - generic [ref=e353]: 'showConnectionLines :'
+                                                - generic [ref=e354]: 'true'
+                                                - button "remove the property 'showConnectionLines' with value 'true' from 'undefined'" [ref=e355] [cursor=pointer]:
+                                                    - img [ref=e356] [cursor=pointer]
+                                        - generic [ref=e359]: '}'
+                                        - button "remove the object 'config'" [ref=e360] [cursor=pointer]:
+                                            - img [ref=e361] [cursor=pointer]
+                    - row "onNodeSelect -" [ref=e364]:
+                        - cell "onNodeSelect" [ref=e365]:
+                            - generic [ref=e366]: onNodeSelect
+                        - cell "-" [ref=e367]
+                    - row "onNodeUpdate -" [ref=e368]:
+                        - cell "onNodeUpdate" [ref=e369]:
+                            - generic [ref=e370]: onNodeUpdate
+                        - cell "-" [ref=e371]
+                    - row "onNodeMove -" [ref=e372]:
+                        - cell "onNodeMove" [ref=e373]:
+                            - generic [ref=e374]: onNodeMove
+                        - cell "-" [ref=e375]
+                    - row "onNodeCreate -" [ref=e376]:
+                        - cell "onNodeCreate" [ref=e377]:
+                            - generic [ref=e378]: onNodeCreate
+                        - cell "-" [ref=e379]
+                    - row "onNodeDelete -" [ref=e380]:
+                        - cell "onNodeDelete" [ref=e381]:
+                            - generic [ref=e382]: onNodeDelete
+                        - cell "-" [ref=e383]
+                    - row "onTreeChange -" [ref=e384]:
+                        - cell "onTreeChange" [ref=e385]:
+                            - generic [ref=e386]: onTreeChange
+                        - cell "-" [ref=e387]
+                    - row "className Set object" [ref=e388]:
+                        - cell "className" [ref=e389]:
+                            - generic [ref=e390]: className
+                        - cell "Set object" [ref=e391]:
+                            - button "Set object" [ref=e392] [cursor=pointer]
+                    - row "isLoading Set boolean" [ref=e393]:
+                        - cell "isLoading" [ref=e394]:
+                            - generic [ref=e395]: isLoading
+                        - cell "Set boolean" [ref=e396]:
+                            - button "Set boolean" [ref=e397] [cursor=pointer]
+                    - row "error Set string" [ref=e398]:
+                        - cell "error" [ref=e399]:
+                            - generic [ref=e400]: error
+                        - cell "Set string" [ref=e401]:
+                            - button "Set string" [ref=e402] [cursor=pointer]
+```

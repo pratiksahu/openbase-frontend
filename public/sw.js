@@ -36,15 +36,7 @@ define(['./workbox-4d767a27'], function (e) {
       [
         {
           url: '/_next/app-build-manifest.json',
-          revision: 'b1ed6967327b2cf3d9f87ebfbcfa0b57',
-        },
-        {
-          url: '/_next/static/LtcfqU-8LYpnCIiW0xVSj/_buildManifest.js',
-          revision: 'b900a0a6dea10903b63c34f3f5009991',
-        },
-        {
-          url: '/_next/static/LtcfqU-8LYpnCIiW0xVSj/_ssgManifest.js',
-          revision: 'b6652df95db52feb4daf4eca35380933',
+          revision: 'e671ddbe88227c3a32661e5a435de7ff',
         },
         {
           url: '/_next/static/chunks/1255-de419e8b3760f9d4.js',
@@ -273,6 +265,14 @@ define(['./workbox-4d767a27'], function (e) {
         {
           url: '/_next/static/css/bb872523dc8b334a.css',
           revision: 'bb872523dc8b334a',
+        },
+        {
+          url: '/_next/static/hM-fEquRh3d981uf_Iym_/_buildManifest.js',
+          revision: 'b900a0a6dea10903b63c34f3f5009991',
+        },
+        {
+          url: '/_next/static/hM-fEquRh3d981uf_Iym_/_ssgManifest.js',
+          revision: 'b6652df95db52feb4daf4eca35380933',
         },
         {
           url: '/_next/static/media/0ea4f4df910e6120-s.woff2',
