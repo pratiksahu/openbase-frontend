@@ -10,10 +10,6 @@
 
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { BreakdownTree } from './BreakdownTree';
-import {
-  SelectionMode,
-} from './BreakdownTree.types';
 import {
   type SmartGoal,
   type Task,
@@ -26,6 +22,9 @@ import {
   MetricType,
   Frequency,
 } from '@/types/smart-goals.types';
+
+import { BreakdownTree } from './BreakdownTree';
+import { SelectionMode } from './BreakdownTree.types';
 
 // =============================================================================
 // Meta Configuration
@@ -72,8 +71,8 @@ import { BreakdownTree } from '@/components/BreakdownTree';
     enableSearch: true,
     selectionMode: SelectionMode.MULTIPLE,
   }}
-  onNodeSelect={(selectedIds) => console.log('Selected:', selectedIds)}
-  onTreeChange={(tree) => console.log('Tree updated:', tree)}
+  onNodeSelect={() => {}}
+  onTreeChange={() => {}}
 />
 \`\`\`
         `,
@@ -143,7 +142,8 @@ const mockGoals: SmartGoal[] = [
     // Specific fields
     title: 'Launch Product Beta',
     description: 'Successfully launch the beta version of our new product',
-    specificObjective: 'Launch a fully functional beta version with core features',
+    specificObjective:
+      'Launch a fully functional beta version with core features',
     successCriteria: [
       'Beta version deployed to production',
       '50+ beta users registered',
@@ -391,7 +391,12 @@ const mockOutcomes: Outcome[] = [
   },
 ];
 
-const allMockData = [...mockGoals, ...mockTasks, ...mockMilestones, ...mockOutcomes];
+const allMockData = [
+  ...mockGoals,
+  ...mockTasks,
+  ...mockMilestones,
+  ...mockOutcomes,
+];
 
 // Large dataset for performance testing
 const generateLargeDataset = (nodeCount: number) => {
@@ -409,7 +414,9 @@ const generateLargeDataset = (nodeCount: number) => {
         title: `Goal ${i}`,
         progress: Math.floor(Math.random() * 100),
         status: ['draft', 'active', 'completed'][Math.floor(Math.random() * 3)],
-        priority: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)],
+        priority: ['low', 'medium', 'high', 'critical'][
+          Math.floor(Math.random() * 4)
+        ],
       });
     } else if (isMilestone && !isOutcome) {
       data.push({
@@ -433,7 +440,9 @@ const generateLargeDataset = (nodeCount: number) => {
         title: `Task ${i}`,
         goalId: `goal-${Math.floor(i / 10) * 10}`,
         progress: Math.floor(Math.random() * 100),
-        status: ['todo', 'in_progress', 'completed', 'blocked'][Math.floor(Math.random() * 4)],
+        status: ['todo', 'in_progress', 'completed', 'blocked'][
+          Math.floor(Math.random() * 4)
+        ],
         priority: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)],
       });
     }
@@ -564,7 +573,8 @@ export const LargeDataset: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Performance test with 100 nodes to validate virtual scrolling and search performance.',
+        story:
+          'Performance test with 100 nodes to validate virtual scrolling and search performance.',
       },
     },
   },

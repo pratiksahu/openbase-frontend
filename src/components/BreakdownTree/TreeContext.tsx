@@ -10,23 +10,28 @@
 
 'use client';
 
-import React, { createContext, useContext, useReducer, useCallback, useMemo } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useCallback,
+  useMemo,
+} from 'react';
+
 import {
   type TreeContextValue,
   type TreeViewState,
   type FlatTree,
-  type TreeNode,
   type TreeNodeUpdate,
   type TreeNodeMove,
   type TreeNodeCreate,
-  type SelectionState,
   type SearchConfig,
   type FilterConfig,
   SelectionMode,
   TreeNodeType,
 } from './BreakdownTree.types';
-import { treeUtils } from './utils/tree-utils';
 import { treeOperations } from './utils/tree-operations';
+import { treeUtils } from './utils/tree-utils';
 
 // =============================================================================
 // Action Types
@@ -221,7 +226,10 @@ function treeReducer(state: TreeViewState, action: TreeAction): TreeViewState {
         selectedIds = new Set(selection.selectedIds);
         if (selectedIds.has(nodeId)) {
           selectedIds.delete(nodeId);
-          lastSelectedId = selectedIds.size > 0 ? Array.from(selectedIds)[selectedIds.size - 1] : null;
+          lastSelectedId =
+            selectedIds.size > 0
+              ? Array.from(selectedIds)[selectedIds.size - 1]
+              : null;
         } else {
           selectedIds.add(nodeId);
           lastSelectedId = nodeId;
@@ -291,12 +299,14 @@ function treeReducer(state: TreeViewState, action: TreeAction): TreeViewState {
 
       // Update matching IDs if query changed
       const matchingIds = updatedSearch.query
-        ? new Set(treeUtils.searchNodes(state.tree, updatedSearch.query, {
-            searchTitles: updatedSearch.searchTitles,
-            searchDescriptions: updatedSearch.searchDescriptions,
-            caseSensitive: updatedSearch.caseSensitive,
-            useRegex: updatedSearch.useRegex,
-          }))
+        ? new Set(
+            treeUtils.searchNodes(state.tree, updatedSearch.query, {
+              searchTitles: updatedSearch.searchTitles,
+              searchDescriptions: updatedSearch.searchDescriptions,
+              caseSensitive: updatedSearch.caseSensitive,
+              useRegex: updatedSearch.useRegex,
+            })
+          )
         : new Set<string>();
 
       return {
@@ -305,23 +315,31 @@ function treeReducer(state: TreeViewState, action: TreeAction): TreeViewState {
           ...state.searchFilter,
           search: updatedSearch,
           matchingIds,
-          isActive: updatedSearch.query.length > 0 || state.searchFilter.filters.nodeTypes.length < Object.values(TreeNodeType).length,
+          isActive:
+            updatedSearch.query.length > 0 ||
+            state.searchFilter.filters.nodeTypes.length <
+              Object.values(TreeNodeType).length,
         },
       };
     }
 
     case 'SET_FILTERS': {
       const filtersUpdate = action.payload;
-      const updatedFilters = { ...state.searchFilter.filters, ...filtersUpdate };
+      const updatedFilters = {
+        ...state.searchFilter.filters,
+        ...filtersUpdate,
+      };
 
       // Update matching IDs based on filters
-      const matchingIds = new Set(treeUtils.filterNodes(state.tree, {
-        nodeTypes: updatedFilters.nodeTypes,
-        statuses: updatedFilters.statuses,
-        priorities: updatedFilters.priorities,
-        progressRange: updatedFilters.progressRange,
-        dateRange: updatedFilters.dateRange,
-      }));
+      const matchingIds = new Set(
+        treeUtils.filterNodes(state.tree, {
+          nodeTypes: updatedFilters.nodeTypes,
+          statuses: updatedFilters.statuses,
+          priorities: updatedFilters.priorities,
+          progressRange: updatedFilters.progressRange,
+          dateRange: updatedFilters.dateRange,
+        })
+      );
 
       return {
         ...state,
@@ -329,7 +347,10 @@ function treeReducer(state: TreeViewState, action: TreeAction): TreeViewState {
           ...state.searchFilter,
           filters: updatedFilters,
           matchingIds,
-          isActive: state.searchFilter.search.query.length > 0 || updatedFilters.nodeTypes.length < Object.values(TreeNodeType).length,
+          isActive:
+            state.searchFilter.search.query.length > 0 ||
+            updatedFilters.nodeTypes.length <
+              Object.values(TreeNodeType).length,
         },
       };
     }
@@ -492,131 +513,146 @@ export function TreeProvider({
     dispatch({ type: 'FOCUS_NODE', payload: nodeId });
   }, []);
 
-  const updateNode = useCallback(async (update: TreeNodeUpdate) => {
-    dispatch({ type: 'OPERATION_START', payload: update.nodeId });
+  const updateNode = useCallback(
+    async (update: TreeNodeUpdate) => {
+      dispatch({ type: 'OPERATION_START', payload: update.nodeId });
 
-    try {
-      const result = treeOperations.updateNode(state.tree, update);
-      if (result.success && result.tree) {
-        dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
-        onTreeChange?.(result.tree);
-      } else {
-        throw new Error(result.error || 'Update failed');
+      try {
+        const result = treeOperations.updateNode(state.tree, update);
+        if (result.success && result.tree) {
+          dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
+          onTreeChange?.(result.tree);
+        } else {
+          throw new Error(result.error || 'Update failed');
+        }
+      } catch (error) {
+        dispatch({
+          type: 'OPERATION_ERROR',
+          payload: {
+            nodeId: update.nodeId,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          },
+        });
+        throw error;
+      } finally {
+        dispatch({ type: 'OPERATION_COMPLETE', payload: update.nodeId });
       }
-    } catch (error) {
-      dispatch({
-        type: 'OPERATION_ERROR',
-        payload: {
-          nodeId: update.nodeId,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        },
-      });
-      throw error;
-    } finally {
-      dispatch({ type: 'OPERATION_COMPLETE', payload: update.nodeId });
-    }
-  }, [state.tree, onTreeChange]);
+    },
+    [state.tree, onTreeChange]
+  );
 
-  const moveNode = useCallback(async (move: TreeNodeMove) => {
-    dispatch({ type: 'OPERATION_START', payload: move.nodeId });
+  const moveNode = useCallback(
+    async (move: TreeNodeMove) => {
+      dispatch({ type: 'OPERATION_START', payload: move.nodeId });
 
-    try {
-      const result = treeOperations.moveNode(state.tree, move);
-      if (result.success && result.tree) {
-        dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
-        onTreeChange?.(result.tree);
-      } else {
-        throw new Error(result.error || 'Move failed');
+      try {
+        const result = treeOperations.moveNode(state.tree, move);
+        if (result.success && result.tree) {
+          dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
+          onTreeChange?.(result.tree);
+        } else {
+          throw new Error(result.error || 'Move failed');
+        }
+      } catch (error) {
+        dispatch({
+          type: 'OPERATION_ERROR',
+          payload: {
+            nodeId: move.nodeId,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          },
+        });
+        throw error;
+      } finally {
+        dispatch({ type: 'OPERATION_COMPLETE', payload: move.nodeId });
       }
-    } catch (error) {
-      dispatch({
-        type: 'OPERATION_ERROR',
-        payload: {
-          nodeId: move.nodeId,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        },
-      });
-      throw error;
-    } finally {
-      dispatch({ type: 'OPERATION_COMPLETE', payload: move.nodeId });
-    }
-  }, [state.tree, onTreeChange]);
+    },
+    [state.tree, onTreeChange]
+  );
 
-  const createNode = useCallback(async (create: TreeNodeCreate) => {
-    const tempNodeId = 'temp_' + Date.now();
-    dispatch({ type: 'OPERATION_START', payload: tempNodeId });
+  const createNode = useCallback(
+    async (create: TreeNodeCreate) => {
+      const tempNodeId = 'temp_' + Date.now();
+      dispatch({ type: 'OPERATION_START', payload: tempNodeId });
 
-    try {
-      const result = treeOperations.addNode(state.tree, create);
-      if (result.success && result.tree) {
-        dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
-        onTreeChange?.(result.tree);
-      } else {
-        throw new Error(result.error || 'Creation failed');
+      try {
+        const result = treeOperations.addNode(state.tree, create);
+        if (result.success && result.tree) {
+          dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
+          onTreeChange?.(result.tree);
+        } else {
+          throw new Error(result.error || 'Creation failed');
+        }
+      } catch (error) {
+        dispatch({
+          type: 'OPERATION_ERROR',
+          payload: {
+            nodeId: tempNodeId,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          },
+        });
+        throw error;
+      } finally {
+        dispatch({ type: 'OPERATION_COMPLETE', payload: tempNodeId });
       }
-    } catch (error) {
-      dispatch({
-        type: 'OPERATION_ERROR',
-        payload: {
-          nodeId: tempNodeId,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        },
-      });
-      throw error;
-    } finally {
-      dispatch({ type: 'OPERATION_COMPLETE', payload: tempNodeId });
-    }
-  }, [state.tree, onTreeChange]);
+    },
+    [state.tree, onTreeChange]
+  );
 
-  const deleteNode = useCallback(async (nodeId: string) => {
-    dispatch({ type: 'OPERATION_START', payload: nodeId });
+  const deleteNode = useCallback(
+    async (nodeId: string) => {
+      dispatch({ type: 'OPERATION_START', payload: nodeId });
 
-    try {
-      const result = treeOperations.removeNode(state.tree, nodeId);
-      if (result.success && result.tree) {
-        dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
-        onTreeChange?.(result.tree);
-      } else {
-        throw new Error(result.error || 'Deletion failed');
+      try {
+        const result = treeOperations.removeNode(state.tree, nodeId);
+        if (result.success && result.tree) {
+          dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
+          onTreeChange?.(result.tree);
+        } else {
+          throw new Error(result.error || 'Deletion failed');
+        }
+      } catch (error) {
+        dispatch({
+          type: 'OPERATION_ERROR',
+          payload: {
+            nodeId,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          },
+        });
+        throw error;
+      } finally {
+        dispatch({ type: 'OPERATION_COMPLETE', payload: nodeId });
       }
-    } catch (error) {
-      dispatch({
-        type: 'OPERATION_ERROR',
-        payload: {
-          nodeId,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        },
-      });
-      throw error;
-    } finally {
-      dispatch({ type: 'OPERATION_COMPLETE', payload: nodeId });
-    }
-  }, [state.tree, onTreeChange]);
+    },
+    [state.tree, onTreeChange]
+  );
 
-  const duplicateNode = useCallback(async (nodeId: string) => {
-    dispatch({ type: 'OPERATION_START', payload: nodeId });
+  const duplicateNode = useCallback(
+    async (nodeId: string) => {
+      dispatch({ type: 'OPERATION_START', payload: nodeId });
 
-    try {
-      const result = treeOperations.duplicateNode(state.tree, nodeId);
-      if (result.success && result.tree) {
-        dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
-        onTreeChange?.(result.tree);
-      } else {
-        throw new Error(result.error || 'Duplication failed');
+      try {
+        const result = treeOperations.duplicateNode(state.tree, nodeId);
+        if (result.success && result.tree) {
+          dispatch({ type: 'UPDATE_TREE_SUCCESS', payload: result.tree });
+          onTreeChange?.(result.tree);
+        } else {
+          throw new Error(result.error || 'Duplication failed');
+        }
+      } catch (error) {
+        dispatch({
+          type: 'OPERATION_ERROR',
+          payload: {
+            nodeId,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          },
+        });
+        throw error;
+      } finally {
+        dispatch({ type: 'OPERATION_COMPLETE', payload: nodeId });
       }
-    } catch (error) {
-      dispatch({
-        type: 'OPERATION_ERROR',
-        payload: {
-          nodeId,
-          error: error instanceof Error ? error.message : 'Unknown error',
-        },
-      });
-      throw error;
-    } finally {
-      dispatch({ type: 'OPERATION_COMPLETE', payload: nodeId });
-    }
-  }, [state.tree, onTreeChange]);
+    },
+    [state.tree, onTreeChange]
+  );
 
   const setSearch = useCallback((search: Partial<SearchConfig>) => {
     dispatch({ type: 'SET_SEARCH', payload: search });
@@ -638,37 +674,58 @@ export function TreeProvider({
   // Utilities
   // =============================================================================
 
-  const getNode = useCallback((nodeId: string) => {
-    return treeUtils.findNode(state.tree, nodeId) || undefined;
-  }, [state.tree]);
+  const getNode = useCallback(
+    (nodeId: string) => {
+      return treeUtils.findNode(state.tree, nodeId) || undefined;
+    },
+    [state.tree]
+  );
 
-  const getNodePath = useCallback((nodeId: string) => {
-    return treeUtils.getNodePath(state.tree, nodeId);
-  }, [state.tree]);
+  const getNodePath = useCallback(
+    (nodeId: string) => {
+      return treeUtils.getNodePath(state.tree, nodeId);
+    },
+    [state.tree]
+  );
 
-  const getChildren = useCallback((nodeId: string) => {
-    return treeUtils.getChildren(state.tree, nodeId);
-  }, [state.tree]);
+  const getChildren = useCallback(
+    (nodeId: string) => {
+      return treeUtils.getChildren(state.tree, nodeId);
+    },
+    [state.tree]
+  );
 
-  const getParent = useCallback((nodeId: string) => {
-    return treeUtils.getParent(state.tree, nodeId);
-  }, [state.tree]);
+  const getParent = useCallback(
+    (nodeId: string) => {
+      return treeUtils.getParent(state.tree, nodeId);
+    },
+    [state.tree]
+  );
 
-  const getSiblings = useCallback((nodeId: string) => {
-    return treeUtils.getSiblings(state.tree, nodeId);
-  }, [state.tree]);
+  const getSiblings = useCallback(
+    (nodeId: string) => {
+      return treeUtils.getSiblings(state.tree, nodeId);
+    },
+    [state.tree]
+  );
 
-  const isAncestor = useCallback((ancestorId: string, descendantId: string) => {
-    return treeUtils.isAncestor(state.tree, ancestorId, descendantId);
-  }, [state.tree]);
+  const isAncestor = useCallback(
+    (ancestorId: string, descendantId: string) => {
+      return treeUtils.isAncestor(state.tree, ancestorId, descendantId);
+    },
+    [state.tree]
+  );
 
-  const validateDrop = useCallback((draggedNodeId: string, targetNodeId: string) => {
-    return treeOperations.validateNodeMove(state.tree, {
-      nodeId: draggedNodeId,
-      newParentId: targetNodeId,
-      newIndex: 0, // Placeholder index
-    });
-  }, [state.tree]);
+  const validateDrop = useCallback(
+    (draggedNodeId: string, targetNodeId: string) => {
+      return treeOperations.validateNodeMove(state.tree, {
+        nodeId: draggedNodeId,
+        newParentId: targetNodeId,
+        newIndex: 0, // Placeholder index
+      });
+    },
+    [state.tree]
+  );
 
   const getStatistics = useCallback(() => {
     return treeUtils.calculateTreeStatistics(state.tree);
@@ -678,9 +735,37 @@ export function TreeProvider({
   // Context Value
   // =============================================================================
 
-  const contextValue = useMemo<TreeContextValue>(() => ({
-    state,
-    operations: {
+  const contextValue = useMemo<TreeContextValue>(
+    () => ({
+      state,
+      operations: {
+        expandNode,
+        collapseNode,
+        selectNode,
+        focusNode,
+        updateNode,
+        moveNode,
+        createNode,
+        deleteNode,
+        duplicateNode,
+        setSearch,
+        setFilters,
+        expandAll,
+        collapseAll,
+      },
+      utils: {
+        getNode,
+        getNodePath,
+        getChildren,
+        getParent,
+        getSiblings,
+        isAncestor,
+        validateDrop,
+        getStatistics,
+      },
+    }),
+    [
+      state,
       expandNode,
       collapseNode,
       selectNode,
@@ -694,8 +779,6 @@ export function TreeProvider({
       setFilters,
       expandAll,
       collapseAll,
-    },
-    utils: {
       getNode,
       getNodePath,
       getChildren,
@@ -704,36 +787,11 @@ export function TreeProvider({
       isAncestor,
       validateDrop,
       getStatistics,
-    },
-  }), [
-    state,
-    expandNode,
-    collapseNode,
-    selectNode,
-    focusNode,
-    updateNode,
-    moveNode,
-    createNode,
-    deleteNode,
-    duplicateNode,
-    setSearch,
-    setFilters,
-    expandAll,
-    collapseAll,
-    getNode,
-    getNodePath,
-    getChildren,
-    getParent,
-    getSiblings,
-    isAncestor,
-    validateDrop,
-    getStatistics,
-  ]);
+    ]
+  );
 
   return (
-    <TreeContext.Provider value={contextValue}>
-      {children}
-    </TreeContext.Provider>
+    <TreeContext.Provider value={contextValue}>{children}</TreeContext.Provider>
   );
 }
 

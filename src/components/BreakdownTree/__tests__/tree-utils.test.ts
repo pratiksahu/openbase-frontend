@@ -9,8 +9,21 @@
  */
 
 import { describe, it, expect, beforeEach } from '@jest/globals';
+
 import {
-  treeUtils,
+  SmartGoal,
+  Task,
+  Milestone,
+  GoalCategory,
+  GoalStatus,
+  GoalPriority,
+  MetricType,
+  Frequency,
+  TaskStatus,
+} from '@/types/smart-goals.types';
+
+import { type FlatTree, TreeNodeType } from '../BreakdownTree.types';
+import {
   buildTree,
   flattenTree,
   findNode,
@@ -31,16 +44,6 @@ import {
   searchNodes,
   filterNodes,
 } from '../utils/tree-utils';
-import {
-  type FlatTree,
-  type TreeNode,
-  TreeNodeType,
-} from '../BreakdownTree.types';
-import {
-  SmartGoal,
-  Task,
-  Milestone,
-} from '@/types/smart-goals.types';
 
 // =============================================================================
 // Mock Data
@@ -56,15 +59,15 @@ const mockGoal: SmartGoal = {
   description: 'A test goal for unit testing',
   specificObjective: 'Test objective',
   successCriteria: ['Criterion 1'],
-  category: 'professional',
+  category: GoalCategory.PROFESSIONAL,
   tags: ['test'],
   measurable: {
-    metricType: 'number',
+    metricType: MetricType.NUMBER,
     targetValue: 100,
     currentValue: 50,
     unit: '%',
     higherIsBetter: true,
-    measurementFrequency: 'weekly',
+    measurementFrequency: Frequency.WEEKLY,
   },
   achievability: {
     score: 0.8,
@@ -94,12 +97,12 @@ const mockGoal: SmartGoal = {
     estimatedDuration: 30,
     isRecurring: false,
   },
-  status: 'active',
-  priority: 'high',
+  status: GoalStatus.ACTIVE,
+  priority: GoalPriority.HIGH,
   progress: 50,
   ownerId: 'user-1',
   collaborators: [],
-  parentGoalId: null,
+  parentGoalId: undefined,
   childGoalIds: [],
   tasks: [],
   milestones: [],
@@ -119,8 +122,8 @@ const mockTask: Task = {
   updatedBy: 'user-1',
   title: 'Test Task',
   description: 'A test task',
-  status: 'todo',
-  priority: 'medium',
+  status: TaskStatus.TODO,
+  priority: GoalPriority.MEDIUM,
   progress: 25,
   subtasks: [],
   checklist: [],
@@ -142,7 +145,7 @@ const mockMilestone: Milestone = {
   isCompleted: false,
   successCriteria: ['Complete tasks'],
   progress: 75,
-  priority: 'high',
+  priority: GoalPriority.HIGH,
   taskIds: [],
   goalId: 'goal-1',
   order: 0,
@@ -243,12 +246,18 @@ describe('Tree Utils', () => {
 
   describe('findNodes', () => {
     it('should find nodes matching predicate', () => {
-      const highPriorityNodes = findNodes(tree, node => node.priority === 'high');
+      const highPriorityNodes = findNodes(
+        tree,
+        node => node.priority === 'high'
+      );
       expect(highPriorityNodes).toHaveLength(2); // goal-1 and milestone-1
     });
 
     it('should return empty array when no matches', () => {
-      const criticalNodes = findNodes(tree, node => node.priority === 'critical');
+      const criticalNodes = findNodes(
+        tree,
+        node => node.priority === 'critical'
+      );
       expect(criticalNodes).toHaveLength(0);
     });
   });
@@ -397,14 +406,24 @@ describe('Tree Utils', () => {
 
   describe('isValidParentChildRelation', () => {
     it('should validate correct relationships', () => {
-      expect(isValidParentChildRelation(TreeNodeType.GOAL, TreeNodeType.TASK)).toBe(true);
-      expect(isValidParentChildRelation(TreeNodeType.GOAL, TreeNodeType.MILESTONE)).toBe(true);
-      expect(isValidParentChildRelation(TreeNodeType.TASK, TreeNodeType.SUBTASK)).toBe(true);
+      expect(
+        isValidParentChildRelation(TreeNodeType.GOAL, TreeNodeType.TASK)
+      ).toBe(true);
+      expect(
+        isValidParentChildRelation(TreeNodeType.GOAL, TreeNodeType.MILESTONE)
+      ).toBe(true);
+      expect(
+        isValidParentChildRelation(TreeNodeType.TASK, TreeNodeType.SUBTASK)
+      ).toBe(true);
     });
 
     it('should reject invalid relationships', () => {
-      expect(isValidParentChildRelation(TreeNodeType.OUTCOME, TreeNodeType.TASK)).toBe(false);
-      expect(isValidParentChildRelation(TreeNodeType.SUBTASK, TreeNodeType.GOAL)).toBe(false);
+      expect(
+        isValidParentChildRelation(TreeNodeType.OUTCOME, TreeNodeType.TASK)
+      ).toBe(false);
+      expect(
+        isValidParentChildRelation(TreeNodeType.SUBTASK, TreeNodeType.GOAL)
+      ).toBe(false);
     });
   });
 
@@ -454,7 +473,9 @@ describe('Tree Utils', () => {
 
     it('should respect case sensitivity', () => {
       const caseSensitive = searchNodes(tree, 'test', { caseSensitive: true });
-      const caseInsensitive = searchNodes(tree, 'test', { caseSensitive: false });
+      const caseInsensitive = searchNodes(tree, 'test', {
+        caseSensitive: false,
+      });
 
       expect(caseSensitive.length).toBeLessThanOrEqual(caseInsensitive.length);
     });

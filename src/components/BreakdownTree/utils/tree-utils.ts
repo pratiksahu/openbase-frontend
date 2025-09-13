@@ -8,6 +8,8 @@
  * @version 1.0.0
  */
 
+import { SmartGoal, Task, Milestone, Outcome } from '@/types/smart-goals.types';
+
 import {
   type TreeNode,
   type FlatTree,
@@ -20,12 +22,6 @@ import {
   type OutcomeTreeNode,
   type SubtaskTreeNode,
 } from '../BreakdownTree.types';
-import {
-  SmartGoal,
-  Task,
-  Milestone,
-  Outcome,
-} from '@/types/smart-goals.types';
 
 // =============================================================================
 // Tree Construction Utilities
@@ -143,7 +139,7 @@ export function buildTree(
   });
 
   // Second pass: establish parent-child relationships
-  nodes.forEach((node) => {
+  nodes.forEach(node => {
     const parentId = getParentIdFromNode(node);
     if (parentId && nodes.has(parentId)) {
       const parent = nodes.get(parentId)!;
@@ -154,7 +150,7 @@ export function buildTree(
   });
 
   // Sort children by order
-  nodes.forEach((node) => {
+  nodes.forEach(node => {
     node.children.sort((a, b) => {
       const nodeA = nodes.get(a)!;
       const nodeB = nodes.get(b)!;
@@ -176,7 +172,9 @@ export function buildTree(
 /**
  * Gets parent ID from raw data
  */
-function getParentIdFromData(data: SmartGoal | Task | Milestone | Outcome): string | null {
+function getParentIdFromData(
+  data: SmartGoal | Task | Milestone | Outcome
+): string | null {
   if ('parentGoalId' in data) {
     return data.parentGoalId || null;
   }
@@ -214,11 +212,14 @@ function getParentIdFromNode(node: TreeNode): string | null {
 /**
  * Flattens a tree structure into an ordered array
  */
-export function flattenTree(tree: FlatTree, expandedOnly: boolean = false): TreeNode[] {
+export function flattenTree(
+  tree: FlatTree,
+  expandedOnly: boolean = false
+): TreeNode[] {
   const result: TreeNode[] = [];
 
   function traverse(nodeIds: string[], currentDepth: number = 0) {
-    nodeIds.forEach((nodeId) => {
+    nodeIds.forEach(nodeId => {
       const node = tree.nodes.get(nodeId);
       if (!node) return;
 
@@ -250,7 +251,7 @@ export function findNodes(
   predicate: (node: TreeNode) => boolean
 ): TreeNode[] {
   const result: TreeNode[] = [];
-  tree.nodes.forEach((node) => {
+  tree.nodes.forEach(node => {
     if (predicate(node)) {
       result.push(node);
     }
@@ -270,7 +271,9 @@ export function getNodePath(tree: FlatTree, nodeId: string): TreePath | null {
 
   while (current) {
     path.unshift(current.id);
-    current = current.parentId ? tree.nodes.get(current.parentId) || null : null;
+    current = current.parentId
+      ? tree.nodes.get(current.parentId) || null
+      : null;
   }
 
   return {
@@ -290,7 +293,7 @@ export function getAncestors(tree: FlatTree, nodeId: string): TreeNode[] {
   // Exclude the node itself, only return ancestors
   return path.path
     .slice(0, -1)
-    .map((id) => tree.nodes.get(id))
+    .map(id => tree.nodes.get(id))
     .filter((node): node is TreeNode => node !== undefined);
 }
 
@@ -304,7 +307,7 @@ export function getDescendants(tree: FlatTree, nodeId: string): TreeNode[] {
   const result: TreeNode[] = [];
 
   function traverse(children: string[]) {
-    children.forEach((childId) => {
+    children.forEach(childId => {
       const child = tree.nodes.get(childId);
       if (child) {
         result.push(child);
@@ -325,7 +328,7 @@ export function getChildren(tree: FlatTree, nodeId: string): TreeNode[] {
   if (!node) return [];
 
   return node.children
-    .map((childId) => tree.nodes.get(childId))
+    .map(childId => tree.nodes.get(childId))
     .filter((child): child is TreeNode => child !== undefined);
 }
 
@@ -349,8 +352,8 @@ export function getSiblings(tree: FlatTree, nodeId: string): TreeNode[] {
   if (!node.parentId) {
     // Root level siblings
     return tree.rootIds
-      .filter((id) => id !== nodeId)
-      .map((id) => tree.nodes.get(id))
+      .filter(id => id !== nodeId)
+      .map(id => tree.nodes.get(id))
       .filter((sibling): sibling is TreeNode => sibling !== undefined);
   }
 
@@ -358,8 +361,8 @@ export function getSiblings(tree: FlatTree, nodeId: string): TreeNode[] {
   if (!parent) return [];
 
   return parent.children
-    .filter((id) => id !== nodeId)
-    .map((id) => tree.nodes.get(id))
+    .filter(id => id !== nodeId)
+    .map(id => tree.nodes.get(id))
     .filter((sibling): sibling is TreeNode => sibling !== undefined);
 }
 
@@ -370,7 +373,10 @@ export function getSiblings(tree: FlatTree, nodeId: string): TreeNode[] {
 /**
  * Gets the position of a node within its parent
  */
-export function getNodePosition(tree: FlatTree, nodeId: string): TreeNodePosition | null {
+export function getNodePosition(
+  tree: FlatTree,
+  nodeId: string
+): TreeNodePosition | null {
   const node = tree.nodes.get(nodeId);
   if (!node) return null;
 
@@ -400,7 +406,7 @@ export function getNodePosition(tree: FlatTree, nodeId: string): TreeNodePositio
  */
 export function getNextNode(tree: FlatTree, nodeId: string): TreeNode | null {
   const flatNodes = flattenTree(tree, true); // Only expanded nodes
-  const currentIndex = flatNodes.findIndex((node) => node.id === nodeId);
+  const currentIndex = flatNodes.findIndex(node => node.id === nodeId);
 
   if (currentIndex === -1 || currentIndex >= flatNodes.length - 1) {
     return null;
@@ -412,9 +418,12 @@ export function getNextNode(tree: FlatTree, nodeId: string): TreeNode | null {
 /**
  * Gets the previous node in tree order (depth-first)
  */
-export function getPreviousNode(tree: FlatTree, nodeId: string): TreeNode | null {
+export function getPreviousNode(
+  tree: FlatTree,
+  nodeId: string
+): TreeNode | null {
   const flatNodes = flattenTree(tree, true); // Only expanded nodes
-  const currentIndex = flatNodes.findIndex((node) => node.id === nodeId);
+  const currentIndex = flatNodes.findIndex(node => node.id === nodeId);
 
   if (currentIndex <= 0) {
     return null;
@@ -430,7 +439,11 @@ export function getPreviousNode(tree: FlatTree, nodeId: string): TreeNode | null
 /**
  * Checks if one node is an ancestor of another
  */
-export function isAncestor(tree: FlatTree, ancestorId: string, descendantId: string): boolean {
+export function isAncestor(
+  tree: FlatTree,
+  ancestorId: string,
+  descendantId: string
+): boolean {
   if (ancestorId === descendantId) return false;
 
   const path = getNodePath(tree, descendantId);
@@ -497,7 +510,7 @@ export function calculateTreeStatistics(tree: FlatTree) {
   let totalDepth = 0;
   let totalProgress = 0;
 
-  tree.nodes.forEach((node) => {
+  tree.nodes.forEach(node => {
     // Count by type
     stats.nodesByType[node.type]++;
 
@@ -548,15 +561,15 @@ export function searchNodes(
   const searchPattern = useRegex
     ? new RegExp(query, caseSensitive ? 'g' : 'gi')
     : caseSensitive
-    ? query
-    : query.toLowerCase();
+      ? query
+      : query.toLowerCase();
 
   const matchingIds: string[] = [];
 
-  tree.nodes.forEach((node) => {
+  tree.nodes.forEach(node => {
     const titleText = caseSensitive ? node.title : node.title.toLowerCase();
     const descText = caseSensitive
-      ? (node.description || '')
+      ? node.description || ''
       : (node.description || '').toLowerCase();
 
     let matches = false;
@@ -566,7 +579,8 @@ export function searchNodes(
       if (searchDescriptions && searchPattern.test(descText)) matches = true;
     } else if (typeof searchPattern === 'string') {
       if (searchTitles && titleText.includes(searchPattern)) matches = true;
-      if (searchDescriptions && descText.includes(searchPattern)) matches = true;
+      if (searchDescriptions && descText.includes(searchPattern))
+        matches = true;
     }
 
     if (matches) {
@@ -592,7 +606,7 @@ export function filterNodes(
 ): string[] {
   const matchingIds: string[] = [];
 
-  tree.nodes.forEach((node) => {
+  tree.nodes.forEach(node => {
     let matches = true;
 
     // Filter by node type

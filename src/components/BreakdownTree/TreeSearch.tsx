@@ -10,8 +10,6 @@
 
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { cn } from '@/lib/utils';
 import {
   Search,
   Filter,
@@ -23,16 +21,18 @@ import {
   Flag,
   Circle,
 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import React, { useState, useCallback, useMemo } from 'react';
+
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
@@ -40,9 +40,10 @@ import {
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
+import { cn } from '@/lib/utils';
+
 import {
   type SearchConfig,
-  type FilterConfig,
   TreeNodeType,
   type SearchFilterState,
 } from './BreakdownTree.types';
@@ -96,13 +97,19 @@ export function TreeSearch({
   // Search Handlers
   // =============================================================================
 
-  const handleSearchChange = useCallback((value: string) => {
-    operations.setSearch({ query: value });
-  }, [operations]);
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      operations.setSearch({ query: value });
+    },
+    [operations]
+  );
 
-  const handleSearchOptionsChange = useCallback((options: Partial<SearchConfig>) => {
-    operations.setSearch(options);
-  }, [operations]);
+  const handleSearchOptionsChange = useCallback(
+    (options: Partial<SearchConfig>) => {
+      operations.setSearch(options);
+    },
+    [operations]
+  );
 
   const clearSearch = useCallback(() => {
     operations.setSearch({ query: '' });
@@ -112,38 +119,50 @@ export function TreeSearch({
   // Filter Handlers
   // =============================================================================
 
-  const handleNodeTypeFilter = useCallback((nodeType: TreeNodeType, checked: boolean) => {
-    const currentTypes = searchFilter.filters.nodeTypes;
-    const newTypes = checked
-      ? [...currentTypes, nodeType]
-      : currentTypes.filter(t => t !== nodeType);
+  const handleNodeTypeFilter = useCallback(
+    (nodeType: TreeNodeType, checked: boolean) => {
+      const currentTypes = searchFilter.filters.nodeTypes;
+      const newTypes = checked
+        ? [...currentTypes, nodeType]
+        : currentTypes.filter(t => t !== nodeType);
 
-    operations.setFilters({ nodeTypes: newTypes });
-  }, [searchFilter.filters.nodeTypes, operations]);
+      operations.setFilters({ nodeTypes: newTypes });
+    },
+    [searchFilter.filters.nodeTypes, operations]
+  );
 
-  const handleStatusFilter = useCallback((status: string, checked: boolean) => {
-    const currentStatuses = searchFilter.filters.statuses;
-    const newStatuses = checked
-      ? [...currentStatuses, status]
-      : currentStatuses.filter(s => s !== status);
+  const handleStatusFilter = useCallback(
+    (status: string, checked: boolean) => {
+      const currentStatuses = searchFilter.filters.statuses;
+      const newStatuses = checked
+        ? [...currentStatuses, status]
+        : currentStatuses.filter(s => s !== status);
 
-    operations.setFilters({ statuses: newStatuses });
-  }, [searchFilter.filters.statuses, operations]);
+      operations.setFilters({ statuses: newStatuses });
+    },
+    [searchFilter.filters.statuses, operations]
+  );
 
-  const handlePriorityFilter = useCallback((priority: string, checked: boolean) => {
-    const currentPriorities = searchFilter.filters.priorities;
-    const newPriorities = checked
-      ? [...currentPriorities, priority]
-      : currentPriorities.filter(p => p !== priority);
+  const handlePriorityFilter = useCallback(
+    (priority: string, checked: boolean) => {
+      const currentPriorities = searchFilter.filters.priorities;
+      const newPriorities = checked
+        ? [...currentPriorities, priority]
+        : currentPriorities.filter(p => p !== priority);
 
-    operations.setFilters({ priorities: newPriorities });
-  }, [searchFilter.filters.priorities, operations]);
+      operations.setFilters({ priorities: newPriorities });
+    },
+    [searchFilter.filters.priorities, operations]
+  );
 
-  const handleProgressRangeChange = useCallback((range: [number, number]) => {
-    operations.setFilters({
-      progressRange: { min: range[0], max: range[1] }
-    });
-  }, [operations]);
+  const handleProgressRangeChange = useCallback(
+    (range: [number, number]) => {
+      operations.setFilters({
+        progressRange: { min: range[0], max: range[1] },
+      });
+    },
+    [operations]
+  );
 
   const clearFilters = useCallback(() => {
     operations.setFilters({
@@ -176,7 +195,8 @@ export function TreeSearch({
     // Count other filters
     if (filters.statuses.length > 0) count++;
     if (filters.priorities.length > 0) count++;
-    if (filters.progressRange.min > 0 || filters.progressRange.max < 100) count++;
+    if (filters.progressRange.min > 0 || filters.progressRange.max < 100)
+      count++;
 
     return count;
   }, [searchFilter.filters]);
@@ -192,14 +212,25 @@ export function TreeSearch({
   // Available Filter Options
   // =============================================================================
 
-  const statusOptions = useMemo(() => [
-    'draft', 'active', 'on_hold', 'completed', 'cancelled', 'overdue',
-    'todo', 'in_progress', 'blocked'
-  ], []);
+  const statusOptions = useMemo(
+    () => [
+      'draft',
+      'active',
+      'on_hold',
+      'completed',
+      'cancelled',
+      'overdue',
+      'todo',
+      'in_progress',
+      'blocked',
+    ],
+    []
+  );
 
-  const priorityOptions = useMemo(() => [
-    'low', 'medium', 'high', 'critical'
-  ], []);
+  const priorityOptions = useMemo(
+    () => ['low', 'medium', 'high', 'critical'],
+    []
+  );
 
   // =============================================================================
   // Effect: Notify parent of changes
@@ -218,20 +249,20 @@ export function TreeSearch({
       {/* Search Bar */}
       {enableSearch && (
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
           <Input
             type="text"
             placeholder={searchPlaceholder}
             value={searchFilter.search.query}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-10 pr-10"
+            onChange={e => handleSearchChange(e.target.value)}
+            className="pr-10 pl-10"
           />
           {hasActiveSearch && (
             <Button
               variant="ghost"
               size="sm"
               onClick={clearSearch}
-              className="absolute right-2 top-1/2 h-6 w-6 -translate-y-1/2 p-0 hover:bg-destructive/10"
+              className="hover:bg-destructive/10 absolute top-1/2 right-2 h-6 w-6 -translate-y-1/2 p-0"
             >
               <X className="h-3 w-3" />
             </Button>
@@ -249,7 +280,10 @@ export function TreeSearch({
                   <Filter className="mr-2 h-4 w-4" />
                   Filters
                   {hasActiveFilters && (
-                    <Badge variant="secondary" className="ml-2 h-5 w-5 rounded-full p-0 text-xs">
+                    <Badge
+                      variant="secondary"
+                      className="ml-2 h-5 w-5 rounded-full p-0 text-xs"
+                    >
                       {activeFiltersCount}
                     </Badge>
                   )}
@@ -268,30 +302,43 @@ export function TreeSearch({
                   </div>
 
                   {/* Node Type Filter */}
-                  <Collapsible open={filtersExpanded} onOpenChange={setFiltersExpanded}>
+                  <Collapsible
+                    open={filtersExpanded}
+                    onOpenChange={setFiltersExpanded}
+                  >
                     <CollapsibleTrigger asChild>
-                      <Button variant="ghost" className="w-full justify-between p-0">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-between p-0"
+                      >
                         <span className="text-sm font-medium">Node Types</span>
                         <ChevronDown className="h-4 w-4" />
                       </Button>
                     </CollapsibleTrigger>
                     <CollapsibleContent className="space-y-2">
-                      {Object.values(TreeNodeType).map((nodeType) => {
+                      {Object.values(TreeNodeType).map(nodeType => {
                         const Icon = NODE_TYPE_ICONS[nodeType];
-                        const isChecked = searchFilter.filters.nodeTypes.includes(nodeType);
+                        const isChecked =
+                          searchFilter.filters.nodeTypes.includes(nodeType);
 
                         return (
-                          <div key={nodeType} className="flex items-center space-x-2">
+                          <div
+                            key={nodeType}
+                            className="flex items-center space-x-2"
+                          >
                             <Checkbox
                               id={`nodeType-${nodeType}`}
                               checked={isChecked}
-                              onCheckedChange={(checked) =>
-                                handleNodeTypeFilter(nodeType, checked as boolean)
+                              onCheckedChange={checked =>
+                                handleNodeTypeFilter(
+                                  nodeType,
+                                  checked as boolean
+                                )
                               }
                             />
                             <Label
                               htmlFor={`nodeType-${nodeType}`}
-                              className="flex items-center gap-2 text-sm font-normal cursor-pointer"
+                              className="flex cursor-pointer items-center gap-2 text-sm font-normal"
                             >
                               <Icon className="h-3 w-3" />
                               {nodeType.replace('_', ' ')}
@@ -308,18 +355,23 @@ export function TreeSearch({
                   <div>
                     <Label className="text-sm font-medium">Status</Label>
                     <div className="mt-2 grid grid-cols-2 gap-2">
-                      {statusOptions.map((status) => (
-                        <div key={status} className="flex items-center space-x-2">
+                      {statusOptions.map(status => (
+                        <div
+                          key={status}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={`status-${status}`}
-                            checked={searchFilter.filters.statuses.includes(status)}
-                            onCheckedChange={(checked) =>
+                            checked={searchFilter.filters.statuses.includes(
+                              status
+                            )}
+                            onCheckedChange={checked =>
                               handleStatusFilter(status, checked as boolean)
                             }
                           />
                           <Label
                             htmlFor={`status-${status}`}
-                            className="text-sm font-normal cursor-pointer"
+                            className="cursor-pointer text-sm font-normal"
                           >
                             {status.replace('_', ' ')}
                           </Label>
@@ -334,18 +386,23 @@ export function TreeSearch({
                   <div>
                     <Label className="text-sm font-medium">Priority</Label>
                     <div className="mt-2 space-y-2">
-                      {priorityOptions.map((priority) => (
-                        <div key={priority} className="flex items-center space-x-2">
+                      {priorityOptions.map(priority => (
+                        <div
+                          key={priority}
+                          className="flex items-center space-x-2"
+                        >
                           <Checkbox
                             id={`priority-${priority}`}
-                            checked={searchFilter.filters.priorities.includes(priority)}
-                            onCheckedChange={(checked) =>
+                            checked={searchFilter.filters.priorities.includes(
+                              priority
+                            )}
+                            onCheckedChange={checked =>
                               handlePriorityFilter(priority, checked as boolean)
                             }
                           />
                           <Label
                             htmlFor={`priority-${priority}`}
-                            className="text-sm font-normal cursor-pointer capitalize"
+                            className="cursor-pointer text-sm font-normal capitalize"
                           >
                             {priority}
                           </Label>
@@ -358,17 +415,22 @@ export function TreeSearch({
 
                   {/* Progress Range Filter */}
                   <div>
-                    <Label className="text-sm font-medium">Progress Range</Label>
+                    <Label className="text-sm font-medium">
+                      Progress Range
+                    </Label>
                     <div className="mt-2 space-y-2">
                       <Slider
-                        value={[searchFilter.filters.progressRange.min, searchFilter.filters.progressRange.max]}
+                        value={[
+                          searchFilter.filters.progressRange.min,
+                          searchFilter.filters.progressRange.max,
+                        ]}
                         onValueChange={handleProgressRangeChange}
                         max={100}
                         min={0}
                         step={5}
                         className="w-full"
                       />
-                      <div className="flex justify-between text-xs text-muted-foreground">
+                      <div className="text-muted-foreground flex justify-between text-xs">
                         <span>{searchFilter.filters.progressRange.min}%</span>
                         <span>{searchFilter.filters.progressRange.max}%</span>
                       </div>
@@ -397,8 +459,10 @@ export function TreeSearch({
                         <Checkbox
                           id="searchTitles"
                           checked={searchFilter.search.searchTitles}
-                          onCheckedChange={(checked) =>
-                            handleSearchOptionsChange({ searchTitles: checked as boolean })
+                          onCheckedChange={checked =>
+                            handleSearchOptionsChange({
+                              searchTitles: checked as boolean,
+                            })
                           }
                         />
                         <Label htmlFor="searchTitles" className="text-sm">
@@ -410,8 +474,10 @@ export function TreeSearch({
                         <Checkbox
                           id="searchDescriptions"
                           checked={searchFilter.search.searchDescriptions}
-                          onCheckedChange={(checked) =>
-                            handleSearchOptionsChange({ searchDescriptions: checked as boolean })
+                          onCheckedChange={checked =>
+                            handleSearchOptionsChange({
+                              searchDescriptions: checked as boolean,
+                            })
                           }
                         />
                         <Label htmlFor="searchDescriptions" className="text-sm">
@@ -423,8 +489,10 @@ export function TreeSearch({
                         <Checkbox
                           id="caseSensitive"
                           checked={searchFilter.search.caseSensitive}
-                          onCheckedChange={(checked) =>
-                            handleSearchOptionsChange({ caseSensitive: checked as boolean })
+                          onCheckedChange={checked =>
+                            handleSearchOptionsChange({
+                              caseSensitive: checked as boolean,
+                            })
                           }
                         />
                         <Label htmlFor="caseSensitive" className="text-sm">
@@ -436,8 +504,10 @@ export function TreeSearch({
                         <Checkbox
                           id="useRegex"
                           checked={searchFilter.search.useRegex}
-                          onCheckedChange={(checked) =>
-                            handleSearchOptionsChange({ useRegex: checked as boolean })
+                          onCheckedChange={checked =>
+                            handleSearchOptionsChange({
+                              useRegex: checked as boolean,
+                            })
                           }
                         />
                         <Label htmlFor="useRegex" className="text-sm">
@@ -462,7 +532,7 @@ export function TreeSearch({
 
       {/* Results Summary */}
       {searchFilter.isActive && (
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex items-center justify-between text-sm">
           <span>
             {matchingCount} of {totalCount} nodes
             {hasActiveSearch && ` matching "${searchFilter.search.query}"`}
@@ -471,7 +541,10 @@ export function TreeSearch({
           {/* Active Filters Display */}
           {hasActiveFilters && (
             <div className="flex items-center gap-1">
-              {activeFiltersCount === 1 ? '1 filter' : `${activeFiltersCount} filters`} active
+              {activeFiltersCount === 1
+                ? '1 filter'
+                : `${activeFiltersCount} filters`}{' '}
+              active
             </div>
           )}
         </div>
@@ -479,7 +552,7 @@ export function TreeSearch({
 
       {/* No Results Message */}
       {searchFilter.isActive && matchingCount === 0 && (
-        <div className="text-center py-4 text-sm text-muted-foreground">
+        <div className="text-muted-foreground py-4 text-center text-sm">
           No nodes match your current search and filter criteria
         </div>
       )}

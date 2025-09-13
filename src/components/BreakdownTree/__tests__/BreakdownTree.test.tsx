@@ -8,16 +8,15 @@
  * @version 1.0.0
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { describe, it, expect, beforeEach, jest } from '@jest/globals';
-import { BreakdownTree } from '../BreakdownTree';
-import {
-  SelectionMode,
-  TreeNodeType,
-} from '../BreakdownTree.types';
+import React from 'react';
+
+// Import jest-dom matchers
+import '@testing-library/jest-dom/jest-globals';
+
 import {
   SmartGoal,
   Task,
@@ -29,6 +28,9 @@ import {
   Frequency,
   TaskStatus,
 } from '@/types/smart-goals.types';
+
+import { BreakdownTree } from '../BreakdownTree';
+import { SelectionMode } from '../BreakdownTree.types';
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations);
@@ -223,12 +225,13 @@ describe('BreakdownTree', () => {
     it('should render loading state', () => {
       renderBreakdownTree({
         initialData: [],
-        isLoading: true
+        isLoading: true,
       });
 
       // Should show loading skeletons
-      const skeletons = screen.getAllByTestId('skeleton') ||
-                       document.querySelectorAll('[class*="skeleton"]');
+      const skeletons =
+        screen.getAllByTestId('skeleton') ||
+        document.querySelectorAll('[class*="skeleton"]');
       expect(skeletons.length).toBeGreaterThan(0);
     });
 
@@ -236,7 +239,7 @@ describe('BreakdownTree', () => {
       const errorMessage = 'Failed to load tree data';
       renderBreakdownTree({
         initialData: [],
-        error: errorMessage
+        error: errorMessage,
       });
 
       expect(screen.getByText(errorMessage)).toBeInTheDocument();
@@ -270,7 +273,9 @@ describe('BreakdownTree', () => {
     it('should render filter controls when enabled', () => {
       renderBreakdownTree();
 
-      expect(screen.getByRole('button', { name: /filters/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /filters/i })
+      ).toBeInTheDocument();
     });
 
     it('should open filter popover when clicked', async () => {
@@ -286,18 +291,22 @@ describe('BreakdownTree', () => {
 
     it('should not render search when disabled', () => {
       renderBreakdownTree({
-        config: { enableSearch: false }
+        config: { enableSearch: false },
       });
 
-      expect(screen.queryByPlaceholderText(/search nodes/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByPlaceholderText(/search nodes/i)
+      ).not.toBeInTheDocument();
     });
 
     it('should not render filters when disabled', () => {
       renderBreakdownTree({
-        config: { enableFilters: false }
+        config: { enableFilters: false },
       });
 
-      expect(screen.queryByRole('button', { name: /filters/i })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /filters/i })
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -324,7 +333,9 @@ describe('BreakdownTree', () => {
       const onNodeSelect = jest.fn();
       renderBreakdownTree({ onNodeSelect });
 
-      const goalNode = screen.getByText('Test Goal').closest('[role="treeitem"]');
+      const goalNode = screen
+        .getByText('Test Goal')
+        .closest('[role="treeitem"]');
       await user.click(goalNode!);
 
       expect(onNodeSelect).toHaveBeenCalledWith(['goal-1']);
@@ -334,23 +345,31 @@ describe('BreakdownTree', () => {
       const onNodeSelect = jest.fn();
       renderBreakdownTree({
         config: { selectionMode: SelectionMode.MULTIPLE },
-        onNodeSelect
+        onNodeSelect,
       });
 
-      const goalNode = screen.getByText('Test Goal').closest('[role="treeitem"]');
-      const taskNode = screen.getByText('Test Task').closest('[role="treeitem"]');
+      const goalNode = screen
+        .getByText('Test Goal')
+        .closest('[role="treeitem"]');
+      const taskNode = screen
+        .getByText('Test Task')
+        .closest('[role="treeitem"]');
 
       await user.click(goalNode!);
-      await user.click(taskNode!, { ctrlKey: true });
+      await user.click(taskNode!);
 
-      expect(onNodeSelect).toHaveBeenCalledWith(expect.arrayContaining(['goal-1']));
+      expect(onNodeSelect).toHaveBeenCalledWith(
+        expect.arrayContaining(['goal-1'])
+      );
     });
 
     it('should open action menu when more button is clicked', async () => {
       renderBreakdownTree();
 
       // Hover to make action button visible
-      const goalNode = screen.getByText('Test Goal').closest('[role="treeitem"]');
+      const goalNode = screen
+        .getByText('Test Goal')
+        .closest('[role="treeitem"]');
       await user.hover(goalNode!);
 
       await waitFor(() => {
@@ -369,7 +388,7 @@ describe('BreakdownTree', () => {
       renderBreakdownTree();
 
       const firstNode = screen.getAllByRole('treeitem')[0];
-      firstNode.focus();
+      (firstNode as HTMLElement).focus();
 
       await user.keyboard('{ArrowDown}');
 
@@ -381,8 +400,10 @@ describe('BreakdownTree', () => {
     it('should expand nodes with right arrow', async () => {
       renderBreakdownTree();
 
-      const goalNode = screen.getByText('Test Goal').closest('[role="treeitem"]');
-      goalNode?.focus();
+      const goalNode = screen
+        .getByText('Test Goal')
+        .closest('[role="treeitem"]');
+      (goalNode as HTMLElement)?.focus();
 
       await user.keyboard('{ArrowRight}');
 
@@ -394,8 +415,10 @@ describe('BreakdownTree', () => {
     it('should collapse nodes with left arrow', async () => {
       renderBreakdownTree();
 
-      const goalNode = screen.getByText('Test Goal').closest('[role="treeitem"]');
-      goalNode?.focus();
+      const goalNode = screen
+        .getByText('Test Goal')
+        .closest('[role="treeitem"]');
+      (goalNode as HTMLElement)?.focus();
 
       // First expand, then collapse
       await user.keyboard('{ArrowRight}');
@@ -410,8 +433,10 @@ describe('BreakdownTree', () => {
       const onNodeSelect = jest.fn();
       renderBreakdownTree({ onNodeSelect });
 
-      const goalNode = screen.getByText('Test Goal').closest('[role="treeitem"]');
-      goalNode?.focus();
+      const goalNode = screen
+        .getByText('Test Goal')
+        .closest('[role="treeitem"]');
+      (goalNode as HTMLElement)?.focus();
 
       await user.keyboard('{Enter}');
 
@@ -420,7 +445,7 @@ describe('BreakdownTree', () => {
 
     it('should disable keyboard navigation when configured', () => {
       renderBreakdownTree({
-        config: { enableKeyboardNavigation: false }
+        config: { enableKeyboardNavigation: false },
       });
 
       const firstNode = screen.getAllByRole('treeitem')[0];
@@ -436,25 +461,31 @@ describe('BreakdownTree', () => {
     it('should render expand all button', () => {
       renderBreakdownTree();
 
-      expect(screen.getByRole('button', { name: /expand all/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /expand all/i })
+      ).toBeInTheDocument();
     });
 
     it('should render collapse all button', () => {
       renderBreakdownTree();
 
-      expect(screen.getByRole('button', { name: /collapse all/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /collapse all/i })
+      ).toBeInTheDocument();
     });
 
     it('should expand all nodes when expand all is clicked', async () => {
       renderBreakdownTree();
 
-      const expandAllButton = screen.getByRole('button', { name: /expand all/i });
+      const expandAllButton = screen.getByRole('button', {
+        name: /expand all/i,
+      });
       await user.click(expandAllButton);
 
       await waitFor(() => {
         const treeItems = screen.getAllByRole('treeitem');
-        const expandableItems = treeItems.filter(item =>
-          item.getAttribute('aria-expanded') !== null
+        const expandableItems = treeItems.filter(
+          item => item.getAttribute('aria-expanded') !== null
         );
 
         expandableItems.forEach(item => {
@@ -471,10 +502,12 @@ describe('BreakdownTree', () => {
 
     it('should display selection count when nodes are selected', async () => {
       renderBreakdownTree({
-        config: { selectionMode: SelectionMode.MULTIPLE }
+        config: { selectionMode: SelectionMode.MULTIPLE },
       });
 
-      const goalNode = screen.getByText('Test Goal').closest('[role="treeitem"]');
+      const goalNode = screen
+        .getByText('Test Goal')
+        .closest('[role="treeitem"]');
       await user.click(goalNode!);
 
       await waitFor(() => {
@@ -530,7 +563,9 @@ describe('BreakdownTree', () => {
     it('should announce expand/collapse state', () => {
       renderBreakdownTree();
 
-      const goalNode = screen.getByText('Test Goal').closest('[role="treeitem"]');
+      const goalNode = screen
+        .getByText('Test Goal')
+        .closest('[role="treeitem"]');
       expect(goalNode).toHaveAttribute('aria-expanded');
     });
 
@@ -561,17 +596,18 @@ describe('BreakdownTree', () => {
 
     it('should handle drag and drop when enabled', async () => {
       renderBreakdownTree({
-        config: { enableDragDrop: true }
+        config: { enableDragDrop: true },
       });
 
-      const taskNode = screen.getByText('Test Task').closest('[role="treeitem"]');
+      const taskNode = screen
+        .getByText('Test Task')
+        .closest('[role="treeitem"]');
 
       // Check if drag handle is present (visible on hover)
       await user.hover(taskNode!);
 
       await waitFor(() => {
-        const dragHandle = taskNode?.querySelector('[data-testid="drag-handle"]') ||
-                          taskNode?.querySelector('[class*="drag"]');
+        // Check if drag handle is present or node is draggable
         // Drag handle might not be visible in test environment, just check node is draggable
         expect(taskNode).toHaveAttribute('draggable', 'true');
       });
@@ -627,7 +663,7 @@ describe('BreakdownTree', () => {
       const errorMessage = 'Custom error message';
       renderBreakdownTree({
         initialData: [],
-        error: errorMessage
+        error: errorMessage,
       });
 
       expect(screen.getByText(errorMessage)).toBeInTheDocument();

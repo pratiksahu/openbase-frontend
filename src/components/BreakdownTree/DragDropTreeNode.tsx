@@ -10,16 +10,14 @@
 
 'use client';
 
-import React, { useMemo } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import React, { useMemo } from 'react';
+
 import { cn } from '@/lib/utils';
+
+import { type TreeNodeProps, type DropValidation } from './BreakdownTree.types';
 import { TreeNode } from './TreeNode';
-import {
-  type TreeNodeProps,
-  type TreeNode as TreeNodeData,
-  type DropValidation,
-} from './BreakdownTree.types';
 
 // =============================================================================
 // Types
@@ -29,7 +27,10 @@ interface DragDropTreeNodeProps extends TreeNodeProps {
   /** Whether drag and drop is enabled */
   enableDragDrop: boolean;
   /** Validation function for drop operations */
-  validateDrop?: (draggedNodeId: string, targetNodeId: string) => DropValidation;
+  validateDrop?: (
+    draggedNodeId: string,
+    targetNodeId: string
+  ) => DropValidation;
   /** Drop indicator position */
   dropIndicator?: 'above' | 'below' | 'inside' | null;
   /** Whether this node is being dragged */
@@ -82,21 +83,33 @@ export function DragDropTreeNode({
   // Computed Styles
   // =============================================================================
 
-  const style = useMemo(() => ({
-    transform: CSS.Transform.toString(transform),
-    transition,
-  }), [transform, transition]);
+  const style = useMemo(
+    () => ({
+      transform: CSS.Transform.toString(transform),
+      transition,
+    }),
+    [transform, transition]
+  );
 
   // =============================================================================
   // Drop Validation
   // =============================================================================
 
   const dropValidation = useMemo(() => {
-    if (!validateDrop) return { isValid: true, wouldCreateCircularDependency: false, areTypesCompatible: true };
+    if (!validateDrop)
+      return {
+        isValid: true,
+        wouldCreateCircularDependency: false,
+        areTypesCompatible: true,
+      };
 
     // This would be called during drag over events
     // For now, we'll assume it's valid since validation is handled elsewhere
-    return { isValid: true, wouldCreateCircularDependency: false, areTypesCompatible: true };
+    return {
+      isValid: true,
+      wouldCreateCircularDependency: false,
+      areTypesCompatible: true,
+    };
   }, [validateDrop]);
 
   // =============================================================================
@@ -113,7 +126,11 @@ export function DragDropTreeNode({
     props.onDragEnd?.();
   };
 
-  const handleDrop = (draggedNodeId: string, targetNodeId: string, position: 'before' | 'after' | 'inside') => {
+  const handleDrop = (
+    draggedNodeId: string,
+    targetNodeId: string,
+    position: 'before' | 'after' | 'inside'
+  ) => {
     // Validate the drop before executing
     if (validateDrop) {
       const validation = validateDrop(draggedNodeId, targetNodeId);
@@ -137,12 +154,14 @@ export function DragDropTreeNode({
       className={cn(
         'relative',
         // Dragging state
-        isSortableDragging && 'opacity-50 z-50',
-        isDragging && 'shadow-lg ring-2 ring-primary/50',
+        isSortableDragging && 'z-50 opacity-50',
+        isDragging && 'ring-primary/50 shadow-lg ring-2',
 
         // Drop target state
         isValidDropTarget && 'ring-2 ring-green-500/50',
-        !dropValidation.isValid && isValidDropTarget && 'ring-2 ring-red-500/50',
+        !dropValidation.isValid &&
+          isValidDropTarget &&
+          'ring-2 ring-red-500/50',
 
         className
       )}
@@ -153,10 +172,11 @@ export function DragDropTreeNode({
       {dropIndicator && (
         <div
           className={cn(
-            'absolute left-0 right-0 h-0.5 bg-primary z-10',
+            'bg-primary absolute right-0 left-0 z-10 h-0.5',
             dropIndicator === 'above' && '-top-px',
             dropIndicator === 'below' && '-bottom-px',
-            dropIndicator === 'inside' && 'top-1/2 -translate-y-1/2 h-full bg-primary/20 border-2 border-primary border-dashed'
+            dropIndicator === 'inside' &&
+              'bg-primary/20 border-primary top-1/2 h-full -translate-y-1/2 border-2 border-dashed'
           )}
         />
       )}
@@ -182,8 +202,12 @@ export function DragDropTreeNode({
           isDragging && 'bg-accent/50',
 
           // Drop target styling
-          isValidDropTarget && dropValidation.isValid && 'ring-1 ring-green-500/30',
-          isValidDropTarget && !dropValidation.isValid && 'ring-1 ring-red-500/30'
+          isValidDropTarget &&
+            dropValidation.isValid &&
+            'ring-1 ring-green-500/30',
+          isValidDropTarget &&
+            !dropValidation.isValid &&
+            'ring-1 ring-red-500/30'
         )}
         {...props}
       />
@@ -198,15 +222,14 @@ export function DragDropTreeNode({
       {/* Drop validation feedback */}
       {isValidDropTarget && !dropValidation.isValid && (
         <div
-          className="absolute inset-0 flex items-center justify-center bg-red-500/10 text-red-700 dark:text-red-300 text-xs font-medium pointer-events-none"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center bg-red-500/10 text-xs font-medium text-red-700 dark:text-red-300"
           aria-live="polite"
         >
           {dropValidation.wouldCreateCircularDependency
             ? 'Cannot move to descendant'
             : !dropValidation.areTypesCompatible
-            ? 'Incompatible node types'
-            : 'Invalid drop target'
-          }
+              ? 'Incompatible node types'
+              : 'Invalid drop target'}
         </div>
       )}
     </div>

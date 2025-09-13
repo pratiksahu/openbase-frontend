@@ -10,28 +10,6 @@
 
 'use client';
 
-import React, { useMemo, useState } from 'react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuShortcut,
-} from '@/components/ui/dropdown-menu';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import {
   Plus,
   Edit,
@@ -46,11 +24,32 @@ import {
   Check,
   Archive,
   Split,
-  Flag,
-  CheckSquare,
-  Circle,
 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuShortcut,
+} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+
 import {
   type TreeActionsProps,
   type QuickAction,
@@ -105,7 +104,7 @@ export function TreeActions({
         icon: 'Edit',
         enabled: true,
         shortcut: 'E',
-        handler: (nodeId) => onAction(QuickActionType.EDIT, nodeId),
+        handler: nodeId => onAction(QuickActionType.EDIT, nodeId),
       },
     ];
 
@@ -121,28 +120,28 @@ export function TreeActions({
               label: 'Add Sub-Goal',
               icon: 'Target',
               enabled: true,
-              handler: (nodeId) => onAction(QuickActionType.ADD_CHILD, nodeId),
+              handler: nodeId => onAction(QuickActionType.ADD_CHILD, nodeId),
             },
             {
               type: QuickActionType.ADD_CHILD,
               label: 'Add Outcome',
               icon: 'Circle',
               enabled: true,
-              handler: (nodeId) => onAction(QuickActionType.ADD_CHILD, nodeId),
+              handler: nodeId => onAction(QuickActionType.ADD_CHILD, nodeId),
             },
             {
               type: QuickActionType.ADD_CHILD,
               label: 'Add Milestone',
               icon: 'Flag',
               enabled: true,
-              handler: (nodeId) => onAction(QuickActionType.ADD_CHILD, nodeId),
+              handler: nodeId => onAction(QuickActionType.ADD_CHILD, nodeId),
             },
             {
               type: QuickActionType.ADD_CHILD,
               label: 'Add Task',
               icon: 'CheckSquare',
               enabled: true,
-              handler: (nodeId) => onAction(QuickActionType.ADD_CHILD, nodeId),
+              handler: nodeId => onAction(QuickActionType.ADD_CHILD, nodeId),
             }
           );
           break;
@@ -153,7 +152,7 @@ export function TreeActions({
             label: 'Add Task',
             icon: 'CheckSquare',
             enabled: true,
-            handler: (nodeId) => onAction(QuickActionType.ADD_CHILD, nodeId),
+            handler: nodeId => onAction(QuickActionType.ADD_CHILD, nodeId),
           });
           break;
 
@@ -163,7 +162,7 @@ export function TreeActions({
             label: 'Add Subtask',
             icon: 'CheckSquare',
             enabled: true,
-            handler: (nodeId) => onAction(QuickActionType.ADD_CHILD, nodeId),
+            handler: nodeId => onAction(QuickActionType.ADD_CHILD, nodeId),
           });
           break;
       }
@@ -179,7 +178,7 @@ export function TreeActions({
         icon: 'ArrowUp',
         enabled: true,
         shortcut: '↑',
-        handler: (nodeId) => onAction(QuickActionType.MOVE_UP, nodeId),
+        handler: nodeId => onAction(QuickActionType.MOVE_UP, nodeId),
       },
       {
         type: QuickActionType.MOVE_DOWN,
@@ -187,7 +186,7 @@ export function TreeActions({
         icon: 'ArrowDown',
         enabled: true,
         shortcut: '↓',
-        handler: (nodeId) => onAction(QuickActionType.MOVE_DOWN, nodeId),
+        handler: nodeId => onAction(QuickActionType.MOVE_DOWN, nodeId),
       }
     );
 
@@ -199,7 +198,7 @@ export function TreeActions({
         icon: 'ArrowLeft',
         enabled: true,
         shortcut: '←',
-        handler: (nodeId) => onAction(QuickActionType.PROMOTE, nodeId),
+        handler: nodeId => onAction(QuickActionType.PROMOTE, nodeId),
       });
     }
 
@@ -209,7 +208,7 @@ export function TreeActions({
       icon: 'ArrowRight',
       enabled: true,
       shortcut: '→',
-      handler: (nodeId) => onAction(QuickActionType.DEMOTE, nodeId),
+      handler: nodeId => onAction(QuickActionType.DEMOTE, nodeId),
     });
 
     // Utility actions
@@ -220,14 +219,15 @@ export function TreeActions({
         icon: 'Copy',
         enabled: true,
         shortcut: 'Ctrl+D',
-        handler: (nodeId) => onAction(QuickActionType.DUPLICATE, nodeId),
+        handler: nodeId => onAction(QuickActionType.DUPLICATE, nodeId),
       },
       {
         type: QuickActionType.SPLIT,
         label: 'Split Node',
         icon: 'Split',
-        enabled: node.type === TreeNodeType.TASK || node.type === TreeNodeType.GOAL,
-        handler: (nodeId) => onAction(QuickActionType.SPLIT, nodeId),
+        enabled:
+          node.type === TreeNodeType.TASK || node.type === TreeNodeType.GOAL,
+        handler: nodeId => onAction(QuickActionType.SPLIT, nodeId),
       }
     );
 
@@ -238,18 +238,21 @@ export function TreeActions({
         label: 'Convert to Sub-Goal',
         icon: 'Target',
         enabled: true,
-        handler: (nodeId) => onAction(QuickActionType.CONVERT_TO_SUBGOAL, nodeId),
+        handler: nodeId => onAction(QuickActionType.CONVERT_TO_SUBGOAL, nodeId),
       });
     }
 
     // Metric actions (for goals and milestones)
-    if (node.type === TreeNodeType.GOAL || node.type === TreeNodeType.MILESTONE) {
+    if (
+      node.type === TreeNodeType.GOAL ||
+      node.type === TreeNodeType.MILESTONE
+    ) {
       baseActions.push({
         type: QuickActionType.ADD_METRIC,
         label: 'Add Metric',
         icon: 'BarChart',
         enabled: true,
-        handler: (nodeId) => onAction(QuickActionType.ADD_METRIC, nodeId),
+        handler: nodeId => onAction(QuickActionType.ADD_METRIC, nodeId),
       });
     }
 
@@ -261,7 +264,7 @@ export function TreeActions({
         icon: 'Check',
         enabled: true,
         shortcut: 'C',
-        handler: (nodeId) => onAction(QuickActionType.MARK_COMPLETE, nodeId),
+        handler: nodeId => onAction(QuickActionType.MARK_COMPLETE, nodeId),
       });
     }
 
@@ -272,7 +275,7 @@ export function TreeActions({
         label: 'Archive',
         icon: 'Archive',
         enabled: true,
-        handler: (nodeId) => onAction(QuickActionType.ARCHIVE, nodeId),
+        handler: nodeId => onAction(QuickActionType.ARCHIVE, nodeId),
       },
       {
         type: QuickActionType.DELETE,
@@ -318,11 +321,21 @@ export function TreeActions({
 
   const groupedActions = useMemo(() => {
     const groups = {
-      primary: contextActions.filter(a => ['edit', 'add_child'].includes(a.type)),
-      movement: contextActions.filter(a => ['move_up', 'move_down', 'promote', 'demote'].includes(a.type)),
-      utility: contextActions.filter(a => ['duplicate', 'split', 'convert_to_subgoal', 'add_metric'].includes(a.type)),
+      primary: contextActions.filter(a =>
+        ['edit', 'add_child'].includes(a.type)
+      ),
+      movement: contextActions.filter(a =>
+        ['move_up', 'move_down', 'promote', 'demote'].includes(a.type)
+      ),
+      utility: contextActions.filter(a =>
+        ['duplicate', 'split', 'convert_to_subgoal', 'add_metric'].includes(
+          a.type
+        )
+      ),
       status: contextActions.filter(a => ['mark_complete'].includes(a.type)),
-      destructive: contextActions.filter(a => ['archive', 'delete'].includes(a.type)),
+      destructive: contextActions.filter(a =>
+        ['archive', 'delete'].includes(a.type)
+      ),
     };
 
     return groups;
@@ -339,13 +352,13 @@ export function TreeActions({
       <DropdownMenuItem
         key={action.type}
         disabled={!action.enabled}
-        onClick={(e) => handleActionClick(action, e)}
+        onClick={e => handleActionClick(action, e)}
         className={cn(
           'flex items-center gap-2 px-3 py-2 text-sm',
           action.type === 'delete' && 'text-destructive focus:text-destructive'
         )}
       >
-        <Icon className="w-4 h-4" />
+        <Icon className="h-4 w-4" />
         <span>{action.label}</span>
         {action.shortcut && (
           <DropdownMenuShortcut className="ml-auto">
@@ -361,7 +374,9 @@ export function TreeActions({
   // =============================================================================
 
   const renderAddSubmenu = () => {
-    const addActions = groupedActions.primary.filter(a => a.type === 'add_child');
+    const addActions = groupedActions.primary.filter(
+      a => a.type === 'add_child'
+    );
 
     if (addActions.length <= 1) {
       return addActions.map(renderActionItem);
@@ -370,19 +385,19 @@ export function TreeActions({
     return (
       <DropdownMenuSub>
         <DropdownMenuSubTrigger className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
+          <Plus className="h-4 w-4" />
           <span>Add</span>
         </DropdownMenuSubTrigger>
         <DropdownMenuSubContent>
-          {addActions.map((action) => {
+          {addActions.map(action => {
             const Icon = ACTION_ICONS[action.type] || Plus;
             return (
               <DropdownMenuItem
                 key={action.label}
-                onClick={(e) => handleActionClick(action, e)}
+                onClick={e => handleActionClick(action, e)}
                 className="flex items-center gap-2"
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="h-4 w-4" />
                 <span>{action.label}</span>
               </DropdownMenuItem>
             );
@@ -428,7 +443,9 @@ export function TreeActions({
           {/* Utility Actions */}
           {groupedActions.utility.length > 0 && (
             <>
-              {groupedActions.utility.filter(a => a.enabled).map(renderActionItem)}
+              {groupedActions.utility
+                .filter(a => a.enabled)
+                .map(renderActionItem)}
               <DropdownMenuSeparator />
             </>
           )}
@@ -454,15 +471,18 @@ export function TreeActions({
             <AlertDialogDescription>
               Are you sure you want to delete &ldquo;{node.title}&rdquo;?
               {node.children.length > 0 && (
-                <span className="block mt-2 font-medium text-destructive">
-                  This will also delete all {node.children.length} child node(s).
+                <span className="text-destructive mt-2 block font-medium">
+                  This will also delete all {node.children.length} child
+                  node(s).
                 </span>
               )}
               This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCancel}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleDeleteCancel}>
+              Cancel
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteConfirm}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"

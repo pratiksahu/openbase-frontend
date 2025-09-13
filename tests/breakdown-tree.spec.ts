@@ -8,7 +8,7 @@
  * @version 1.0.0
  */
 
-import { test, expect, type Page, type Locator } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 // =============================================================================
 // Test Configuration
@@ -16,7 +16,8 @@ import { test, expect, type Page, type Locator } from '@playwright/test';
 
 test.describe('BreakdownTree Component', () => {
   // URL where the BreakdownTree component is mounted for testing
-  const COMPONENT_URL = '/storybook/?path=/story/components-breakdowntree--default';
+  const COMPONENT_URL =
+    '/storybook/?path=/story/components-breakdowntree--default';
 
   test.beforeEach(async ({ page }) => {
     // Navigate to the Storybook story
@@ -41,7 +42,9 @@ test.describe('BreakdownTree Component', () => {
       await expect(treeItems).toHaveCount(3); // Goal, task, milestone
 
       // Check if expand/collapse buttons are present for parent nodes
-      const expandButtons = page.locator('button[aria-label*="Expand"], button[aria-label*="Collapse"]');
+      const expandButtons = page.locator(
+        'button[aria-label*="Expand"], button[aria-label*="Collapse"]'
+      );
       await expect(expandButtons.first()).toBeVisible();
     });
 
@@ -71,8 +74,12 @@ test.describe('BreakdownTree Component', () => {
       await expect(filterButton).toBeVisible();
 
       // Check tree controls
-      await expect(page.getByRole('button', { name: /expand all/i })).toBeVisible();
-      await expect(page.getByRole('button', { name: /collapse all/i })).toBeVisible();
+      await expect(
+        page.getByRole('button', { name: /expand all/i })
+      ).toBeVisible();
+      await expect(
+        page.getByRole('button', { name: /collapse all/i })
+      ).toBeVisible();
     });
   });
 
@@ -82,15 +89,23 @@ test.describe('BreakdownTree Component', () => {
 
   test.describe('Node Interactions', () => {
     test('should expand and collapse nodes', async ({ page }) => {
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
-      const expandButton = goalNode.locator('button[aria-label*="Expand"], button[aria-label*="Collapse"]').first();
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
+      const expandButton = goalNode
+        .locator('button[aria-label*="Expand"], button[aria-label*="Collapse"]')
+        .first();
 
       // Initially expanded - collapse it
       await expandButton.click();
       await expect(goalNode).toHaveAttribute('aria-expanded', 'false');
 
       // Child nodes should be hidden
-      const taskNode = page.getByText('Test Task').locator('..').locator('[role="treeitem"]');
+      const taskNode = page
+        .getByText('Test Task')
+        .locator('..')
+        .locator('[role="treeitem"]');
       await expect(taskNode).not.toBeVisible();
 
       // Expand again
@@ -102,7 +117,10 @@ test.describe('BreakdownTree Component', () => {
     });
 
     test('should select nodes on click', async ({ page }) => {
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       // Click to select
       await goalNode.click();
@@ -118,8 +136,14 @@ test.describe('BreakdownTree Component', () => {
       // First switch to multi-selection mode (if needed)
       // This might require changing the story controls
 
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
-      const taskNode = page.getByText('Test Task').locator('..').locator('[role="treeitem"]');
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
+      const taskNode = page
+        .getByText('Test Task')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       // Select first node
       await goalNode.click();
@@ -134,13 +158,18 @@ test.describe('BreakdownTree Component', () => {
     });
 
     test('should show action menu on hover and click', async ({ page }) => {
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       // Hover to show action button
       await goalNode.hover();
 
       // Find and click the action menu button
-      const actionButton = goalNode.locator('button[aria-label*="More actions"], button:has-text("⋯")');
+      const actionButton = goalNode.locator(
+        'button[aria-label*="More actions"], button:has-text("⋯")'
+      );
       await expect(actionButton).toBeVisible();
 
       await actionButton.click();
@@ -234,7 +263,10 @@ test.describe('BreakdownTree Component', () => {
       const count = await expandableNodes.count();
 
       for (let i = 0; i < count; i++) {
-        await expect(expandableNodes.nth(i)).toHaveAttribute('aria-expanded', 'true');
+        await expect(expandableNodes.nth(i)).toHaveAttribute(
+          'aria-expanded',
+          'true'
+        );
       }
     });
 
@@ -243,7 +275,9 @@ test.describe('BreakdownTree Component', () => {
       await page.getByRole('button', { name: /expand all/i }).click();
 
       // Then collapse all
-      const collapseAllButton = page.getByRole('button', { name: /collapse all/i });
+      const collapseAllButton = page.getByRole('button', {
+        name: /collapse all/i,
+      });
       await collapseAllButton.click();
 
       // All expandable nodes should be collapsed
@@ -251,7 +285,10 @@ test.describe('BreakdownTree Component', () => {
       const count = await expandableNodes.count();
 
       for (let i = 0; i < count; i++) {
-        await expect(expandableNodes.nth(i)).toHaveAttribute('aria-expanded', 'false');
+        await expect(expandableNodes.nth(i)).toHaveAttribute(
+          'aria-expanded',
+          'false'
+        );
       }
     });
 
@@ -288,7 +325,10 @@ test.describe('BreakdownTree Component', () => {
     });
 
     test('should expand/collapse with arrow keys', async ({ page }) => {
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       // Focus the goal node
       await goalNode.focus();
@@ -303,7 +343,10 @@ test.describe('BreakdownTree Component', () => {
     });
 
     test('should select with Enter and Space', async ({ page }) => {
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       // Focus and press Enter
       await goalNode.focus();
@@ -316,7 +359,9 @@ test.describe('BreakdownTree Component', () => {
       await page.keyboard.press('Space');
     });
 
-    test('should navigate to first/last nodes with Home/End', async ({ page }) => {
+    test('should navigate to first/last nodes with Home/End', async ({
+      page,
+    }) => {
       const firstNode = page.locator('[role="treeitem"]').first();
       const lastNode = page.locator('[role="treeitem"]').last();
 
@@ -342,8 +387,14 @@ test.describe('BreakdownTree Component', () => {
   test.describe('Drag and Drop', () => {
     test('should support drag and drop reordering', async ({ page }) => {
       // Enable drag and drop if not already enabled
-      const taskNode = page.getByText('Test Task').locator('..').locator('[role="treeitem"]');
-      const milestoneNode = page.getByText('Test Milestone').locator('..').locator('[role="treeitem"]');
+      const taskNode = page
+        .getByText('Test Task')
+        .locator('..')
+        .locator('[role="treeitem"]');
+      const milestoneNode = page
+        .getByText('Test Milestone')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       // Get initial positions
       const taskBox = await taskNode.boundingBox();
@@ -353,7 +404,10 @@ test.describe('BreakdownTree Component', () => {
         // Drag task below milestone
         await taskNode.hover();
         await page.mouse.down();
-        await page.mouse.move(milestoneBox.x, milestoneBox.y + milestoneBox.height);
+        await page.mouse.move(
+          milestoneBox.x,
+          milestoneBox.y + milestoneBox.height
+        );
         await page.mouse.up();
 
         // Wait for the operation to complete
@@ -361,8 +415,14 @@ test.describe('BreakdownTree Component', () => {
 
         // Verify the order changed (task should now be after milestone)
         const treeItems = page.locator('[role="treeitem"]');
-        const taskIndex = await treeItems.locator(':has-text("Test Task")').first().boundingBox();
-        const milestoneIndex = await treeItems.locator(':has-text("Test Milestone")').first().boundingBox();
+        const taskIndex = await treeItems
+          .locator(':has-text("Test Task")')
+          .first()
+          .boundingBox();
+        const milestoneIndex = await treeItems
+          .locator(':has-text("Test Milestone")')
+          .first()
+          .boundingBox();
 
         if (taskIndex && milestoneIndex) {
           expect(taskIndex.y).toBeGreaterThan(milestoneIndex.y);
@@ -371,14 +431,19 @@ test.describe('BreakdownTree Component', () => {
     });
 
     test('should show drag feedback during operation', async ({ page }) => {
-      const taskNode = page.getByText('Test Task').locator('..').locator('[role="treeitem"]');
+      const taskNode = page
+        .getByText('Test Task')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       // Start drag operation
       await taskNode.hover();
       await page.mouse.down();
 
       // Should show drag overlay or visual feedback
-      await expect(page.locator('[class*="drag"], [data-dragging="true"]')).toBeVisible();
+      await expect(
+        page.locator('[class*="drag"], [data-dragging="true"]')
+      ).toBeVisible();
 
       // End drag
       await page.mouse.up();
@@ -387,8 +452,14 @@ test.describe('BreakdownTree Component', () => {
     test('should validate drop targets', async ({ page }) => {
       // Try to drag a node to an invalid location
       // This test would depend on the specific validation rules
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
-      const taskNode = page.getByText('Test Task').locator('..').locator('[role="treeitem"]');
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
+      const taskNode = page
+        .getByText('Test Task')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       await goalNode.hover();
       await page.mouse.down();
@@ -397,7 +468,9 @@ test.describe('BreakdownTree Component', () => {
       await taskNode.hover();
 
       // Should show invalid drop indicator
-      await expect(page.locator('[class*="invalid"], [data-valid="false"]')).toBeVisible();
+      await expect(
+        page.locator('[class*="invalid"], [data-valid="false"]')
+      ).toBeVisible();
 
       await page.mouse.up();
     });
@@ -438,12 +511,19 @@ test.describe('BreakdownTree Component', () => {
       await expect(otherItems).toHaveAttribute('tabindex', '-1');
     });
 
-    test('should announce state changes to screen readers', async ({ page }) => {
+    test('should announce state changes to screen readers', async ({
+      page,
+    }) => {
       // This test checks for live regions and announcements
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
 
       // Expand node
-      const expandButton = goalNode.locator('button[aria-label*="Expand"]').first();
+      const expandButton = goalNode
+        .locator('button[aria-label*="Expand"]')
+        .first();
       await expandButton.click();
 
       // Should update aria-expanded
@@ -478,7 +558,9 @@ test.describe('BreakdownTree Component', () => {
   test.describe('Performance', () => {
     test('should handle large datasets efficiently', async ({ page }) => {
       // Navigate to large dataset story
-      await page.goto('/storybook/?path=/story/components-breakdowntree--large-dataset');
+      await page.goto(
+        '/storybook/?path=/story/components-breakdowntree--large-dataset'
+      );
 
       // Wait for component to load
       await page.waitForSelector('[role="tree"]', { timeout: 15000 });
@@ -496,14 +578,21 @@ test.describe('BreakdownTree Component', () => {
     });
 
     test('should maintain smooth animations', async ({ page }) => {
-      const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
-      const expandButton = goalNode.locator('button[aria-label*="Expand"], button[aria-label*="Collapse"]').first();
+      const goalNode = page
+        .getByText('Test Goal')
+        .locator('..')
+        .locator('[role="treeitem"]');
+      const expandButton = goalNode
+        .locator('button[aria-label*="Expand"], button[aria-label*="Collapse"]')
+        .first();
 
       // Measure animation performance
       const startTime = Date.now();
 
       await expandButton.click();
-      await page.waitForSelector('[role="treeitem"]:has-text("Test Task")', { state: 'visible' });
+      await page.waitForSelector('[role="treeitem"]:has-text("Test Task")', {
+        state: 'visible',
+      });
 
       const endTime = Date.now();
       const duration = endTime - startTime;
@@ -520,7 +609,9 @@ test.describe('BreakdownTree Component', () => {
   test.describe('Error Handling', () => {
     test('should display error states gracefully', async ({ page }) => {
       // Navigate to error state story
-      await page.goto('/storybook/?path=/story/components-breakdowntree--error-state');
+      await page.goto(
+        '/storybook/?path=/story/components-breakdowntree--error-state'
+      );
 
       // Should show error message
       await expect(page.getByText(/failed to load tree data/i)).toBeVisible();
@@ -531,7 +622,9 @@ test.describe('BreakdownTree Component', () => {
 
     test('should handle empty states', async ({ page }) => {
       // Navigate to empty state story
-      await page.goto('/storybook/?path=/story/components-breakdowntree--empty-state');
+      await page.goto(
+        '/storybook/?path=/story/components-breakdowntree--empty-state'
+      );
 
       // Should show empty state message
       await expect(page.getByText(/no nodes to display/i)).toBeVisible();
@@ -545,18 +638,22 @@ test.describe('BreakdownTree Component', () => {
       // Implementation depends on how the component handles async operations
 
       // Simulate network failure during operation
-      await page.route('**/api/**', (route) => {
+      await page.route('**/api/**', route => {
         route.abort();
       });
 
       // Try to perform an operation that requires network
-      const actionButton = page.locator('button[aria-label*="More actions"]').first();
+      const actionButton = page
+        .locator('button[aria-label*="More actions"]')
+        .first();
       if (await actionButton.isVisible()) {
         await actionButton.click();
         await page.getByText('Delete').click();
 
         // Should show error feedback
-        await expect(page.locator('[class*="error"], [role="alert"]')).toBeVisible();
+        await expect(
+          page.locator('[class*="error"], [role="alert"]')
+        ).toBeVisible();
       }
     });
   });
@@ -566,17 +663,26 @@ test.describe('BreakdownTree Component', () => {
   // ===========================================================================
 
   test.describe('Cross-browser Compatibility', () => {
-    ['chromium', 'firefox', 'webkit'].forEach((browserName) => {
-      test(`should work correctly in ${browserName}`, async ({ page, browserName: currentBrowser }) => {
+    ['chromium', 'firefox', 'webkit'].forEach(browserName => {
+      test(`should work correctly in ${browserName}`, async ({
+        page,
+        browserName: currentBrowser,
+      }) => {
         // Skip if not the target browser
-        test.skip(currentBrowser !== browserName, `Skipping ${browserName} test`);
+        test.skip(
+          currentBrowser !== browserName,
+          `Skipping ${browserName} test`
+        );
 
         // Basic functionality test
         await expect(page.locator('[role="tree"]')).toBeVisible();
         await expect(page.getByText('Test Goal')).toBeVisible();
 
         // Interactive functionality
-        const goalNode = page.getByText('Test Goal').locator('..').locator('[role="treeitem"]');
+        const goalNode = page
+          .getByText('Test Goal')
+          .locator('..')
+          .locator('[role="treeitem"]');
         await goalNode.click();
         await expect(goalNode).toHaveAttribute('aria-selected', 'true');
       });

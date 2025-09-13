@@ -9,15 +9,18 @@
  */
 
 import { describe, it, expect, beforeEach } from '@jest/globals';
+
 import {
-  treeOperations,
-  addNode,
-  removeNode,
-  moveNode,
-  updateNode,
-  duplicateNode,
-} from '../utils/tree-operations';
-import { buildTree } from '../utils/tree-utils';
+  SmartGoal,
+  Task,
+  GoalCategory,
+  GoalStatus,
+  GoalPriority,
+  MetricType,
+  Frequency,
+  TaskStatus,
+} from '@/types/smart-goals.types';
+
 import {
   type FlatTree,
   type TreeNodeCreate,
@@ -26,9 +29,13 @@ import {
   TreeNodeType,
 } from '../BreakdownTree.types';
 import {
-  SmartGoal,
-  Task,
-} from '@/types/smart-goals.types';
+  addNode,
+  removeNode,
+  moveNode,
+  updateNode,
+  duplicateNode,
+} from '../utils/tree-operations';
+import { buildTree } from '../utils/tree-utils';
 
 // =============================================================================
 // Mock Data
@@ -44,15 +51,15 @@ const mockGoal: SmartGoal = {
   description: 'A test goal',
   specificObjective: 'Test objective',
   successCriteria: ['Criterion 1'],
-  category: 'professional',
+  category: GoalCategory.PROFESSIONAL,
   tags: ['test'],
   measurable: {
-    metricType: 'number',
+    metricType: MetricType.NUMBER,
     targetValue: 100,
     currentValue: 50,
     unit: '%',
     higherIsBetter: true,
-    measurementFrequency: 'weekly',
+    measurementFrequency: Frequency.WEEKLY,
   },
   achievability: {
     score: 0.8,
@@ -82,12 +89,12 @@ const mockGoal: SmartGoal = {
     estimatedDuration: 30,
     isRecurring: false,
   },
-  status: 'active',
-  priority: 'high',
+  status: GoalStatus.ACTIVE,
+  priority: GoalPriority.HIGH,
   progress: 50,
   ownerId: 'user-1',
   collaborators: [],
-  parentGoalId: null,
+  parentGoalId: undefined,
   childGoalIds: [],
   tasks: [],
   milestones: [],
@@ -107,8 +114,8 @@ const mockTask: Task = {
   updatedBy: 'user-1',
   title: 'Test Task',
   description: 'A test task',
-  status: 'todo',
-  priority: 'medium',
+  status: TaskStatus.TODO,
+  priority: GoalPriority.MEDIUM,
   progress: 25,
   subtasks: [],
   checklist: [],
@@ -181,7 +188,9 @@ describe('Tree Operations', () => {
       const result = addNode(tree, nodeCreate);
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Parent node with ID non-existent not found');
+      expect(result.error).toContain(
+        'Parent node with ID non-existent not found'
+      );
     });
 
     it('should fail when parent cannot have children', () => {
@@ -196,8 +205,9 @@ describe('Tree Operations', () => {
       const outcomeResult = addNode(tree, outcomeCreate);
       expect(outcomeResult.success).toBe(true);
 
-      const outcomeNode = Array.from(outcomeResult.tree!.nodes.values())
-        .find(n => n.type === TreeNodeType.OUTCOME);
+      const outcomeNode = Array.from(outcomeResult.tree!.nodes.values()).find(
+        n => n.type === TreeNodeType.OUTCOME
+      );
 
       // Now try to add a child to the outcome (should fail)
       const childCreate: TreeNodeCreate = {
@@ -251,8 +261,9 @@ describe('Tree Operations', () => {
       expect(secondResult.success).toBe(true);
 
       const parent = secondResult.tree!.nodes.get('goal-1');
-      const firstChildNode = Array.from(secondResult.tree!.nodes.values())
-        .find(n => n.title === 'Second Task');
+      const firstChildNode = Array.from(secondResult.tree!.nodes.values()).find(
+        n => n.title === 'Second Task'
+      );
 
       expect(parent?.children[0]).toBe(firstChildNode?.id);
     });
@@ -275,8 +286,9 @@ describe('Tree Operations', () => {
       const addResult = addNode(tree, childCreate);
       expect(addResult.success).toBe(true);
 
-      const childNode = Array.from(addResult.tree!.nodes.values())
-        .find(n => n.title === 'Child Task');
+      const childNode = Array.from(addResult.tree!.nodes.values()).find(
+        n => n.title === 'Child Task'
+      );
 
       // Now remove the parent task (should remove child too)
       const removeResult = removeNode(addResult.tree!, 'task-1');
@@ -328,8 +340,9 @@ describe('Tree Operations', () => {
       const addResult = addNode(tree, newGoalCreate);
       expect(addResult.success).toBe(true);
 
-      const newGoalNode = Array.from(addResult.tree!.nodes.values())
-        .find(n => n.title === 'New Goal');
+      const newGoalNode = Array.from(addResult.tree!.nodes.values()).find(
+        n => n.title === 'New Goal'
+      );
 
       // Move task from goal-1 to new goal
       const moveOperation: TreeNodeMove = {
@@ -432,8 +445,9 @@ describe('Tree Operations', () => {
       const addResult = addNode(tree, outcomeCreate);
       expect(addResult.success).toBe(true);
 
-      const outcomeNode = Array.from(addResult.tree!.nodes.values())
-        .find(n => n.type === TreeNodeType.OUTCOME);
+      const outcomeNode = Array.from(addResult.tree!.nodes.values()).find(
+        n => n.type === TreeNodeType.OUTCOME
+      );
 
       // Try to move task under outcome (invalid relationship)
       const moveOperation: TreeNodeMove = {
@@ -487,7 +501,9 @@ describe('Tree Operations', () => {
 
       expect(result.success).toBe(true);
       const updatedNode = result.tree!.nodes.get('task-1');
-      expect(updatedNode?.updatedAt.getTime()).toBeGreaterThanOrEqual(beforeUpdate.getTime());
+      expect(updatedNode?.updatedAt.getTime()).toBeGreaterThanOrEqual(
+        beforeUpdate.getTime()
+      );
     });
 
     it('should fail when node does not exist', () => {
@@ -533,8 +549,9 @@ describe('Tree Operations', () => {
       expect(result.tree!.count).toBe(tree.count + 1);
 
       // Find the duplicated node
-      const duplicatedNode = Array.from(result.tree!.nodes.values())
-        .find(n => n.title === 'Test Task (Copy)');
+      const duplicatedNode = Array.from(result.tree!.nodes.values()).find(
+        n => n.title === 'Test Task (Copy)'
+      );
 
       expect(duplicatedNode).toBeDefined();
       expect(duplicatedNode?.parentId).toBe('goal-1'); // Same parent as original
@@ -565,8 +582,9 @@ describe('Tree Operations', () => {
       expect(result.success).toBe(true);
       const parent = result.tree!.nodes.get('goal-1');
       const originalIndex = parent?.children.indexOf('task-1');
-      const duplicatedNode = Array.from(result.tree!.nodes.values())
-        .find(n => n.title === 'Test Task (Copy)');
+      const duplicatedNode = Array.from(result.tree!.nodes.values()).find(
+        n => n.title === 'Test Task (Copy)'
+      );
 
       expect(parent?.children[originalIndex! + 1]).toBe(duplicatedNode?.id);
     });
@@ -587,8 +605,9 @@ describe('Tree Operations', () => {
       const result = duplicateNode(tree, 'task-1');
 
       expect(result.success).toBe(true);
-      const duplicatedNode = Array.from(result.tree!.nodes.values())
-        .find(n => n.title === 'Test Task (Copy)');
+      const duplicatedNode = Array.from(result.tree!.nodes.values()).find(
+        n => n.title === 'Test Task (Copy)'
+      );
 
       expect(duplicatedNode?.isSelected).toBe(false);
     });
