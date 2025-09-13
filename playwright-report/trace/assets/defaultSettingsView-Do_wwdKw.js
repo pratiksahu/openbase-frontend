@@ -21870,10 +21870,12 @@ class gy {
     );
   }
   strictModeViolationError(e, n) {
-    const r = n.slice(0, 10).map(l => ({
-        preview: this.previewNode(l),
-        selector: this.generateSelectorSimple(l),
-      })),
+    const r = n
+        .slice(0, 10)
+        .map(l => ({
+          preview: this.previewNode(l),
+          selector: this.generateSelectorSimple(l),
+        })),
       o = r.map(
         (l, c) => `
     ${c + 1}) ${l.preview} aka ${Lr(this._sdkLanguage, l.selector)}`

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Roboto_Mono } from 'next/font/google';
 
+import { Navigation } from '@/components/layout/Navigation';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { PWAStatus } from '@/components/pwa/PWAStatus';
@@ -21,19 +22,19 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Modern Next.js App',
-    template: '%s | Modern Next.js App',
+    default: 'OpenBase V2 - Modern Next.js App',
+    template: '%s | OpenBase V2',
   },
   description:
     'Production-ready Next.js application with TypeScript and Tailwind CSS',
-  keywords: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
+  keywords: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'OpenBase'],
   authors: [{ name: 'Your Name' }],
   creator: 'Your Company',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Modern Next.js App',
+    title: 'OpenBase V2',
   },
   formatDetection: {
     telephone: false,
@@ -42,9 +43,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://yoursite.com',
-    title: 'Modern Next.js App',
+    title: 'OpenBase V2',
     description: 'Production-ready Next.js application',
-    siteName: 'Modern Next.js App',
+    siteName: 'OpenBase V2',
     images: [
       {
         url: 'https://yoursite.com/og-image.jpg',
@@ -140,6 +141,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Navigation />
           {children}
           <Toaster />
           <InstallPrompt />

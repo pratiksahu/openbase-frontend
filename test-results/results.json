@@ -155,49 +155,69 @@
       "specs": [],
       "suites": [
         {
-          "title": "Form Testing",
+          "title": "Theme Switching",
           "file": "example.spec.ts",
-          "line": 73,
+          "line": 24,
           "column": 6,
           "specs": [
             {
-              "title": "should handle form interactions on test-forms page",
+              "title": "should toggle between light and dark themes",
               "ok": true,
               "tags": [],
               "tests": [
                 {
                   "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Theme toggle not found on page",
+                      "location": {
+                        "file": "/Users/kumarpratik/Sites/ai/openbase-v2/e2e/example.spec.ts",
+                        "line": 33,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 9,
+                      "workerIndex": 17,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1336,
+                      "status": "skipped",
+                      "duration": 1584,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-09-12T20:12:40.580Z",
-                      "annotations": [],
+                      "startTime": "2025-09-13T09:09:58.542Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "Theme toggle not found on page",
+                          "location": {
+                            "file": "/Users/kumarpratik/Sites/ai/openbase-v2/e2e/example.spec.ts",
+                            "line": 33,
+                            "column": 12
+                          }
+                        }
+                      ],
                       "attachments": [
                         {
                           "name": "trace",
                           "contentType": "application/zip",
-                          "path": "/Users/kumarpratik/Sites/ai/openbase-v2/test-results/example-Form-Testing-shoul-6e37e-ractions-on-test-forms-page-chromium/trace.zip"
+                          "path": "/Users/kumarpratik/Sites/ai/openbase-v2/test-results/example-Theme-Switching-sh-6457c-tween-light-and-dark-themes-chromium/trace.zip"
                         }
                       ]
                     }
                   ],
-                  "status": "expected"
+                  "status": "skipped"
                 }
               ],
-              "id": "a30a6eba6312f6b87ea5-a960e2dd7de2345fef90",
+              "id": "a30a6eba6312f6b87ea5-e2a678d8b9104f69f0a7",
               "file": "example.spec.ts",
-              "line": 74,
+              "line": 25,
               "column": 7
             }
           ]
@@ -207,10 +227,10 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-09-12T20:12:39.669Z",
-    "duration": 2631.453999999998,
-    "expected": 1,
-    "skipped": 0,
+    "startTime": "2025-09-13T09:09:57.696Z",
+    "duration": 2779.84300000011,
+    "expected": 0,
+    "skipped": 1,
     "unexpected": 0,
     "flaky": 0
   }

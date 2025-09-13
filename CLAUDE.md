@@ -25,6 +25,7 @@ This is a modern Next.js 15 application using App Router, TypeScript, shadcn/ui,
 **IMPORTANT: For detailed setup instructions and development workflow, refer to [README.md](./README.md)**
 
 The README.md contains comprehensive information about:
+
 - Installation and setup
 - Starting/stopping development servers
 - Running tests (Playwright, unit tests)
@@ -32,12 +33,26 @@ The README.md contains comprehensive information about:
 - Port configuration
 - Development workflow for running multiple tools
 
+## 🚨 IMPORTANT: Port Configuration
+
+**ALWAYS USE PORT 3001 FOR THE DEVELOPMENT SERVER**
+
+The development server must run on port 3001 to ensure compatibility with Playwright tests and avoid port conflicts.
+
+```bash
+# ALWAYS start the dev server with:
+PORT=3001 npm run dev
+
+# DO NOT use:
+npm run dev  # This may use port 3000 which will conflict
+```
+
 ### Quick Reference
 
 ```bash
 # Start development (see README.md for full workflow)
-npm run dev        # Start Next.js dev server
-npm run storybook  # Start Storybook (separate terminal)
+PORT=3001 npm run dev  # Start Next.js dev server on port 3001 (ALWAYS USE THIS)
+npm run storybook      # Start Storybook on port 6006 (separate terminal)
 npx playwright test --ui  # Run tests in UI mode (separate terminal)
 
 # Code quality
@@ -420,6 +435,7 @@ Before committing code, ensure:
 **Note**: The pre-push hook has been removed to simplify the development workflow. While pre-commit hooks still run for code quality, pushes are no longer blocked by automated checks. This allows for more flexibility when pushing documentation changes or work-in-progress code.
 
 However, it's still recommended to manually run the quality checks before pushing:
+
 ```bash
 npm run lint
 npm run typecheck

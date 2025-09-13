@@ -11,10 +11,9 @@ import { Section } from '@/components/layout/Section';
 import { Button } from '@/components/ui/button';
 import { OptimizedImage } from '@/components/ui/optimized-image';
 
-
 export default function HomePage() {
   return (
-    <>
+    <main>
       {/* Hero Section */}
       <Section spacing="xl" data-testid="hero-section">
         <Container>
@@ -153,7 +152,7 @@ export default function HomePage() {
           </div>
         </Container>
       </Section>
-    </>
+    </main>
   );
 }
 
