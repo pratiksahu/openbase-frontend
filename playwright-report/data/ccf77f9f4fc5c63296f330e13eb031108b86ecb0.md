@@ -1,0 +1,265 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e5]:
+        - link "OpenBase V2" [ref=e7]:
+          - /url: /
+        - generic [ref=e8]:
+          - generic [ref=e10]:
+            - link "Home" [ref=e11]:
+              - /url: /
+            - link "Features" [ref=e12]:
+              - /url: /features
+            - link "Pricing" [ref=e13]:
+              - /url: /pricing
+            - link "About" [ref=e14]:
+              - /url: /about
+            - link "Contact" [ref=e15]:
+              - /url: /contact
+          - button "Toggle theme" [ref=e16]:
+            - img
+            - generic [ref=e17]: Toggle theme
+    - main [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - heading "Form Testing Page" [level=1] [ref=e21]
+          - paragraph [ref=e22]: Test and demonstrate form components with React Hook Form and Zod validation
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - generic [ref=e25]:
+              - generic [ref=e26]: Contact Form
+              - generic [ref=e27]: Complete contact form with validation, API integration, and success/error states
+            - group [ref=e31]:
+              - generic [ref=e32]:
+                - generic [ref=e33]:
+                  - generic [ref=e34]:
+                    - text: Name
+                    - generic [ref=e35]: "*"
+                  - textbox "Your full name" [active] [ref=e37]
+                - generic [ref=e38]:
+                  - generic [ref=e39]:
+                    - text: Email
+                    - generic [ref=e40]: "*"
+                  - textbox "your.email@example.com" [ref=e42]
+              - generic [ref=e43]:
+                - generic [ref=e44]: Phone (optional)
+                - textbox "+1 (555) 123-4567" [ref=e46]
+              - generic [ref=e47]:
+                - generic [ref=e48]:
+                  - text: Subject
+                  - generic [ref=e49]: "*"
+                - textbox "How can we help you?" [ref=e51]
+              - generic [ref=e52]:
+                - generic [ref=e53]:
+                  - text: Message
+                  - generic [ref=e54]: "*"
+                - textbox "Tell us more about your inquiry..." [ref=e56]
+              - generic [ref=e59]:
+                - generic [ref=e60]:
+                  - checkbox "Subscribe to our newsletter" [ref=e61]
+                  - img
+                - generic [ref=e62]:
+                  - generic [ref=e63] [cursor=pointer]: Subscribe to our newsletter
+                  - paragraph [ref=e64]: Get updates about new features and improvements
+              - button "Send Message" [ref=e65]
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - generic [ref=e68]: Form Component Demo
+              - generic [ref=e69]: Test all form input types with validation
+            - group [ref=e72]:
+              - generic [ref=e73]:
+                - generic [ref=e74]:
+                  - text: Text Input
+                  - generic [ref=e75]: "*"
+                - textbox "Enter some text" [ref=e77]
+              - generic [ref=e78]:
+                - generic [ref=e79]:
+                  - text: Email Input
+                  - generic [ref=e80]: "*"
+                - textbox "email@example.com" [ref=e82]
+              - generic [ref=e83]:
+                - generic [ref=e84]:
+                  - text: Select Dropdown
+                  - generic [ref=e85]: "*"
+                - generic [ref=e87]:
+                  - combobox [ref=e88]:
+                    - option "Choose an option" [disabled] [selected]
+                    - option "Option 1"
+                    - option "Option 2"
+                    - option "Option 3"
+                    - option "Option 4" [disabled]
+                  - img
+              - generic [ref=e89]:
+                - generic [ref=e90]:
+                  - text: Textarea
+                  - generic [ref=e91]: "*"
+                - paragraph [ref=e92]: Auto-resizing textarea with minimum 10 characters
+                - textbox "Enter your message here..." [ref=e94]
+              - generic [ref=e97]:
+                - generic [ref=e98]:
+                  - checkbox [ref=e99]
+                  - img
+                - generic [ref=e100]:
+                  - generic [ref=e101] [cursor=pointer]: I agree to the terms and conditions
+                  - paragraph [ref=e102]: This is a required checkbox
+              - button "Submit Demo Form" [ref=e103]
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e106]:
+                - generic [ref=e107]: Login Form
+                - generic [ref=e108]: User authentication form
+              - group [ref=e111]:
+                - generic [ref=e112]:
+                  - generic [ref=e113]:
+                    - text: Email
+                    - generic [ref=e114]: "*"
+                  - textbox "your@email.com" [ref=e116]
+                - generic [ref=e117]:
+                  - generic [ref=e118]:
+                    - text: Password
+                    - generic [ref=e119]: "*"
+                  - textbox "Enter your password" [ref=e121]
+                - generic [ref=e124]:
+                  - generic [ref=e125]:
+                    - checkbox [ref=e126]
+                    - img
+                  - generic [ref=e128] [cursor=pointer]: Remember me
+                - button "Sign In" [ref=e129]
+            - generic [ref=e130]:
+              - generic [ref=e131]:
+                - generic [ref=e132]: Registration Form
+                - generic [ref=e133]: User signup with validation
+              - group [ref=e136]:
+                - generic [ref=e137]:
+                  - generic [ref=e138]:
+                    - generic [ref=e139]:
+                      - text: First Name
+                      - generic [ref=e140]: "*"
+                    - textbox "John" [ref=e142]
+                  - generic [ref=e143]:
+                    - generic [ref=e144]:
+                      - text: Last Name
+                      - generic [ref=e145]: "*"
+                    - textbox "Doe" [ref=e147]
+                - generic [ref=e148]:
+                  - generic [ref=e149]:
+                    - text: Email
+                    - generic [ref=e150]: "*"
+                  - textbox "john@example.com" [ref=e152]
+                - generic [ref=e153]:
+                  - generic [ref=e154]:
+                    - text: Password
+                    - generic [ref=e155]: "*"
+                  - paragraph [ref=e156]: Must contain uppercase, lowercase, number, and special character
+                  - textbox "Enter secure password" [ref=e158]
+                - generic [ref=e159]:
+                  - generic [ref=e160]:
+                    - text: Confirm Password
+                    - generic [ref=e161]: "*"
+                  - textbox "Confirm your password" [ref=e163]
+                - generic [ref=e166]:
+                  - generic [ref=e167]:
+                    - checkbox [ref=e168]
+                    - img
+                  - generic [ref=e170] [cursor=pointer]: I accept the terms and conditions
+                - button "Create Account" [ref=e171]
+          - generic [ref=e172]:
+            - generic [ref=e173]:
+              - generic [ref=e174]: Form Validation Showcase
+              - generic [ref=e175]: Test validation by submitting empty forms or invalid data
+            - generic [ref=e177]:
+              - generic [ref=e178]:
+                - heading "Testing Instructions:" [level=4] [ref=e179]
+                - list [ref=e180]:
+                  - listitem [ref=e181]: • Submit empty forms to see required field validation
+                  - listitem [ref=e182]: • Enter invalid email addresses to test email validation
+                  - listitem [ref=e183]: • Try passwords that don't meet complexity requirements
+                  - listitem [ref=e184]: • Test password confirmation matching
+                  - listitem [ref=e185]: • Check form submission loading states
+                  - listitem [ref=e186]: • Verify success and error message display
+              - generic [ref=e187]:
+                - heading "Accessibility Features:" [level=4] [ref=e188]
+                - list [ref=e189]:
+                  - listitem [ref=e190]: • Proper form labels and ARIA attributes
+                  - listitem [ref=e191]: • Error messages with aria-live regions
+                  - listitem [ref=e192]: • Keyboard navigation support
+                  - listitem [ref=e193]: • Focus management
+                  - listitem [ref=e194]: • Screen reader compatible
+    - contentinfo [ref=e195]:
+      - generic [ref=e196]:
+        - generic [ref=e197]:
+          - generic [ref=e198]:
+            - heading "Company" [level=3] [ref=e199]
+            - list [ref=e200]:
+              - listitem [ref=e201]:
+                - link "About" [ref=e202]:
+                  - /url: /about
+              - listitem [ref=e203]:
+                - link "Careers" [ref=e204]:
+                  - /url: /careers
+              - listitem [ref=e205]:
+                - link "Contact" [ref=e206]:
+                  - /url: /contact
+          - generic [ref=e207]:
+            - heading "Product" [level=3] [ref=e208]
+            - list [ref=e209]:
+              - listitem [ref=e210]:
+                - link "Features" [ref=e211]:
+                  - /url: /features
+              - listitem [ref=e212]:
+                - link "Pricing" [ref=e213]:
+                  - /url: /pricing
+              - listitem [ref=e214]:
+                - link "Documentation" [ref=e215]:
+                  - /url: /docs
+          - generic [ref=e216]:
+            - heading "Resources" [level=3] [ref=e217]
+            - list [ref=e218]:
+              - listitem [ref=e219]:
+                - link "Blog" [ref=e220]:
+                  - /url: /blog
+              - listitem [ref=e221]:
+                - link "Guides" [ref=e222]:
+                  - /url: /guides
+              - listitem [ref=e223]:
+                - link "Help Center" [ref=e224]:
+                  - /url: /help
+          - generic [ref=e225]:
+            - heading "Legal" [level=3] [ref=e226]
+            - list [ref=e227]:
+              - listitem [ref=e228]:
+                - link "Privacy Policy" [ref=e229]:
+                  - /url: /privacy
+              - listitem [ref=e230]:
+                - link "Terms of Service" [ref=e231]:
+                  - /url: /terms
+              - listitem [ref=e232]:
+                - link "Cookie Policy" [ref=e233]:
+                  - /url: /cookies
+        - generic [ref=e234]:
+          - generic [ref=e235]:
+            - link "Facebook" [ref=e236]:
+              - /url: "#"
+              - generic [ref=e237]: Facebook
+              - img [ref=e238]
+            - link "Twitter" [ref=e240]:
+              - /url: "#"
+              - generic [ref=e241]: Twitter
+              - img [ref=e242]
+            - link "GitHub" [ref=e244]:
+              - /url: "#"
+              - generic [ref=e245]: GitHub
+              - img [ref=e246]
+            - link "LinkedIn" [ref=e249]:
+              - /url: "#"
+              - generic [ref=e250]: LinkedIn
+              - img [ref=e251]
+          - paragraph [ref=e255]: © 2024 OpenBase V2. All rights reserved.
+  - region "Notifications alt+T"
+  - button "Open Next.js Dev Tools" [ref=e261] [cursor=pointer]:
+    - img [ref=e262] [cursor=pointer]
+  - alert [ref=e267]
+```
