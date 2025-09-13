@@ -57,19 +57,19 @@ export const States: Story = {
         <Switch id="unchecked" checked={false} />
         <Label htmlFor="unchecked">Unchecked</Label>
       </div>
-      
+
       <div className="flex items-center space-x-2">
         <Switch id="checked" checked={true} />
         <Label htmlFor="checked">Checked</Label>
       </div>
-      
+
       <div className="flex items-center space-x-2">
         <Switch id="disabled-unchecked" disabled checked={false} />
         <Label htmlFor="disabled-unchecked" className="text-muted-foreground">
           Disabled (unchecked)
         </Label>
       </div>
-      
+
       <div className="flex items-center space-x-2">
         <Switch id="disabled-checked" disabled checked={true} />
         <Label htmlFor="disabled-checked" className="text-muted-foreground">
@@ -93,12 +93,12 @@ export const States: Story = {
 export const Interactive: Story = {
   render: () => {
     const [isEnabled, setIsEnabled] = useState(false);
-    
+
     return (
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
-          <Switch 
-            id="interactive-switch" 
+          <Switch
+            id="interactive-switch"
             checked={isEnabled}
             onCheckedChange={setIsEnabled}
           />
@@ -106,8 +106,8 @@ export const Interactive: Story = {
             {isEnabled ? 'Notifications enabled' : 'Notifications disabled'}
           </Label>
         </div>
-        
-        <p className="text-sm text-muted-foreground">
+
+        <p className="text-muted-foreground text-sm">
           Current state: {isEnabled ? 'ON' : 'OFF'}
         </p>
       </div>
@@ -134,90 +134,90 @@ export const SettingsPanel: Story = {
       analytics: false,
       autoSave: true,
     });
-    
+
     const updateSetting = (key: keyof typeof settings) => {
       setSettings(prev => ({ ...prev, [key]: !prev[key] }));
     };
-    
+
     return (
       <div className="w-[400px] space-y-6">
         <h3 className="text-lg font-semibold">Settings</h3>
-        
+
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="notifications" className="text-base">
                 Push Notifications
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Receive push notifications for important updates
               </p>
             </div>
-            <Switch 
+            <Switch
               id="notifications"
               checked={settings.notifications}
               onCheckedChange={() => updateSetting('notifications')}
             />
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="email" className="text-base">
                 Email Updates
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Get weekly email summaries
               </p>
             </div>
-            <Switch 
+            <Switch
               id="email"
               checked={settings.emailUpdates}
               onCheckedChange={() => updateSetting('emailUpdates')}
             />
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="dark-mode" className="text-base">
                 Dark Mode
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Use dark theme for better viewing in low light
               </p>
             </div>
-            <Switch 
+            <Switch
               id="dark-mode"
               checked={settings.darkMode}
               onCheckedChange={() => updateSetting('darkMode')}
             />
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="analytics" className="text-base">
                 Analytics
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Help improve our service by sharing usage data
               </p>
             </div>
-            <Switch 
+            <Switch
               id="analytics"
               checked={settings.analytics}
               onCheckedChange={() => updateSetting('analytics')}
             />
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="auto-save" className="text-base">
                 Auto-save
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Automatically save your work every few minutes
               </p>
             </div>
-            <Switch 
+            <Switch
               id="auto-save"
               checked={settings.autoSave}
               onCheckedChange={() => updateSetting('autoSave')}
@@ -230,7 +230,8 @@ export const SettingsPanel: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Settings panel with multiple switches for different preferences.',
+        story:
+          'Settings panel with multiple switches for different preferences.',
       },
     },
   },
@@ -246,65 +247,61 @@ export const FormIntegration: Story = {
       terms: false,
       marketing: false,
     });
-    
+
     const [errors, setErrors] = useState<Record<string, string>>({});
-    
+
     const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       const newErrors: Record<string, string> = {};
-      
+
       if (!formData.terms) {
         newErrors.terms = 'You must accept the terms and conditions';
       }
-      
+
       setErrors(newErrors);
-      
+
       if (Object.keys(newErrors).length === 0) {
-        console.log('Form submitted:', formData);
+        // Form submitted with data: formData
       }
     };
-    
+
     return (
       <form onSubmit={handleSubmit} className="w-[400px] space-y-6">
         <h3 className="text-lg font-semibold">Sign Up</h3>
-        
+
         <div className="space-y-4">
           <div className="flex items-center space-x-2">
-            <Switch 
+            <Switch
               id="subscribe"
               checked={formData.subscribe}
-              onCheckedChange={(checked) => 
+              onCheckedChange={checked =>
                 setFormData(prev => ({ ...prev, subscribe: checked }))
               }
             />
-            <Label htmlFor="subscribe">
-              Subscribe to newsletter
-            </Label>
+            <Label htmlFor="subscribe">Subscribe to newsletter</Label>
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
-              <Switch 
+              <Switch
                 id="terms"
                 checked={formData.terms}
-                onCheckedChange={(checked) => 
+                onCheckedChange={checked =>
                   setFormData(prev => ({ ...prev, terms: checked }))
                 }
               />
-              <Label htmlFor="terms">
-                I accept the terms and conditions *
-              </Label>
+              <Label htmlFor="terms">I accept the terms and conditions *</Label>
             </div>
             {errors.terms && (
               <p className="text-sm text-red-600">{errors.terms}</p>
             )}
           </div>
-          
+
           <div className="flex items-center space-x-2">
-            <Switch 
+            <Switch
               id="marketing"
               checked={formData.marketing}
-              onCheckedChange={(checked) => 
+              onCheckedChange={checked =>
                 setFormData(prev => ({ ...prev, marketing: checked }))
               }
             />
@@ -313,10 +310,10 @@ export const FormIntegration: Story = {
             </Label>
           </div>
         </div>
-        
-        <button 
+
+        <button
           type="submit"
-          className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 w-full rounded-md px-4 py-2"
         >
           Sign Up
         </button>
@@ -326,7 +323,8 @@ export const FormIntegration: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Switches used in form validation scenarios with error handling.',
+        story:
+          'Switches used in form validation scenarios with error handling.',
       },
     },
   },
@@ -339,22 +337,30 @@ export const Compact: Story = {
   render: () => (
     <div className="space-y-2">
       <div className="flex items-center justify-between py-2">
-        <Label htmlFor="wifi" className="text-sm">Wi-Fi</Label>
+        <Label htmlFor="wifi" className="text-sm">
+          Wi-Fi
+        </Label>
         <Switch id="wifi" checked={true} />
       </div>
-      
+
       <div className="flex items-center justify-between py-2">
-        <Label htmlFor="bluetooth" className="text-sm">Bluetooth</Label>
+        <Label htmlFor="bluetooth" className="text-sm">
+          Bluetooth
+        </Label>
         <Switch id="bluetooth" checked={false} />
       </div>
-      
+
       <div className="flex items-center justify-between py-2">
-        <Label htmlFor="location" className="text-sm">Location Services</Label>
+        <Label htmlFor="location" className="text-sm">
+          Location Services
+        </Label>
         <Switch id="location" checked={true} />
       </div>
-      
+
       <div className="flex items-center justify-between py-2">
-        <Label htmlFor="airplane" className="text-sm">Airplane Mode</Label>
+        <Label htmlFor="airplane" className="text-sm">
+          Airplane Mode
+        </Label>
         <Switch id="airplane" checked={false} />
       </div>
     </div>
@@ -379,76 +385,77 @@ export const FeatureToggles: Story = {
       advancedMode: false,
       debugMode: false,
     });
-    
+
     const toggleFeature = (feature: keyof typeof features) => {
       setFeatures(prev => ({ ...prev, [feature]: !prev[feature] }));
     };
-    
+
     return (
       <div className="w-[400px] space-y-4">
         <h3 className="text-lg font-semibold">Developer Settings</h3>
-        
+
         <div className="space-y-3">
-          <div className="p-3 border rounded-lg">
-            <div className="flex items-center justify-between mb-2">
+          <div className="rounded-lg border p-3">
+            <div className="mb-2 flex items-center justify-between">
               <Label htmlFor="beta" className="font-medium">
                 Beta Features
               </Label>
-              <Switch 
+              <Switch
                 id="beta"
                 checked={features.betaFeatures}
                 onCheckedChange={() => toggleFeature('betaFeatures')}
               />
             </div>
-            <p className="text-xs text-muted-foreground">
-              Enable access to experimental features that are still in development
+            <p className="text-muted-foreground text-xs">
+              Enable access to experimental features that are still in
+              development
             </p>
           </div>
-          
-          <div className="p-3 border rounded-lg">
-            <div className="flex items-center justify-between mb-2">
+
+          <div className="rounded-lg border p-3">
+            <div className="mb-2 flex items-center justify-between">
               <Label htmlFor="experimental" className="font-medium">
                 Experimental UI
               </Label>
-              <Switch 
+              <Switch
                 id="experimental"
                 checked={features.experimentalUI}
                 onCheckedChange={() => toggleFeature('experimentalUI')}
               />
             </div>
-            <p className="text-xs text-muted-foreground">
-              Try out new interface designs before they're released
+            <p className="text-muted-foreground text-xs">
+              Try out new interface designs before they&apos;re released
             </p>
           </div>
-          
-          <div className="p-3 border rounded-lg">
-            <div className="flex items-center justify-between mb-2">
+
+          <div className="rounded-lg border p-3">
+            <div className="mb-2 flex items-center justify-between">
               <Label htmlFor="advanced" className="font-medium">
                 Advanced Mode
               </Label>
-              <Switch 
+              <Switch
                 id="advanced"
                 checked={features.advancedMode}
                 onCheckedChange={() => toggleFeature('advancedMode')}
               />
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Show advanced options and detailed technical information
             </p>
           </div>
-          
-          <div className="p-3 border rounded-lg">
-            <div className="flex items-center justify-between mb-2">
+
+          <div className="rounded-lg border p-3">
+            <div className="mb-2 flex items-center justify-between">
               <Label htmlFor="debug" className="font-medium">
                 Debug Mode
               </Label>
-              <Switch 
+              <Switch
                 id="debug"
                 checked={features.debugMode}
                 onCheckedChange={() => toggleFeature('debugMode')}
               />
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Enable debugging tools and verbose logging (affects performance)
             </p>
           </div>
@@ -459,7 +466,8 @@ export const FeatureToggles: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Feature toggle switches for development and experimental settings.',
+        story:
+          'Feature toggle switches for development and experimental settings.',
       },
     },
   },

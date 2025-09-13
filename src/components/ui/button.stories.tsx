@@ -56,7 +56,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: 'Button',
-    onClick: () => console.log('Button clicked'),
+    onClick: () => {
+      // Button clicked
+    },
   },
 };
 
@@ -127,7 +129,9 @@ export const Disabled: Story = {
 export const Interactive: Story = {
   args: {
     children: 'Click me!',
-    onClick: () => console.log('Interactive button clicked'),
+    onClick: () => {
+      // Interactive button clicked
+    },
   },
   parameters: {
     docs: {

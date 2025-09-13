@@ -137,7 +137,7 @@ export function withSanitization<T extends Record<string, unknown>>(
         return new Response(
           JSON.stringify({
             error: 'Validation failed',
-            details: error.errors,
+            details: error.issues,
           }),
           {
             status: 400,

@@ -92,7 +92,7 @@ export const WithHelperText: Story = {
     <div className="grid w-full gap-1.5">
       <Label htmlFor="message-2">Your message</Label>
       <Textarea placeholder="Type your message here..." id="message-2" />
-      <p className="text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         Your message will be copied to the support team.
       </p>
     </div>
@@ -145,7 +145,7 @@ export const ReadOnly: Story = {
  */
 export const Sizes: Story = {
   render: () => (
-    <div className="space-y-4 w-full">
+    <div className="w-full space-y-4">
       <div>
         <Label htmlFor="small">Small (3 rows)</Label>
         <Textarea
@@ -155,16 +155,12 @@ export const Sizes: Story = {
           className="min-h-[80px]"
         />
       </div>
-      
+
       <div>
         <Label htmlFor="default">Default (4 rows)</Label>
-        <Textarea
-          id="default"
-          placeholder="Default textarea..."
-          rows={4}
-        />
+        <Textarea id="default" placeholder="Default textarea..." rows={4} />
       </div>
-      
+
       <div>
         <Label htmlFor="large">Large (6 rows)</Label>
         <Textarea
@@ -200,10 +196,10 @@ export const WithCharacterCount: Story = {
           placeholder="Type your message here..."
           id="message-count"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={e => setValue(e.target.value)}
           maxLength={maxLength}
         />
-        <p className="text-sm text-muted-foreground text-right">
+        <p className="text-muted-foreground text-right text-sm">
           {value.length}/{maxLength} characters
         </p>
       </div>
@@ -223,7 +219,7 @@ export const WithCharacterCount: Story = {
  */
 export const ValidationStates: Story = {
   render: () => (
-    <div className="space-y-6 w-full">
+    <div className="w-full space-y-6">
       <div className="grid gap-1.5">
         <Label htmlFor="success">Success State</Label>
         <Textarea
@@ -251,14 +247,17 @@ export const ValidationStates: Story = {
           placeholder="This field has a warning"
           className="border-yellow-500 focus-visible:ring-yellow-500"
         />
-        <p className="text-sm text-yellow-600">This field should be reviewed.</p>
+        <p className="text-sm text-yellow-600">
+          This field should be reviewed.
+        </p>
       </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Textareas with different validation states using custom styling.',
+        story:
+          'Textareas with different validation states using custom styling.',
       },
     },
   },
@@ -272,20 +271,17 @@ export const Controlled: Story = {
     const [value, setValue] = useState('This is a controlled textarea.');
 
     return (
-      <div className="space-y-4 w-full">
+      <div className="w-full space-y-4">
         <div className="grid gap-1.5">
           <Label htmlFor="controlled">Controlled Textarea</Label>
           <Textarea
             id="controlled"
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={e => setValue(e.target.value)}
           />
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setValue('')}
-          >
+          <Button variant="outline" onClick={() => setValue('')}>
             Clear
           </Button>
           <Button
@@ -295,8 +291,8 @@ export const Controlled: Story = {
             Set Preset Text
           </Button>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Current value: "{value}"
+        <p className="text-muted-foreground text-sm">
+          Current value: &ldquo;{value}&rdquo;
         </p>
       </div>
     );
@@ -335,7 +331,7 @@ export const AutoResize: Story = {
           className="resize-none overflow-hidden"
           rows={1}
         />
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           This textarea automatically resizes as you type.
         </p>
       </div>
@@ -355,17 +351,17 @@ export const AutoResize: Story = {
  */
 export const FormExample: Story = {
   render: () => (
-    <div className="space-y-4 w-full max-w-md">
+    <div className="w-full max-w-md space-y-4">
       <div className="grid gap-1.5">
         <Label htmlFor="subject">Subject</Label>
         <input
           type="text"
           id="subject"
-          className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+          className="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
           placeholder="Enter subject"
         />
       </div>
-      
+
       <div className="grid gap-1.5">
         <Label htmlFor="message-form">Message</Label>
         <Textarea
@@ -374,7 +370,7 @@ export const FormExample: Story = {
           rows={4}
         />
       </div>
-      
+
       <div className="flex justify-end gap-2">
         <Button variant="outline">Cancel</Button>
         <Button>Send Message</Button>

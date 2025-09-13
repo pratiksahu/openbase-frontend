@@ -84,7 +84,7 @@ async function checkDatabase(): Promise<string> {
   try {
     // Example: await db.raw('SELECT 1');
     return 'healthy';
-  } catch (_error) {
+  } catch {
     return 'unhealthy';
   }
 }
@@ -94,7 +94,7 @@ async function checkExternalAPI(): Promise<string> {
   try {
     // Example: await fetch('https://api.example.com/health');
     return 'healthy';
-  } catch (_error) {
+  } catch {
     return 'unhealthy';
   }
 }

@@ -77,8 +77,8 @@ export const WithLabels: Story = {
         <Label className="text-base font-medium">
           Choose your preferred notification method
         </Label>
-        <p className="text-sm text-muted-foreground">
-          Select how you'd like to receive notifications.
+        <p className="text-muted-foreground text-sm">
+          Select how you&apos;d like to receive notifications.
         </p>
       </div>
       <RadioGroup defaultValue="email" className="space-y-3">
@@ -88,7 +88,7 @@ export const WithLabels: Story = {
             <Label htmlFor="email" className="font-medium">
               Email
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Get notified via email
             </p>
           </div>
@@ -99,7 +99,7 @@ export const WithLabels: Story = {
             <Label htmlFor="sms" className="font-medium">
               SMS
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Get notified via text message
             </p>
           </div>
@@ -110,7 +110,7 @@ export const WithLabels: Story = {
             <Label htmlFor="push" className="font-medium">
               Push Notifications
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Get notified via push notifications
             </p>
           </div>
@@ -121,8 +121,8 @@ export const WithLabels: Story = {
             <Label htmlFor="none" className="font-medium">
               No Notifications
             </Label>
-            <p className="text-sm text-muted-foreground">
-              Don't send any notifications
+            <p className="text-muted-foreground text-sm">
+              Don&apos;t send any notifications
             </p>
           </div>
         </div>
@@ -176,7 +176,7 @@ export const Horizontal: Story = {
 export const Disabled: Story = {
   render: () => (
     <div className="space-y-4">
-      <Label className="text-base font-medium text-muted-foreground">
+      <Label className="text-muted-foreground text-base font-medium">
         Payment Method (Disabled)
       </Label>
       <RadioGroup defaultValue="credit-card" disabled>
@@ -214,8 +214,10 @@ export const Controlled: Story = {
     return (
       <div className="space-y-4">
         <div>
-          <Label className="text-base font-medium">Controlled Radio Group</Label>
-          <p className="text-sm text-muted-foreground">
+          <Label className="text-base font-medium">
+            Controlled Radio Group
+          </Label>
+          <p className="text-muted-foreground text-sm">
             Currently selected: {value}
           </p>
         </div>
@@ -316,35 +318,35 @@ export const CustomStyling: Story = {
     <div className="space-y-4">
       <Label className="text-base font-medium">Theme Preference</Label>
       <RadioGroup defaultValue="light" className="space-y-3">
-        <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50">
+        <div className="hover:bg-muted/50 flex items-center space-x-3 rounded-lg border p-3">
           <RadioGroupItem value="light" id="light-theme" />
           <div className="space-y-1">
             <Label htmlFor="light-theme" className="font-medium">
               🌞 Light Theme
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Clean and bright interface
             </p>
           </div>
         </div>
-        <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50">
+        <div className="hover:bg-muted/50 flex items-center space-x-3 rounded-lg border p-3">
           <RadioGroupItem value="dark" id="dark-theme" />
           <div className="space-y-1">
             <Label htmlFor="dark-theme" className="font-medium">
               🌚 Dark Theme
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Easy on the eyes in low light
             </p>
           </div>
         </div>
-        <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50">
+        <div className="hover:bg-muted/50 flex items-center space-x-3 rounded-lg border p-3">
           <RadioGroupItem value="system" id="system-theme" />
           <div className="space-y-1">
             <Label htmlFor="system-theme" className="font-medium">
               🔄 System Theme
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Automatically match your system preference
             </p>
           </div>
@@ -371,61 +373,61 @@ export const InForm: Story = {
     });
 
     return (
-      <div className="space-y-6 max-w-md">
+      <div className="max-w-md space-y-6">
         <div className="space-y-2">
           <h3 className="text-lg font-medium">Order Delivery</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Choose your preferred delivery method for this order.
           </p>
         </div>
-        
+
         <div className="space-y-4">
           <Label className="text-base font-medium">Delivery Method</Label>
           <RadioGroup
             value={formData.deliveryMethod}
-            onValueChange={(value) =>
+            onValueChange={value =>
               setFormData({ ...formData, deliveryMethod: value })
             }
             className="space-y-2"
           >
-            <div className="flex items-center justify-between p-4 border rounded-lg">
+            <div className="flex items-center justify-between rounded-lg border p-4">
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="standard" id="standard" />
                 <div className="space-y-1">
                   <Label htmlFor="standard" className="font-medium">
                     Standard Delivery
                   </Label>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     5-7 business days
                   </p>
                 </div>
               </div>
               <span className="text-sm font-medium">Free</span>
             </div>
-            
-            <div className="flex items-center justify-between p-4 border rounded-lg">
+
+            <div className="flex items-center justify-between rounded-lg border p-4">
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="express" id="express" />
                 <div className="space-y-1">
                   <Label htmlFor="express" className="font-medium">
                     Express Delivery
                   </Label>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     2-3 business days
                   </p>
                 </div>
               </div>
               <span className="text-sm font-medium">$9.99</span>
             </div>
-            
-            <div className="flex items-center justify-between p-4 border rounded-lg">
+
+            <div className="flex items-center justify-between rounded-lg border p-4">
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="overnight" id="overnight" />
                 <div className="space-y-1">
                   <Label htmlFor="overnight" className="font-medium">
                     Overnight Delivery
                   </Label>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Next business day
                   </p>
                 </div>
@@ -434,11 +436,13 @@ export const InForm: Story = {
             </div>
           </RadioGroup>
         </div>
-        
-        <div className="pt-4 border-t">
-          <div className="flex justify-between items-center mb-4">
+
+        <div className="border-t pt-4">
+          <div className="mb-4 flex items-center justify-between">
             <span className="font-medium">Selected:</span>
-            <span className="capitalize">{formData.deliveryMethod} delivery</span>
+            <span className="capitalize">
+              {formData.deliveryMethod} delivery
+            </span>
           </div>
           <Button className="w-full">Continue to Payment</Button>
         </div>

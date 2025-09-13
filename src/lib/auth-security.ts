@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
+
 import { env } from './env';
 
 // Password security
@@ -99,19 +100,19 @@ export class JWTSecurity {
   private static readonly ALGORITHM = 'HS256';
   private static readonly ISSUER = env.NEXT_PUBLIC_APP_NAME;
 
-  static sign(payload: object, expiresIn: string = '1h'): string {
+  static sign(payload: object, expiresIn: string | number = '1h'): string {
     if (!env.JWT_SECRET) {
       throw new Error('JWT_SECRET is not configured');
     }
 
     return jwt.sign(payload, env.JWT_SECRET, {
-      algorithm: this.ALGORITHM,
-      expiresIn,
+      algorithm: this.ALGORITHM as jwt.Algorithm,
+      expiresIn: expiresIn as string | number,
       issuer: this.ISSUER,
-    });
+    } as jwt.SignOptions);
   }
 
-  static verify<T = any>(token: string): T {
+  static verify<T = unknown>(token: string): T {
     if (!env.JWT_SECRET) {
       throw new Error('JWT_SECRET is not configured');
     }
@@ -132,7 +133,7 @@ export class JWTSecurity {
     }
   }
 
-  static decode(token: string): any {
+  static decode(token: string): unknown {
     return jwt.decode(token);
   }
 }
@@ -155,7 +156,7 @@ export class SessionSecurity {
   static verifySessionToken(token: string): {
     userId: string;
     sessionId: string;
-    [key: string]: any;
+    [key: string]: unknown;
   } {
     return JWTSecurity.verify(token);
   }

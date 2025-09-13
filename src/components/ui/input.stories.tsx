@@ -10,7 +10,8 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A flexible input component supporting various types and states.',
+        component:
+          'A flexible input component supporting various types and states.',
       },
     },
   },
@@ -56,7 +57,9 @@ export const Default: Story = {
   args: {
     type: 'text',
     placeholder: 'Enter text...',
-    onChange: (e) => console.log('Input changed:', e.target.value),
+    onChange: _e => {
+      // Input value changed
+    },
   },
 };
 
@@ -65,7 +68,7 @@ export const Default: Story = {
  */
 export const InputTypes: Story = {
   render: () => (
-    <div className="grid gap-4 w-80">
+    <div className="grid w-80 gap-4">
       <div className="space-y-2">
         <Label htmlFor="text">Text</Label>
         <Input id="text" type="text" placeholder="Enter text..." />
@@ -106,7 +109,7 @@ export const InputTypes: Story = {
  */
 export const ValidationStates: Story = {
   render: () => (
-    <div className="grid gap-4 w-80">
+    <div className="grid w-80 gap-4">
       <div className="space-y-2">
         <Label htmlFor="valid">Valid Input</Label>
         <Input
@@ -154,7 +157,7 @@ export const ValidationStates: Story = {
  */
 export const FileInput: Story = {
   render: () => (
-    <div className="grid gap-4 w-80">
+    <div className="grid w-80 gap-4">
       <div className="space-y-2">
         <Label htmlFor="file">Upload File</Label>
         <Input id="file" type="file" />
@@ -183,7 +186,7 @@ export const FileInput: Story = {
  */
 export const FormExample: Story = {
   render: () => (
-    <form className="space-y-4 w-80" onSubmit={(e) => e.preventDefault()}>
+    <form className="w-80 space-y-4" onSubmit={_e => _e.preventDefault()}>
       <div className="space-y-2">
         <Label htmlFor="firstName">First Name</Label>
         <Input id="firstName" placeholder="John" required />
@@ -194,7 +197,12 @@ export const FormExample: Story = {
       </div>
       <div className="space-y-2">
         <Label htmlFor="userEmail">Email</Label>
-        <Input id="userEmail" type="email" placeholder="john@example.com" required />
+        <Input
+          id="userEmail"
+          type="email"
+          placeholder="john@example.com"
+          required
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="userPhone">Phone</Label>

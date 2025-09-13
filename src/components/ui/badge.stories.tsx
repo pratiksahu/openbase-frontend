@@ -96,14 +96,14 @@ export const StatusBadges: Story = {
         <Badge variant="destructive">Inactive</Badge>
         <Badge variant="outline">Draft</Badge>
       </div>
-      
+
       <div className="flex flex-wrap gap-2">
         <Badge>Online</Badge>
         <Badge variant="secondary">Away</Badge>
         <Badge variant="destructive">Offline</Badge>
         <Badge variant="outline">Busy</Badge>
       </div>
-      
+
       <div className="flex flex-wrap gap-2">
         <Badge>Completed</Badge>
         <Badge variant="secondary">In Progress</Badge>
@@ -128,31 +128,36 @@ export const NotificationBadges: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
       <div className="relative">
-        <button className="p-2 border rounded">
-          Messages
-        </button>
+        <button className="rounded border p-2">Messages</button>
         <Badge className="absolute -top-2 -right-2 px-2 py-1 text-xs">3</Badge>
       </div>
-      
+
       <div className="relative">
-        <button className="p-2 border rounded">
-          Notifications
-        </button>
-        <Badge variant="destructive" className="absolute -top-2 -right-2 px-2 py-1 text-xs">99+</Badge>
+        <button className="rounded border p-2">Notifications</button>
+        <Badge
+          variant="destructive"
+          className="absolute -top-2 -right-2 px-2 py-1 text-xs"
+        >
+          99+
+        </Badge>
       </div>
-      
+
       <div className="relative">
-        <button className="p-2 border rounded">
-          Cart
-        </button>
-        <Badge variant="secondary" className="absolute -top-2 -right-2 px-2 py-1 text-xs">12</Badge>
+        <button className="rounded border p-2">Cart</button>
+        <Badge
+          variant="secondary"
+          className="absolute -top-2 -right-2 px-2 py-1 text-xs"
+        >
+          12
+        </Badge>
       </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Badges used as notification indicators on buttons or UI elements.',
+        story:
+          'Badges used as notification indicators on buttons or UI elements.',
       },
     },
   },
@@ -170,13 +175,13 @@ export const Tags: Story = {
         <Badge variant="outline">React</Badge>
         <Badge variant="outline">Next.js</Badge>
       </div>
-      
+
       <div className="flex flex-wrap gap-2">
         <Badge variant="secondary">Frontend</Badge>
         <Badge variant="secondary">Backend</Badge>
         <Badge variant="secondary">Full Stack</Badge>
       </div>
-      
+
       <div className="flex flex-wrap gap-2">
         <Badge>Beginner</Badge>
         <Badge>Intermediate</Badge>
@@ -200,23 +205,29 @@ export const Tags: Story = {
 export const Interactive: Story = {
   render: () => (
     <div className="flex flex-wrap gap-2">
-      <Badge 
-        className="cursor-pointer hover:bg-primary/90 transition-colors"
-        onClick={() => console.log('Badge clicked')}
+      <Badge
+        className="hover:bg-primary/90 cursor-pointer transition-colors"
+        onClick={() => {
+          // Badge clicked
+        }}
       >
         Clickable
       </Badge>
-      <Badge 
-        variant="secondary" 
-        className="cursor-pointer hover:bg-secondary/80 transition-colors"
-        onClick={() => console.log('Secondary badge clicked')}
+      <Badge
+        variant="secondary"
+        className="hover:bg-secondary/80 cursor-pointer transition-colors"
+        onClick={() => {
+          // Secondary badge clicked
+        }}
       >
         Interactive
       </Badge>
-      <Badge 
-        variant="outline" 
-        className="cursor-pointer hover:bg-accent transition-colors"
-        onClick={() => console.log('Outline badge clicked')}
+      <Badge
+        variant="outline"
+        className="hover:bg-accent cursor-pointer transition-colors"
+        onClick={() => {
+          // Outline badge clicked
+        }}
       >
         Hoverable
       </Badge>

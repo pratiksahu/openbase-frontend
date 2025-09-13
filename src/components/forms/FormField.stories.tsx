@@ -84,7 +84,8 @@ export const Required: Story = {
 export const WithDescription: Story = {
   args: {
     label: 'Username',
-    description: 'Choose a unique username that will be visible to other users.',
+    description:
+      'Choose a unique username that will be visible to other users.',
     children: <Input placeholder="Enter username" />,
   },
   parameters: {
@@ -104,7 +105,13 @@ export const WithError: Story = {
     label: 'Email Address',
     required: true,
     error: 'Please enter a valid email address',
-    children: <Input type="email" placeholder="Enter your email" className="border-red-500" />,
+    children: (
+      <Input
+        type="email"
+        placeholder="Enter your email"
+        className="border-red-500"
+      />
+    ),
   },
   parameters: {
     docs: {
@@ -122,9 +129,16 @@ export const WithDescriptionAndError: Story = {
   args: {
     label: 'Password',
     required: true,
-    description: 'Password must be at least 8 characters long and contain both letters and numbers.',
+    description:
+      'Password must be at least 8 characters long and contain both letters and numbers.',
     error: 'Password must be at least 8 characters long',
-    children: <Input type="password" placeholder="Enter password" className="border-red-500" />,
+    children: (
+      <Input
+        type="password"
+        placeholder="Enter password"
+        className="border-red-500"
+      />
+    ),
   },
   parameters: {
     docs: {
@@ -162,7 +176,7 @@ export const WithSelect: Story = {
     required: true,
     description: 'Select your country of residence.',
     children: (
-      <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
+      <select className="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50">
         <option value="">Select a country</option>
         <option value="us">United States</option>
         <option value="ca">Canada</option>
@@ -192,7 +206,7 @@ export const WithCheckbox: Story = {
         <input
           type="checkbox"
           id="terms"
-          className="h-4 w-4 rounded border border-primary text-primary focus:ring-2 focus:ring-primary"
+          className="border-primary text-primary focus:ring-primary h-4 w-4 rounded border focus:ring-2"
         />
         <label htmlFor="terms" className="text-sm">
           I agree to the terms and conditions
@@ -213,6 +227,9 @@ export const WithCheckbox: Story = {
  * Interactive example showing state changes
  */
 export const Interactive: Story = {
+  args: {
+    children: null,
+  },
   render: () => {
     const [value, setValue] = useState('');
     const [showError, setShowError] = useState(false);
@@ -229,12 +246,16 @@ export const Interactive: Story = {
     };
 
     return (
-      <div className="space-y-4 w-full max-w-sm">
+      <div className="w-full max-w-sm space-y-4">
         <FormField
           label="Interactive Field"
           required
-          description={showDescription ? 'Enter at least 3 characters' : undefined}
-          error={showError ? 'Input must be at least 3 characters long' : undefined}
+          description={
+            showDescription ? 'Enter at least 3 characters' : undefined
+          }
+          error={
+            showError ? 'Input must be at least 3 characters long' : undefined
+          }
         >
           <Input
             value={value}
@@ -243,7 +264,7 @@ export const Interactive: Story = {
             className={showError ? 'border-red-500' : ''}
           />
         </FormField>
-        
+
         <div className="flex gap-2 pt-4">
           <Button
             variant="outline"
@@ -252,17 +273,13 @@ export const Interactive: Story = {
           >
             Toggle Description
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setValue('')}
-          >
+          <Button variant="outline" size="sm" onClick={() => setValue('')}>
             Clear
           </Button>
         </div>
-        
-        <div className="text-sm text-muted-foreground">
-          Current value: "{value}" (length: {value.length})
+
+        <div className="text-muted-foreground text-sm">
+          Current value: &ldquo;{value}&rdquo; (length: {value.length})
         </div>
       </div>
     );
@@ -280,16 +297,19 @@ export const Interactive: Story = {
  * Multiple fields layout
  */
 export const MultipleFields: Story = {
+  args: {
+    children: null,
+  },
   render: () => (
-    <div className="space-y-6 w-full max-w-md">
+    <div className="w-full max-w-md space-y-6">
       <FormField label="First Name" required>
         <Input placeholder="John" />
       </FormField>
-      
+
       <FormField label="Last Name" required>
         <Input placeholder="Doe" />
       </FormField>
-      
+
       <FormField
         label="Email"
         required
@@ -297,21 +317,18 @@ export const MultipleFields: Story = {
       >
         <Input type="email" placeholder="john@example.com" />
       </FormField>
-      
+
       <FormField
         label="Phone Number"
         description="Optional - for account security purposes."
       >
         <Input type="tel" placeholder="(555) 123-4567" />
       </FormField>
-      
-      <FormField
-        label="Bio"
-        description="Tell us a bit about yourself."
-      >
+
+      <FormField label="Bio" description="Tell us a bit about yourself.">
         <Textarea placeholder="I'm a software developer..." rows={3} />
       </FormField>
-      
+
       <div className="pt-4">
         <Button className="w-full">Save Profile</Button>
       </div>

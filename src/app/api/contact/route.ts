@@ -62,11 +62,7 @@ export const POST = withSecurity(
       await processContactForm(validatedData);
 
       // Log successful submission
-      console.log('Contact form submitted:', {
-        email: validatedData.email,
-        subject: validatedData.subject,
-        ip,
-      });
+      // Successfully submitted contact form for email: validatedData.email
 
       return NextResponse.json(
         {
@@ -113,12 +109,11 @@ function isSpamContent(content: string): boolean {
 }
 
 async function processContactForm(
-  data: z.infer<typeof sanitizedContactSchema>
+  _data: z.infer<typeof sanitizedContactSchema>
 ) {
   // Implement your contact form processing logic here
   // e.g., send email, save to database, etc.
-  console.log('Processing contact form:', data);
-
+  // Processing contact form data for: data.name, data.email
   // TODO: Implement email service
   // TODO: Save to database if needed
 }

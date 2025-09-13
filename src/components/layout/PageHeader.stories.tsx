@@ -85,10 +85,14 @@ export const WithBreadcrumb: Story = {
     title: 'Settings',
     description: 'Manage your account preferences and configuration.',
     breadcrumb: (
-      <nav className="flex items-center space-x-1 text-sm text-muted-foreground">
-        <a href="#" className="hover:text-foreground">Home</a>
+      <nav className="text-muted-foreground flex items-center space-x-1 text-sm">
+        <a href="#" className="hover:text-foreground">
+          Home
+        </a>
         <span>/</span>
-        <a href="#" className="hover:text-foreground">Account</a>
+        <a href="#" className="hover:text-foreground">
+          Account
+        </a>
         <span>/</span>
         <span>Settings</span>
       </nav>
@@ -111,10 +115,14 @@ export const Complete: Story = {
     title: 'User Management',
     description: 'Add, edit, and manage user accounts and permissions.',
     breadcrumb: (
-      <nav className="flex items-center space-x-1 text-sm text-muted-foreground">
-        <a href="#" className="hover:text-foreground">Admin</a>
+      <nav className="text-muted-foreground flex items-center space-x-1 text-sm">
+        <a href="#" className="hover:text-foreground">
+          Admin
+        </a>
         <span>/</span>
-        <a href="#" className="hover:text-foreground">Users</a>
+        <a href="#" className="hover:text-foreground">
+          Users
+        </a>
         <span>/</span>
         <span>Management</span>
       </nav>
@@ -130,7 +138,8 @@ export const Complete: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Complete page header with breadcrumb, title, description, and actions.',
+        story:
+          'Complete page header with breadcrumb, title, description, and actions.',
       },
     },
   },
@@ -140,6 +149,9 @@ export const Complete: Story = {
  * Different sizes
  */
 export const Sizes: Story = {
+  args: {
+    title: 'Sizes Example',
+  },
   render: () => (
     <div className="space-y-12">
       <PageHeader
@@ -148,14 +160,14 @@ export const Sizes: Story = {
         description="This is a small page header with reduced spacing and font size."
         actions={<Button size="sm">Action</Button>}
       />
-      
+
       <PageHeader
         size="md"
         title="Medium Header"
         description="This is a medium page header with default spacing and font size."
         actions={<Button>Action</Button>}
       />
-      
+
       <PageHeader
         size="lg"
         title="Large Header"
@@ -181,7 +193,9 @@ export const TitleOnly: Story = {
     title: 'Analytics',
     actions: (
       <div className="flex gap-2">
-        <Button variant="outline" size="sm">Export</Button>
+        <Button variant="outline" size="sm">
+          Export
+        </Button>
         <Button size="sm">Refresh</Button>
       </div>
     ),
@@ -199,14 +213,19 @@ export const TitleOnly: Story = {
  * Page header in context
  */
 export const InContext: Story = {
+  args: {
+    title: 'In Context Example',
+  },
   render: () => (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <PageHeader
         title="E-commerce Dashboard"
         description="Monitor your store performance, sales, and customer analytics."
         breadcrumb={
-          <nav className="flex items-center space-x-1 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground">Home</a>
+          <nav className="text-muted-foreground flex items-center space-x-1 text-sm">
+            <a href="#" className="hover:text-foreground">
+              Home
+            </a>
             <span>/</span>
             <span>Dashboard</span>
           </nav>
@@ -218,27 +237,29 @@ export const InContext: Story = {
           </div>
         }
       />
-      
+
       <div className="container py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {[
             { title: 'Total Revenue', value: '$12,345', change: '+12.5%' },
             { title: 'Orders', value: '1,234', change: '+5.2%' },
             { title: 'Customers', value: '5,678', change: '+8.1%' },
             { title: 'Products', value: '234', change: '+2.4%' },
-          ].map((stat) => (
-            <div key={stat.title} className="bg-card p-6 rounded-lg border">
-              <h3 className="text-sm font-medium text-muted-foreground">{stat.title}</h3>
-              <div className="flex items-center justify-between mt-2">
+          ].map(stat => (
+            <div key={stat.title} className="bg-card rounded-lg border p-6">
+              <h3 className="text-muted-foreground text-sm font-medium">
+                {stat.title}
+              </h3>
+              <div className="mt-2 flex items-center justify-between">
                 <span className="text-2xl font-bold">{stat.value}</span>
                 <span className="text-sm text-green-600">{stat.change}</span>
               </div>
             </div>
           ))}
         </div>
-        
-        <div className="mt-8 p-8 bg-card rounded-lg border">
-          <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
+
+        <div className="bg-card mt-8 rounded-lg border p-8">
+          <h2 className="mb-4 text-lg font-semibold">Recent Activity</h2>
           <p className="text-muted-foreground">
             This area would contain charts, tables, and other dashboard content.
             The page header provides context and actions for the entire page.

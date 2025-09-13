@@ -27,10 +27,14 @@ test.describe('Theme Switching', () => {
 
     // Find theme toggle button
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
-    
+
     // If theme toggle doesn't exist, skip this test
     if (!(await themeToggle.isVisible())) {
-      test.skip('Theme toggle not found on page');
+      test.skip(
+        !(await themeToggle.isVisible()),
+        'Theme toggle not found on page'
+      );
+      return;
     }
 
     // Get initial theme
@@ -71,7 +75,9 @@ test.describe('Components Test Page', () => {
 });
 
 test.describe('Form Testing', () => {
-  test('should handle form interactions on test-forms page', async ({ page }) => {
+  test('should handle form interactions on test-forms page', async ({
+    page,
+  }) => {
     await page.goto('/test-forms');
 
     // Check if form elements exist
@@ -133,7 +139,7 @@ test.describe('Accessibility', () => {
     // Check for h1 tag
     const h1 = page.locator('h1');
     const h1Count = await h1.count();
-    
+
     // Should have at least one h1 on the page
     if (h1Count === 0) {
       console.warn('No h1 tags found on homepage');
@@ -150,7 +156,7 @@ test.describe('Accessibility', () => {
     for (let i = 0; i < imageCount; i++) {
       const img = images.nth(i);
       const alt = await img.getAttribute('alt');
-      
+
       // Images should have alt text (can be empty for decorative images)
       expect(alt).not.toBeNull();
     }

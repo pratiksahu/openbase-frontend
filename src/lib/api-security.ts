@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { withRateLimit, apiRateLimit } from './rate-limit';
-import { withCors } from './cors';
-import { securityMonitor, logSuspiciousRequest } from './security-monitor';
 import { z } from 'zod';
+
+import { withCors } from './cors';
+import { withRateLimit, apiRateLimit } from './rate-limit';
+import { logSuspiciousRequest } from './security-monitor';
 
 // Security middleware composition
 export function withSecurity(
@@ -244,7 +245,7 @@ class TemporaryBlocking {
 
   unblock(ip: string): void {
     this.blocked.delete(ip);
-    console.info(`✅ Unblocked IP: ${ip}`);
+    // IP unblocked: ${ip}
   }
 
   cleanup(): void {

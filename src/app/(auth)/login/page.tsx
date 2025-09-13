@@ -8,10 +8,23 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
@@ -36,19 +49,19 @@ export default function LoginPage() {
 
   async function onSubmit(_data: FormData) {
     setIsLoading(true);
-    
+
     try {
       // TODO: Implement actual login logic
       // Login data will be sent to the server here
-      
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       toast({
         title: 'Login successful',
         description: 'Welcome back!',
       });
-      
+
       router.push('/dashboard');
     } catch {
       toast({
@@ -116,13 +129,16 @@ export default function LoginPage() {
           </Form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             Don&apos;t have an account?{' '}
             <Link href="/register" className="text-primary hover:underline">
               Sign up
             </Link>
           </div>
-          <Link href="/forgot-password" className="text-sm text-muted-foreground hover:underline">
+          <Link
+            href="/forgot-password"
+            className="text-muted-foreground text-sm hover:underline"
+          >
             Forgot your password?
           </Link>
         </CardFooter>

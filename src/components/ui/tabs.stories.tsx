@@ -36,8 +36,8 @@ export const Default: Story = {
       <TabsContent value="account" className="space-y-4">
         <div className="space-y-2">
           <h3 className="text-lg font-semibold">Account</h3>
-          <p className="text-sm text-muted-foreground">
-            Make changes to your account here. Click save when you're done.
+          <p className="text-muted-foreground text-sm">
+            Make changes to your account here. Click save when you&apos;re done.
           </p>
         </div>
         <div className="space-y-2">
@@ -53,8 +53,8 @@ export const Default: Story = {
       <TabsContent value="password" className="space-y-4">
         <div className="space-y-2">
           <h3 className="text-lg font-semibold">Password</h3>
-          <p className="text-sm text-muted-foreground">
-            Change your password here. After saving, you'll be logged out.
+          <p className="text-muted-foreground text-sm">
+            Change your password here. After saving, you&apos;ll be logged out.
           </p>
         </div>
         <div className="space-y-2">
@@ -83,63 +83,71 @@ export const MultipleTabs: Story = {
         <TabsTrigger value="reports">Reports</TabsTrigger>
         <TabsTrigger value="notifications">Notifications</TabsTrigger>
       </TabsList>
-      
+
       <TabsContent value="overview" className="space-y-4">
         <h3 className="text-xl font-bold">Overview</h3>
         <div className="grid grid-cols-2 gap-4">
-          <div className="p-4 border rounded-lg">
+          <div className="rounded-lg border p-4">
             <h4 className="font-semibold">Total Users</h4>
             <p className="text-2xl font-bold text-blue-600">12,345</p>
           </div>
-          <div className="p-4 border rounded-lg">
+          <div className="rounded-lg border p-4">
             <h4 className="font-semibold">Revenue</h4>
             <p className="text-2xl font-bold text-green-600">$45,678</p>
           </div>
         </div>
       </TabsContent>
-      
+
       <TabsContent value="analytics" className="space-y-4">
         <h3 className="text-xl font-bold">Analytics</h3>
-        <div className="p-4 border rounded-lg">
-          <p className="text-muted-foreground">Analytics dashboard would go here...</p>
-          <div className="mt-4 h-32 bg-muted rounded flex items-center justify-center">
+        <div className="rounded-lg border p-4">
+          <p className="text-muted-foreground">
+            Analytics dashboard would go here...
+          </p>
+          <div className="bg-muted mt-4 flex h-32 items-center justify-center rounded">
             <span className="text-muted-foreground">Chart Placeholder</span>
           </div>
         </div>
       </TabsContent>
-      
+
       <TabsContent value="reports" className="space-y-4">
         <h3 className="text-xl font-bold">Reports</h3>
         <div className="space-y-2">
-          <div className="p-3 border rounded flex justify-between items-center">
+          <div className="flex items-center justify-between rounded border p-3">
             <span>Monthly Report - November 2023</span>
-            <Button size="sm" variant="outline">Download</Button>
+            <Button size="sm" variant="outline">
+              Download
+            </Button>
           </div>
-          <div className="p-3 border rounded flex justify-between items-center">
+          <div className="flex items-center justify-between rounded border p-3">
             <span>Weekly Report - Week 47</span>
-            <Button size="sm" variant="outline">Download</Button>
+            <Button size="sm" variant="outline">
+              Download
+            </Button>
           </div>
-          <div className="p-3 border rounded flex justify-between items-center">
+          <div className="flex items-center justify-between rounded border p-3">
             <span>Daily Report - Today</span>
-            <Button size="sm" variant="outline">Download</Button>
+            <Button size="sm" variant="outline">
+              Download
+            </Button>
           </div>
         </div>
       </TabsContent>
-      
+
       <TabsContent value="notifications" className="space-y-4">
         <h3 className="text-xl font-bold">Notifications</h3>
         <div className="space-y-3">
-          <div className="p-3 border rounded">
+          <div className="rounded border p-3">
             <p className="font-medium">New user registration</p>
-            <p className="text-sm text-muted-foreground">2 minutes ago</p>
+            <p className="text-muted-foreground text-sm">2 minutes ago</p>
           </div>
-          <div className="p-3 border rounded">
+          <div className="rounded border p-3">
             <p className="font-medium">Payment received</p>
-            <p className="text-sm text-muted-foreground">1 hour ago</p>
+            <p className="text-muted-foreground text-sm">1 hour ago</p>
           </div>
-          <div className="p-3 border rounded">
+          <div className="rounded border p-3">
             <p className="font-medium">System maintenance scheduled</p>
-            <p className="text-sm text-muted-foreground">3 hours ago</p>
+            <p className="text-muted-foreground text-sm">3 hours ago</p>
           </div>
         </div>
       </TabsContent>
@@ -148,7 +156,8 @@ export const MultipleTabs: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Tabs with multiple sections showing different types of content.',
+        story:
+          'Tabs with multiple sections showing different types of content.',
       },
     },
   },
@@ -161,7 +170,7 @@ export const VerticalLayout: Story = {
   render: () => (
     <Tabs defaultValue="general" className="w-[600px]" orientation="vertical">
       <div className="flex">
-        <TabsList className="flex-col h-auto w-48 p-1">
+        <TabsList className="h-auto w-48 flex-col p-1">
           <TabsTrigger value="general" className="w-full justify-start">
             General
           </TabsTrigger>
@@ -175,9 +184,9 @@ export const VerticalLayout: Story = {
             Support
           </TabsTrigger>
         </TabsList>
-        
-        <div className="flex-1 ml-4">
-          <TabsContent value="general" className="space-y-4 mt-0">
+
+        <div className="ml-4 flex-1">
+          <TabsContent value="general" className="mt-0 space-y-4">
             <h3 className="text-lg font-semibold">General Settings</h3>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -186,9 +195,9 @@ export const VerticalLayout: Story = {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
-                <textarea 
-                  id="description" 
-                  className="w-full p-2 border rounded-md" 
+                <textarea
+                  id="description"
+                  className="w-full rounded-md border p-2"
                   rows={3}
                   placeholder="Describe your application..."
                 />
@@ -196,59 +205,69 @@ export const VerticalLayout: Story = {
               <Button>Save Changes</Button>
             </div>
           </TabsContent>
-          
-          <TabsContent value="security" className="space-y-4 mt-0">
+
+          <TabsContent value="security" className="mt-0 space-y-4">
             <h3 className="text-lg font-semibold">Security Settings</h3>
             <div className="space-y-4">
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-medium mb-2">Two-Factor Authentication</h4>
-                <p className="text-sm text-muted-foreground mb-3">
+              <div className="rounded-lg border p-4">
+                <h4 className="mb-2 font-medium">Two-Factor Authentication</h4>
+                <p className="text-muted-foreground mb-3 text-sm">
                   Add an extra layer of security to your account
                 </p>
                 <Button variant="outline">Enable 2FA</Button>
               </div>
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-medium mb-2">API Keys</h4>
-                <p className="text-sm text-muted-foreground mb-3">
+              <div className="rounded-lg border p-4">
+                <h4 className="mb-2 font-medium">API Keys</h4>
+                <p className="text-muted-foreground mb-3 text-sm">
                   Manage your API access keys
                 </p>
                 <Button variant="outline">Manage Keys</Button>
               </div>
             </div>
           </TabsContent>
-          
-          <TabsContent value="integrations" className="space-y-4 mt-0">
+
+          <TabsContent value="integrations" className="mt-0 space-y-4">
             <h3 className="text-lg font-semibold">Integrations</h3>
             <div className="grid grid-cols-1 gap-4">
-              <div className="p-4 border rounded-lg flex justify-between items-center">
+              <div className="flex items-center justify-between rounded-lg border p-4">
                 <div>
                   <h4 className="font-medium">Slack</h4>
-                  <p className="text-sm text-muted-foreground">Team communication</p>
+                  <p className="text-muted-foreground text-sm">
+                    Team communication
+                  </p>
                 </div>
                 <Button variant="outline">Connect</Button>
               </div>
-              <div className="p-4 border rounded-lg flex justify-between items-center">
+              <div className="flex items-center justify-between rounded-lg border p-4">
                 <div>
                   <h4 className="font-medium">GitHub</h4>
-                  <p className="text-sm text-muted-foreground">Code repository</p>
+                  <p className="text-muted-foreground text-sm">
+                    Code repository
+                  </p>
                 </div>
                 <Button variant="outline">Connect</Button>
               </div>
             </div>
           </TabsContent>
-          
-          <TabsContent value="support" className="space-y-4 mt-0">
+
+          <TabsContent value="support" className="mt-0 space-y-4">
             <h3 className="text-lg font-semibold">Support</h3>
             <div className="space-y-4">
-              <div className="p-4 border rounded-lg">
+              <div className="rounded-lg border p-4">
                 <h4 className="font-medium">Contact Support</h4>
-                <p className="text-sm text-muted-foreground">Get help from our support team</p>
+                <p className="text-muted-foreground text-sm">
+                  Get help from our support team
+                </p>
                 <Button className="mt-2">Contact Us</Button>
               </div>
-              <div className="p-4 border rounded-lg">
+              <div className="rounded-lg border p-4">
                 <h4 className="font-medium">Documentation</h4>
-                <p className="text-sm text-muted-foreground">Learn how to use our platform</p>
-                <Button variant="outline" className="mt-2">View Docs</Button>
+                <p className="text-muted-foreground text-sm">
+                  Learn how to use our platform
+                </p>
+                <Button variant="outline" className="mt-2">
+                  View Docs
+                </Button>
               </div>
             </div>
           </TabsContent>
@@ -276,45 +295,54 @@ export const ContentTabs: Story = {
         <TabsTrigger value="code">Code</TabsTrigger>
         <TabsTrigger value="docs">Documentation</TabsTrigger>
       </TabsList>
-      
-      <TabsContent value="preview" className="border rounded-lg p-6">
+
+      <TabsContent value="preview" className="rounded-lg border p-6">
         <div className="space-y-4">
           <h3 className="text-xl font-bold">Component Preview</h3>
-          <div className="p-4 bg-muted rounded">
+          <div className="bg-muted rounded p-4">
             <Button>Sample Button</Button>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             This is how the component looks when rendered.
           </p>
         </div>
       </TabsContent>
-      
-      <TabsContent value="code" className="border rounded-lg p-6">
+
+      <TabsContent value="code" className="rounded-lg border p-6">
         <div className="space-y-4">
           <h3 className="text-xl font-bold">Source Code</h3>
-          <div className="bg-black text-green-400 p-4 rounded font-mono text-sm overflow-x-auto">
+          <div className="overflow-x-auto rounded bg-black p-4 font-mono text-sm text-green-400">
             <pre>{`<Button variant="default">
   Sample Button  
 </Button>`}</pre>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Copy and paste this code into your project.
           </p>
         </div>
       </TabsContent>
-      
-      <TabsContent value="docs" className="border rounded-lg p-6">
+
+      <TabsContent value="docs" className="rounded-lg border p-6">
         <div className="space-y-4">
           <h3 className="text-xl font-bold">Documentation</h3>
           <div className="prose prose-sm max-w-none">
             <h4>Props</h4>
             <ul>
-              <li><code>variant</code> - The visual style variant</li>
-              <li><code>size</code> - The size of the button</li>
-              <li><code>disabled</code> - Whether the button is disabled</li>
+              <li>
+                <code>variant</code> - The visual style variant
+              </li>
+              <li>
+                <code>size</code> - The size of the button
+              </li>
+              <li>
+                <code>disabled</code> - Whether the button is disabled
+              </li>
             </ul>
             <h4>Usage</h4>
-            <p>The Button component is used for triggering actions and navigation.</p>
+            <p>
+              The Button component is used for triggering actions and
+              navigation.
+            </p>
           </div>
         </div>
       </TabsContent>
@@ -323,7 +351,8 @@ export const ContentTabs: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Tabs for displaying different views of the same content (preview, code, docs).',
+        story:
+          'Tabs for displaying different views of the same content (preview, code, docs).',
       },
     },
   },
@@ -342,29 +371,29 @@ export const DisabledTab: Story = {
           Disabled
         </TabsTrigger>
       </TabsList>
-      
+
       <TabsContent value="available">
-        <div className="p-4 border rounded-lg">
+        <div className="rounded-lg border p-4">
           <h3 className="font-semibold">Available Content</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             This content is available and can be accessed.
           </p>
         </div>
       </TabsContent>
-      
+
       <TabsContent value="pending">
-        <div className="p-4 border rounded-lg">
+        <div className="rounded-lg border p-4">
           <h3 className="font-semibold">Pending Content</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             This content is pending approval.
           </p>
         </div>
       </TabsContent>
-      
+
       <TabsContent value="disabled">
-        <div className="p-4 border rounded-lg">
+        <div className="rounded-lg border p-4">
           <h3 className="font-semibold">Disabled Content</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             This content is currently disabled.
           </p>
         </div>

@@ -46,12 +46,14 @@ export const Default: Story = {
         <SheetHeader>
           <SheetTitle>Sheet Title</SheetTitle>
           <SheetDescription>
-            This is a basic sheet that slides in from the right side of the screen.
+            This is a basic sheet that slides in from the right side of the
+            screen.
           </SheetDescription>
         </SheetHeader>
         <div className="py-4">
           <p className="text-sm">
-            Sheet content goes here. You can add any content you need in this area.
+            Sheet content goes here. You can add any content you need in this
+            area.
           </p>
         </div>
         <SheetFooter>
@@ -64,7 +66,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'A basic sheet with header, content, and footer sliding from the right.',
+        story:
+          'A basic sheet with header, content, and footer sliding from the right.',
       },
     },
   },
@@ -75,7 +78,7 @@ export const Default: Story = {
  */
 export const DifferentSides: Story = {
   render: () => (
-    <div className="flex gap-4 flex-wrap justify-center">
+    <div className="flex flex-wrap justify-center gap-4">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline">Left Sheet</Button>
@@ -167,7 +170,7 @@ export const WithForm: Story = {
         <SheetHeader>
           <SheetTitle>Edit Profile</SheetTitle>
           <SheetDescription>
-            Make changes to your profile here. Click save when you're done.
+            Make changes to your profile here. Click save when you&apos;re done.
           </SheetDescription>
         </SheetHeader>
         <div className="grid gap-4 py-4">
@@ -175,11 +178,7 @@ export const WithForm: Story = {
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
-            <Input
-              id="name"
-              defaultValue="John Doe"
-              className="col-span-3"
-            />
+            <Input id="name" defaultValue="John Doe" className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="email" className="text-right">
@@ -266,7 +265,7 @@ export const NavigationMenu: Story = {
             >
               📞 Contact
             </a>
-            <div className="border-t pt-4 mt-4">
+            <div className="mt-4 border-t pt-4">
               <a
                 href="#"
                 className="flex items-center text-sm font-medium hover:underline"
@@ -275,13 +274,13 @@ export const NavigationMenu: Story = {
               </a>
               <a
                 href="#"
-                className="flex items-center text-sm font-medium hover:underline mt-2"
+                className="mt-2 flex items-center text-sm font-medium hover:underline"
               >
                 ⚙️ Settings
               </a>
               <a
                 href="#"
-                className="flex items-center text-sm font-medium hover:underline mt-2"
+                className="mt-2 flex items-center text-sm font-medium hover:underline"
               >
                 📊 Dashboard
               </a>
@@ -321,14 +320,14 @@ export const ShoppingCart: Story = {
             Review your items before checkout.
           </SheetDescription>
         </SheetHeader>
-        <div className="py-4 space-y-4">
+        <div className="space-y-4 py-4">
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-muted rounded-md flex items-center justify-center">
+            <div className="bg-muted flex h-16 w-16 items-center justify-center rounded-md">
               📱
             </div>
             <div className="flex-1">
               <h4 className="text-sm font-medium">Smartphone</h4>
-              <p className="text-sm text-muted-foreground">Color: Black</p>
+              <p className="text-muted-foreground text-sm">Color: Black</p>
               <p className="text-sm font-medium">$699.99</p>
             </div>
             <Button variant="outline" size="sm">
@@ -336,12 +335,12 @@ export const ShoppingCart: Story = {
             </Button>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-muted rounded-md flex items-center justify-center">
+            <div className="bg-muted flex h-16 w-16 items-center justify-center rounded-md">
               🎧
             </div>
             <div className="flex-1">
               <h4 className="text-sm font-medium">Headphones</h4>
-              <p className="text-sm text-muted-foreground">Color: White</p>
+              <p className="text-muted-foreground text-sm">Color: White</p>
               <p className="text-sm font-medium">$199.99</p>
             </div>
             <Button variant="outline" size="sm">
@@ -349,12 +348,12 @@ export const ShoppingCart: Story = {
             </Button>
           </div>
           <div className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-muted rounded-md flex items-center justify-center">
+            <div className="bg-muted flex h-16 w-16 items-center justify-center rounded-md">
               💻
             </div>
             <div className="flex-1">
               <h4 className="text-sm font-medium">Laptop</h4>
-              <p className="text-sm text-muted-foreground">Storage: 512GB</p>
+              <p className="text-muted-foreground text-sm">Storage: 512GB</p>
               <p className="text-sm font-medium">$1,299.99</p>
             </div>
             <Button variant="outline" size="sm">
@@ -362,15 +361,15 @@ export const ShoppingCart: Story = {
             </Button>
           </div>
           <div className="border-t pt-4">
-            <div className="flex justify-between items-center mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <span className="text-sm">Subtotal:</span>
               <span className="text-sm font-medium">$2,199.97</span>
             </div>
-            <div className="flex justify-between items-center mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <span className="text-sm">Tax:</span>
               <span className="text-sm font-medium">$219.99</span>
             </div>
-            <div className="flex justify-between items-center font-medium">
+            <div className="flex items-center justify-between font-medium">
               <span>Total:</span>
               <span>$2,419.96</span>
             </div>
@@ -409,7 +408,7 @@ export const Controlled: Story = {
             Close Sheet
           </Button>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Sheet is currently: {open ? 'Open' : 'Closed'}
         </p>
         <Sheet open={open} onOpenChange={setOpen}>
@@ -422,7 +421,8 @@ export const Controlled: Story = {
             </SheetHeader>
             <div className="py-4">
               <p className="text-sm">
-                You can control this sheet programmatically using the buttons above.
+                You can control this sheet programmatically using the buttons
+                above.
               </p>
             </div>
             <SheetFooter>
@@ -454,12 +454,12 @@ export const ContentOnly: Story = {
         <Button variant="outline">Open Content Sheet</Button>
       </SheetTrigger>
       <SheetContent>
-        <div className="h-full flex flex-col justify-center items-center space-y-4">
+        <div className="flex h-full flex-col items-center justify-center space-y-4">
           <div className="text-6xl">🎉</div>
           <h2 className="text-2xl font-bold">Success!</h2>
-          <p className="text-center text-muted-foreground">
-            Your action was completed successfully. This sheet contains only content
-            without a header or footer.
+          <p className="text-muted-foreground text-center">
+            Your action was completed successfully. This sheet contains only
+            content without a header or footer.
           </p>
           <Button onClick={() => {}}>Continue</Button>
         </div>
@@ -488,9 +488,7 @@ export const CustomSize: Story = {
         <SheetContent className="w-[300px] sm:w-[300px]">
           <SheetHeader>
             <SheetTitle>Small Sheet</SheetTitle>
-            <SheetDescription>
-              This is a smaller width sheet.
-            </SheetDescription>
+            <SheetDescription>This is a smaller width sheet.</SheetDescription>
           </SheetHeader>
           <div className="py-4">
             <p className="text-sm">Compact content area.</p>
@@ -509,21 +507,21 @@ export const CustomSize: Story = {
               This is a wider sheet with more space for content.
             </SheetDescription>
           </SheetHeader>
-          <div className="py-4 space-y-4">
+          <div className="space-y-4 py-4">
             <p className="text-sm">
-              This larger sheet has more room for detailed content, forms, or other
-              complex layouts.
+              This larger sheet has more room for detailed content, forms, or
+              other complex layouts.
             </p>
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 border rounded">
-                <h4 className="font-medium mb-2">Section 1</h4>
-                <p className="text-sm text-muted-foreground">
+              <div className="rounded border p-4">
+                <h4 className="mb-2 font-medium">Section 1</h4>
+                <p className="text-muted-foreground text-sm">
                   Content for the first section.
                 </p>
               </div>
-              <div className="p-4 border rounded">
-                <h4 className="font-medium mb-2">Section 2</h4>
-                <p className="text-sm text-muted-foreground">
+              <div className="rounded border p-4">
+                <h4 className="mb-2 font-medium">Section 2</h4>
+                <p className="text-muted-foreground text-sm">
                   Content for the second section.
                 </p>
               </div>

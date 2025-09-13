@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type UseFormReturn, type FieldValues } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -40,7 +40,11 @@ const profileSchema = z.object({
   lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Please enter a valid email address'),
   bio: z.string().optional(),
-  website: z.string().url('Please enter a valid URL').optional().or(z.literal('')),
+  website: z
+    .string()
+    .url('Please enter a valid URL')
+    .optional()
+    .or(z.literal('')),
 });
 
 const contactSchema = z.object({
@@ -58,6 +62,11 @@ type ContactFormData = z.infer<typeof contactSchema>;
  * Basic login form
  */
 export const LoginForm: Story = {
+  args: {
+    form: {} as UseFormReturn<FieldValues>,
+    onSubmit: () => {},
+    children: null,
+  },
   render: () => {
     const form = useForm<LoginFormData>({
       resolver: zodResolver(loginSchema),
@@ -68,7 +77,7 @@ export const LoginForm: Story = {
     });
 
     const onSubmit = (data: LoginFormData) => {
-      console.log('Login form data:', data);
+      // Login form data submitted
       alert(`Login attempt for: ${data.email}`);
     };
 
@@ -76,15 +85,13 @@ export const LoginForm: Story = {
       <div className="w-full max-w-sm space-y-4">
         <div className="text-center">
           <h2 className="text-2xl font-bold">Sign In</h2>
-          <p className="text-muted-foreground">Enter your credentials to continue</p>
+          <p className="text-muted-foreground">
+            Enter your credentials to continue
+          </p>
         </div>
-        
+
         <Form form={form} onSubmit={onSubmit}>
-          <FormField
-            label="Email"
-            required
-            error={form.formState.errors.email}
-          >
+          <FormField label="Email" required error={form.formState.errors.email}>
             <Input
               type="email"
               placeholder="Enter your email"
@@ -124,6 +131,11 @@ export const LoginForm: Story = {
  * Profile form with multiple fields
  */
 export const ProfileForm: Story = {
+  args: {
+    form: {} as UseFormReturn<FieldValues>,
+    onSubmit: () => {},
+    children: null,
+  },
   render: () => {
     const form = useForm<ProfileFormData>({
       resolver: zodResolver(profileSchema),
@@ -136,8 +148,8 @@ export const ProfileForm: Story = {
       },
     });
 
-    const onSubmit = (data: ProfileFormData) => {
-      console.log('Profile form data:', data);
+    const onSubmit = (_data: ProfileFormData) => {
+      // Profile form data submitted
       alert('Profile updated successfully!');
     };
 
@@ -145,9 +157,11 @@ export const ProfileForm: Story = {
       <div className="w-full max-w-md space-y-4">
         <div className="text-center">
           <h2 className="text-xl font-bold">Edit Profile</h2>
-          <p className="text-muted-foreground">Update your profile information</p>
+          <p className="text-muted-foreground">
+            Update your profile information
+          </p>
         </div>
-        
+
         <Form form={form} onSubmit={onSubmit}>
           <div className="grid grid-cols-2 gap-4">
             <FormField
@@ -167,11 +181,7 @@ export const ProfileForm: Story = {
             </FormField>
           </div>
 
-          <FormField
-            label="Email"
-            required
-            error={form.formState.errors.email}
-          >
+          <FormField label="Email" required error={form.formState.errors.email}>
             <Input
               type="email"
               placeholder="john@example.com"
@@ -204,7 +214,11 @@ export const ProfileForm: Story = {
           </FormField>
 
           <div className="flex gap-2">
-            <Button type="button" variant="outline" onClick={() => form.reset()}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => form.reset()}
+            >
               Reset
             </Button>
             <Button type="submit" className="flex-1">
@@ -228,6 +242,11 @@ export const ProfileForm: Story = {
  * Contact form with loading state
  */
 export const ContactFormWithLoading: Story = {
+  args: {
+    form: {} as UseFormReturn<FieldValues>,
+    onSubmit: () => {},
+    children: null,
+  },
   render: () => {
     const [isLoading, setIsLoading] = useState(false);
     const form = useForm<ContactFormData>({
@@ -240,13 +259,13 @@ export const ContactFormWithLoading: Story = {
       },
     });
 
-    const onSubmit = async (data: ContactFormData) => {
+    const onSubmit = async (_data: ContactFormData) => {
       setIsLoading(true);
-      console.log('Contact form data:', data);
-      
+      // Contact form data submitted
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       setIsLoading(false);
       alert('Message sent successfully!');
       form.reset();
@@ -256,23 +275,17 @@ export const ContactFormWithLoading: Story = {
       <div className="w-full max-w-md space-y-4">
         <div className="text-center">
           <h2 className="text-xl font-bold">Contact Us</h2>
-          <p className="text-muted-foreground">We'd love to hear from you</p>
+          <p className="text-muted-foreground">
+            We&apos;d love to hear from you
+          </p>
         </div>
-        
+
         <Form form={form} onSubmit={onSubmit} loading={isLoading}>
-          <FormField
-            label="Name"
-            required
-            error={form.formState.errors.name}
-          >
+          <FormField label="Name" required error={form.formState.errors.name}>
             <Input placeholder="Your name" {...form.register('name')} />
           </FormField>
 
-          <FormField
-            label="Email"
-            required
-            error={form.formState.errors.email}
-          >
+          <FormField label="Email" required error={form.formState.errors.email}>
             <Input
               type="email"
               placeholder="your@email.com"
@@ -324,6 +337,11 @@ export const ContactFormWithLoading: Story = {
  * Form with conditional fields
  */
 export const ConditionalForm: Story = {
+  args: {
+    form: {} as UseFormReturn<FieldValues>,
+    onSubmit: () => {},
+    children: null,
+  },
   render: () => {
     const form = useForm({
       defaultValues: {
@@ -337,8 +355,8 @@ export const ConditionalForm: Story = {
 
     const watchAccountType = form.watch('accountType');
 
-    const onSubmit = (data: any) => {
-      console.log('Conditional form data:', data);
+    const onSubmit = (_data: Record<string, unknown>) => {
+      // Conditional form data submitted
       alert('Account created successfully!');
     };
 
@@ -348,11 +366,11 @@ export const ConditionalForm: Story = {
           <h2 className="text-xl font-bold">Create Account</h2>
           <p className="text-muted-foreground">Choose your account type</p>
         </div>
-        
+
         <Form form={form} onSubmit={onSubmit}>
           <FormField label="Account Type" required>
             <select
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none"
               {...form.register('accountType')}
             >
               <option value="personal">Personal</option>
@@ -371,7 +389,10 @@ export const ConditionalForm: Story = {
             </div>
           ) : (
             <FormField label="Company Name" required>
-              <Input placeholder="Acme Corp" {...form.register('companyName')} />
+              <Input
+                placeholder="Acme Corp"
+                {...form.register('companyName')}
+              />
             </FormField>
           )}
 
@@ -403,6 +424,11 @@ export const ConditionalForm: Story = {
  * Form with custom validation
  */
 export const CustomValidation: Story = {
+  args: {
+    form: {} as UseFormReturn<FieldValues>,
+    onSubmit: () => {},
+    children: null,
+  },
   render: () => {
     const form = useForm({
       defaultValues: {
@@ -415,8 +441,8 @@ export const CustomValidation: Story = {
 
     const password = form.watch('password');
 
-    const onSubmit = (data: any) => {
-      console.log('Registration form data:', data);
+    const onSubmit = (_data: Record<string, unknown>) => {
+      // Registration form data submitted
       alert('Registration successful!');
     };
 
@@ -426,7 +452,7 @@ export const CustomValidation: Story = {
           <h2 className="text-xl font-bold">Register</h2>
           <p className="text-muted-foreground">Create your account</p>
         </div>
-        
+
         <Form form={form} onSubmit={onSubmit}>
           <FormField
             label="Username"
@@ -444,7 +470,8 @@ export const CustomValidation: Story = {
                 },
                 pattern: {
                   value: /^[a-zA-Z0-9_]+$/,
-                  message: 'Username can only contain letters, numbers, and underscores',
+                  message:
+                    'Username can only contain letters, numbers, and underscores',
                 },
               })}
             />
@@ -479,14 +506,14 @@ export const CustomValidation: Story = {
               placeholder="confirm password"
               {...form.register('confirmPassword', {
                 required: 'Please confirm your password',
-                validate: (value) =>
+                validate: value =>
                   value === password || 'Passwords do not match',
               })}
             />
           </FormField>
 
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={!form.formState.isValid}
             className="w-full"
           >

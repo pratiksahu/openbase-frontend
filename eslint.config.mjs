@@ -39,6 +39,12 @@ const eslintConfig = [// Global ignores
     '.lintstagedrc.js',
     'vitest.config.ts',
     'vitest.shims.d.ts',
+    'playwright-report/**',
+    'test-results/**',
+    'scripts/**/*.js',
+    'tasks/**',
+    'jest.setup.js',
+    'worker/**/*.js',
   ],
 }, // Base Next.js and TypeScript configuration
 ...compat.extends('next/core-web-vitals', 'next/typescript'), // Enhanced configuration for all JS/TS files

@@ -43,7 +43,8 @@ export const Default: Story = {
         <DialogHeader>
           <DialogTitle>Dialog Title</DialogTitle>
           <DialogDescription>
-            This is a basic dialog with a title and description. You can add any content here.
+            This is a basic dialog with a title and description. You can add any
+            content here.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
@@ -121,17 +122,20 @@ export const FormDialog: Story = {
             </label>
             <input
               id="name"
-              className="col-span-3 px-3 py-2 border rounded-md"
+              className="col-span-3 rounded-md border px-3 py-2"
               placeholder="Enter name..."
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <label htmlFor="description" className="text-right text-sm font-medium">
+            <label
+              htmlFor="description"
+              className="text-right text-sm font-medium"
+            >
               Description
             </label>
             <textarea
               id="description"
-              className="col-span-3 px-3 py-2 border rounded-md"
+              className="col-span-3 rounded-md border px-3 py-2"
               rows={3}
               placeholder="Enter description..."
             />
@@ -166,13 +170,13 @@ export const InfoDialog: Story = {
         <DialogHeader>
           <DialogTitle>Information</DialogTitle>
           <DialogDescription>
-            Here's some important information you should know.
+            Here&apos;s some important information you should know.
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
           <div className="space-y-2">
             <h4 className="text-sm font-medium">Features:</h4>
-            <ul className="text-sm text-muted-foreground space-y-1">
+            <ul className="text-muted-foreground space-y-1 text-sm">
               <li>• Accessible by default</li>
               <li>• Keyboard navigation support</li>
               <li>• Focus management</li>
@@ -207,7 +211,7 @@ export const ControlledDialog: Story = {
             Close Dialog
           </Button>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Dialog is currently: {open ? 'Open' : 'Closed'}
         </p>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -220,7 +224,8 @@ export const ControlledDialog: Story = {
             </DialogHeader>
             <div className="py-4">
               <p className="text-sm">
-                You can control this dialog programmatically using the buttons above.
+                You can control this dialog programmatically using the buttons
+                above.
               </p>
             </div>
             <DialogFooter>
@@ -251,9 +256,9 @@ export const CustomStyledDialog: Story = {
       <DialogTrigger asChild>
         <Button>Custom Dialog</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900">
+      <DialogContent className="bg-gradient-to-br from-blue-50 to-indigo-100 sm:max-w-[600px] dark:from-blue-950 dark:to-indigo-900">
         <DialogHeader>
-          <DialogTitle className="text-xl bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <DialogTitle className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-xl text-transparent">
             Custom Styled Dialog
           </DialogTitle>
           <DialogDescription className="text-blue-700 dark:text-blue-300">
@@ -261,7 +266,7 @@ export const CustomStyledDialog: Story = {
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
-          <div className="bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg">
+          <div className="rounded-lg bg-white/50 p-4 dark:bg-gray-800/50">
             <p className="text-sm">
               You can customize the appearance of dialogs using Tailwind classes
               or your own CSS styles.

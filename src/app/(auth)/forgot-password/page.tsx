@@ -8,10 +8,23 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
@@ -35,21 +48,21 @@ export default function ForgotPasswordPage() {
 
   async function onSubmit(_data: FormData) {
     setIsLoading(true);
-    
+
     try {
       // TODO: Implement actual password reset logic
       // Password reset email will be sent here
-      
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       setIsSubmitted(true);
-      
+
       toast({
         title: 'Reset link sent',
         description: 'Check your email for password reset instructions.',
       });
-      
+
       // Redirect to login after 3 seconds
       setTimeout(() => {
         router.push('/login');
@@ -70,17 +83,19 @@ export default function ForgotPasswordPage() {
       <div className="flex min-h-screen items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Check your email</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Check your email
+            </CardTitle>
             <CardDescription>
               We&apos;ve sent a password reset link to your email address.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               If you don&apos;t see the email, check your spam folder.
             </p>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full"
               onClick={() => router.push('/login')}
             >
@@ -98,7 +113,8 @@ export default function ForgotPasswordPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Reset password</CardTitle>
           <CardDescription>
-            Enter your email address and we&apos;ll send you a link to reset your password
+            Enter your email address and we&apos;ll send you a link to reset
+            your password
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -129,7 +145,7 @@ export default function ForgotPasswordPage() {
           </Form>
         </CardContent>
         <CardFooter>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             Remember your password?{' '}
             <Link href="/login" className="text-primary hover:underline">
               Sign in

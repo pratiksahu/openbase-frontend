@@ -2,18 +2,16 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-export interface InputProps extends React.ComponentProps<'input'> {
-  // Additional props can be added here when needed
-}
+export type InputProps = React.ComponentProps<'input'>;
 
 /**
  * A flexible input component supporting various types and states
  *
  * @example
  * ```tsx
- * <Input 
- *   type="email" 
- *   placeholder="Enter your email..." 
+ * <Input
+ *   type="email"
+ *   placeholder="Enter your email..."
  *   onChange={handleChange}
  * />
  * ```

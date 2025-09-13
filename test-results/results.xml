@@ -1,0 +1,11 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="2.631453999999998">
+<testsuite name="example.spec.ts" timestamp="2025-09-12T20:12:40.119Z" hostname="chromium" tests="1" failures="0" skipped="0" time="1.336" errors="0">
+<testcase name="Form Testing › should handle form interactions on test-forms page" classname="example.spec.ts" time="1.336">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|example-Form-Testing-shoul-6e37e-ractions-on-test-forms-page-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

@@ -16,7 +16,7 @@ interface SecurityEvent {
   type: SecurityEventType;
   severity: 'low' | 'medium' | 'high' | 'critical';
   message: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   timestamp: Date;
   ip?: string;
   userAgent?: string;
@@ -25,11 +25,16 @@ interface SecurityEvent {
 
 class SecurityMonitor {
   private events: SecurityEvent[] = [];
-  private alertThresholds = {
+  private alertThresholds: Record<SecurityEventType, number> = {
     [SecurityEventType.FAILED_LOGIN]: 5, // 5 failed logins
     [SecurityEventType.RATE_LIMIT_EXCEEDED]: 3, // 3 rate limit hits
     [SecurityEventType.XSS_ATTEMPT]: 1, // Any XSS attempt
     [SecurityEventType.SQL_INJECTION_ATTEMPT]: 1, // Any SQL injection attempt
+    [SecurityEventType.SUSPICIOUS_REQUEST]: 2, // 2 suspicious requests
+    [SecurityEventType.UNAUTHORIZED_ACCESS]: 1, // Any unauthorized access
+    [SecurityEventType.INVALID_TOKEN]: 3, // 3 invalid token attempts
+    [SecurityEventType.ACCOUNT_LOCKED]: 1, // Any account lock
+    [SecurityEventType.CSRF_ATTACK]: 1, // Any CSRF attack
   };
 
   logEvent(event: Omit<SecurityEvent, 'timestamp'>): void {
@@ -98,8 +103,8 @@ class SecurityMonitor {
   }
 
   private sendAlert(eventType: SecurityEventType, count: number): void {
-    const alert = {
-      type: 'SECURITY_ALERT',
+    const alert: SecurityEvent = {
+      type: SecurityEventType.SUSPICIOUS_REQUEST,
       message: `Multiple ${eventType} events detected: ${count} in the last hour`,
       severity: 'high' as const,
       timestamp: new Date(),
@@ -109,7 +114,7 @@ class SecurityMonitor {
 
     // Send alert to administrators
     if (env.NODE_ENV === 'production') {
-      this.sendToMonitoringService(alert as any);
+      this.sendToMonitoringService(alert);
     }
   }
 

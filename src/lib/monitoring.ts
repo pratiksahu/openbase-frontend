@@ -4,43 +4,43 @@ import { env } from './env';
 export const initSentry = () => {
   if (env.NEXT_PUBLIC_SENTRY_DSN) {
     // Initialize Sentry
-    console.log('Sentry initialized');
+    // Sentry monitoring initialized with DSN
   }
 };
 
 // Performance monitoring
-export const trackDeployment = (version: string) => {
+export const trackDeployment = (_version: string) => {
   // Track deployment metrics
   if (env.NODE_ENV === 'production') {
-    console.log(`Deployment tracked: ${version}`);
+    // Deployment tracking enabled for version: ${version}
   }
 };
 
 // Custom metrics
 export const trackMetric = (
-  name: string,
-  value: number,
-  tags?: Record<string, string>
+  _name: string,
+  _value: number,
+  _tags?: Record<string, string>
 ) => {
   // Send metrics to monitoring service
   if (env.NODE_ENV === 'production') {
-    console.log(`Metric: ${name} = ${value}`, tags);
+    // Metric tracked: ${name} = ${value} with tags
   }
 };
 
 // Performance tracking
-export const trackPageView = (page: string) => {
+export const trackPageView = (_page: string) => {
   if (env.NEXT_PUBLIC_ENABLE_ANALYTICS && env.NEXT_PUBLIC_GA_ID) {
     // Track page views with Google Analytics
-    console.log(`Page view tracked: ${page}`);
+    // Page view analytics tracked for: ${page}
   }
 };
 
 // Error tracking
-export const trackError = (error: Error, context?: Record<string, any>) => {
+export const trackError = (error: Error, _context?: Record<string, any>) => {
   if (env.NODE_ENV === 'production') {
-    console.error('Error tracked:', error.message, context);
-    
+    console.error('Error tracked:', error.message, _context);
+
     // Send to error tracking service
     if (env.SENTRY_DSN) {
       // Send to Sentry
@@ -49,8 +49,11 @@ export const trackError = (error: Error, context?: Record<string, any>) => {
 };
 
 // Feature usage tracking
-export const trackFeatureUsage = (feature: string, data?: Record<string, any>) => {
+export const trackFeatureUsage = (
+  _feature: string,
+  _data?: Record<string, any>
+) => {
   if (env.NEXT_PUBLIC_ENABLE_ANALYTICS) {
-    console.log(`Feature usage tracked: ${feature}`, data);
+    // Feature usage analytics tracked: ${feature}
   }
 };

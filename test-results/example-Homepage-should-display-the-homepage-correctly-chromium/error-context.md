@@ -1,0 +1,107 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+    - generic [ref=e4]:
+        - generic [ref=e5]:
+            - heading "Build Amazing Apps Faster Than Ever" [level=1] [ref=e6]:
+                - text: Build Amazing Apps
+                - generic [ref=e7]: Faster Than Ever
+            - paragraph [ref=e8]: A modern Next.js starter with everything you need to build production-ready applications. TypeScript, Tailwind CSS, testing, and more.
+        - generic [ref=e9]:
+            - link "Get Started" [ref=e10] [cursor=pointer]:
+                - /url: /features
+                - text: Get Started
+                - img
+            - link "View Demo" [ref=e11] [cursor=pointer]:
+                - /url: '#demo'
+                - img
+                - text: View Demo
+        - generic [ref=e12]:
+            - generic [ref=e13]:
+                - img [ref=e14]
+                - img [ref=e16]
+                - img [ref=e18]
+                - img [ref=e20]
+                - img [ref=e22]
+            - generic [ref=e24]: Trusted by 1000+ developers
+    - generic [ref=e27]:
+        - generic [ref=e28]:
+            - heading "Everything You Need" [level=2] [ref=e29]
+            - paragraph [ref=e30]: Built with modern tools and best practices to help you ship faster and build better.
+        - generic [ref=e31]:
+            - generic [ref=e32]:
+                - img [ref=e34]
+                - heading "TypeScript Ready" [level=3] [ref=e36]
+                - paragraph [ref=e37]: Built with TypeScript for better developer experience and type safety.
+            - generic [ref=e38]:
+                - img [ref=e40]
+                - heading "Modern UI" [level=3] [ref=e42]
+                - paragraph [ref=e43]: Beautiful components built with Tailwind CSS and Radix UI primitives.
+            - generic [ref=e44]:
+                - img [ref=e46]
+                - heading "Production Ready" [level=3] [ref=e48]
+                - paragraph [ref=e49]: Optimized builds, testing setup, and deployment configuration included.
+        - link "View All Features" [ref=e50] [cursor=pointer]:
+            - /url: /features
+    - generic [ref=e53]:
+        - heading "Loved by Developers" [level=2] [ref=e54]
+        - generic [ref=e55]:
+            - generic [ref=e56]:
+                - generic [ref=e57]:
+                    - img [ref=e58]
+                    - img [ref=e60]
+                    - img [ref=e62]
+                    - img [ref=e64]
+                    - img [ref=e66]
+                - paragraph [ref=e68]: '"This starter saved me weeks of setup time. Everything just works!"'
+                - generic [ref=e69]:
+                    - generic [ref=e70]:
+                        - img "Sarah Johnson" [ref=e71]
+                        - generic [ref=e73]: Failed to load image
+                    - generic [ref=e74]:
+                        - paragraph [ref=e75]: Sarah Johnson
+                        - paragraph [ref=e76]: Frontend Developer
+            - generic [ref=e77]:
+                - generic [ref=e78]:
+                    - img [ref=e79]
+                    - img [ref=e81]
+                    - img [ref=e83]
+                    - img [ref=e85]
+                    - img [ref=e87]
+                - paragraph [ref=e89]: '"The best Next.js starter I''ve used. Great documentation and examples."'
+                - generic [ref=e90]:
+                    - generic [ref=e91]:
+                        - img "Mike Chen" [ref=e92]
+                        - generic [ref=e94]: Failed to load image
+                    - generic [ref=e95]:
+                        - paragraph [ref=e96]: Mike Chen
+                        - paragraph [ref=e97]: Full Stack Developer
+            - generic [ref=e98]:
+                - generic [ref=e99]:
+                    - img [ref=e100]
+                    - img [ref=e102]
+                    - img [ref=e104]
+                    - img [ref=e106]
+                    - img [ref=e108]
+                - paragraph [ref=e110]: '"Clean code, modern patterns, and excellent performance out of the box."'
+                - generic [ref=e111]:
+                    - generic [ref=e112]:
+                        - img "Emma Davis" [ref=e113]
+                        - generic [ref=e115]: Failed to load image
+                    - generic [ref=e116]:
+                        - paragraph [ref=e117]: Emma Davis
+                        - paragraph [ref=e118]: Tech Lead
+    - generic [ref=e121]:
+        - heading "Ready to Get Started?" [level=2] [ref=e122]
+        - paragraph [ref=e123]: Join thousands of developers building amazing applications.
+        - generic [ref=e124]:
+            - link "Start Building" [ref=e125] [cursor=pointer]:
+                - /url: /register
+            - link "Contact Sales" [ref=e126] [cursor=pointer]:
+                - /url: /contact
+    - region "Notifications alt+T"
+    - button "Open Next.js Dev Tools" [ref=e132] [cursor=pointer]:
+        - img [ref=e133] [cursor=pointer]
+    - alert [ref=e136]
+```

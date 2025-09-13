@@ -35,9 +35,9 @@ type Story = StoryObj<typeof meta>;
  */
 export const Default: Story = {
   args: {
-    onSubmit: (data) => {
-      console.log('Contact form submitted:', data);
-      alert(`Thank you ${data.name}! We'll get back to you soon.`);
+    onSubmit: _data => {
+      // Contact form submitted with data
+      alert(`Thank you ${_data.name}! We'll get back to you soon.`);
     },
   },
   parameters: {
@@ -56,24 +56,34 @@ export const WithCustomHandler: Story = {
   render: () => {
     const [submissions, setSubmissions] = useState<any[]>([]);
 
-    const handleSubmit = (data: any) => {
-      console.log('Custom handler called:', data);
-      setSubmissions(prev => [...prev, { ...data, timestamp: new Date().toISOString() }]);
+    const handleSubmit = (_data: any) => {
+      // Custom handler called with form data
+      setSubmissions(prev => [
+        ...prev,
+        { ..._data, timestamp: new Date().toISOString() },
+      ]);
     };
 
     return (
       <div className="space-y-6">
         <ContactForm onSubmit={handleSubmit} />
-        
+
         {submissions.length > 0 && (
-          <div className="w-full max-w-md p-4 border rounded-lg bg-muted/50">
-            <h3 className="font-medium mb-2">Submissions ({submissions.length})</h3>
-            <div className="space-y-2 max-h-40 overflow-y-auto">
+          <div className="bg-muted/50 w-full max-w-md rounded-lg border p-4">
+            <h3 className="mb-2 font-medium">
+              Submissions ({submissions.length})
+            </h3>
+            <div className="max-h-40 space-y-2 overflow-y-auto">
               {submissions.map((submission, index) => (
-                <div key={index} className="text-sm p-2 bg-background rounded border">
+                <div
+                  key={index}
+                  className="bg-background rounded border p-2 text-sm"
+                >
                   <div className="font-medium">{submission.name}</div>
-                  <div className="text-muted-foreground">{submission.email}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
+                  <div className="text-muted-foreground">
+                    {submission.email}
+                  </div>
+                  <div className="text-muted-foreground mt-1 text-xs">
                     {new Date(submission.timestamp).toLocaleString()}
                   </div>
                 </div>
@@ -87,7 +97,8 @@ export const WithCustomHandler: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Contact form with a custom submit handler that tracks submissions.',
+        story:
+          'Contact form with a custom submit handler that tracks submissions.',
       },
     },
   },
@@ -100,28 +111,30 @@ export const WithErrorSimulation: Story = {
   render: () => {
     const [shouldError, setShouldError] = useState(false);
 
-    const handleSubmit = async (data: any) => {
+    const handleSubmit = async (__data: any) => {
       if (shouldError) {
-        throw new Error('Network error: Failed to send message. Please try again.');
+        throw new Error(
+          'Network error: Failed to send message. Please try again.'
+        );
       }
       alert('Message sent successfully!');
     };
 
     return (
       <div className="space-y-4">
-        <div className="flex items-center gap-2 p-3 border rounded-lg">
+        <div className="flex items-center gap-2 rounded-lg border p-3">
           <input
             type="checkbox"
             id="error-sim"
             checked={shouldError}
-            onChange={(e) => setShouldError(e.target.checked)}
+            onChange={_e => setShouldError(_e.target.checked)}
             className="h-4 w-4"
           />
           <label htmlFor="error-sim" className="text-sm">
             Simulate submission error
           </label>
         </div>
-        
+
         <ContactForm onSubmit={handleSubmit} />
       </div>
     );
@@ -140,9 +153,10 @@ export const WithErrorSimulation: Story = {
  */
 export const CustomStyling: Story = {
   args: {
-    className: 'bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/20 dark:to-indigo-950/20 p-6 rounded-lg border',
-    onSubmit: (data) => {
-      console.log('Styled form submitted:', data);
+    className:
+      'bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950/20 dark:to-indigo-950/20 p-6 rounded-lg border',
+    onSubmit: _data => {
+      // Styled form submitted with data
       alert('Message received! Thanks for reaching out.');
     },
   },
@@ -161,8 +175,10 @@ export const CustomStyling: Story = {
 export const Minimal: Story = {
   render: () => (
     <div className="w-full max-w-xs">
-      <ContactForm 
-        onSubmit={(data) => console.log('Minimal form:', data)}
+      <ContactForm
+        onSubmit={_data => {
+          // Minimal form submitted with data
+        }}
       />
     </div>
   ),
@@ -180,19 +196,19 @@ export const Minimal: Story = {
  */
 export const InModal: Story = {
   render: () => (
-    <div className="max-w-lg mx-auto">
-      <div className="bg-background border rounded-lg shadow-lg p-6">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold mb-2">Get In Touch</h2>
+    <div className="mx-auto max-w-lg">
+      <div className="bg-background rounded-lg border p-6 shadow-lg">
+        <div className="mb-6 text-center">
+          <h2 className="mb-2 text-2xl font-bold">Get In Touch</h2>
           <p className="text-muted-foreground">
             Have a question or want to work together? Send us a message!
           </p>
         </div>
-        
-        <ContactForm 
-          onSubmit={(data) => {
-            console.log('Modal form:', data);
-            alert('Message sent! We\'ll respond within 24 hours.');
+
+        <ContactForm
+          onSubmit={_data => {
+            // Modal form submitted with data
+            alert("Message sent! We'll respond within 24 hours.");
           }}
         />
       </div>
@@ -216,16 +232,17 @@ export const PreFilled: Story = {
     // For now, we show the concept
     return (
       <div className="space-y-4">
-        <div className="p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-950/20">
           <p className="text-sm text-blue-800 dark:text-blue-200">
-            <strong>Note:</strong> This story demonstrates the concept of pre-filled forms. 
-            In a real implementation, you would pass defaultValues to the ContactForm component.
+            <strong>Note:</strong> This story demonstrates the concept of
+            pre-filled forms. In a real implementation, you would pass
+            defaultValues to the ContactForm component.
           </p>
         </div>
-        
-        <ContactForm 
-          onSubmit={(data) => {
-            console.log('Pre-filled form:', data);
+
+        <ContactForm
+          onSubmit={_data => {
+            // Pre-filled form submitted with data
             alert('Updated message sent!');
           }}
         />
@@ -235,7 +252,8 @@ export const PreFilled: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Concept of a contact form with pre-filled data (would require component modification).',
+        story:
+          'Concept of a contact form with pre-filled data (would require component modification).',
       },
     },
   },
