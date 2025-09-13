@@ -116,9 +116,9 @@ export function CriteriaEditor({
           // Parse simple text list (one criterion per line)
           criteria = bulkCriteria
             .split('\n')
-            .map((line, index) => line.trim())
+            .map((line, _index) => line.trim())
             .filter(Boolean)
-            .map((description) => ({
+            .map((description, _index) => ({
               description,
               category: 'required' as CriteriaCategory,
               order: index + 1,

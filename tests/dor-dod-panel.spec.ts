@@ -457,7 +457,7 @@ test.describe('DorDodPanel Component', () => {
       await expect(headings.first()).toBeVisible();
 
       // Check for proper semantic structure
-      const _landmarks = page.getByRole('region');
+      // const landmarks = page.getByRole('region');
       // Specific assertions depend on landmark implementation
     });
   });
