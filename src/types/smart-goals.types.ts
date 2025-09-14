@@ -742,16 +742,22 @@ export type SmartGoalCreate = Omit<
   | 'updatedAt'
   | 'createdBy'
   | 'updatedBy'
-  | 'checkpoints'
-  | 'tasks'
-  | 'milestones'
-  | 'outcomes'
-  | 'childGoalIds'
   | 'actualStartDate'
   | 'actualCompletionDate'
   | 'lastProgressUpdate'
   | 'nextReviewDate'
->;
+> & {
+  /** Progress checkpoints (optional during creation) */
+  checkpoints?: MetricCheckpoint[];
+  /** Associated tasks (optional during creation) */
+  tasks?: Task[];
+  /** Key milestones (optional during creation) */
+  milestones?: Milestone[];
+  /** Expected outcomes (optional during creation) */
+  outcomes?: Outcome[];
+  /** Child goal IDs (optional during creation) */
+  childGoalIds?: string[];
+};
 
 /** Utility type for filtering goals */
 export interface GoalFilters {

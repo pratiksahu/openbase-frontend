@@ -2,7 +2,7 @@
  * Type definitions for SmartScoreBadge component
  */
 
-import { SmartGoal } from '@/types/smart-goals.types';
+import { SmartGoal, SmartGoalCreate } from '@/types/smart-goals.types';
 
 /** Size variants for the badge */
 export type BadgeSize = 'sm' | 'md' | 'lg';
@@ -36,7 +36,7 @@ export interface SmartScoreResult {
 /** Props for SmartScoreBadge component */
 export interface SmartScoreBadgeProps {
   /** SMART goal to calculate score for */
-  goal: SmartGoal;
+  goal: SmartGoal | SmartGoalCreate;
   /** Size variant of the badge */
   size?: BadgeSize;
   /** Whether to show the tooltip with breakdown */

@@ -566,6 +566,7 @@ export function transformToSmartGoal(formData: WizardFormData): SmartGoalCreate 
     // Metadata
     visibility: formData.visibility,
     isArchived: false,
+    isDeleted: false,
   };
 }
 

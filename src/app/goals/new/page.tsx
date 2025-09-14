@@ -13,10 +13,10 @@ import { useRouter } from 'next/navigation';
 import React, { useCallback } from 'react';
 
 import { GoalWizard } from '@/components/GoalWizard/GoalWizard';
-import type { WizardStep } from '@/components/GoalWizard/GoalWizard.types';
+import type { WizardStep, WizardFormData } from '@/components/GoalWizard/GoalWizard.types';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import type { SmartGoal } from '@/types/smart-goals.types';
+import type { SmartGoal, SmartGoalCreate } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
@@ -38,25 +38,28 @@ interface NewGoalPageProps {
 // Main New Goal Page Component
 // =============================================================================
 
-export default function NewGoalPage({ searchParams }: NewGoalPageProps) {
+export default function NewGoalPage({ searchParams: _searchParams }: NewGoalPageProps) {
   const router = useRouter();
 
   // Handle successful goal creation
-  const handleSave = useCallback(async (goal: SmartGoal) => {
+  const handleSave = useCallback(async (goalData: SmartGoalCreate) => {
     try {
       // TODO: Replace with actual API call
-      console.log('Saving goal:', goal);
+      console.warn('Saving goal:', goalData);
 
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
 
+      // Generate a temporary ID for navigation (in real app, this would come from API)
+      const tempId = `goal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
       toast({
         title: 'Goal Created Successfully!',
-        description: `"${goal.title}" has been created and is ready to track.`,
+        description: `"${goalData.title}" has been created and is ready to track.`,
       });
 
       // Redirect to the goal detail page
-      router.push(`/goals/${goal.id}`);
+      router.push(`/goals/${tempId}`);
     } catch (error) {
       console.error('Failed to save goal:', error);
       toast({
@@ -68,10 +71,10 @@ export default function NewGoalPage({ searchParams }: NewGoalPageProps) {
   }, [router]);
 
   // Handle draft saving
-  const handleSaveDraft = useCallback(async (goalData: any) => {
+  const handleSaveDraft = useCallback(async (goalData: Partial<WizardFormData>) => {
     try {
       // TODO: Replace with actual API call to save draft
-      console.log('Saving draft:', goalData);
+      console.warn('Saving draft:', goalData);
 
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -98,7 +101,7 @@ export default function NewGoalPage({ searchParams }: NewGoalPageProps) {
   // Handle step changes (for analytics/tracking)
   const handleStepChange = useCallback((step: WizardStep) => {
     // TODO: Track step changes for analytics
-    console.log('Step changed to:', step);
+    console.warn('Step changed to:', step);
   }, []);
 
   return (

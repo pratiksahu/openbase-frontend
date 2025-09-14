@@ -2,13 +2,16 @@
  * Utility functions for calculating SMART goal scores
  */
 
-import { SmartGoal } from '@/types/smart-goals.types';
+import { SmartGoal, SmartGoalCreate } from '@/types/smart-goals.types';
 
 import {
   SmartScoreBreakdown,
   SmartScoreResult,
   ScoreConfig,
 } from './SmartScoreBadge.types';
+
+/** Union type for goal objects that can be scored */
+type ScorableGoal = SmartGoal | SmartGoalCreate;
 
 /** Default configuration for score calculation */
 export const DEFAULT_CONFIG: Required<ScoreConfig> = {
@@ -23,7 +26,7 @@ export const DEFAULT_CONFIG: Required<ScoreConfig> = {
  * Calculate the Specific (S) criteria score
  * Checks if title, description, specificObjective, and successCriteria are present
  */
-function calculateSpecificScore(goal: SmartGoal): number {
+function calculateSpecificScore(goal: ScorableGoal): number {
   let score = 0;
   const maxScore = 20;
   const criteriaCount = 4;
@@ -56,7 +59,7 @@ function calculateSpecificScore(goal: SmartGoal): number {
  * Calculate the Measurable (M) criteria score
  * Checks if measurable specs and checkpoints exist
  */
-function calculateMeasurableScore(goal: SmartGoal): number {
+function calculateMeasurableScore(goal: ScorableGoal): number {
   let score = 0;
   const maxScore = 20;
   const criteriaCount = 4;
@@ -93,7 +96,7 @@ function calculateMeasurableScore(goal: SmartGoal): number {
  * Calculate the Achievable (A) criteria score
  * Checks achievability score and resources
  */
-function calculateAchievableScore(goal: SmartGoal): number {
+function calculateAchievableScore(goal: ScorableGoal): number {
   let score = 0;
   const maxScore = 20;
   const criteriaCount = 4;
@@ -132,7 +135,7 @@ function calculateAchievableScore(goal: SmartGoal): number {
  * Calculate the Relevant (R) criteria score
  * Checks relevance score and stakeholders
  */
-function calculateRelevantScore(goal: SmartGoal): number {
+function calculateRelevantScore(goal: ScorableGoal): number {
   let score = 0;
   const maxScore = 20;
   const criteriaCount = 4;
@@ -168,7 +171,7 @@ function calculateRelevantScore(goal: SmartGoal): number {
  * Calculate the Time-bound (T) criteria score
  * Checks timebound dates and milestones
  */
-function calculateTimeBoundScore(goal: SmartGoal): number {
+function calculateTimeBoundScore(goal: ScorableGoal): number {
   let score = 0;
   const maxScore = 20;
   const criteriaCount = 4;
@@ -201,7 +204,7 @@ function calculateTimeBoundScore(goal: SmartGoal): number {
  * Generate improvement suggestions based on missing criteria
  */
 function generateSuggestions(
-  goal: SmartGoal,
+  goal: ScorableGoal,
   breakdown: SmartScoreBreakdown
 ): string[] {
   const suggestions: string[] = [];
@@ -325,7 +328,7 @@ function getScoreCategory(
  * Calculate the overall SMART score for a goal
  */
 export function calculateSmartScore(
-  goal: SmartGoal,
+  goal: ScorableGoal,
   _config: ScoreConfig = {}
 ): SmartScoreResult {
   // Calculate individual scores
