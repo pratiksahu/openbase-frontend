@@ -521,7 +521,7 @@ export function profileComponent<P>(
       process.env.NODE_ENV === 'development' ? (props as any) : {}
     );
 
-    return React.createElement(Component as any, props);
+    return React.createElement(Component, props);
   };
 }
 

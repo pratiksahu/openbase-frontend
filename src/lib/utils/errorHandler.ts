@@ -67,12 +67,26 @@ export interface ErrorReportingOptions {
 }
 
 // =============================================================================
+// Type Guards
+// =============================================================================
+
+function isAppError(error: unknown): error is AppError {
+  return error !== null &&
+    typeof error === 'object' &&
+    'type' in error &&
+    'severity' in error &&
+    'message' in error &&
+    'retryable' in error &&
+    'userFriendly' in error &&
+    'timestamp' in error;
+}
+
 // Error Classification
 // =============================================================================
 
 export class ErrorClassifier {
   static classifyError(error: unknown): AppError {
-    if (error instanceof AppError) {
+    if (isAppError(error)) {
       return error;
     }
 

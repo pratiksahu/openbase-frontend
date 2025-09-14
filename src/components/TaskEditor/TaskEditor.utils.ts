@@ -46,11 +46,13 @@ export const taskFormSchema = z.object({
     .optional(),
 
   status: z.nativeEnum(TaskStatus, {
-    errorMap: () => ({ message: 'Please select a valid status' })
+    required_error: 'Please select a valid status',
+    invalid_type_error: 'Please select a valid status'
   }),
 
   priority: z.nativeEnum(GoalPriority, {
-    errorMap: () => ({ message: 'Please select a valid priority' })
+    required_error: 'Please select a valid priority',
+    invalid_type_error: 'Please select a valid priority'
   }),
 
   assignedTo: z.string()
