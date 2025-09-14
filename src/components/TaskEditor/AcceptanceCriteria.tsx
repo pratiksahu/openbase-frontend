@@ -16,7 +16,7 @@
 import {
   FileText,
   Code,
-  MarkdownIcon as Markdown,
+  Hash as Markdown,
   Eye,
   EyeOff,
   Copy,

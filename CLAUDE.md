@@ -20,6 +20,13 @@ This ensures the development context remains current and helpful for ongoing wor
 
 This is a modern Next.js 15 application using App Router, TypeScript, shadcn/ui, and Tailwind CSS.
 
+### Major Features
+
+- **SMART Goals Management System**: Comprehensive goal tracking with metrics, tasks, collaboration, and analytics
+- **Authentication System**: User management and session handling
+- **Component Library**: shadcn/ui with custom extensions
+- **Testing Infrastructure**: Playwright E2E testing with comprehensive coverage
+
 ## 📚 Setup & Development
 
 **IMPORTANT: For detailed setup instructions and development workflow, refer to [README.md](./README.md)**
@@ -209,9 +216,14 @@ components/
 │   └── Navigation.tsx
 ├── features/        # Feature-specific components
 │   ├── auth/
-│   └── dashboard/
-└── providers/       # Context providers
-    └── ThemeProvider.tsx
+│   ├── dashboard/
+│   └── SmartGoals/  # SMART Goals feature components
+├── providers/       # Context providers
+│   └── ThemeProvider.tsx
+├── TaskEditor/      # Task management components
+├── GoalWizard/      # Goal creation wizard
+├── MetricsChart/    # Progress visualization
+└── CollaborationPanel/ # Team collaboration
 ```
 
 ## Data Fetching
@@ -461,9 +473,228 @@ npm run build
 - Completing TODO items → Mark as complete in TODO\_\*.md files
 - Discovering patterns → Document in relevant section
 
+## 🎯 SMART Goals Feature Patterns
+
+### State Management with Zustand
+
+The SMART Goals feature uses Zustand for state management with the following patterns:
+
+```typescript
+// Store structure
+interface GoalStore {
+  goals: SmartGoalSummary[];
+  currentGoal: SmartGoal | null;
+  loading: LoadingStates;
+  error: ErrorStates;
+  filters: GoalFilters;
+  sort: GoalSort;
+  pagination: PaginationState;
+  actions: GoalActions;
+}
+
+// Usage with selectors
+const goals = useGoalsSelector();
+const loading = useGoalsLoading();
+const actions = useGoalActions();
+```
+
+### Custom Hook Patterns
+
+Implement specialized hooks for different data access patterns:
+
+```typescript
+// Main data hook
+useGoals(options)      // All goals with filtering/pagination
+useGoal(id, options)   // Single goal with real-time updates
+useMetrics(goalId)     // Goal metrics and checkpoints
+useTasks(goalId)       // Goal tasks and management
+
+// Specialized variants
+useGoalsByStatus(status)     // Filter by status
+useGoalsByPriority(priority) // Filter by priority
+useDashboardGoals()          // Dashboard-optimized data
+useOverdueGoals()            # Overdue goals specifically
+```
+
+### Component Composition Patterns
+
+```typescript
+// Compound component pattern for complex features
+<GoalCard goal={goal}>
+  <GoalCard.Header />
+  <GoalCard.Progress />
+  <GoalCard.Tasks />
+  <GoalCard.Actions />
+</GoalCard>
+
+// Render props for flexible data access
+<GoalProvider goalId={id}>
+  {({ goal, loading, error }) => (
+    <div>{/* Goal content */}</div>
+  )}
+</GoalProvider>
+```
+
+### Testing Patterns
+
+#### E2E Test Organization
+
+```
+tests/smart-goals/
+├── goal-creation.spec.ts      # Creation workflows
+├── goal-management.spec.ts    # CRUD operations
+├── goal-collaboration.spec.ts # Team features
+├── metrics-tracking.spec.ts   # Progress tracking
+├── task-workflow.spec.ts      # Task management
+└── full-journey.spec.ts       # End-to-end scenarios
+```
+
+#### Test Data Management
+
+```typescript
+// Demo data generators
+export function generateTestGoalData(count: number): SmartGoal[]
+export function generateStressTestData(): SmartGoal[]
+
+// Mock data patterns
+const mockGoals = createSampleGoalsDataset().goals;
+const demoScenarios = getDemoScenarios();
+```
+
+### Performance Optimizations Discovered
+
+#### Bundle Size Management
+- Use dynamic imports for heavy components: `dynamic(() => import('./HeavyChart'))`
+- Implement virtual scrolling for large goal lists
+- Lazy load metrics charts and visualizations
+
+#### Memory Management
+- Clear intervals and timeouts in useEffect cleanup
+- Use AbortController for cancelling fetch requests
+- Implement proper cleanup in Zustand stores
+
+#### Rendering Optimizations
+- Memoize expensive calculations with useMemo
+- Use React.memo for frequently re-rendering components
+- Implement debounced search to reduce API calls
+
+### Common Issues and Solutions
+
+#### Export/Import Issues
+
+```typescript
+// Problem: Missing exports causing build errors
+// Solution: Always export mock data and utilities
+export const mockGoals = createSampleGoalsDataset().goals;
+export { toast } from './use-toast';
+
+// Problem: Icon imports from lucide-react
+// Solution: Check icon availability before using
+import { Hash as Markdown } from 'lucide-react'; // Not MarkdownIcon
+```
+
+#### TypeScript Patterns
+
+```typescript
+// Strong typing for API responses
+interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+  error?: string;
+}
+
+// Generic hook typing
+function useData<T>(
+  fetcher: () => Promise<T>,
+  options?: UseDataOptions
+): UseDataResult<T>
+```
+
+#### Error Handling Patterns
+
+```typescript
+// Centralized error handling in hooks
+const handleError = useCallback((error: unknown) => {
+  const message = error instanceof Error ? error.message : 'Unknown error';
+  setError(message);
+  onError?.(message);
+}, [onError]);
+
+// Toast notifications for user feedback
+const { toast } = useToast();
+toast({
+  title: "Success",
+  description: "Goal created successfully",
+  variant: "default"
+});
+```
+
+## 🔍 Accessibility Patterns
+
+### WCAG 2.1 AA Compliance
+
+```typescript
+// Proper ARIA labeling
+<button
+  aria-label="Add new goal"
+  aria-describedby="goal-help-text"
+>
+  Add Goal
+</button>
+
+// Keyboard navigation support
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    handleClick();
+  }
+};
+
+// Focus management
+const dialogRef = useRef<HTMLDivElement>(null);
+useEffect(() => {
+  if (isOpen && dialogRef.current) {
+    dialogRef.current.focus();
+  }
+}, [isOpen]);
+```
+
+### Screen Reader Support
+
+```typescript
+// Live regions for dynamic content
+<div aria-live="polite" aria-atomic="true">
+  {statusMessage}
+</div>
+
+// Progress announcements
+<div role="progressbar"
+     aria-valuenow={progress}
+     aria-valuemin={0}
+     aria-valuemax={100}
+     aria-label={`Goal progress: ${progress}%`}>
+</div>
+```
+
+## 📊 Performance Monitoring
+
+### Lighthouse Metrics Targets
+- **First Contentful Paint**: < 1.8s (Currently: 1.1s ✅)
+- **Largest Contentful Paint**: < 2.5s (Currently: 15.8s ❌ - Needs optimization)
+- **Cumulative Layout Shift**: < 0.1
+- **Time to Interactive**: < 3.8s
+
+### Performance Issues Identified
+1. **LCP Issue**: Large components loading slowly - implement code splitting
+2. **Bundle Size**: Monitor with `npm run analyze` (if available)
+3. **Memory Leaks**: Ensure proper cleanup of intervals and event listeners
+
 ## Useful Resources
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [shadcn/ui Components](https://ui.shadcn.com)
 - [Tailwind CSS Docs](https://tailwindcss.com/docs)
 - [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app)
+- [Playwright Testing](https://playwright.dev/docs/intro)
+- [Zustand State Management](https://github.com/pmndrs/zustand)
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)

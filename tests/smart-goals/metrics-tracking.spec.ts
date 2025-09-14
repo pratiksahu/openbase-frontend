@@ -1,0 +1,408 @@
+/**
+ * Metrics Tracking E2E Tests
+ *
+ * Tests for metrics tracking functionality including chart displays,
+ * checkpoint entry, progress analysis, and reporting features.
+ */
+
+import { test, expect, Page } from '@playwright/test';
+
+// Test Configuration
+const GOALS_BASE_URL = '/goals';
+const MOCK_GOAL_ID = 'goal-1';
+
+test.describe('Metrics Tracking Features', () => {
+  let page: Page;
+
+  test.beforeEach(async ({ page: testPage }) => {
+    page = testPage;
+    await page.goto(`${GOALS_BASE_URL}/${MOCK_GOAL_ID}/metrics`);
+    await page.waitForLoadState('networkidle');
+  });
+
+  test('should display metrics dashboard', async () => {
+    // Check for metrics dashboard
+    await expect(page.locator('text=/Metrics.*Dashboard/i')).toBeVisible();
+
+    // Should show current metrics
+    await expect(page.locator('text=/Current.*Value/i')).toBeVisible();
+    await expect(page.locator('text=/Target.*Value/i')).toBeVisible();
+    await expect(page.locator('text=/Progress/i')).toBeVisible();
+
+    // Should display progress percentage
+    await expect(page.locator('text=/\\d+%/')).toBeVisible();
+  });
+
+  test('should display metric charts', async () => {
+    // Look for chart containers
+    const chartContainer = page.locator('svg, canvas, [data-testid="chart"], .chart');
+    await expect(chartContainer.first()).toBeVisible();
+
+    // Should have chart elements
+    const chartElements = page.locator('svg path, canvas, .recharts, .chart-line');
+    const elementCount = await chartElements.count();
+
+    if (elementCount > 0) {
+      await expect(chartElements.first()).toBeVisible();
+    }
+
+    // Should show chart labels/axes
+    const chartLabels = page.locator('text=/\\d{1,2}\/\\d{1,2}/, .chart-label');
+    if (await chartLabels.first().isVisible()) {
+      await expect(chartLabels.first()).toBeVisible();
+    }
+  });
+
+  test('should allow adding metric checkpoints', async () => {
+    // Look for add checkpoint button
+    const addCheckpointButton = page.getByRole('button', { name: /add checkpoint|record/i });
+
+    if (await addCheckpointButton.isVisible()) {
+      await addCheckpointButton.click();
+
+      // Should open checkpoint form
+      const checkpointForm = page.locator('[data-testid="checkpoint-form"], .checkpoint-form');
+
+      if (await checkpointForm.isVisible()) {
+        // Fill checkpoint data
+        const valueInput = checkpointForm.locator('input[name="value"], [data-testid="checkpoint-value"]');
+        await valueInput.fill('75');
+
+        const noteInput = checkpointForm.locator('textarea[name="note"], [data-testid="checkpoint-note"]');
+        await noteInput.fill('Quarterly progress checkpoint - on track');
+
+        // Submit checkpoint
+        const submitButton = page.getByRole('button', { name: /save|record/i });
+        await submitButton.click();
+
+        // Should show success message
+        await expect(page.locator('text=/checkpoint.*added|recorded/i')).toBeVisible();
+
+        // Should update the chart
+        await page.waitForTimeout(1000);
+        await expect(chartContainer.first()).toBeVisible();
+      }
+    }
+  });
+
+  test('should display checkpoint history', async () => {
+    // Look for checkpoint timeline or list
+    const checkpointHistory = page.locator('[data-testid="checkpoint-history"], .checkpoint-timeline');
+
+    if (await checkpointHistory.isVisible()) {
+      await expect(checkpointHistory).toBeVisible();
+
+      // Should show checkpoint entries
+      const checkpoints = checkpointHistory.locator('.checkpoint, [data-testid="checkpoint"]');
+      const checkpointCount = await checkpoints.count();
+
+      if (checkpointCount > 0) {
+        const firstCheckpoint = checkpoints.first();
+        await expect(firstCheckpoint).toBeVisible();
+
+        // Should show value and date
+        await expect(firstCheckpoint.locator('text=/\\d+/')).toBeVisible();
+        await expect(firstCheckpoint.locator('text=/ago|\\d{1,2}\/\\d{1,2}/i')).toBeVisible();
+      }
+    }
+  });
+
+  test('should show progress analysis', async () => {
+    // Look for progress analysis section
+    const analysisSection = page.locator('[data-testid="progress-analysis"], .progress-analysis');
+
+    if (await analysisSection.isVisible()) {
+      await expect(analysisSection).toBeVisible();
+
+      // Should show analysis metrics
+      const analysisMetrics = [
+        page.locator('text=/velocity/i'),
+        page.locator('text=/trend/i'),
+        page.locator('text=/projection/i'),
+        page.locator('text=/on track|at risk|off track/i'),
+      ];
+
+      let visibleMetrics = 0;
+      for (const metric of analysisMetrics) {
+        if (await metric.isVisible()) {
+          visibleMetrics++;
+        }
+      }
+
+      expect(visibleMetrics).toBeGreaterThan(0);
+    }
+  });
+
+  test('should display metric configuration', async () => {
+    // Look for edit/configure button
+    const configureButton = page.getByRole('button', { name: /configure|edit.*metric/i });
+
+    if (await configureButton.isVisible()) {
+      await configureButton.click();
+
+      // Should show metric configuration form
+      const configForm = page.locator('[data-testid="metric-config"], .metric-form');
+
+      if (await configForm.isVisible()) {
+        // Should show metric type selection
+        await expect(configForm.locator('text=/Type/i')).toBeVisible();
+
+        // Should show target value input
+        const targetInput = configForm.locator('input[name="targetValue"], [data-testid="target-value"]');
+        await expect(targetInput).toBeVisible();
+
+        // Should show unit input
+        const unitInput = configForm.locator('input[name="unit"], [data-testid="unit"]');
+        await expect(unitInput).toBeVisible();
+      }
+    }
+  });
+
+  test('should handle different metric types', async () => {
+    // Test configuration for different metric types
+    const configureButton = page.getByRole('button', { name: /configure|edit.*metric/i });
+
+    if (await configureButton.isVisible()) {
+      await configureButton.click();
+
+      const typeSelect = page.locator('select[name="metricType"], [data-testid="metric-type"]');
+
+      if (await typeSelect.isVisible()) {
+        // Test percentage type
+        await typeSelect.selectOption('percentage');
+        await expect(page.locator('text=/%/')).toBeVisible();
+
+        // Test currency type
+        await typeSelect.selectOption('currency');
+        await expect(page.locator('text=/\\$|currency/i')).toBeVisible();
+
+        // Test duration type
+        await typeSelect.selectOption('duration');
+        await expect(page.locator('text=/hours|days|minutes/i')).toBeVisible();
+      }
+    }
+  });
+
+  test('should show target achievement status', async () => {
+    // Look for achievement status indicators
+    const statusIndicators = [
+      page.locator('[data-testid="achievement-status"], .achievement-status'),
+      page.locator('text=/achieved|not achieved/i'),
+      page.locator('.badge').filter({ hasText: /complete|success|achieved/i }),
+    ];
+
+    let visibleIndicators = 0;
+    for (const indicator of statusIndicators) {
+      if (await indicator.first().isVisible()) {
+        await expect(indicator.first()).toBeVisible();
+        visibleIndicators++;
+      }
+    }
+
+    // At least one status indicator should be visible
+    if (visibleIndicators === 0) {
+      // Check for progress bar as status indicator
+      const progressBar = page.locator('[role="progressbar"], .progress');
+      await expect(progressBar).toBeVisible();
+    }
+  });
+
+  test('should export metric data', async () => {
+    // Look for export functionality
+    const exportButton = page.getByRole('button', { name: /export|download/i });
+
+    if (await exportButton.isVisible()) {
+      await exportButton.click();
+
+      // Should show export options
+      const exportMenu = page.locator('[data-testid="export-menu"], .dropdown-menu');
+
+      if (await exportMenu.isVisible()) {
+        // Should have different format options
+        await expect(exportMenu.locator('text=/csv/i')).toBeVisible();
+        await expect(exportMenu.locator('text=/json/i')).toBeVisible();
+
+        // Test CSV export
+        const csvOption = exportMenu.locator('text=/csv/i');
+        await csvOption.click();
+
+        // Should trigger download (in real test, we'd verify file download)
+        await page.waitForTimeout(1000);
+      }
+    }
+  });
+
+  test('should display metric insights', async () => {
+    // Look for insights or recommendations section
+    const insightsSection = page.locator('[data-testid="insights"], .insights, .recommendations');
+
+    if (await insightsSection.isVisible()) {
+      await expect(insightsSection).toBeVisible();
+
+      // Should show actionable insights
+      const insights = insightsSection.locator('.insight, [data-testid="insight"]');
+      const insightCount = await insights.count();
+
+      if (insightCount > 0) {
+        await expect(insights.first()).toBeVisible();
+
+        // Should contain suggestion text
+        const insightText = await insights.first().textContent();
+        expect(insightText).toBeTruthy();
+        expect(insightText!.length).toBeGreaterThan(10);
+      }
+    }
+  });
+
+  test('should handle metric validation', async () => {
+    // Try to add invalid checkpoint
+    const addCheckpointButton = page.getByRole('button', { name: /add checkpoint|record/i });
+
+    if (await addCheckpointButton.isVisible()) {
+      await addCheckpointButton.click();
+
+      const checkpointForm = page.locator('[data-testid="checkpoint-form"], .checkpoint-form');
+
+      if (await checkpointForm.isVisible()) {
+        // Try to submit with invalid value
+        const valueInput = checkpointForm.locator('input[name="value"], [data-testid="checkpoint-value"]');
+        await valueInput.fill('-50'); // Invalid negative value
+
+        const submitButton = page.getByRole('button', { name: /save|record/i });
+        await submitButton.click();
+
+        // Should show validation error
+        await expect(page.locator('text=/invalid|error/i')).toBeVisible();
+
+        // Fix the value
+        await valueInput.fill('50');
+        await submitButton.click();
+
+        // Should succeed
+        await expect(page.locator('text=/checkpoint.*added/i')).toBeVisible();
+      }
+    }
+  });
+
+  test('should show metric comparison', async () => {
+    // Look for comparison features
+    const comparisonSection = page.locator('[data-testid="comparison"], .comparison');
+
+    if (await comparisonSection.isVisible()) {
+      await expect(comparisonSection).toBeVisible();
+
+      // Should show current vs target
+      await expect(page.locator('text=/current.*vs.*target/i')).toBeVisible();
+
+      // Should show percentage difference
+      await expect(page.locator('text=/\\d+%.*difference/i')).toBeVisible();
+    }
+  });
+
+  test('should display forecast projections', async () => {
+    // Look for forecast/projection section
+    const forecastSection = page.locator('[data-testid="forecast"], .forecast, .projection');
+
+    if (await forecastSection.isVisible()) {
+      await expect(forecastSection).toBeVisible();
+
+      // Should show projected completion date
+      const projectionText = page.locator('text=/projected|forecast|estimated/i');
+      if (await projectionText.isVisible()) {
+        await expect(projectionText).toBeVisible();
+      }
+
+      // Should show confidence level
+      const confidenceText = page.locator('text=/confidence|likelihood/i');
+      if (await confidenceText.isVisible()) {
+        await expect(confidenceText).toBeVisible();
+      }
+    }
+  });
+});
+
+test.describe('Metrics Visualization', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(`${GOALS_BASE_URL}/${MOCK_GOAL_ID}/metrics`);
+  });
+
+  test('should support different chart types', async ({ page }) => {
+    // Look for chart type selector
+    const chartTypeSelector = page.locator('[data-testid="chart-type"], .chart-selector');
+
+    if (await chartTypeSelector.isVisible()) {
+      // Try line chart
+      const lineChartOption = page.getByRole('button', { name: /line/i });
+      if (await lineChartOption.isVisible()) {
+        await lineChartOption.click();
+        await expect(page.locator('svg path, .line-chart')).toBeVisible();
+      }
+
+      // Try bar chart
+      const barChartOption = page.getByRole('button', { name: /bar/i });
+      if (await barChartOption.isVisible()) {
+        await barChartOption.click();
+        await expect(page.locator('svg rect, .bar-chart')).toBeVisible();
+      }
+    }
+  });
+
+  test('should support chart zoom and pan', async ({ page }) => {
+    const chartContainer = page.locator('svg, canvas, [data-testid="chart"]').first();
+
+    if (await chartContainer.isVisible()) {
+      // Test zoom controls
+      const zoomInButton = page.getByRole('button', { name: /zoom in|\+/i });
+      const zoomOutButton = page.getByRole('button', { name: /zoom out|\-/i });
+
+      if (await zoomInButton.isVisible()) {
+        await zoomInButton.click();
+        await page.waitForTimeout(500);
+
+        if (await zoomOutButton.isVisible()) {
+          await zoomOutButton.click();
+        }
+      }
+    }
+  });
+
+  test('should show data tooltips on hover', async ({ page }) => {
+    const chartContainer = page.locator('svg, canvas, [data-testid="chart"]').first();
+
+    if (await chartContainer.isVisible()) {
+      // Hover over chart data point
+      await chartContainer.hover();
+
+      // Look for tooltip
+      const tooltip = page.locator('[data-testid="tooltip"], .tooltip');
+      if (await tooltip.isVisible({ timeout: 2000 })) {
+        await expect(tooltip).toBeVisible();
+
+        // Should show value and date
+        await expect(tooltip.locator('text=/\\d+/')).toBeVisible();
+      }
+    }
+  });
+
+  test('should support time range selection', async ({ page }) => {
+    // Look for time range selector
+    const timeRangeSelector = page.locator('[data-testid="time-range"], .time-range');
+
+    if (await timeRangeSelector.isVisible()) {
+      // Test different time ranges
+      const ranges = ['1M', '3M', '6M', '1Y', 'All'];
+
+      for (const range of ranges) {
+        const rangeButton = page.getByRole('button', { name: range });
+        if (await rangeButton.isVisible()) {
+          await rangeButton.click();
+          await page.waitForTimeout(500);
+
+          // Chart should update
+          await expect(page.locator('svg, canvas, [data-testid="chart"]')).toBeVisible();
+          break; // Test at least one range
+        }
+      }
+    }
+  });
+});

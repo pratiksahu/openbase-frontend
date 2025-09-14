@@ -961,6 +961,13 @@ export {
   randomElements,
 };
 
+// =============================================================================
+// Sample Dataset Exports
+// =============================================================================
+
+// Create a sample dataset for use in UI components
+export const mockGoals = createSampleGoalsDataset().goals;
+
 // Default export for convenience
 const smartGoalsMockData = {
   createMockSmartGoal,
@@ -976,6 +983,7 @@ const smartGoalsMockData = {
   createMockTimebound,
   createSampleGoalsDataset,
   createTestDataset,
+  mockGoals,
 };
 
 export default smartGoalsMockData;
