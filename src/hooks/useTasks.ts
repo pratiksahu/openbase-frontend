@@ -13,6 +13,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+
 import {
   tasksApi,
   CreateTaskRequest,
@@ -22,7 +23,7 @@ import {
   TaskFilters,
   TaskStats
 } from '@/lib/api/tasks';
-import { Task, Subtask, TaskStatus, GoalPriority } from '@/types/smart-goals.types';
+import { Task, Subtask, TaskStatus } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces

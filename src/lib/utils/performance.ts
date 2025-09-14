@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 // =============================================================================
 // Types and Interfaces
@@ -194,8 +194,8 @@ export function useMemoizedValue<T>(
   deps: React.DependencyList,
   isEqual?: (a: T, b: T) => boolean
 ): T {
-  const valueRef = useRef<T>();
-  const depsRef = useRef<React.DependencyList>();
+  const valueRef = useRef<T | undefined>(undefined);
+  const depsRef = useRef<React.DependencyList | undefined>(undefined);
 
   return useMemo(() => {
     // Check if dependencies have changed
@@ -398,7 +398,7 @@ export function useRenderCount(name?: string): number {
 }
 
 export function useWhyDidYouUpdate(name: string, props: Record<string, any>): void {
-  const previousProps = useRef<Record<string, any>>();
+  const previousProps = useRef<Record<string, any> | undefined>(undefined);
 
   useEffect(() => {
     if (previousProps.current && process.env.NODE_ENV === 'development') {
@@ -521,7 +521,7 @@ export function profileComponent<P>(
       process.env.NODE_ENV === 'development' ? (props as any) : {}
     );
 
-    return React.createElement(Component, props);
+    return React.createElement(Component as any, props);
   };
 }
 

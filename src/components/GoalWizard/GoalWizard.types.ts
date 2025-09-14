@@ -5,22 +5,19 @@
  * component for creating SMART goals with validation, draft saving, and navigation.
  */
 
+import { SmartScoreResult } from '@/components/SmartScoreBadge/SmartScoreBadge.types';
 import {
   SmartGoal,
   SmartGoalCreate,
   GoalCategory,
   GoalPriority,
   MeasurableSpec,
-  Achievability,
-  Relevance,
-  Timebound,
   Resource,
   RequiredSkill,
   Constraint,
   StrategyAlignment,
   Stakeholder,
 } from '@/types/smart-goals.types';
-import { SmartScoreResult } from '@/components/SmartScoreBadge/SmartScoreBadge.types';
 
 // =============================================================================
 // Wizard Configuration and Steps

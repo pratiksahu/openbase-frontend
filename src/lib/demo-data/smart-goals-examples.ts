@@ -5,11 +5,10 @@
  * use cases, and complete workflow examples for testing and demonstration.
  */
 
+import { createMockSmartGoal, createMockTask, createMockMilestone } from '@/lib/mock-data/smart-goals';
 import {
   SmartGoal,
   Task,
-  Milestone,
-  Outcome,
   MetricCheckpoint,
   GoalStatus,
   GoalPriority,
@@ -18,7 +17,6 @@ import {
   MetricType,
   Frequency,
 } from '@/types/smart-goals.types';
-import { createMockSmartGoal, createMockTask, createMockMilestone } from '@/lib/mock-data/smart-goals';
 
 // =============================================================================
 // Demo Goal Templates

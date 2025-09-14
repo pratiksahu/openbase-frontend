@@ -7,7 +7,6 @@
 
 'use client';
 
-import React from 'react';
 import {
   FileText,
   Target,
@@ -21,6 +20,7 @@ import {
   Clock,
   Circle,
 } from 'lucide-react';
+import React from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';

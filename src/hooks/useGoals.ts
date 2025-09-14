@@ -13,8 +13,8 @@
  */
 
 import { useEffect, useCallback, useRef } from 'react';
+
 import {
-  useGoalStore,
   useGoals as useGoalsSelector,
   useGoalsLoading,
   useGoalsError,

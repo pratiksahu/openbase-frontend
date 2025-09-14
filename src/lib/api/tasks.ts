@@ -12,9 +12,8 @@
  * @version 1.0.0
  */
 
-import { apiClient } from './client';
+import { createMockTask, createMockSubtask } from '@/lib/mock-data/smart-goals';
 import { Task, Subtask, TaskStatus, GoalPriority, ChecklistItem } from '@/types/smart-goals.types';
-import { createMockTask, createMockSubtask, createMockChecklistItem } from '@/lib/mock-data/smart-goals';
 
 // =============================================================================
 // Types and Interfaces

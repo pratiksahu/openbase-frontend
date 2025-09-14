@@ -12,10 +12,10 @@
  * @version 1.0.0
  */
 
+import { enableMapSet } from 'immer';
 import { create } from 'zustand';
 import { devtools, persist, subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { enableMapSet } from 'immer';
 
 // Enable MapSet plugin for Immer
 enableMapSet();
@@ -28,7 +28,6 @@ import {
   GoalSort,
   GoalStatus,
   GoalPriority,
-  GoalCategory,
 } from '@/types/smart-goals.types';
 
 // =============================================================================

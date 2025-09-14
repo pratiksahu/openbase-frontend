@@ -11,10 +11,12 @@ import React, {
   createContext,
   useContext,
   useReducer,
-  useCallback,
   useEffect,
   useMemo,
 } from 'react';
+
+import { calculateSmartScore } from '@/components/SmartScoreBadge/SmartScoreBadge.utils';
+import { SmartGoalCreate } from '@/types/smart-goals.types';
 
 import {
   WizardContextValue,
@@ -49,8 +51,6 @@ import {
   getDraftMetadataList,
   transformToSmartGoal,
 } from './GoalWizard.utils';
-import { SmartGoalCreate } from '@/types/smart-goals.types';
-import { calculateSmartScore } from '@/components/SmartScoreBadge/SmartScoreBadge.utils';
 
 // =============================================================================
 // Wizard Reducer
@@ -278,7 +278,7 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
 
   const dataManagement = useMemo(
     () => ({
-      updateStepData: <T>(step: WizardStep, data: Partial<T>) => {
+      updateStepData: (step: WizardStep, data: any) => {
         dispatch({
           type: WizardActionType.UPDATE_FORM_DATA,
           payload: { step, data },
@@ -335,8 +335,8 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
         }
       },
 
-      getStepData: <T>(step: WizardStep): T | undefined => {
-        return state.formData[step as keyof WizardFormData] as T | undefined;
+      getStepData: (step: WizardStep): any => {
+        return state.formData[step as keyof WizardFormData];
       },
 
       resetStep: (step: WizardStep) => {

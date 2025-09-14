@@ -8,7 +8,6 @@
 
 'use client';
 
-import React, { useEffect, useCallback, lazy, Suspense } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -18,10 +17,9 @@ import {
   CheckCircle,
   Loader2,
 } from 'lucide-react';
+import React, { useEffect, useCallback, lazy, Suspense } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { SmartScoreBadge } from '@/components/SmartScoreBadge/SmartScoreBadge';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,18 +30,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
 import {
   GoalWizardProps,
   WizardStep,
-  StepStatus,
   NavigationConfig,
 } from './GoalWizard.types';
-import { DEFAULT_STEPS, createEmptyFormData } from './GoalWizard.utils';
+import { DEFAULT_STEPS } from './GoalWizard.utils';
 import { WizardContextProvider, useWizardContext } from './WizardContext';
 import { WizardStepper } from './WizardStepper';
-import { SmartScoreBadge } from '@/components/SmartScoreBadge/SmartScoreBadge';
+
 
 // Lazy load step components for better performance
 const ContextStep = lazy(() => import('./steps/ContextStep'));

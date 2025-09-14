@@ -8,21 +8,13 @@
 
 'use client';
 
-import React, { useState } from 'react';
 import { Plus, BarChart3, Target, TrendingUp, AlertCircle, Lightbulb, HelpCircle } from 'lucide-react';
+import React, { useState } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { MetricEditor } from '@/components/MetricEditor/MetricEditor';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import {
   Collapsible,
   CollapsibleContent,
@@ -35,21 +27,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { MeasurableSpec, MetricCheckpoint } from '@/types/smart-goals.types';
 
 import {
   MeasurableStepProps,
   MeasurableStepData,
 } from '../GoalWizard.types';
-import { MeasurableSpec, MetricCheckpoint, MetricType, Frequency } from '@/types/smart-goals.types';
-import { MetricEditor } from '@/components/MetricEditor/MetricEditor';
 
 // =============================================================================
 // Measurement Template Data

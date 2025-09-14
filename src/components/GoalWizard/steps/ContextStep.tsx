@@ -8,13 +8,14 @@
 
 'use client';
 
-import React, { useState } from 'react';
 import { Plus, X, TrendingUp, GraduationCap, Flag, Users2, Heart, DollarSign, Palette, HelpCircle } from 'lucide-react';
+import React, { useState } from 'react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -22,9 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
@@ -32,13 +32,13 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { GoalCategory } from '@/types/smart-goals.types';
 
 import {
   ContextStepProps,
   ContextStepData,
   GoalTemplate,
 } from '../GoalWizard.types';
-import { GoalCategory } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Template Cards Data

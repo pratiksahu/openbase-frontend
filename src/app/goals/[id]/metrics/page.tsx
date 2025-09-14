@@ -7,8 +7,6 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { notFound } from 'next/navigation';
 import {
   BarChart3,
   TrendingUp,
@@ -23,10 +21,12 @@ import {
   AlertCircle,
   CheckCircle,
 } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 
+import { MetricEditor } from '@/components/MetricEditor/MetricEditor';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import {
   Select,
@@ -36,19 +36,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { MetricEditor } from '@/components/MetricEditor/MetricEditor';
-
-import type { SmartGoal, MetricCheckpoint, MetricType } from '@/types/smart-goals.types';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
+import type { SmartGoal, MetricType } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
 // =============================================================================
 
 interface MetricsPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 interface MetricTrendData {
@@ -363,21 +361,27 @@ const MetricsToolbar: React.FC<MetricsToolbarProps> = ({
 // =============================================================================
 
 export default function GoalMetricsPage({ params }: MetricsPageProps) {
+  const [id, setId] = React.useState<string>('');
+
+  React.useEffect(() => {
+    params.then(p => setId(p.id));
+  }, [params]);
   const [goal, setGoal] = React.useState<SmartGoal | null>(null);
   const [timeRange, setTimeRange] = useState('30d');
   const [editingMetric, setEditingMetric] = useState(false);
 
   // Load goal data
   React.useEffect(() => {
+    if (!id) return;
     const loadGoal = async () => {
-      const goalData = await getGoal(params.id);
+      const goalData = await getGoal(id);
       if (goalData) {
         setGoal(goalData);
       }
     };
 
     loadGoal();
-  }, [params.id]);
+  }, [id]);
 
   const trendData = useMemo(() => {
     if (!goal) return [];

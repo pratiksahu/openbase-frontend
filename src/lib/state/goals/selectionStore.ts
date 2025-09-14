@@ -15,6 +15,7 @@
 import { create } from 'zustand';
 import { devtools, subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+
 import { GoalStatus, GoalPriority } from '@/types/smart-goals.types';
 
 // =============================================================================

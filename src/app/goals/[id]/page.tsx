@@ -5,43 +5,39 @@
  * SMART criteria details, progress overview, and key metrics.
  */
 
-import React from 'react';
-import { notFound } from 'next/navigation';
 import {
   Target,
-  Calendar,
   Clock,
   TrendingUp,
-  Users,
   CheckCircle,
-  AlertTriangle,
   Activity,
   Flag,
   Star,
   BarChart3,
   GitBranch,
 } from 'lucide-react';
+import { notFound } from 'next/navigation';
+import React from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
-import { SmartScoreBadge } from '@/components/SmartScoreBadge/SmartScoreBadge';
 import { BreakdownTree } from '@/components/BreakdownTree/BreakdownTree';
-
-import type { SmartGoal, Task, Milestone } from '@/types/smart-goals.types';
+import { SmartScoreBadge } from '@/components/SmartScoreBadge/SmartScoreBadge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
+import type { SmartGoal } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
 // =============================================================================
 
 interface OverviewPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // =============================================================================
@@ -443,7 +439,8 @@ const RecentActivity: React.FC<RecentActivityProps> = ({ goal }) => {
 // =============================================================================
 
 export default async function GoalOverviewPage({ params }: OverviewPageProps) {
-  const goal = await getGoal(params.id);
+  const { id } = await params;
+  const goal = await getGoal(id);
 
   if (!goal) {
     notFound();

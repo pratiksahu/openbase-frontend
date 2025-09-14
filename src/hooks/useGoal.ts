@@ -13,6 +13,7 @@
  */
 
 import { useEffect, useCallback, useRef, useMemo } from 'react';
+
 import {
   useGoalStore,
   useCurrentGoal,

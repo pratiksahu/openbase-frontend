@@ -5,8 +5,9 @@
  * @version 1.0.0
  */
 
-import { useGoalStore } from '../goalStore';
 import { GoalStatus, GoalPriority, GoalCategory } from '@/types/smart-goals.types';
+
+import { useGoalStore } from '../goalStore';
 
 // Mock the API
 jest.mock('@/lib/api/goals', () => ({

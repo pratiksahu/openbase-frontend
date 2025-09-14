@@ -12,7 +12,7 @@
  * @version 1.0.0
  */
 
-import { apiClient, ApiResponse } from './client';
+import { createSampleGoalsDataset, createMockSmartGoal } from '@/lib/mock-data/smart-goals';
 import {
   SmartGoal,
   SmartGoalSummary,
@@ -23,7 +23,7 @@ import {
   GoalStatus,
   GoalPriority,
 } from '@/types/smart-goals.types';
-import { createSampleGoalsDataset, createMockSmartGoal } from '@/lib/mock-data/smart-goals';
+
 
 // =============================================================================
 // Types and Interfaces

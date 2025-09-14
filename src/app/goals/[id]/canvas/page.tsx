@@ -8,8 +8,6 @@
 
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import { notFound } from 'next/navigation';
 import {
   ZoomIn,
   ZoomOut,
@@ -17,20 +15,22 @@ import {
   Download,
   Share,
   Plus,
-  Move,
   Square,
   Circle,
   Triangle,
-  Maximize2,
   Grid,
-  Eye,
-  EyeOff,
 } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Select,
   SelectContent,
@@ -38,17 +38,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
 // import { Toggle } from '@/components/ui/toggle'; // TODO: Add toggle component
-
-import type { SmartGoal } from '@/types/smart-goals.types';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
+import type { SmartGoal } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
@@ -169,7 +162,7 @@ const generateNodesFromGoal = (goal: SmartGoal): CanvasNode[] => {
   return nodes;
 };
 
-const generateConnections = (goal: SmartGoal, nodes: CanvasNode[]): CanvasConnection[] => {
+const generateConnections = (goal: SmartGoal, _nodes: CanvasNode[]): CanvasConnection[] => {
   const connections: CanvasConnection[] = [];
   let connectionId = 1;
 
@@ -236,7 +229,7 @@ const CanvasNodeComponent: React.FC<CanvasNodeComponentProps> = ({
   node,
   isSelected,
   onSelect,
-  onMove
+  onMove: _onMove
 }) => {
   const getNodeIcon = () => {
     switch (node.type) {

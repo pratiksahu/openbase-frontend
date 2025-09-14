@@ -5,10 +5,6 @@
  * and action menu. Provides consistent structure for all goal views.
  */
 
-import React from 'react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import {
   ChevronLeft,
   ChevronRight,
@@ -27,13 +23,15 @@ import {
   CheckCircle,
   GitBranch,
 } from 'lucide-react';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import React from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { SmartScoreBadge } from '@/components/SmartScoreBadge/SmartScoreBadge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,10 +39,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { SmartScoreBadge } from '@/components/SmartScoreBadge/SmartScoreBadge';
-
-import type { SmartGoal, GoalStatus } from '@/types/smart-goals.types';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
+import type { SmartGoal, GoalStatus } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces

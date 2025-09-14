@@ -8,7 +8,6 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
 import {
   Plus,
   X,
@@ -20,26 +19,19 @@ import {
   Wrench,
   BookOpen,
   Shield,
-  TrendingDown,
   Target,
   HelpCircle,
   Calculator,
   Users,
 } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
@@ -47,14 +39,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { Resource, RequiredSkill, Constraint } from '@/types/smart-goals.types';
 
 import {
   AchievableStepProps,
   AchievableStepData,
 } from '../GoalWizard.types';
-import { Resource, RequiredSkill, Constraint } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Resource Categories

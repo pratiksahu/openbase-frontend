@@ -7,8 +7,6 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import Link from 'next/link';
 import {
   Calendar,
   Clock,
@@ -23,12 +21,14 @@ import {
   Trash2,
   Copy
 } from 'lucide-react';
+import Link from 'next/link';
+import React, { useState, useMemo } from 'react';
 
+import { SmartScoreBadge } from '@/components/SmartScoreBadge/SmartScoreBadge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,6 +36,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Progress } from '@/components/ui/progress';
 import {
   Select,
   SelectContent,
@@ -43,10 +44,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { SmartScoreBadge } from '@/components/SmartScoreBadge/SmartScoreBadge';
-
-import type { SmartGoal, GoalStatus, GoalPriority } from '@/types/smart-goals.types';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
+import type { SmartGoal, GoalStatus, GoalPriority } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
@@ -378,7 +377,7 @@ export default function GoalsPage() {
 
   // Filter and sort goals
   const filteredGoals = useMemo(() => {
-    let filtered = goals.filter(goal => {
+    const filtered = goals.filter(goal => {
       // Status filter
       if (filters.status?.length && !filters.status.includes(goal.status)) {
         return false;

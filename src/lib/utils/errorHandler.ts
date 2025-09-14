@@ -612,4 +612,4 @@ export function isAppError(error: unknown): error is AppError {
          'timestamp' in error;
 }
 
-export { ErrorType, ErrorSeverity, ErrorClassifier, ErrorRecovery, OfflineHandler, ErrorReporter, ErrorMessageFormatter };
+// Types and classes are already exported above as named exports

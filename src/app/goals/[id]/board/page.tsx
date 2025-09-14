@@ -7,7 +7,6 @@
 
 'use client';
 
-import React, { useState, useCallback } from 'react';
 import {
   Plus,
   Filter,
@@ -21,11 +20,20 @@ import {
   Trash2,
   Eye,
 } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
 
+import { TaskEditor } from '@/components/TaskEditor/TaskEditor';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Progress } from '@/components/ui/progress';
 import {
   Select,
@@ -34,18 +42,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
-import { TaskEditor } from '@/components/TaskEditor/TaskEditor';
-
-import type { SmartGoal, Task, TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
+import type { SmartGoal, Task, TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
@@ -171,7 +170,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   onEdit,
   onDelete,
   onView,
-  onStatusChange
+  onStatusChange: _onStatusChange
 }) => {
   const daysUntil = getDaysUntilDue(task.dueDate);
   const overdue = isOverdue(task.dueDate);

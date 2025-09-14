@@ -5,12 +5,12 @@
  * that match the layout and structure of the goals list page.
  */
 
-import React from 'react';
 import { Target, TrendingUp, Clock, Users } from 'lucide-react';
+import React from 'react';
 
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // =============================================================================
 // Loading Components

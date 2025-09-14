@@ -7,15 +7,12 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { notFound } from 'next/navigation';
 import {
   MessageCircle,
   Clock,
   CheckCircle,
   XCircle,
   AlertCircle,
-  User,
   Calendar,
   FileText,
   ThumbsUp,
@@ -24,14 +21,13 @@ import {
   History,
   Users,
 } from 'lucide-react';
+import React, { useState } from 'react';
 
+import { DorDodPanel } from '@/components/DorDodPanel/DorDodPanel';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Textarea } from '@/components/ui/textarea';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
@@ -39,10 +35,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { DorDodPanel } from '@/components/DorDodPanel/DorDodPanel';
-
-import type { SmartGoal } from '@/types/smart-goals.types';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
+import type { SmartGoal } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces

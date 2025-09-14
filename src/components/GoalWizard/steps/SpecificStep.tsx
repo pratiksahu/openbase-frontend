@@ -8,27 +8,27 @@
 
 'use client';
 
-import React, { useState } from 'react';
 import { Plus, X, Target, CheckCircle, AlertCircle, Lightbulb, HelpCircle, Tag } from 'lucide-react';
+import React, { useState } from 'react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 
 import {
@@ -440,7 +440,7 @@ export const SpecificStep: React.FC<SpecificStepProps> = ({
 
     const allText = `${title} ${description} ${objective}`;
 
-    let suggestions: string[] = [];
+    const suggestions: string[] = [];
 
     // Add suggestions based on content
     if (allText.includes('revenue') || allText.includes('sales') || allText.includes('business')) {

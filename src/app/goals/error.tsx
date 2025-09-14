@@ -7,12 +7,12 @@
 
 'use client';
 
-import React from 'react';
 import { AlertTriangle, RefreshCcw, Home, Bug } from 'lucide-react';
+import React from 'react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 
 // =============================================================================
 // Types

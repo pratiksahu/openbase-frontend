@@ -7,17 +7,16 @@
 
 'use client';
 
-import React, { useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { ChevronLeft, Save } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React, { useCallback } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { GoalWizard } from '@/components/GoalWizard/GoalWizard';
-import { toast } from '@/hooks/use-toast';
-
-import type { SmartGoal } from '@/types/smart-goals.types';
 import type { WizardStep } from '@/components/GoalWizard/GoalWizard.types';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/hooks/use-toast';
+import type { SmartGoal } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces

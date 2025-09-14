@@ -5,13 +5,14 @@
  * navigation, validation, state management, and user interactions.
  */
 
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
+import { GoalCategory } from '@/types/smart-goals.types';
+
 import { GoalWizard } from '../GoalWizard';
-import { WizardStep, GoalTemplate } from '../GoalWizard.types';
-import { GoalCategory, GoalPriority } from '@/types/smart-goals.types';
+import { WizardStep } from '../GoalWizard.types';
 
 // Mock the lazy-loaded components to avoid issues in tests
 vi.mock('../steps/ContextStep', () => ({

@@ -6,6 +6,15 @@
  */
 
 import {
+  SmartGoalCreate,
+  GoalCategory,
+  GoalPriority,
+  GoalStatus,
+  MetricType,
+  Frequency,
+} from '@/types/smart-goals.types';
+
+import {
   WizardStep,
   StepStatus,
   WizardFormData,
@@ -23,14 +32,6 @@ import {
   RelevantStepData,
   TimeboundStepData,
 } from './GoalWizard.types';
-import {
-  SmartGoalCreate,
-  GoalCategory,
-  GoalPriority,
-  GoalStatus,
-  MetricType,
-  Frequency,
-} from '@/types/smart-goals.types';
 
 // =============================================================================
 // Constants

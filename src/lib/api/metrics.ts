@@ -11,9 +11,8 @@
  * @version 1.0.0
  */
 
-import { apiClient } from './client';
-import { MetricCheckpoint } from '@/types/smart-goals.types';
 import { createMockMetricCheckpoint } from '@/lib/mock-data/smart-goals';
+import { MetricCheckpoint } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces

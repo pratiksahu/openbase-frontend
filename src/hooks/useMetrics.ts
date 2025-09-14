@@ -13,6 +13,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+
 import { metricsApi, MetricAnalytics, MetricTrendData, CreateCheckpointRequest } from '@/lib/api/metrics';
 import { MetricCheckpoint } from '@/types/smart-goals.types';
 

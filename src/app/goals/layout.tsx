@@ -5,20 +5,20 @@
  * and consistent UI structure across all goal-related pages.
  */
 
-import React from 'react';
+import { ChevronRight, Plus, Filter, Grid, List, Search } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ChevronRight, Plus, Filter, Grid, List, Search } from 'lucide-react';
+import React from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 // import { Toggle } from '@/components/ui/toggle'; // TODO: Add toggle component
 
 export const metadata: Metadata = {

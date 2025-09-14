@@ -5,13 +5,12 @@
  * various use cases, templates, and configurations.
  */
 
-import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import type { Meta, StoryObj } from '@storybook/react';
 import { within, expect, userEvent } from '@storybook/test';
 
+
 import { GoalWizard } from './GoalWizard';
-import { GoalTemplate, WizardStep } from './GoalWizard.types';
-import { GoalCategory, GoalPriority, MetricType, Frequency } from '@/types/smart-goals.types';
 
 const meta: Meta<typeof GoalWizard> = {
   title: 'Components/GoalWizard',
