@@ -380,6 +380,8 @@ export interface Subtask extends BaseEntity, SoftDeletable, Commentable {
   status: TaskStatus;
   /** Priority level */
   priority: GoalPriority;
+  /** Order/position within the parent task */
+  order: number;
   /** Assigned to (user ID) */
   assignedTo?: string;
   /** Estimated effort in hours */

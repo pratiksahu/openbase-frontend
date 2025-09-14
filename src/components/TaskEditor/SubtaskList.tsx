@@ -515,11 +515,19 @@ export function SubtaskList({
   }, [onSubtaskUpdate]);
 
   const handleAddNew = useCallback((data: SubtaskFormData) => {
-    onSubtaskAdd(data);
+    const newSubtask: Omit<Subtask, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'> = {
+      ...data,
+      progress: 0,
+      checklist: [],
+      taskId,
+      isDeleted: false,
+      comments: []
+    };
+    onSubtaskAdd(newSubtask);
     setIsAddingNew(false);
     resetAddForm();
     toast.success('Subtask added');
-  }, [onSubtaskAdd, resetAddForm]);
+  }, [onSubtaskAdd, resetAddForm, taskId]);
 
   // =============================================================================
   // Computed Values

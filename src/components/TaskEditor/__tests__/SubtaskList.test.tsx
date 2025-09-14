@@ -414,7 +414,8 @@ describe('SubtaskList Component', () => {
       render(<SubtaskList {...defaultProps} />);
 
       const completedSubtask = screen.getByText('First Subtask');
-      expect(completedSubtask).toHaveClass('line-through', 'text-muted-foreground');
+      expect(completedSubtask).toHaveClass('line-through');
+      expect(completedSubtask).toHaveClass('text-muted-foreground');
     });
 
     it('shows progress for in-progress subtasks', () => {
