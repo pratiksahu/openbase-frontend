@@ -40,7 +40,8 @@ test.describe('Goals List Page', () => {
 
     // Check that goal cards/items are present
     const goalCards = page.locator('[data-testid="goal-card"], [data-testid="goal-list-item"]');
-    await expect(goalCards).toHaveCount({ min: 1 });
+    const count = await goalCards.count();
+    expect(count).toBeGreaterThanOrEqual(1);
 
     // Check first goal card content
     const firstGoal = goalCards.first();
@@ -259,8 +260,8 @@ test.describe('Goal Canvas Page', () => {
   });
 
   test('should display zoom controls', async ({ page }) => {
-    await expect(page.getByRole('button', { name: /zoom in/i })).or(page.locator('[data-testid="zoom-in"]')).toBeVisible();
-    await expect(page.getByRole('button', { name: /zoom out/i })).or(page.locator('[data-testid="zoom-out"]')).toBeVisible();
+    await expect(page.getByRole('button', { name: /zoom in/i }).or(page.locator('[data-testid="zoom-in"]'))).toBeVisible();
+    await expect(page.getByRole('button', { name: /zoom out/i }).or(page.locator('[data-testid="zoom-out"]'))).toBeVisible();
   });
 });
 

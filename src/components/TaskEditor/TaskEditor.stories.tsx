@@ -592,6 +592,10 @@ export const MinimalTask: Story = {
  * Loading state demonstration
  */
 export const LoadingState: Story = {
+  args: {
+    goalId: 'goal-1',
+    onSave: async () => {}
+  },
   render: () => {
     // This would typically come from a loading hook or state
     return (

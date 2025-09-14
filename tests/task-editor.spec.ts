@@ -204,7 +204,7 @@ test.describe('TaskEditor Component', () => {
 
     test('should edit existing subtask', async ({ page }) => {
       // Find and click edit button for first subtask
-      await page.click('[data-testid="edit-subtask"]').first();
+      await page.locator('[data-testid="edit-subtask"]').first().click();
 
       // Update title
       await page.fill('input[value*="Design user interface"]', 'Updated Subtask Title');
@@ -219,7 +219,7 @@ test.describe('TaskEditor Component', () => {
 
     test('should delete subtask with confirmation', async ({ page }) => {
       // Click delete button for first subtask
-      await page.click('[data-testid="delete-subtask"]').first();
+      await page.locator('[data-testid="delete-subtask"]').first().click();
 
       // Handle confirmation dialog
       page.on('dialog', dialog => dialog.accept());
@@ -256,7 +256,7 @@ test.describe('TaskEditor Component', () => {
 
     test('should toggle checklist item completion', async ({ page }) => {
       // Find and click checkbox for an uncompleted item
-      await page.click('[data-testid="checklist-checkbox"]').first();
+      await page.locator('[data-testid="checklist-checkbox"]').first().click();
 
       // Verify item is marked as completed
       await expect(page.locator('[data-testid="completed-item"]')).toBeVisible();

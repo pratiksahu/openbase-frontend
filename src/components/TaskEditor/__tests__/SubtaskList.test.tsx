@@ -468,10 +468,24 @@ describe('SubtaskList Component', () => {
       jest.spyOn(dndCore, 'DndContext').mockImplementation(({ onDragEnd, children }) => {
         // Simulate a drag end event
         setTimeout(() => {
-          onDragEnd({
-            active: { id: 'subtask-1' },
-            over: { id: 'subtask-2' },
-          });
+          if (onDragEnd) {
+            onDragEnd({
+              active: {
+                id: 'subtask-1',
+                data: { current: {} },
+                rect: { current: { initial: null, translated: null } }
+              } as any,
+              over: {
+                id: 'subtask-2',
+                data: { current: {} },
+                rect: { current: { initial: null, translated: null } },
+                disabled: false
+              } as any,
+              collisions: [],
+              delta: { x: 0, y: 0 },
+              activatorEvent: null
+            } as any);
+          }
         }, 0);
 
         return originalDndContext({ onDragEnd, children });

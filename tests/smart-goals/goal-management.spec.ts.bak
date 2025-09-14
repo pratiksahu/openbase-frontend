@@ -20,14 +20,13 @@ test.describe('Goal Management Operations', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test('should display goals list with management options', async ({ page }) => {
+  test('should display goals list with management options', async () => {
     // Wait for goals to load
     await page.waitForSelector('[data-testid="goal-card"], [data-testid="goal-list-item"]', { timeout: 10000 });
 
     // Check that goal cards are present
     const goalCards = page.locator('[data-testid="goal-card"], [data-testid="goal-list-item"]');
-    const count = await goalCards.count();
-    expect(count).toBeGreaterThanOrEqual(1);
+    await expect(goalCards).toHaveCount({ min: 1 });
 
     // Each goal should have management options
     const firstGoal = goalCards.first();
@@ -39,7 +38,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should open goal detail page', async ({ page }) => {
+  test('should open goal detail page', async () => {
     // Click on first goal
     const goalLink = page.locator('a[href*="/goals/"]').filter({ hasText: /.*/ }).first();
     await expect(goalLink).toBeVisible();
@@ -52,7 +51,7 @@ test.describe('Goal Management Operations', () => {
     await expect(page.locator('h1, [data-testid="goal-title"]')).toBeVisible();
   });
 
-  test('should edit goal successfully', async ({ page }) => {
+  test('should edit goal successfully', async () => {
     // Navigate to goal detail
     await navigateToGoalDetail();
 
@@ -81,7 +80,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should change goal status', async ({ page }) => {
+  test('should change goal status', async () => {
     // Navigate to goal detail
     await navigateToGoalDetail();
 
@@ -108,7 +107,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should archive goal', async ({ page }) => {
+  test('should archive goal', async () => {
     // Navigate to goal detail
     await navigateToGoalDetail();
 
@@ -134,7 +133,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should delete goal with confirmation', async ({ page }) => {
+  test('should delete goal with confirmation', async () => {
     // Navigate to goal detail
     await navigateToGoalDetail();
 
@@ -165,7 +164,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should duplicate goal', async ({ page }) => {
+  test('should duplicate goal', async () => {
     // Navigate to goal detail
     await navigateToGoalDetail();
 
@@ -194,7 +193,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should handle bulk operations', async ({ page }) => {
+  test('should handle bulk operations', async () => {
     // Look for bulk selection checkboxes
     const selectAllCheckbox = page.locator('input[type="checkbox"][aria-label*="select all"], .select-all');
 
@@ -211,7 +210,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should filter goals by status', async ({ page }) => {
+  test('should filter goals by status', async () => {
     // Open filter dropdown
     const filterButton = page.getByRole('button', { name: /filter/i });
     await filterButton.click();
@@ -240,7 +239,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should search goals', async ({ page }) => {
+  test('should search goals', async () => {
     // Find search input
     const searchInput = page.getByPlaceholder(/search.*goals/i);
     await expect(searchInput).toBeVisible();
@@ -262,7 +261,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should sort goals', async ({ page }) => {
+  test('should sort goals', async () => {
     // Look for sort dropdown
     const sortButton = page.getByRole('button', { name: /sort/i }).or(page.locator('[data-testid="sort-button"]'));
 
@@ -283,7 +282,7 @@ test.describe('Goal Management Operations', () => {
     }
   });
 
-  test('should display goal statistics', async ({ page }) => {
+  test('should display goal statistics', async () => {
     // Check for stats cards
     const statsSection = page.locator('[data-testid="stats"], .stats, .dashboard-stats').first();
 
@@ -329,7 +328,7 @@ test.describe('Goal List Views', () => {
     await page.goto(GOALS_BASE_URL);
   });
 
-  test('should toggle between grid and list views', async ({ page }) => {
+  test('should toggle between grid and list views', async () => {
     // Look for view toggle buttons
     const gridViewButton = page.getByRole('button', { name: /grid/i }).or(page.locator('[data-testid="grid-view"]'));
     const listViewButton = page.getByRole('button', { name: /list/i }).or(page.locator('[data-testid="list-view"]'));
@@ -353,7 +352,7 @@ test.describe('Goal List Views', () => {
     }
   });
 
-  test('should handle empty state', async ({ page }) => {
+  test('should handle empty state', async () => {
     // Mock empty state by filtering to show no results
     const searchInput = page.getByPlaceholder(/search.*goals/i);
     await searchInput.fill('nonexistent goal that should not match anything');
@@ -370,7 +369,7 @@ test.describe('Goal List Views', () => {
     }
   });
 
-  test('should paginate large numbers of goals', async ({ page }) => {
+  test('should paginate large numbers of goals', async () => {
     // Look for pagination controls
     const paginationContainer = page.locator('[data-testid="pagination"], .pagination, nav[aria-label*="pagination"]');
 

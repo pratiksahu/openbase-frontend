@@ -164,7 +164,8 @@ test.describe('Task Workflow Features', () => {
             }
 
             // Verify task is in completed column
-            await expect(completedColumn.locator('.task-card, [data-testid="task-card"]')).toHaveCount({ min: 1 });
+            const count = await completedColumn.locator('.task-card, [data-testid="task-card"]').count();
+            expect(count).toBeGreaterThanOrEqual(1);
           }
         }
       }

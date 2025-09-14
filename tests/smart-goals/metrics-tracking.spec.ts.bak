@@ -20,7 +20,7 @@ test.describe('Metrics Tracking Features', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test('should display metrics dashboard', async ({ page }) => {
+  test('should display metrics dashboard', async () => {
     // Check for metrics dashboard
     await expect(page.locator('text=/Metrics.*Dashboard/i')).toBeVisible();
 
@@ -33,7 +33,7 @@ test.describe('Metrics Tracking Features', () => {
     await expect(page.locator('text=/\\d+%/')).toBeVisible();
   });
 
-  test('should display metric charts', async ({ page }) => {
+  test('should display metric charts', async () => {
     // Look for chart containers
     const chartContainer = page.locator('svg, canvas, [data-testid="chart"], .chart');
     await expect(chartContainer.first()).toBeVisible();
@@ -53,7 +53,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should allow adding metric checkpoints', async ({ page }) => {
+  test('should allow adding metric checkpoints', async () => {
     // Look for add checkpoint button
     const addCheckpointButton = page.getByRole('button', { name: /add checkpoint|record/i });
 
@@ -86,7 +86,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should display checkpoint history', async ({ page }) => {
+  test('should display checkpoint history', async () => {
     // Look for checkpoint timeline or list
     const checkpointHistory = page.locator('[data-testid="checkpoint-history"], .checkpoint-timeline');
 
@@ -108,7 +108,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should show progress analysis', async ({ page }) => {
+  test('should show progress analysis', async () => {
     // Look for progress analysis section
     const analysisSection = page.locator('[data-testid="progress-analysis"], .progress-analysis');
 
@@ -134,7 +134,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should display metric configuration', async ({ page }) => {
+  test('should display metric configuration', async () => {
     // Look for edit/configure button
     const configureButton = page.getByRole('button', { name: /configure|edit.*metric/i });
 
@@ -159,7 +159,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should handle different metric types', async ({ page }) => {
+  test('should handle different metric types', async () => {
     // Test configuration for different metric types
     const configureButton = page.getByRole('button', { name: /configure|edit.*metric/i });
 
@@ -184,7 +184,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should show target achievement status', async ({ page }) => {
+  test('should show target achievement status', async () => {
     // Look for achievement status indicators
     const statusIndicators = [
       page.locator('[data-testid="achievement-status"], .achievement-status'),
@@ -208,7 +208,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should export metric data', async ({ page }) => {
+  test('should export metric data', async () => {
     // Look for export functionality
     const exportButton = page.getByRole('button', { name: /export|download/i });
 
@@ -233,7 +233,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should display metric insights', async ({ page }) => {
+  test('should display metric insights', async () => {
     // Look for insights or recommendations section
     const insightsSection = page.locator('[data-testid="insights"], .insights, .recommendations');
 
@@ -255,7 +255,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should handle metric validation', async ({ page }) => {
+  test('should handle metric validation', async () => {
     // Try to add invalid checkpoint
     const addCheckpointButton = page.getByRole('button', { name: /add checkpoint|record/i });
 
@@ -285,7 +285,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should show metric comparison', async ({ page }) => {
+  test('should show metric comparison', async () => {
     // Look for comparison features
     const comparisonSection = page.locator('[data-testid="comparison"], .comparison');
 
@@ -300,7 +300,7 @@ test.describe('Metrics Tracking Features', () => {
     }
   });
 
-  test('should display forecast projections', async ({ page }) => {
+  test('should display forecast projections', async () => {
     // Look for forecast/projection section
     const forecastSection = page.locator('[data-testid="forecast"], .forecast, .projection');
 

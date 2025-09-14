@@ -20,7 +20,7 @@ test.describe('Goal Creation Workflow', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test('should display goal creation wizard correctly', async () => {
+  test('should display goal creation wizard correctly', async ({ page }) => {
     // Check page title and header
     await expect(page).toHaveTitle(/Create.*Goal.*OpenBase/);
     await expect(page.locator('h1')).toContainText(/Create.*Goal/i);
@@ -36,7 +36,7 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.getByRole('button', { name: /back|previous/i })).toBeVisible();
   });
 
-  test('should navigate through wizard steps', async () => {
+  test('should navigate through wizard steps', async ({ page }) => {
     // Start with Context step
     await expect(page.locator('text=/Context/i')).toBeVisible();
 
@@ -87,7 +87,7 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/Preview/i')).toBeVisible();
   });
 
-  test('should validate required fields', async () => {
+  test('should validate required fields', async ({ page }) => {
     // Try to navigate without filling title
     await page.getByRole('button', { name: /next/i }).click();
 
@@ -105,7 +105,7 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/description.*required/i')).toBeVisible();
   });
 
-  test('should show SMART score calculation', async () => {
+  test('should show SMART score calculation', async ({ page }) => {
     // Fill basic information
     await fillBasicGoalInfo();
 
@@ -119,7 +119,7 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/\\d+/').first()).toBeVisible();
   });
 
-  test('should save goal successfully', async () => {
+  test('should save goal successfully', async ({ page }) => {
     // Fill complete goal information
     await fillCompleteGoalInfo();
 
@@ -138,7 +138,7 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/success|created|saved/i')).toBeVisible();
   });
 
-  test('should handle navigation back and forth', async () => {
+  test('should handle navigation back and forth', async ({ page }) => {
     await fillBasicGoalInfo();
 
     // Navigate forward
@@ -154,7 +154,7 @@ test.describe('Goal Creation Workflow', () => {
     await expect(titleInput).toHaveValue('Test SMART Goal');
   });
 
-  test('should support form auto-save', async () => {
+  test('should support form auto-save', async ({ page }) => {
     // Fill some data
     await fillBasicGoalInfo();
 
@@ -172,7 +172,7 @@ test.describe('Goal Creation Workflow', () => {
     await expect(titleInput).toHaveValue('Test SMART Goal');
   });
 
-  test('should handle wizard exit confirmation', async () => {
+  test('should handle wizard exit confirmation', async ({ page }) => {
     // Fill some data
     await fillBasicGoalInfo();
 
@@ -192,7 +192,7 @@ test.describe('Goal Creation Workflow', () => {
     }
   });
 
-  test('should display help content', async () => {
+  test('should display help content', async ({ page }) => {
     // Look for help section or tooltips
     const helpSection = page.locator('[data-testid="help"], text=/help/i');
     if (await helpSection.isVisible()) {
@@ -276,7 +276,7 @@ test.describe('Goal Templates', () => {
     await page.goto(NEW_GOAL_URL);
   });
 
-  test('should display goal templates if available', async () => {
+  test('should display goal templates if available', async ({ page }) => {
     // Look for template section
     const templateSection = page.locator('[data-testid="templates"], text=/templates/i');
 
@@ -293,7 +293,7 @@ test.describe('Goal Templates', () => {
     }
   });
 
-  test('should apply template when selected', async () => {
+  test('should apply template when selected', async ({ page }) => {
     // Look for template selection
     const templateCard = page.locator('[data-testid="template-card"], .template').first();
 
