@@ -24,9 +24,9 @@ interface ErrorResponse {
 }
 
 interface RouteParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // =============================================================================
@@ -34,7 +34,7 @@ interface RouteParams {
 // =============================================================================
 
 const findGoalById = (id: string): SmartGoal | null => {
-  return mockGoals.find(goal => goal.id === id) || null;
+  return mockGoals.find((goal: SmartGoal) => goal.id === id) || null;
 };
 
 const validateGoalUpdate = (update: Partial<SmartGoal>): string[] => {
@@ -81,12 +81,13 @@ const validateGoalUpdate = (update: Partial<SmartGoal>): string[] => {
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const goal = findGoalById(params.id);
+    const { id } = await params;
+    const goal = findGoalById(id);
 
     if (!goal) {
       const errorResponse: ErrorResponse = {
         error: 'Not Found',
-        message: `Goal with id "${params.id}" not found`,
+        message: `Goal with id "${id}" not found`,
         code: 'GOAL_NOT_FOUND',
       };
       return NextResponse.json(errorResponse, { status: 404 });
@@ -121,12 +122,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
-    const existingGoal = findGoalById(params.id);
+    const { id } = await params;
+    const existingGoal = findGoalById(id);
 
     if (!existingGoal) {
       const errorResponse: ErrorResponse = {
         error: 'Not Found',
-        message: `Goal with id "${params.id}" not found`,
+        message: `Goal with id "${id}" not found`,
         code: 'GOAL_NOT_FOUND',
       };
       return NextResponse.json(errorResponse, { status: 404 });
@@ -189,12 +191,13 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
-    const existingGoal = findGoalById(params.id);
+    const { id } = await params;
+    const existingGoal = findGoalById(id);
 
     if (!existingGoal) {
       const errorResponse: ErrorResponse = {
         error: 'Not Found',
-        message: `Goal with id "${params.id}" not found`,
+        message: `Goal with id "${id}" not found`,
         code: 'GOAL_NOT_FOUND',
       };
       return NextResponse.json(errorResponse, { status: 404 });
@@ -259,12 +262,13 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
-    const existingGoal = findGoalById(params.id);
+    const { id } = await params;
+    const existingGoal = findGoalById(id);
 
     if (!existingGoal) {
       const errorResponse: ErrorResponse = {
         error: 'Not Found',
-        message: `Goal with id "${params.id}" not found`,
+        message: `Goal with id "${id}" not found`,
         code: 'GOAL_NOT_FOUND',
       };
       return NextResponse.json(errorResponse, { status: 404 });
@@ -286,7 +290,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     if (permanent) {
       // Hard delete - in a real implementation, you would remove from database
       return NextResponse.json(
-        { message: 'Goal permanently deleted', id: params.id },
+        { message: 'Goal permanently deleted', id },
         { status: 200 }
       );
     } else {
@@ -302,7 +306,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
       // In a real implementation, you would save to a database here
       return NextResponse.json(
-        { message: 'Goal soft deleted', id: params.id, goal: deletedGoal },
+        { message: 'Goal soft deleted', id, goal: deletedGoal },
         { status: 200 }
       );
     }

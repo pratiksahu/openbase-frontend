@@ -67,7 +67,7 @@ interface ReviewAction {
   user: string;
   timestamp: Date;
   details: string;
-  changes?: Record<string, { old: any; new: any }>;
+  changes?: Record<string, { old: string; new: string }>;
 }
 
 interface ReviewStatus {
@@ -85,7 +85,7 @@ interface ReviewStatus {
 
 async function getGoal(id: string): Promise<SmartGoal | null> {
   // TODO: Replace with actual API call
-  return mockGoals.find(goal => goal.id === id) || null;
+  return mockGoals.find((goal: SmartGoal) => goal.id === id) || null;
 }
 
 const mockComments: ReviewComment[] = [
@@ -394,7 +394,7 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ actions }) => {
 
   return (
     <div className="space-y-4">
-      {actions.map((action, index) => (
+      {actions.map((action) => (
         <div key={action.id} className="flex items-start space-x-3">
           <div className="flex-shrink-0">
             {getActionIcon(action.type)}
@@ -415,9 +415,9 @@ const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ actions }) => {
                   {Object.entries(action.changes).map(([field, change]) => (
                     <li key={field} className="flex items-center space-x-2">
                       <span>{field}:</span>
-                      <span className="text-red-600">"{change.old}"</span>
+                      <span className="text-red-600">&ldquo;{change.old}&rdquo;</span>
                       <span>→</span>
-                      <span className="text-green-600">"{change.new}"</span>
+                      <span className="text-green-600">&ldquo;{change.new}&rdquo;</span>
                     </li>
                   ))}
                 </ul>
@@ -474,17 +474,14 @@ export default function GoalReviewPage({ params }: ReviewPageProps) {
 
   const handleApprove = () => {
     // TODO: Implement approval logic
-    console.log('Approve goal');
   };
 
   const handleReject = () => {
     // TODO: Implement rejection logic
-    console.log('Reject goal');
   };
 
   const handleRequestChanges = () => {
     // TODO: Implement change request logic
-    console.log('Request changes');
   };
 
   if (!goal) {
@@ -621,11 +618,10 @@ export default function GoalReviewPage({ params }: ReviewPageProps) {
 
         <TabsContent value="dor-dod" className="space-y-6">
           <DorDodPanel
-            goalId={goal.id}
-            mode="review"
-            onSave={(data) => {
-              console.log('DoR/DoD saved:', data);
+            onStateChange={(_state) => {
+              // TODO: Handle DoR/DoD state change
             }}
+            readOnly={false}
           />
         </TabsContent>
 

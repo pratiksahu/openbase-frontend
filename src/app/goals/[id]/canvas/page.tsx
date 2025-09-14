@@ -80,7 +80,7 @@ interface CanvasConnection {
 
 async function getGoal(id: string): Promise<SmartGoal | null> {
   // TODO: Replace with actual API call
-  return mockGoals.find(goal => goal.id === id) || null;
+  return mockGoals.find((goal: SmartGoal) => goal.id === id) || null;
 }
 
 const generateNodesFromGoal = (goal: SmartGoal): CanvasNode[] => {
@@ -264,6 +264,8 @@ const CanvasNodeComponent: React.FC<CanvasNodeComponentProps> = ({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       className={`absolute cursor-move select-none transition-all duration-200 ${
         isSelected ? 'ring-2 ring-primary ring-offset-2' : ''
       }`}
@@ -274,6 +276,12 @@ const CanvasNodeComponent: React.FC<CanvasNodeComponentProps> = ({
         height: node.height,
       }}
       onClick={() => onSelect(node.id)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelect(node.id);
+        }
+      }}
     >
       <Card className={`h-full ${getStatusColor(node.status)} shadow-md hover:shadow-lg`}>
         <CardContent className="p-3 h-full flex flex-col">
@@ -337,7 +345,7 @@ const CanvasToolbar: React.FC<CanvasToolbarProps> = ({
     <div className="absolute top-4 left-4 right-4 flex items-center justify-between bg-background/95 backdrop-blur-sm border rounded-lg p-2 shadow-sm z-10">
       <div className="flex items-center space-x-2">
         {/* View Mode */}
-        <Select value={viewMode} onValueChange={(value: any) => onViewModeChange(value)}>
+        <Select value={viewMode} onValueChange={(value) => onViewModeChange(value as 'normal' | 'focus' | 'overview')}>
           <SelectTrigger className="w-32">
             <SelectValue />
           </SelectTrigger>
@@ -465,17 +473,14 @@ export default function GoalCanvasPage({ params }: CanvasPageProps) {
 
   const handleExport = useCallback(() => {
     // TODO: Implement canvas export
-    console.log('Export canvas');
   }, []);
 
   const handleShare = useCallback(() => {
     // TODO: Implement canvas sharing
-    console.log('Share canvas');
   }, []);
 
   const handleAddNode = useCallback(() => {
     // TODO: Implement node addition
-    console.log('Add node');
   }, []);
 
   if (!goal) {

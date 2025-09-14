@@ -134,8 +134,6 @@ export type {
   Task,
   Subtask,
   ChecklistItem,
-  TaskStatus,
-  GoalPriority,
 } from '@/types/smart-goals.types';
 
 export {

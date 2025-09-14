@@ -112,7 +112,7 @@ export const demoGoals: SmartGoal[] = [
       isRecurring: false,
     },
     tasks: [
-      createMockTask({
+      createMockTask('goal-1', {
         title: 'Complete React Fundamentals Course',
         description: 'Master React basics: components, hooks, state management',
         status: TaskStatus.COMPLETED,
@@ -121,7 +121,7 @@ export const demoGoals: SmartGoal[] = [
         actualHours: 35,
         priority: GoalPriority.HIGH,
       }),
-      createMockTask({
+      createMockTask('goal-1', {
         title: 'Learn Advanced TypeScript Patterns',
         description: 'Study generics, utility types, and advanced type patterns',
         status: TaskStatus.IN_PROGRESS,
@@ -130,7 +130,7 @@ export const demoGoals: SmartGoal[] = [
         actualHours: 18,
         priority: GoalPriority.HIGH,
       }),
-      createMockTask({
+      createMockTask('goal-1', {
         title: 'Build E-commerce Project',
         description: 'Create full-featured e-commerce site with React/TS',
         status: TaskStatus.TODO,
@@ -140,7 +140,7 @@ export const demoGoals: SmartGoal[] = [
       }),
     ],
     milestones: [
-      createMockMilestone({
+      createMockMilestone('goal-1', {
         title: 'Complete Foundation Courses',
         description: 'Finish all basic React and TypeScript courses',
         targetDate: new Date('2024-03-01'),
@@ -148,7 +148,7 @@ export const demoGoals: SmartGoal[] = [
         completedAt: new Date('2024-02-28'),
         progress: 100,
       }),
-      createMockMilestone({
+      createMockMilestone('goal-1', {
         title: 'Build First Production Project',
         description: 'Deploy first React/TS project to production',
         targetDate: new Date('2024-04-15'),
@@ -494,7 +494,7 @@ export function generateStressTestData(): SmartGoal[] {
   // Add many tasks
   const tasks: Task[] = [];
   for (let i = 0; i < 100; i++) {
-    const task = createMockTask({
+    const task = createMockTask('stress-test-goal', {
       title: `Task ${i + 1}`,
       description: `This is task number ${i + 1} with detailed description and requirements`,
       status: i < 25 ? TaskStatus.COMPLETED : i < 50 ? TaskStatus.IN_PROGRESS : TaskStatus.TODO,

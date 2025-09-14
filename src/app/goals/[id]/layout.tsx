@@ -51,9 +51,9 @@ import type { SmartGoal, GoalStatus } from '@/types/smart-goals.types';
 
 interface GoalLayoutProps {
   children: React.ReactNode;
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // =============================================================================
@@ -100,7 +100,7 @@ const getDaysRemaining = (targetDate: Date): number => {
 
 async function getGoal(id: string): Promise<SmartGoal | null> {
   // TODO: Replace with actual API call
-  return mockGoals.find(goal => goal.id === id) || null;
+  return mockGoals.find((goal: SmartGoal) => goal.id === id) || null;
 }
 
 // =============================================================================
@@ -215,7 +215,7 @@ const GoalHeader: React.FC<GoalHeaderProps> = ({ goal }) => {
                 {goal.ownerId.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            {goal.collaborators.slice(0, 3).map((collaboratorId, index) => (
+            {goal.collaborators.slice(0, 3).map((collaboratorId) => (
               <Avatar key={collaboratorId} className="h-8 w-8 ring-2 ring-background">
                 <AvatarImage src={`https://api.dicebear.com/7.x/avatars/svg?seed=${collaboratorId}`} />
                 <AvatarFallback className="text-xs">
@@ -346,8 +346,9 @@ const NavigationTabs: React.FC<NavigationTabsProps> = ({ goalId, currentPath }) 
 // Metadata Generation
 // =============================================================================
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const goal = await getGoal(params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const goal = await getGoal(id);
 
   if (!goal) {
     return {
@@ -372,14 +373,15 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 // =============================================================================
 
 export default async function GoalLayout({ children, params }: GoalLayoutProps) {
-  const goal = await getGoal(params.id);
+  const { id } = await params;
+  const goal = await getGoal(id);
 
   if (!goal) {
     notFound();
   }
 
   // Mock current path - in real app this would come from usePathname
-  const currentPath = `/goals/${params.id}`;
+  const currentPath = `/goals/${id}`;
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-7xl">

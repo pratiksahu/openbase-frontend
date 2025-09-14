@@ -94,6 +94,11 @@ export type {
  * Reset all stores to initial state
  */
 export const resetAllStores = () => {
+  // Import stores directly from their modules
+  const { useSelectionStore } = require('./goals/selectionStore');
+  const { useWizardStore } = require('./goals/wizardStore');
+  const { useGoalStore } = require('./goals/goalStore');
+
   const { resetSelectionState } = useSelectionStore.getState();
   const { cancelWizard } = useWizardStore.getState();
   const { clearCache, clearAllErrors } = useGoalStore.getState();
@@ -108,6 +113,10 @@ export const resetAllStores = () => {
  * Get combined store state for debugging
  */
 export const getAllStoreState = () => {
+  const { useGoalStore } = require('./goals/goalStore');
+  const { useSelectionStore } = require('./goals/selectionStore');
+  const { useWizardStore } = require('./goals/wizardStore');
+
   return {
     goals: useGoalStore.getState(),
     selection: useSelectionStore.getState(),
@@ -119,6 +128,10 @@ export const getAllStoreState = () => {
  * Subscribe to multiple stores
  */
 export const subscribeToAllStores = (callback: (state: ReturnType<typeof getAllStoreState>) => void) => {
+  const { useGoalStore } = require('./goals/goalStore');
+  const { useSelectionStore } = require('./goals/selectionStore');
+  const { useWizardStore } = require('./goals/wizardStore');
+
   const unsubscribeGoals = useGoalStore.subscribe(callback);
   const unsubscribeSelection = useSelectionStore.subscribe(callback);
   const unsubscribeWizard = useWizardStore.subscribe(callback);
@@ -135,6 +148,10 @@ export const subscribeToAllStores = (callback: (state: ReturnType<typeof getAllS
 // =============================================================================
 
 export const getStoreStats = () => {
+  const { useGoalStore } = require('./goals/goalStore');
+  const { useSelectionStore } = require('./goals/selectionStore');
+  const { useWizardStore } = require('./goals/wizardStore');
+
   const goalState = useGoalStore.getState();
   const selectionState = useSelectionStore.getState();
   const wizardState = useWizardStore.getState();

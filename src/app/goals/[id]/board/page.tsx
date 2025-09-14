@@ -23,6 +23,7 @@ import {
 import React, { useState, useCallback } from 'react';
 
 import { TaskEditor } from '@/components/TaskEditor/TaskEditor';
+import { TaskEditorMode } from '@/components/TaskEditor/TaskEditor.types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -44,7 +45,8 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
-import type { SmartGoal, Task, TaskStatus, GoalPriority } from '@/types/smart-goals.types';
+import { TaskStatus, GoalPriority } from '@/types/smart-goals.types';
+import type { SmartGoal, Task } from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
@@ -78,31 +80,31 @@ type SwimlaneMode = 'none' | 'assignee' | 'milestone' | 'priority';
 
 const COLUMNS: Column[] = [
   {
-    id: 'todo',
+    id: TaskStatus.TODO,
     title: 'To Do',
     color: 'bg-gray-100 dark:bg-gray-800',
     icon: Circle,
   },
   {
-    id: 'in_progress',
+    id: TaskStatus.IN_PROGRESS,
     title: 'In Progress',
     color: 'bg-blue-100 dark:bg-blue-800',
     icon: Clock,
   },
   {
-    id: 'completed',
+    id: TaskStatus.COMPLETED,
     title: 'Completed',
     color: 'bg-green-100 dark:bg-green-800',
     icon: CheckCircle,
   },
   {
-    id: 'blocked',
+    id: TaskStatus.BLOCKED,
     title: 'Blocked',
     color: 'bg-red-100 dark:bg-red-800',
     icon: AlertTriangle,
   },
   {
-    id: 'cancelled',
+    id: TaskStatus.CANCELLED,
     title: 'Cancelled',
     color: 'bg-gray-200 dark:bg-gray-700',
     icon: Circle,
@@ -115,18 +117,18 @@ const COLUMNS: Column[] = [
 
 async function getGoal(id: string): Promise<SmartGoal | null> {
   // TODO: Replace with actual API call
-  return mockGoals.find(goal => goal.id === id) || null;
+  return mockGoals.find((goal: SmartGoal) => goal.id === id) || null;
 }
 
 const getPriorityColor = (priority: GoalPriority): string => {
   switch (priority) {
-    case 'critical':
+    case GoalPriority.CRITICAL:
       return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-300';
-    case 'high':
+    case GoalPriority.HIGH:
       return 'bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900 dark:text-orange-300';
-    case 'medium':
+    case GoalPriority.MEDIUM:
       return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-300';
-    case 'low':
+    case GoalPriority.LOW:
       return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-300';
     default:
       return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-900 dark:text-gray-300';
@@ -402,7 +404,7 @@ const BoardToolbar: React.FC<BoardToolbarProps> = ({
             <SelectContent>
               <SelectItem value="all">All Assignees</SelectItem>
               {uniqueAssignees.map(assignee => (
-                <SelectItem key={assignee} value={assignee!}>
+                <SelectItem key={assignee} value={assignee || ''}>
                   {assignee}
                 </SelectItem>
               ))}
@@ -435,7 +437,7 @@ const BoardToolbar: React.FC<BoardToolbarProps> = ({
             onValueChange={(value) =>
               onFiltersChange({
                 ...filters,
-                dueDate: value === 'all' ? undefined : value as any
+                dueDate: value === 'all' ? undefined : value as 'overdue' | 'today' | 'this_week' | 'next_week'
               })
             }
           >
@@ -533,24 +535,20 @@ export default function GoalBoardPage({ params }: BoardPageProps) {
     setEditingTask(task);
   }, []);
 
-  const handleTaskDelete = useCallback((task: Task) => {
+  const handleTaskDelete = useCallback((_task: Task) => {
     // TODO: Implement task deletion
-    console.log('Delete task:', task.id);
   }, []);
 
-  const handleTaskView = useCallback((task: Task) => {
+  const handleTaskView = useCallback((_task: Task) => {
     // TODO: Open task detail modal
-    console.log('View task:', task.id);
   }, []);
 
-  const handleStatusChange = useCallback((taskId: string, newStatus: TaskStatus) => {
+  const handleStatusChange = useCallback((_taskId: string, _newStatus: TaskStatus) => {
     // TODO: Update task status
-    console.log('Change task status:', taskId, newStatus);
   }, []);
 
-  const handleAddTask = useCallback((status: TaskStatus) => {
+  const handleAddTask = useCallback((_status: TaskStatus) => {
     // TODO: Add new task with status
-    console.log('Add task with status:', status);
   }, []);
 
   if (!goal) {
@@ -602,13 +600,12 @@ export default function GoalBoardPage({ params }: BoardPageProps) {
             <TaskEditor
               goalId={goal.id}
               task={editingTask}
-              onSave={(updatedTask) => {
+              onSave={async (_updatedTask) => {
                 // TODO: Update task
-                console.log('Save task:', updatedTask);
                 setEditingTask(null);
               }}
               onCancel={() => setEditingTask(null)}
-              mode="edit"
+              mode={TaskEditorMode.EDIT}
             />
           </div>
         </div>

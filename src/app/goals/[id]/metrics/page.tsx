@@ -71,7 +71,7 @@ interface MetricSummary {
 
 async function getGoal(id: string): Promise<SmartGoal | null> {
   // TODO: Replace with actual API call
-  return mockGoals.find(goal => goal.id === id) || null;
+  return mockGoals.find((goal: SmartGoal) => goal.id === id) || null;
 }
 
 const generateMockTrendData = (goal: SmartGoal): MetricTrendData[] => {
@@ -386,7 +386,7 @@ export default function GoalMetricsPage({ params }: MetricsPageProps) {
   const trendData = useMemo(() => {
     if (!goal) return [];
     return generateMockTrendData(goal);
-  }, [goal, timeRange]);
+  }, [goal]);
 
   const metricSummary = useMemo(() => {
     if (!goal) return null;
@@ -395,12 +395,10 @@ export default function GoalMetricsPage({ params }: MetricsPageProps) {
 
   const handleRefresh = () => {
     // TODO: Refresh metrics data
-    console.log('Refresh metrics');
   };
 
   const handleExport = () => {
     // TODO: Export metrics data
-    console.log('Export metrics');
   };
 
   const handleEditMetric = () => {
@@ -570,7 +568,7 @@ export default function GoalMetricsPage({ params }: MetricsPageProps) {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {goal.checkpoints.slice(0, 5).map((checkpoint, index) => (
+                {goal.checkpoints.slice(0, 5).map((checkpoint) => (
                   <div key={checkpoint.id} className="flex items-start space-x-3">
                     <div className="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
                     <div className="flex-1 min-w-0">
@@ -586,7 +584,7 @@ export default function GoalMetricsPage({ params }: MetricsPageProps) {
                       </p>
                       {checkpoint.note && (
                         <p className="text-xs text-muted-foreground italic">
-                          "{checkpoint.note}"
+                          &ldquo;{checkpoint.note}&rdquo;
                         </p>
                       )}
                     </div>
@@ -667,11 +665,9 @@ export default function GoalMetricsPage({ params }: MetricsPageProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-background rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <MetricEditor
-              goalId={goal.id}
-              initialData={goal.measurable}
-              onSave={(updatedMetric) => {
+              initialMetric={goal.measurable}
+              onSave={(_updatedMetric, _checkpoints) => {
                 // TODO: Update metric
-                console.log('Save metric:', updatedMetric);
                 setEditingMetric(false);
               }}
               onCancel={() => setEditingMetric(false)}

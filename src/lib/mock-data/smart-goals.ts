@@ -966,7 +966,7 @@ export {
 // =============================================================================
 
 // Create a sample dataset for use in UI components
-export const mockGoals = createSampleGoalsDataset().goals;
+export const mockGoals = createSampleGoalsDataset();
 
 // Default export for convenience
 const smartGoalsMockData = {

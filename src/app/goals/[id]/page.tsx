@@ -72,7 +72,7 @@ const getProgressColor = (progress: number): string => {
 
 async function getGoal(id: string): Promise<SmartGoal | null> {
   // TODO: Replace with actual API call
-  return mockGoals.find(goal => goal.id === id) || null;
+  return mockGoals.find((goal: SmartGoal) => goal.id === id) || null;
 }
 
 // =============================================================================
@@ -468,10 +468,12 @@ export default async function GoalOverviewPage({ params }: OverviewPageProps) {
           </CardHeader>
           <CardContent>
             <BreakdownTree
-              goal={goal}
-              readOnly={true}
-              showControls={false}
-              maxDepth={2}
+              initialData={[goal]}
+              config={{
+                enableDragDrop: false,
+                enableSearch: false,
+                enableFilters: false
+              }}
               className="max-h-96"
             />
           </CardContent>

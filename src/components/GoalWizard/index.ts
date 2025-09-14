@@ -30,9 +30,6 @@ export type {
   ContextStepProps,
   SpecificStepProps,
   MeasurableStepProps,
-  AchievableStepProps,
-  RelevantStepProps,
-  TimeboundStepProps,
   PreviewStepProps,
   BaseStepProps,
 

@@ -118,7 +118,7 @@ export function CriteriaEditor({
             .split('\n')
             .map((line, _index) => line.trim())
             .filter(Boolean)
-            .map((description, _index) => ({
+            .map((description, index) => ({
               description,
               category: 'required' as CriteriaCategory,
               order: index + 1,
