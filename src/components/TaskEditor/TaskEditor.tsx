@@ -15,7 +15,6 @@ import { format } from 'date-fns';
 import { Save, X, Clock, User, AlertCircle, CheckCircle } from 'lucide-react';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-
 // UI Components
 import { toast } from 'sonner';
 
@@ -29,7 +28,6 @@ import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-
 // Component imports
 import { TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 import type { Task, Subtask, ChecklistItem } from '@/types/smart-goals.types';
@@ -37,7 +35,6 @@ import type { Task, Subtask, ChecklistItem } from '@/types/smart-goals.types';
 import { AcceptanceCriteria } from './AcceptanceCriteria';
 import { ChecklistEditor } from './ChecklistEditor';
 import { SubtaskList } from './SubtaskList';
-
 // Types and utilities
 import {
   TaskFormData,
@@ -71,7 +68,7 @@ export function TaskEditor({
   onSave,
   onCancel,
   onDelete,
-  onStatusChange,
+  onStatusChange: _onStatusChange,
   availableAssignees = [],
   availableTasks: _availableTasks = [],
   templates: _templates = [],
@@ -104,7 +101,7 @@ export function TaskEditor({
     control,
     handleSubmit,
     watch,
-    setValue,
+    // setValue: _setValue,
     getValues,
     formState: { errors, isDirty: formIsDirty },
     // reset,
@@ -559,7 +556,7 @@ export function TaskEditor({
           <X className="h-4 w-4 mr-2" />
           Cancel
         </Button>
-        <Button onClick={handleSubmit(handleSave)} disabled={isSaving || isLoading}>
+        <Button onClick={handleSubmit(() => handleSave())} disabled={isSaving || isLoading}>
           {isSaving ? (
             <>
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />

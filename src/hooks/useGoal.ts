@@ -49,7 +49,7 @@ export interface UseGoalOptions {
   enableOptimisticUpdates?: boolean;
 
   // Dependencies for auto-refetch
-  dependencies?: any[];
+  dependencies?: unknown[];
 }
 
 export interface UseGoalResult {
@@ -101,7 +101,7 @@ export function useGoal(goalId: string | null, options: UseGoalOptions = {}): Us
     onError,
     onUpdate,
     onDelete,
-    enableOptimisticUpdates = true,
+    // enableOptimisticUpdates: _enableOptimisticUpdates = true,
     dependencies = [],
   } = options;
 
@@ -211,7 +211,7 @@ export function useGoal(goalId: string | null, options: UseGoalOptions = {}): Us
     try {
       await actions.deleteGoal(goalId, permanent);
       onDelete?.();
-      mutationOptions?.onSuccess?.(goal!);
+      mutationOptions?.onSuccess?.(goal as SmartGoal);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to delete goal';
       onError?.(errorMessage);
@@ -379,8 +379,8 @@ export function useGoal(goalId: string | null, options: UseGoalOptions = {}): Us
     isOverdue,
     progressPercentage,
     daysUntilDue,
-    canEdit,
-    canDelete,
+    canEdit: canEdit ?? false,
+    canDelete: canDelete ?? false,
   };
 }
 
@@ -442,7 +442,7 @@ export function useOptimisticGoal(goalId: string | null) {
     if (!result.goal) return;
 
     // Apply optimistic update immediately
-    const optimisticGoal = { ...result.goal, ...updates, updatedAt: new Date() };
+    // const _optimisticGoal = { ...result.goal, ...updates, updatedAt: new Date() };
 
     try {
       // Show optimistic state first

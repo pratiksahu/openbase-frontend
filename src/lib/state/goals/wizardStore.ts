@@ -506,7 +506,7 @@ export const useWizardStore = create<WizardStore>()(
           // =============================================================================
 
           nextStep: () => {
-            const { currentStep, totalSteps, steps } = get();
+            const { currentStep, totalSteps } = get();
 
             // Validate current step before proceeding
             if (!get().validateStep(currentStep)) {
@@ -624,7 +624,7 @@ export const useWizardStore = create<WizardStore>()(
 
           clearStepData: (step) => {
             set((state) => {
-              state.data[step] = initialStepData[step];
+              (state.data as any)[step] = initialStepData[step];
               state.hasUnsavedChanges = true;
 
               // Clear validation for this step
@@ -652,7 +652,7 @@ export const useWizardStore = create<WizardStore>()(
               state.hasUnsavedChanges = false;
 
               // Reset all steps
-              state.steps.forEach((step, index) => {
+              state.steps.forEach((step, _index) => {
                 step.isCompleted = false;
                 step.isValid = false;
                 step.hasErrors = false;
@@ -1001,8 +1001,9 @@ export const useWizardStore = create<WizardStore>()(
 
               // Clean up
               get().disableAutoSave();
-              if (get().currentDraft) {
-                get().deleteDraft(get().currentDraft.id);
+              const currentDraft = get().currentDraft;
+              if (currentDraft) {
+                get().deleteDraft(currentDraft.id);
               }
 
               return goalId;
@@ -1079,7 +1080,7 @@ export const useWizardStore = create<WizardStore>()(
           },
 
           getOverallProgress: () => {
-            const { steps, completedSteps, requiredSteps } = get();
+            const { completedSteps, requiredSteps } = get();
 
             if (requiredSteps.size === 0) return 100;
 

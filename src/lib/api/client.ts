@@ -439,13 +439,13 @@ export class ApiClient {
 
       } catch (error) {
         // Apply response interceptors for errors
-        let processedError = error;
+        let processedError = error as ApiError;
         for (const interceptor of this.responseInterceptors) {
           if (interceptor.onRejected) {
             try {
               processedError = await interceptor.onRejected(processedError);
             } catch (interceptorError) {
-              processedError = interceptorError;
+              processedError = interceptorError as ApiError;
             }
           }
         }
