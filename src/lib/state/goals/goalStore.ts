@@ -321,7 +321,7 @@ export const useGoalStore = create<GoalStore>()(
             }
           },
 
-          fetchGoal: async (id: string, forceRefresh = false) => {
+          fetchGoal: async (id: string, _forceRefresh = false) => {
             try {
               set((state) => {
                 state.loading.currentGoal = true;
@@ -423,6 +423,9 @@ export const useGoalStore = create<GoalStore>()(
           },
 
           updateGoal: async (id: string, updates: Partial<SmartGoalUpdate>) => {
+            // Store original goal for rollback
+            const originalGoal = get().goals.find(g => g.id === id);
+
             try {
               set((state) => {
                 state.loading.update = true;
@@ -430,7 +433,6 @@ export const useGoalStore = create<GoalStore>()(
               });
 
               // Optimistic update
-              const originalGoal = get().goals.find(g => g.id === id);
               if (originalGoal) {
                 set((state) => {
                   const index = state.goals.findIndex(g => g.id === id);
@@ -498,6 +500,9 @@ export const useGoalStore = create<GoalStore>()(
           },
 
           deleteGoal: async (id: string, permanent = false) => {
+            // Store original goals for rollback
+            const originalGoals = [...get().goals];
+
             try {
               set((state) => {
                 state.loading.delete = true;
@@ -505,7 +510,6 @@ export const useGoalStore = create<GoalStore>()(
               });
 
               // Optimistic update
-              const originalGoals = [...get().goals];
               set((state) => {
                 state.goals = state.goals.filter(g => g.id !== id);
                 if (state.currentGoal?.id === id) {
@@ -602,9 +606,11 @@ export const useGoalStore = create<GoalStore>()(
           },
 
           bulkDelete: async (ids: string[], permanent = false) => {
+            // Store original goals for rollback
+            const originalGoals = [...get().goals];
+
             try {
               // Optimistic update
-              const originalGoals = [...get().goals];
               set((state) => {
                 state.goals = state.goals.filter(g => !ids.includes(g.id));
               });
@@ -625,9 +631,11 @@ export const useGoalStore = create<GoalStore>()(
           },
 
           bulkArchive: async (ids: string[], reason?: string) => {
+            // Store original goals for rollback
+            const originalGoals = [...get().goals];
+
             try {
               // Optimistic update
-              const originalGoals = [...get().goals];
               set((state) => {
                 state.goals = state.goals.filter(g => !ids.includes(g.id));
               });

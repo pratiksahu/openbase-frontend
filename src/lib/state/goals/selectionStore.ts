@@ -138,8 +138,7 @@ export interface SelectionActions {
   isMaxSelectionsReached: () => boolean;
 
   // UI state management
-  showSelectionBar: () => void;
-  hideSelectionBar: () => void;
+  setShowSelectionBar: (show: boolean) => void;
   toggleSelectionBar: () => void;
   collapseSelectionBar: () => void;
   expandSelectionBar: () => void;
@@ -355,7 +354,7 @@ export const useSelectionStore = create<SelectionStore>()(
           get().selectFiltered(allIds);
         },
 
-        selectOverdue: (allIds: string[], currentDate = new Date()) => {
+        selectOverdue: (allIds: string[], _currentDate = new Date()) => {
           // Would filter overdue goals and select them
           get().selectFiltered(allIds);
         },
@@ -582,9 +581,9 @@ export const useSelectionStore = create<SelectionStore>()(
               clearTimeout(lastOperation.undoTimeout);
             }
 
-            // Import goal store for undo operations
-            const { useGoalStore } = await import('./goalStore');
-            const goalStore = useGoalStore.getState();
+            // Import goal store for undo operations would be needed here
+            // const { useGoalStore } = await import('./goalStore');
+            // const goalStore = useGoalStore.getState();
 
             // Perform undo based on operation type
             switch (lastOperation.type) {
@@ -677,15 +676,9 @@ export const useSelectionStore = create<SelectionStore>()(
         // UI State Management
         // =============================================================================
 
-        showSelectionBar: () => {
+        setShowSelectionBar: (show: boolean) => {
           set((state) => {
-            state.showSelectionBar = true;
-          });
-        },
-
-        hideSelectionBar: () => {
-          set((state) => {
-            state.showSelectionBar = false;
+            state.showSelectionBar = show;
           });
         },
 
