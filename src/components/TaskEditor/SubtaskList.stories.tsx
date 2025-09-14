@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn } from '@storybook/test';
+
+// Action utilities not available in Storybook 9
+const action = (name: string) => (...args: any[]) => console.log(name, ...args);
 
 import { TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 import type { Subtask } from '@/types/smart-goals.types';
@@ -147,11 +149,11 @@ const mockSubtasks: Subtask[] = [
 export const Default: Story = {
   args: {
     subtasks: mockSubtasks,
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -170,11 +172,11 @@ export const Default: Story = {
 export const Empty: Story = {
   args: {
     subtasks: [],
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -193,11 +195,11 @@ export const Empty: Story = {
 export const ReadOnly: Story = {
   args: {
     subtasks: mockSubtasks,
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: true,
   },
@@ -222,11 +224,11 @@ export const AllCompleted: Story = {
       actualHours: subtask.estimatedHours || 0,
       completedAt: new Date('2024-01-20T12:00:00Z'),
     })),
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -274,11 +276,11 @@ export const MixedPriorities: Story = {
         progress: 0,
       },
     ],
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -301,11 +303,11 @@ export const OverdueSubtasks: Story = {
       dueDate: new Date('2024-01-10T17:00:00Z'), // Past date
       status: subtask.status === TaskStatus.COMPLETED ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS,
     })),
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -327,11 +329,11 @@ export const UnassignedSubtasks: Story = {
       ...subtask,
       assignedTo: undefined,
     })),
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -392,11 +394,11 @@ Caching Strategy Implementation:
 - Document caching patterns for future development`,
       },
     ],
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -444,11 +446,11 @@ export const BlockedSubtasks: Story = {
         progress: 5,
       },
     ],
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -471,11 +473,11 @@ export const TimeTrackingDetails: Story = {
       estimatedHours: Math.floor(Math.random() * 20) + 4,
       actualHours: Math.floor(Math.random() * 15) + 1,
     })),
-    onSubtasksChange: fn(),
-    onSubtaskAdd: fn(),
-    onSubtaskUpdate: fn(),
-    onSubtaskDelete: fn(),
-    onSubtaskReorder: fn(),
+    onSubtasksChange: action(),
+    onSubtaskAdd: action(),
+    onSubtaskUpdate: action(),
+    onSubtaskDelete: action(),
+    onSubtaskReorder: action(),
     availableAssignees: mockAssignees,
     isReadOnly: false,
   },
@@ -494,22 +496,22 @@ export const TimeTrackingDetails: Story = {
 export const Interactive: Story = {
   args: {
     subtasks: mockSubtasks.slice(0, 2), // Start with fewer items for demo
-    onSubtasksChange: fn(),
+    onSubtasksChange: action(),
     onSubtaskAdd: (subtask) => {
       console.log('Adding subtask:', subtask);
-      fn()(subtask);
+      action()(subtask);
     },
     onSubtaskUpdate: (id, changes) => {
       console.log('Updating subtask:', id, changes);
-      fn()(id, changes);
+      action()(id, changes);
     },
     onSubtaskDelete: (id) => {
       console.log('Deleting subtask:', id);
-      fn()(id);
+      action()(id);
     },
     onSubtaskReorder: (fromIndex, toIndex) => {
       console.log('Reordering from', fromIndex, 'to', toIndex);
-      fn()(fromIndex, toIndex);
+      action()(fromIndex, toIndex);
     },
     availableAssignees: mockAssignees,
     isReadOnly: false,

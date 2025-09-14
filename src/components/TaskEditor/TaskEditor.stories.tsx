@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn } from '@storybook/test';
+
+// Action utilities not available in Storybook 9
+const action = (name: string) => (...args: any[]) => console.log(name, ...args);
 
 import { TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 import type { Task, Subtask, ChecklistItem } from '@/types/smart-goals.types';
@@ -211,8 +213,8 @@ export const CreateNewTask: Story = {
   args: {
     goalId: 'goal-1',
     mode: TaskEditorMode.CREATE,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
     availableAssignees: mockAssignees,
     availableTasks: mockAvailableTasks,
     autoSave: false,
@@ -234,10 +236,10 @@ export const EditExistingTask: Story = {
     task: mockExistingTask,
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: fn(),
-    onCancel: fn(),
-    onDelete: fn(),
-    onStatusChange: fn(),
+    onSave: action(),
+    onCancel: action(),
+    onDelete: action(),
+    onStatusChange: action(),
     availableAssignees: mockAssignees,
     availableTasks: mockAvailableTasks,
     autoSave: true,
@@ -285,8 +287,8 @@ export const TaskWithSubtasks: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
     availableAssignees: mockAssignees,
   },
   parameters: {
@@ -337,8 +339,8 @@ export const TaskWithChecklist: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
     availableAssignees: mockAssignees,
   },
   parameters: {
@@ -358,8 +360,8 @@ export const TaskWithGherkinCriteria: Story = {
     task: mockExistingTask,
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
     availableAssignees: mockAssignees,
   },
   parameters: {
@@ -406,8 +408,8 @@ export const TaskWithValidationErrors: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
     availableAssignees: mockAssignees,
   },
   parameters: {
@@ -444,8 +446,8 @@ export const CompletedTask: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.VIEW,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
     availableAssignees: mockAssignees,
   },
   parameters: {
@@ -514,8 +516,8 @@ export const UrgentTask: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
     availableAssignees: mockAssignees,
   },
   parameters: {
@@ -535,8 +537,8 @@ export const TaskWithAutoSave: Story = {
     task: mockExistingTask,
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
     availableAssignees: mockAssignees,
     autoSave: true,
     autoSaveDelay: 1000, // 1 second for demo
@@ -574,8 +576,8 @@ export const MinimalTask: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action(),
+    onCancel: action(),
   },
   parameters: {
     docs: {

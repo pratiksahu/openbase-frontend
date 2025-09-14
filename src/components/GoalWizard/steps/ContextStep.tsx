@@ -123,7 +123,7 @@ interface TemplateCardProps {
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, isSelected, onSelect }) => {
-  const IconComponent = template.icon;
+  const IconComponent = template.icon || HelpCircle; // Fallback to HelpCircle if icon is undefined
 
   return (
     <Card
@@ -274,7 +274,7 @@ export const ContextStep: React.FC<ContextStepProps> = ({
     onChange({ [field]: value });
   };
 
-  const CategoryIcon = CATEGORY_ICONS[data.category || GoalCategory.PERSONAL];
+  const CategoryIcon = CATEGORY_ICONS[data.category || GoalCategory.PERSONAL] || HelpCircle;
 
   return (
     <TooltipProvider>

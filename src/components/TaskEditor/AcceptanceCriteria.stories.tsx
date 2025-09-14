@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn } from '@storybook/test';
+
+// Action utilities not available in Storybook 9
+const action = (name: string) => (...args: any[]) => console.log(name, ...args);
 
 import { AcceptanceCriteria } from './AcceptanceCriteria';
 import { AcceptanceCriteriaFormat, type AcceptanceCriteriaData, type TemplateSnippet } from './TaskEditor.types';
@@ -226,7 +228,7 @@ And will show validation errors`,
 export const PlainText: Story = {
   args: {
     criteria: plainTextCriteria,
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: true,
@@ -247,7 +249,7 @@ export const PlainText: Story = {
 export const Gherkin: Story = {
   args: {
     criteria: gherkinCriteria,
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: true,
@@ -268,7 +270,7 @@ export const Gherkin: Story = {
 export const Markdown: Story = {
   args: {
     criteria: markdownCriteria,
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: true,
@@ -293,7 +295,7 @@ export const Empty: Story = {
       content: '',
       isValid: true,
     },
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: true,
@@ -314,7 +316,7 @@ export const Empty: Story = {
 export const InvalidGherkin: Story = {
   args: {
     criteria: invalidGherkinCriteria,
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: true,
@@ -335,7 +337,7 @@ export const InvalidGherkin: Story = {
 export const ReadOnly: Story = {
   args: {
     criteria: gherkinCriteria,
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: true,
@@ -356,7 +358,7 @@ export const ReadOnly: Story = {
 export const GherkinOnly: Story = {
   args: {
     criteria: gherkinCriteria,
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates.filter(t => t.format === AcceptanceCriteriaFormat.GHERKIN),
     supportedFormats: [AcceptanceCriteriaFormat.GHERKIN],
     showPreview: true,
@@ -377,7 +379,7 @@ export const GherkinOnly: Story = {
 export const NoPreview: Story = {
   args: {
     criteria: markdownCriteria,
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: false,
@@ -423,7 +425,7 @@ And I should see a "Retry" button
 And I should have the option to contact support`,
       isValid: true,
     },
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: true,
@@ -611,7 +613,7 @@ Before marking this feature as complete:
 > **Note**: This feature requires coordination with the Security and DevOps teams for deployment.`,
       isValid: true,
     },
-    onCriteriaChange: fn(),
+    onCriteriaChange: action(),
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),
     showPreview: true,
@@ -638,7 +640,7 @@ export const Interactive: Story = {
     },
     onCriteriaChange: (criteria) => {
       console.log('Criteria changed:', criteria);
-      fn()(criteria);
+      action()(criteria);
     },
     templates: mockTemplates,
     supportedFormats: Object.values(AcceptanceCriteriaFormat),

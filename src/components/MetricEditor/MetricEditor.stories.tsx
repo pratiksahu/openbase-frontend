@@ -4,10 +4,13 @@
  * Comprehensive stories showcasing all MetricEditor components and their variations
  */
 
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { fn } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { addDays, subDays } from 'date-fns';
 
+// Action utilities not available in Storybook 9
+const action = (name: string) => (...args: any[]) => console.log(name, ...args);
+
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { MeasurableSpec, MetricCheckpoint, MetricType, Frequency } from '@/types/smart-goals.types';
 
 import { CheckpointTracker } from './CheckpointTracker';
@@ -67,13 +70,26 @@ const meta: Meta<typeof MetricEditor> = {
   title: 'Components/MetricEditor',
   component: MetricEditor,
   parameters: {
-    layout: 'fullscreen',
+    layout: 'padded',
     docs: {
       description: {
         component: 'A comprehensive metric editor for creating and managing measurable specifications with progress tracking.',
       },
     },
   },
+  decorators: [
+    (Story) => (
+      <TooltipProvider>
+        <div className="min-h-screen bg-background">
+          <div className="container mx-auto py-8">
+            <div className="max-w-6xl mx-auto">
+              <Story />
+            </div>
+          </div>
+        </div>
+      </TooltipProvider>
+    ),
+  ],
   tags: ['autodocs'],
 };
 
@@ -83,8 +99,8 @@ type Story = StoryObj<typeof MetricEditor>;
 // Main MetricEditor Stories
 export const Default: Story = {
   args: {
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -92,8 +108,8 @@ export const WithInitialData: Story = {
   args: {
     initialMetric: sampleMetric,
     initialCheckpoints: sampleCheckpoints.slice(0, 3),
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -101,8 +117,8 @@ export const ReadOnlyMode: Story = {
   args: {
     initialMetric: sampleMetric,
     initialCheckpoints: sampleCheckpoints,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
     readOnly: true,
   },
 };
@@ -114,8 +130,8 @@ export const WithFullProgress: Story = {
       currentValue: 92,
     },
     initialCheckpoints: sampleCheckpoints,
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -124,7 +140,7 @@ export const TypeSelector: StoryObj<typeof MetricTypeSelector> = {
   render: (args) => <MetricTypeSelector {...args} />,
   args: {
     value: ExtendedMetricType.PERCENTAGE,
-    onChange: fn('type-changed'),
+    onChange: action('type-changed'),
   },
 };
 
@@ -132,7 +148,7 @@ export const TypeSelectorGrid: StoryObj<typeof MetricTypeGrid> = {
   render: (args) => <MetricTypeGrid {...args} />,
   args: {
     value: ExtendedMetricType.CURRENCY,
-    onChange: fn('type-changed'),
+    onChange: action('type-changed'),
   },
 };
 
@@ -140,7 +156,7 @@ export const TypeSelectorCompact: StoryObj<typeof MetricTypeCompact> = {
   render: (args) => <MetricTypeCompact {...args} />,
   args: {
     value: ExtendedMetricType.RATING,
-    onChange: fn('type-changed'),
+    onChange: action('type-changed'),
   },
 };
 
@@ -148,7 +164,7 @@ export const TypeSelectorDisabled: StoryObj<typeof MetricTypeSelector> = {
   render: (args) => <MetricTypeSelector {...args} />,
   args: {
     value: ExtendedMetricType.DURATION,
-    onChange: fn('type-changed'),
+    onChange: action('type-changed'),
     disabled: true,
   },
 };
@@ -159,7 +175,7 @@ export const CheckpointTrackerEmpty: StoryObj<typeof CheckpointTracker> = {
   args: {
     checkpoints: [],
     metric: sampleMetric,
-    onChange: fn('checkpoints-changed'),
+    onChange: action('checkpoints-changed'),
   },
 };
 
@@ -168,7 +184,7 @@ export const CheckpointTrackerWithData: StoryObj<typeof CheckpointTracker> = {
   args: {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
-    onChange: fn('checkpoints-changed'),
+    onChange: action('checkpoints-changed'),
   },
 };
 
@@ -177,7 +193,7 @@ export const CheckpointTrackerReadOnly: StoryObj<typeof CheckpointTracker> = {
   args: {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
-    onChange: fn('checkpoints-changed'),
+    onChange: action('checkpoints-changed'),
     readOnly: true,
   },
 };
@@ -189,7 +205,7 @@ export const ChartLineChart: StoryObj<typeof MetricChart> = {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
     chartType: ChartType.LINE,
-    onChartTypeChange: fn('chart-type-changed'),
+    onChartTypeChange: action('chart-type-changed'),
     showTarget: true,
     showBaseline: true,
   },
@@ -201,7 +217,7 @@ export const ChartAreaChart: StoryObj<typeof MetricChart> = {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
     chartType: ChartType.AREA,
-    onChartTypeChange: fn('chart-type-changed'),
+    onChartTypeChange: action('chart-type-changed'),
     showTarget: true,
     showBaseline: false,
   },
@@ -213,7 +229,7 @@ export const ChartBarChart: StoryObj<typeof MetricChart> = {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
     chartType: ChartType.BAR,
-    onChartTypeChange: fn('chart-type-changed'),
+    onChartTypeChange: action('chart-type-changed'),
     showTarget: true,
   },
 };
@@ -224,7 +240,7 @@ export const ChartNoData: StoryObj<typeof MetricChart> = {
     checkpoints: [],
     metric: sampleMetric,
     chartType: ChartType.LINE,
-    onChartTypeChange: fn('chart-type-changed'),
+    onChartTypeChange: action('chart-type-changed'),
   },
 };
 
@@ -234,7 +250,7 @@ export const ChartLargeDataset: StoryObj<typeof MetricChart> = {
     checkpoints: generateSampleCheckpoints(20),
     metric: sampleMetric,
     chartType: ChartType.LINE,
-    onChartTypeChange: fn('chart-type-changed'),
+    onChartTypeChange: action('chart-type-changed'),
     showTarget: true,
     showBaseline: true,
   },
@@ -258,8 +274,8 @@ export const CurrencyMetric: Story = {
       ...cp,
       value: 25000 + cp.value * 300, // Scale to currency values
     })),
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -280,8 +296,8 @@ export const DurationMetric: Story = {
       ...cp,
       value: 5 - (cp.value / 20), // Decreasing trend
     })),
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -303,8 +319,8 @@ export const BooleanMetric: Story = {
       ...cp,
       value: Math.random() > 0.1 ? 1 : 0, // 90% uptime
     })),
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -313,8 +329,8 @@ export const MetricWithManyCheckpoints: Story = {
   args: {
     initialMetric: sampleMetric,
     initialCheckpoints: generateSampleCheckpoints(25),
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -326,8 +342,8 @@ export const MetricWithVariedConfidence: Story = {
       confidence: [0.3, 0.6, 0.8, 0.95][index % 4], // Vary confidence levels
       note: index % 3 === 0 ? `Checkpoint ${index + 1} with detailed notes about the measurement context and any relevant observations.` : undefined,
     })),
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -341,8 +357,8 @@ export const MetricOffTrack: Story = {
       ...cp,
       value: cp.value * 0.6, // Scale down to show off-track progress
     })),
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };
 
@@ -366,7 +382,7 @@ export const MetricCompleted: Story = {
       createdBy: 'john.doe@example.com',
       updatedBy: 'john.doe@example.com',
     }],
-    onSave: fn(),
-    onCancel: fn(),
+    onSave: action('onSave'),
+    onCancel: action('onCancel'),
   },
 };

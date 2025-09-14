@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-// import { action } from '@storybook/addon-actions';
+// Action utilities not available in Storybook 9
+const action = (name: string) => (...args: any[]) => console.log(name, ...args);
 import { defaultTemplates } from './defaultTemplates';
 import { DorDodPanel } from './DorDodPanel';
 import type { Criterion } from './DorDodPanel.types';

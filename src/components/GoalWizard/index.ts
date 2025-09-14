@@ -6,8 +6,7 @@
  */
 
 // Main component
-export { default as GoalWizard } from './GoalWizard';
-export { GoalWizard as default } from './GoalWizard';
+export { GoalWizard, default } from './GoalWizard';
 
 // Context and hooks
 export { WizardContextProvider, useWizardContext } from './WizardContext';

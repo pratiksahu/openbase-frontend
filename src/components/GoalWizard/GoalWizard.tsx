@@ -34,6 +34,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { GoalCategory } from '@/types/smart-goals.types';
 
 import {
   GoalWizardProps,
@@ -201,13 +202,41 @@ const StepContentRenderer: React.FC = () => {
   }, [currentStep, dataManagement]);
 
   const renderStep = () => {
+    // Ensure stepData has required properties for each step
+    const getStepDataWithDefaults = () => {
+      if (stepData) return stepData;
+
+      // Return appropriate defaults based on current step
+      switch (currentStep) {
+        case WizardStep.CONTEXT:
+          return {
+            currentSituation: '',
+            problemStatement: '',
+            initialGoalDescription: '',
+            stakeholdersInvolved: [],
+            category: GoalCategory.PERSONAL,
+          };
+        case WizardStep.SPECIFIC:
+          return {
+            title: '',
+            description: '',
+            specificObjective: '',
+            successCriteria: [],
+            tags: [],
+          };
+        default:
+          return {};
+      }
+    };
+
     const commonProps = {
-      data: stepData || {},
+      data: getStepDataWithDefaults(),
       onChange: handleStepChange,
       errors: validation?.errors || {},
       warnings: validation?.warnings,
       suggestions: validation?.suggestions,
       readOnly: false,
+      config: DEFAULT_STEPS.find(s => s.id === currentStep) || DEFAULT_STEPS[0],
     };
 
     switch (currentStep) {

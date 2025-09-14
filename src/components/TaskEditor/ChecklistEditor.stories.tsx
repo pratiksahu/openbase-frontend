@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn } from '@storybook/test';
+
+// Action utilities not available in Storybook 9
+const action = (name: string) => (...args: any[]) => console.log(name, ...args);
 
 import type { ChecklistItem } from '@/types/smart-goals.types';
 
@@ -274,12 +276,12 @@ const comprehensiveChecklistItems: ChecklistItem[] = [
 export const Default: Story = {
   args: {
     checklist: basicChecklistItems,
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: false,
   },
@@ -298,12 +300,12 @@ export const Default: Story = {
 export const Empty: Story = {
   args: {
     checklist: [],
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: false,
   },
@@ -322,12 +324,12 @@ export const Empty: Story = {
 export const WithMarkdownSupport: Story = {
   args: {
     checklist: markdownChecklistItems,
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: true,
     isReadOnly: false,
   },
@@ -346,12 +348,12 @@ export const WithMarkdownSupport: Story = {
 export const ReadOnly: Story = {
   args: {
     checklist: basicChecklistItems,
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: true,
   },
@@ -375,12 +377,12 @@ export const AllCompleted: Story = {
       completedAt: new Date('2024-01-20T12:00:00Z'),
       completedBy: 'user-1',
     })),
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: false,
   },
@@ -399,12 +401,12 @@ export const AllCompleted: Story = {
 export const RequiredItemsOnly: Story = {
   args: {
     checklist: basicChecklistItems.filter(item => item.isRequired),
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: false,
   },
@@ -423,12 +425,12 @@ export const RequiredItemsOnly: Story = {
 export const LargeChecklist: Story = {
   args: {
     checklist: comprehensiveChecklistItems,
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: false,
   },
@@ -523,12 +525,12 @@ The optimizations have resulted in a 40% improvement in page load times and 60% 
         updatedBy: 'user-1',
       },
     ],
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: false,
   },
@@ -551,12 +553,12 @@ export const RecentActivity: Story = {
       updatedAt: new Date(Date.now() - (index * 2 * 60 * 60 * 1000)), // Stagger updates over last few hours
       completedAt: item.isCompleted ? new Date(Date.now() - (index * 60 * 60 * 1000)) : undefined,
     })),
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: false,
   },
@@ -575,26 +577,26 @@ export const RecentActivity: Story = {
 export const Interactive: Story = {
   args: {
     checklist: basicChecklistItems.slice(0, 3), // Start with fewer items for demo
-    onChecklistChange: fn(),
+    onChecklistChange: action(),
     onItemAdd: (item) => {
       console.log('Adding item:', item);
-      fn()(item);
+      action()(item);
     },
     onItemUpdate: (id, changes) => {
       console.log('Updating item:', id, changes);
-      fn()(id, changes);
+      action()(id, changes);
     },
     onItemDelete: (id) => {
       console.log('Deleting item:', id);
-      fn()(id);
+      action()(id);
     },
     onItemToggle: (id) => {
       console.log('Toggling item:', id);
-      fn()(id);
+      action()(id);
     },
     onItemReorder: (fromIndex, toIndex) => {
       console.log('Reordering from', fromIndex, 'to', toIndex);
-      fn()(fromIndex, toIndex);
+      action()(fromIndex, toIndex);
     },
     supportMarkdown: true,
     isReadOnly: false,
@@ -653,12 +655,12 @@ export const CriticalItems: Story = {
         updatedBy: 'user-1',
       },
     ],
-    onChecklistChange: fn(),
-    onItemAdd: fn(),
-    onItemUpdate: fn(),
-    onItemDelete: fn(),
-    onItemToggle: fn(),
-    onItemReorder: fn(),
+    onChecklistChange: action(),
+    onItemAdd: action(),
+    onItemUpdate: action(),
+    onItemDelete: action(),
+    onItemToggle: action(),
+    onItemReorder: action(),
     supportMarkdown: false,
     isReadOnly: false,
   },
