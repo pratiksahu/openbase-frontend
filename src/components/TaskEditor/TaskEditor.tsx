@@ -78,7 +78,7 @@ export function TaskEditor({
   className = '',
   autoSave = true,
   autoSaveDelay = 3000,
-}: TaskEditorProps): JSX.Element {
+}: TaskEditorProps): React.JSX.Element {
   // =============================================================================
   // State Management
   // =============================================================================

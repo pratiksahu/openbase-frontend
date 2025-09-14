@@ -187,7 +187,7 @@ export function AcceptanceCriteria({
   showPreview = true,
   isReadOnly = false,
   className = '',
-}: AcceptanceCriteriaProps): JSX.Element {
+}: AcceptanceCriteriaProps): React.JSX.Element {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
   const [hasCopied, setHasCopied] = useState(false);

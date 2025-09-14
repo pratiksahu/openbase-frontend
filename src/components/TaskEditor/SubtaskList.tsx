@@ -433,7 +433,7 @@ export function SubtaskList({
   availableAssignees = [],
   isReadOnly = false,
   className = '',
-}: SubtaskListProps): JSX.Element {
+}: SubtaskListProps): React.JSX.Element {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
 

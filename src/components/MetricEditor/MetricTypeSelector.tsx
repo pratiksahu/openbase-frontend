@@ -62,7 +62,7 @@ export function MetricTypeSelector({
   onChange,
   disabled = false,
   className,
-}: MetricTypeSelectorProps): JSX.Element {
+}: MetricTypeSelectorProps): React.JSX.Element {
   const selectedConfig = METRIC_TYPE_CONFIGS[value];
   const IconComponent = ICON_MAP[selectedConfig?.icon as keyof typeof ICON_MAP];
 
@@ -192,7 +192,7 @@ export function MetricTypeGrid({
   onChange,
   disabled = false,
   className,
-}: MetricTypeSelectorProps): JSX.Element {
+}: MetricTypeSelectorProps): React.JSX.Element {
   return (
     <div className={cn('space-y-4', className)}>
       <div>
@@ -269,7 +269,7 @@ export function MetricTypeCompact({
   onChange,
   disabled = false,
   className,
-}: MetricTypeSelectorProps): JSX.Element {
+}: MetricTypeSelectorProps): React.JSX.Element {
   const selectedConfig = METRIC_TYPE_CONFIGS[value];
   const IconComponent = ICON_MAP[selectedConfig?.icon as keyof typeof ICON_MAP];
 

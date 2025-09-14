@@ -41,6 +41,7 @@ import {
   ExtendedMetricType,
   MetricDirection,
   MetricEditorProps,
+  ChartType,
 } from './MetricEditor.types';
 import {
   METRIC_TYPE_CONFIGS,
@@ -615,7 +616,7 @@ export function MetricEditor({
               <MetricChart
                 checkpoints={checkpoints}
                 metric={buildMeasurableSpec(getValues())}
-                chartType="line"
+                chartType={ChartType.LINE}
                 onChartTypeChange={() => {}}
                 showTarget={true}
                 showBaseline={true}

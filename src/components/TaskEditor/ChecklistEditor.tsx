@@ -388,7 +388,7 @@ export function ChecklistEditor({
   supportMarkdown = false,
   isReadOnly = false,
   className = '',
-}: ChecklistEditorProps): JSX.Element {
+}: ChecklistEditorProps): React.JSX.Element {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [showPreview, setShowPreview] = useState(false);

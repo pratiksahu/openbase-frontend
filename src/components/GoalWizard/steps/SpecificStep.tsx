@@ -137,7 +137,7 @@ const ListInput: React.FC<ListInputProps> = ({
         <Button
           type="button"
           onClick={addItem}
-          disabled={!inputValue.trim() || disabled || (maxItems && items.length >= maxItems)}
+          disabled={!inputValue.trim() || disabled || Boolean(maxItems && items.length >= maxItems)}
           size="sm"
         >
           <Plus className="h-4 w-4" />
