@@ -213,7 +213,7 @@ export const METRIC_TYPE_CONFIGS: Record<ExtendedMetricType, MetricTypeConfig> =
 /**
  * Validate metric form data
  */
-export function validateMetricForm(data: Partial<MetricFormData>): ValidationErrors {
+function validateMetricForm(data: Partial<MetricFormData>): ValidationErrors {
   const errors: ValidationErrors = {};
 
   // Name validation
@@ -269,7 +269,7 @@ export function validateMetricForm(data: Partial<MetricFormData>): ValidationErr
 /**
  * Validate checkpoint data
  */
-export function validateCheckpoint(
+function validateCheckpoint(
   checkpoint: Partial<MetricCheckpoint>,
   metric: MeasurableSpec
 ): string[] {
@@ -297,7 +297,7 @@ export function validateCheckpoint(
 /**
  * Calculate progress percentage based on baseline, current, and target values
  */
-export function calculateProgressPercentage(
+function calculateProgressPercentage(
   baseline: number,
   current: number,
   target: number,
@@ -328,7 +328,7 @@ export function calculateProgressPercentage(
 /**
  * Determine progress status based on percentage and velocity
  */
-export function determineProgressStatus(
+function determineProgressStatus(
   progressPercentage: number,
   velocity: number,
   daysToTarget?: number
@@ -362,7 +362,7 @@ export function determineProgressStatus(
 /**
  * Calculate velocity (progress per day) from checkpoints
  */
-export function calculateVelocity(checkpoints: MetricCheckpoint[]): number {
+function calculateVelocity(checkpoints: MetricCheckpoint[]): number {
   if (checkpoints.length < 2) return 0;
 
   const sortedCheckpoints = [...checkpoints].sort(
@@ -385,7 +385,7 @@ export function calculateVelocity(checkpoints: MetricCheckpoint[]): number {
 /**
  * Perform comprehensive progress analysis
  */
-export function analyzeProgress(
+function analyzeProgress(
   metric: MeasurableSpec,
   checkpoints: MetricCheckpoint[],
   targetDate?: Date
@@ -462,7 +462,7 @@ function calculateProjectionConfidence(checkpoints: MetricCheckpoint[]): number 
 /**
  * Calculate comprehensive statistics for checkpoints
  */
-export function calculateCheckpointStatistics(checkpoints: MetricCheckpoint[]): CheckpointStatistics {
+function calculateCheckpointStatistics(checkpoints: MetricCheckpoint[]): CheckpointStatistics {
   if (checkpoints.length === 0) {
     return {
       count: 0,
@@ -585,7 +585,7 @@ function calculateMovingAverage(values: number[], windowSize: number): number[] 
 /**
  * Format value according to metric type
  */
-export function formatMetricValue(
+function formatMetricValue(
   value: number,
   metricType: ExtendedMetricType,
   unit?: string
@@ -597,7 +597,7 @@ export function formatMetricValue(
 /**
  * Parse input value according to metric type
  */
-export function parseMetricValue(
+function parseMetricValue(
   input: string,
   metricType: ExtendedMetricType
 ): number | null {
@@ -608,14 +608,14 @@ export function parseMetricValue(
 /**
  * Format date for display
  */
-export function formatCheckpointDate(date: Date): string {
+function formatCheckpointDate(date: Date): string {
   return format(date, 'MMM dd, yyyy');
 }
 
 /**
  * Format confidence level for display
  */
-export function formatConfidenceLevel(level: ConfidenceLevel): string {
+function formatConfidenceLevel(level: ConfidenceLevel): string {
   switch (level) {
     case ConfidenceLevel.LOW:
       return 'Low confidence';
@@ -633,7 +633,7 @@ export function formatConfidenceLevel(level: ConfidenceLevel): string {
 /**
  * Get status color for UI display
  */
-export function getStatusColor(status: ProgressStatus): string {
+function getStatusColor(status: ProgressStatus): string {
   switch (status) {
     case ProgressStatus.ON_TRACK:
       return 'text-green-600 bg-green-100';

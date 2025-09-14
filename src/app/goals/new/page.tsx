@@ -1,0 +1,196 @@
+/**
+ * New Goal Page
+ *
+ * Page for creating a new SMART goal using the GoalWizard component.
+ * Includes navigation handling, draft recovery, and success redirection.
+ */
+
+'use client';
+
+import React, { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { ChevronLeft, Save } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { GoalWizard } from '@/components/GoalWizard/GoalWizard';
+import { toast } from '@/hooks/use-toast';
+
+import type { SmartGoal } from '@/types/smart-goals.types';
+import type { WizardStep } from '@/components/GoalWizard/GoalWizard.types';
+
+// =============================================================================
+// Types and Interfaces
+// =============================================================================
+
+interface NewGoalPageProps {
+  searchParams?: {
+    template?: string;
+    draft?: string;
+    step?: string;
+  };
+}
+
+// =============================================================================
+// Page Metadata (handled by parent layout)
+// =============================================================================
+
+// =============================================================================
+// Main New Goal Page Component
+// =============================================================================
+
+export default function NewGoalPage({ searchParams }: NewGoalPageProps) {
+  const router = useRouter();
+
+  // Handle successful goal creation
+  const handleSave = useCallback(async (goal: SmartGoal) => {
+    try {
+      // TODO: Replace with actual API call
+      console.log('Saving goal:', goal);
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      toast({
+        title: 'Goal Created Successfully!',
+        description: `"${goal.title}" has been created and is ready to track.`,
+      });
+
+      // Redirect to the goal detail page
+      router.push(`/goals/${goal.id}`);
+    } catch (error) {
+      console.error('Failed to save goal:', error);
+      toast({
+        title: 'Error Creating Goal',
+        description: 'There was a problem creating your goal. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  }, [router]);
+
+  // Handle draft saving
+  const handleSaveDraft = useCallback(async (goalData: any) => {
+    try {
+      // TODO: Replace with actual API call to save draft
+      console.log('Saving draft:', goalData);
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      toast({
+        title: 'Draft Saved',
+        description: 'Your progress has been saved as a draft.',
+      });
+    } catch (error) {
+      console.error('Failed to save draft:', error);
+      toast({
+        title: 'Error Saving Draft',
+        description: 'There was a problem saving your draft.',
+        variant: 'destructive',
+      });
+    }
+  }, []);
+
+  // Handle wizard cancellation
+  const handleCancel = useCallback(() => {
+    router.push('/goals');
+  }, [router]);
+
+  // Handle step changes (for analytics/tracking)
+  const handleStepChange = useCallback((step: WizardStep) => {
+    // TODO: Track step changes for analytics
+    console.log('Step changed to:', step);
+  }, []);
+
+  return (
+    <div className="container mx-auto px-4 py-6 max-w-5xl">
+      {/* Back Navigation */}
+      <div className="mb-6">
+        <Button variant="ghost" asChild className="mb-4">
+          <Link href="/goals" className="flex items-center">
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Back to Goals
+          </Link>
+        </Button>
+
+        {/* Page Header */}
+        <div className="text-center space-y-2">
+          <h1 className="text-4xl font-bold tracking-tight">Create a New Goal</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Follow our guided SMART goal creation process to build goals that are
+            Specific, Measurable, Achievable, Relevant, and Time-bound.
+          </p>
+        </div>
+      </div>
+
+      {/* Goal Wizard */}
+      <div className="bg-background">
+        <GoalWizard
+          onSave={handleSave}
+          onCancel={handleCancel}
+          onSaveDraft={handleSaveDraft}
+          onStepChange={handleStepChange}
+          autoSaveEnabled={true}
+          autoSaveInterval={30000} // Auto-save every 30 seconds
+          showProgress={true}
+          className="max-w-4xl mx-auto"
+        />
+      </div>
+
+      {/* Help Section */}
+      <div className="mt-12 text-center">
+        <div className="max-w-2xl mx-auto space-y-4">
+          <h2 className="text-xl font-semibold">Need Help?</h2>
+          <p className="text-muted-foreground">
+            Our SMART goal wizard will guide you through creating effective goals.
+            Each step includes helpful tips and examples to ensure your goal is well-defined and achievable.
+          </p>
+          <div className="flex justify-center space-x-4 text-sm">
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/help/smart-goals">
+                <span>📖 SMART Goals Guide</span>
+              </Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/templates">
+                <span>📝 Goal Templates</span>
+              </Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/examples">
+                <span>💡 Example Goals</span>
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Tips Section */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-muted/50 rounded-lg p-4">
+          <div className="text-lg font-medium mb-2">💡 Pro Tip</div>
+          <p className="text-sm text-muted-foreground">
+            Use the auto-save feature to preserve your progress.
+            Your work is automatically saved every 30 seconds.
+          </p>
+        </div>
+
+        <div className="bg-muted/50 rounded-lg p-4">
+          <div className="text-lg font-medium mb-2">🎯 Best Practice</div>
+          <p className="text-sm text-muted-foreground">
+            Be specific about what success looks like.
+            Clear success criteria make it easier to track progress.
+          </p>
+        </div>
+
+        <div className="bg-muted/50 rounded-lg p-4">
+          <div className="text-lg font-medium mb-2">📊 Measurement</div>
+          <p className="text-sm text-muted-foreground">
+            Choose metrics that truly reflect progress toward your goal.
+            Vanity metrics can be misleading.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
