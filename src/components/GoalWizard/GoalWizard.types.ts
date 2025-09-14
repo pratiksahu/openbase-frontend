@@ -370,6 +370,24 @@ export interface MeasurableStepProps extends BaseStepProps<MeasurableStepData> {
   goalId?: string;
 }
 
+/** Achievable step component props */
+export interface AchievableStepProps extends BaseStepProps<AchievableStepData> {
+  /** Resource suggestion callback */
+  onRequestResources?: (context: string) => Promise<Resource[]>;
+}
+
+/** Relevant step component props */
+export interface RelevantStepProps extends BaseStepProps<RelevantStepData> {
+  /** Strategy alignment callback */
+  onValidateAlignment?: (alignment: StrategyAlignment[]) => Promise<boolean>;
+}
+
+/** Timebound step component props */
+export interface TimeboundStepProps extends BaseStepProps<TimeboundStepData> {
+  /** Timeline validation callback */
+  onValidateTimeline?: (timeline: Date[]) => Promise<boolean>;
+}
+
 /** Preview step component props */
 export interface PreviewStepProps extends BaseStepProps {
   /** Complete form data for preview */

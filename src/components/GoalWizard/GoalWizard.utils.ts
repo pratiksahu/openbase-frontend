@@ -595,6 +595,10 @@ export function getDefaultTemplates(): TemplateDefinition[] {
           stakeholdersInvolved: ['Management', 'Sales Team'],
         },
         specific: {
+          title: '',
+          description: '',
+          specificObjective: '',
+          successCriteria: [],
           tags: ['business', 'revenue'],
         },
         measurable: {
@@ -620,10 +624,17 @@ export function getDefaultTemplates(): TemplateDefinition[] {
       tags: ['personal', 'learning', 'skills'],
       formData: {
         context: {
+          currentSituation: '',
+          problemStatement: '',
+          initialGoalDescription: '',
           category: GoalCategory.PERSONAL,
           stakeholdersInvolved: ['Self', 'Mentor'],
         },
         specific: {
+          title: '',
+          description: '',
+          specificObjective: '',
+          successCriteria: [],
           tags: ['personal', 'development'],
         },
         measurable: {
@@ -635,6 +646,7 @@ export function getDefaultTemplates(): TemplateDefinition[] {
             higherIsBetter: true,
             measurementFrequency: Frequency.WEEKLY,
           },
+          successDefinitions: [],
         },
         priority: GoalPriority.MEDIUM,
       },
@@ -648,10 +660,17 @@ export function getDefaultTemplates(): TemplateDefinition[] {
       tags: ['project', 'milestone', 'deliverable'],
       formData: {
         context: {
+          currentSituation: '',
+          problemStatement: '',
+          initialGoalDescription: '',
           category: GoalCategory.PROFESSIONAL,
           stakeholdersInvolved: ['Project Team', 'Stakeholders'],
         },
         specific: {
+          title: '',
+          description: '',
+          specificObjective: '',
+          successCriteria: [],
           tags: ['project', 'milestone'],
         },
         measurable: {
@@ -663,6 +682,7 @@ export function getDefaultTemplates(): TemplateDefinition[] {
             higherIsBetter: true,
             measurementFrequency: Frequency.WEEKLY,
           },
+          successDefinitions: [],
         },
         priority: GoalPriority.HIGH,
       },
@@ -691,7 +711,15 @@ export function saveDraftToStorage(
       updatedAt: new Date(),
       title: formData.specific?.title || 'Untitled Goal',
       currentStep: wizardState.currentStep || WizardStep.CONTEXT,
-      completionPercentage: calculateProgress(wizardState.stepStatus || {}),
+      completionPercentage: calculateProgress(wizardState.stepStatus || {
+        context: StepStatus.NOT_STARTED,
+        specific: StepStatus.NOT_STARTED,
+        measurable: StepStatus.NOT_STARTED,
+        achievable: StepStatus.NOT_STARTED,
+        relevant: StepStatus.NOT_STARTED,
+        timebound: StepStatus.NOT_STARTED,
+        preview: StepStatus.NOT_STARTED,
+      }),
       version: 1,
     };
 

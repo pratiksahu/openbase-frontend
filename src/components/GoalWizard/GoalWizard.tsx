@@ -34,7 +34,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { GoalCategory } from '@/types/smart-goals.types';
+import { GoalCategory, MetricType, Frequency } from '@/types/smart-goals.types';
 
 import {
   GoalWizardProps,
@@ -203,7 +203,7 @@ const StepContentRenderer: React.FC = () => {
 
   const renderStep = () => {
     // Ensure stepData has required properties for each step
-    const getStepDataWithDefaults = () => {
+    const getStepDataWithDefaults = (): any => {
       if (stepData) return stepData;
 
       // Return appropriate defaults based on current step
@@ -224,61 +224,139 @@ const StepContentRenderer: React.FC = () => {
             successCriteria: [],
             tags: [],
           };
+        case WizardStep.MEASURABLE:
+          return {
+            measurable: {
+              metricType: MetricType.BOOLEAN,
+              targetValue: 1,
+              currentValue: 0,
+              unit: '',
+              higherIsBetter: true,
+              measurementFrequency: Frequency.DAILY,
+            },
+            successDefinitions: [],
+          };
+        case WizardStep.ACHIEVABLE:
+          return {
+            feasibilityCheck: '',
+            requiredResources: [],
+            potentialObstacles: [],
+            riskAssessment: '',
+            skillRequirements: [],
+            successProbability: 50,
+          };
+        case WizardStep.RELEVANT:
+          return {
+            alignment: '',
+            importance: '',
+            stakeholderBuyIn: [],
+            strategicValue: '',
+            personalMotivation: '',
+          };
+        case WizardStep.TIMEBOUND:
+          return {
+            startDate: new Date(),
+            targetDate: new Date(),
+            milestones: [],
+            urgency: '',
+            deadlineReason: '',
+          };
+        case WizardStep.PREVIEW:
+          return {};
         default:
           return {};
       }
-    };
-
-    const commonProps = {
-      data: getStepDataWithDefaults(),
-      onChange: handleStepChange,
-      errors: validation?.errors || {},
-      warnings: validation?.warnings,
-      suggestions: validation?.suggestions,
-      readOnly: false,
-      config: DEFAULT_STEPS.find(s => s.id === currentStep) || DEFAULT_STEPS[0],
     };
 
     switch (currentStep) {
       case WizardStep.CONTEXT:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <ContextStep {...commonProps} />
+            <ContextStep
+              data={getStepDataWithDefaults()}
+              onChange={handleStepChange}
+              errors={validation?.errors || {}}
+              warnings={validation?.warnings}
+              suggestions={validation?.suggestions}
+              readOnly={false}
+              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+            />
           </Suspense>
         );
 
       case WizardStep.SPECIFIC:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <SpecificStep {...commonProps} />
+            <SpecificStep
+              data={getStepDataWithDefaults()}
+              onChange={handleStepChange}
+              errors={validation?.errors || {}}
+              warnings={validation?.warnings}
+              suggestions={validation?.suggestions}
+              readOnly={false}
+              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+            />
           </Suspense>
         );
 
       case WizardStep.MEASURABLE:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <MeasurableStep {...commonProps} goalId="wizard-goal" />
+            <MeasurableStep
+              data={getStepDataWithDefaults()}
+              onChange={handleStepChange}
+              errors={validation?.errors || {}}
+              warnings={validation?.warnings}
+              suggestions={validation?.suggestions}
+              readOnly={false}
+              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+              goalId="wizard-goal"
+            />
           </Suspense>
         );
 
       case WizardStep.ACHIEVABLE:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <AchievableStep {...commonProps} />
+            <AchievableStep
+              data={getStepDataWithDefaults()}
+              onChange={handleStepChange}
+              errors={validation?.errors || {}}
+              warnings={validation?.warnings}
+              suggestions={validation?.suggestions}
+              readOnly={false}
+              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+            />
           </Suspense>
         );
 
       case WizardStep.RELEVANT:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <RelevantStep {...commonProps} />
+            <RelevantStep
+              data={getStepDataWithDefaults()}
+              onChange={handleStepChange}
+              errors={validation?.errors || {}}
+              warnings={validation?.warnings}
+              suggestions={validation?.suggestions}
+              readOnly={false}
+              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+            />
           </Suspense>
         );
 
       case WizardStep.TIMEBOUND:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <TimeboundStep {...commonProps} />
+            <TimeboundStep
+              data={getStepDataWithDefaults()}
+              onChange={handleStepChange}
+              errors={validation?.errors || {}}
+              warnings={validation?.warnings}
+              suggestions={validation?.suggestions}
+              readOnly={false}
+              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+            />
           </Suspense>
         );
 
@@ -286,7 +364,13 @@ const StepContentRenderer: React.FC = () => {
         return (
           <Suspense fallback={<StepLoadingFallback />}>
             <PreviewStep
-              {...commonProps}
+              data={getStepDataWithDefaults()}
+              onChange={handleStepChange}
+              errors={validation?.errors || {}}
+              warnings={validation?.warnings}
+              suggestions={validation?.suggestions}
+              readOnly={false}
+              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
               formData={formData}
               smartScore={state.smartScore}
             />

@@ -31,6 +31,12 @@ import {
   WizardFormData,
   ExportOptions,
   ExportResult,
+  ContextStepData,
+  SpecificStepData,
+  MeasurableStepData,
+  AchievableStepData,
+  RelevantStepData,
+  TimeboundStepData,
 } from './GoalWizard.types';
 import {
   getNextStep,
@@ -75,8 +81,8 @@ function wizardReducer(state: WizardState, action: WizardAction): WizardState {
         formData: {
           ...state.formData,
           [step]: {
-            ...state.formData[step as keyof WizardFormData],
-            ...data,
+            ...(state.formData[step as keyof WizardFormData] || {}),
+            ...(data && typeof data === 'object' && !Array.isArray(data) ? data : {}),
           },
         },
         hasUnsavedChanges: true,
@@ -317,17 +323,17 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
 
         switch (step) {
           case WizardStep.CONTEXT:
-            return validateContextStep(stepData);
+            return validateContextStep(stepData as Partial<ContextStepData>);
           case WizardStep.SPECIFIC:
-            return validateSpecificStep(stepData);
+            return validateSpecificStep(stepData as Partial<SpecificStepData>);
           case WizardStep.MEASURABLE:
-            return validateMeasurableStep(stepData);
+            return validateMeasurableStep(stepData as Partial<MeasurableStepData>);
           case WizardStep.ACHIEVABLE:
-            return validateAchievableStep(stepData);
+            return validateAchievableStep(stepData as Partial<AchievableStepData>);
           case WizardStep.RELEVANT:
-            return validateRelevantStep(stepData);
+            return validateRelevantStep(stepData as Partial<RelevantStepData>);
           case WizardStep.TIMEBOUND:
-            return validateTimeboundStep(stepData);
+            return validateTimeboundStep(stepData as Partial<TimeboundStepData>);
           case WizardStep.PREVIEW:
             return { isValid: true, errors: {} };
           default:
