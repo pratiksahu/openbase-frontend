@@ -13,7 +13,12 @@
  */
 
 import { createMockTask, createMockSubtask } from '@/lib/mock-data/smart-goals';
-import { Task, Subtask, TaskStatus, GoalPriority, ChecklistItem } from '@/types/smart-goals.types';
+import {
+  Task,
+  Subtask,
+  TaskStatus,
+  GoalPriority,
+} from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
@@ -151,7 +156,6 @@ const simulateRandomError = (chance: number = 0.02): void => {
 // =============================================================================
 
 export class TasksApi {
-
   // =============================================================================
   // Task CRUD Operations
   // =============================================================================
@@ -166,27 +170,35 @@ export class TasksApi {
 
       initializeMockTasks();
 
-      let goalTasks = mockTasks.filter(task => task.goalId === goalId && !task.isDeleted);
+      let goalTasks = mockTasks.filter(
+        task => task.goalId === goalId && !task.isDeleted
+      );
 
       // Apply filters
       if (filters) {
         if (filters.status && filters.status.length > 0) {
-          goalTasks = goalTasks.filter(task => filters.status!.includes(task.status));
+          goalTasks = goalTasks.filter(task =>
+            filters.status!.includes(task.status)
+          );
         }
 
         if (filters.priority && filters.priority.length > 0) {
-          goalTasks = goalTasks.filter(task => filters.priority!.includes(task.priority));
+          goalTasks = goalTasks.filter(task =>
+            filters.priority!.includes(task.priority)
+          );
         }
 
         if (filters.assignedTo && filters.assignedTo.length > 0) {
-          goalTasks = goalTasks.filter(task =>
-            task.assignedTo && filters.assignedTo!.includes(task.assignedTo)
+          goalTasks = goalTasks.filter(
+            task =>
+              task.assignedTo && filters.assignedTo!.includes(task.assignedTo)
           );
         }
 
         if (filters.tags && filters.tags.length > 0) {
-          goalTasks = goalTasks.filter(task =>
-            task.tags && filters.tags!.some(tag => task.tags!.includes(tag))
+          goalTasks = goalTasks.filter(
+            task =>
+              task.tags && filters.tags!.some(tag => task.tags!.includes(tag))
           );
         }
 
@@ -200,16 +212,19 @@ export class TasksApi {
 
         if (filters.overdue) {
           const now = new Date();
-          goalTasks = goalTasks.filter(task =>
-            task.dueDate &&
-            task.dueDate < now &&
-            task.status !== TaskStatus.COMPLETED
+          goalTasks = goalTasks.filter(
+            task =>
+              task.dueDate &&
+              task.dueDate < now &&
+              task.status !== TaskStatus.COMPLETED
           );
         }
 
         if (filters.completed !== undefined) {
           goalTasks = goalTasks.filter(task =>
-            filters.completed ? task.status === TaskStatus.COMPLETED : task.status !== TaskStatus.COMPLETED
+            filters.completed
+              ? task.status === TaskStatus.COMPLETED
+              : task.status !== TaskStatus.COMPLETED
           );
         }
       }
@@ -217,13 +232,16 @@ export class TasksApi {
       // Add subtasks to each task
       const tasksWithSubtasks = goalTasks.map(task => ({
         ...task,
-        subtasks: mockSubtasks.filter(subtask => subtask.taskId === task.id && !subtask.isDeleted),
+        subtasks: mockSubtasks.filter(
+          subtask => subtask.taskId === task.id && !subtask.isDeleted
+        ),
       }));
 
       return tasksWithSubtasks.sort((a, b) => a.order - b.order);
-
     } catch (error) {
-      throw new Error(`Failed to fetch tasks: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to fetch tasks: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -245,18 +263,21 @@ export class TasksApi {
       }
 
       // Add subtasks
-      const subtasks = mockSubtasks.filter(subtask => subtask.taskId === task.id && !subtask.isDeleted);
+      const subtasks = mockSubtasks.filter(
+        subtask => subtask.taskId === task.id && !subtask.isDeleted
+      );
 
       return {
         ...task,
         subtasks,
       };
-
     } catch (error) {
       if ((error as any).status === 404) {
         throw error;
       }
-      throw new Error(`Failed to fetch task: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to fetch task: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -294,7 +315,9 @@ export class TasksApi {
         checklist: [],
         dependencies: request.dependencies,
         goalId: request.goalId,
-        order: request.order || mockTasks.filter(t => t.goalId === request.goalId).length + 1,
+        order:
+          request.order ||
+          mockTasks.filter(t => t.goalId === request.goalId).length + 1,
         notes: '',
         comments: [],
       };
@@ -302,9 +325,10 @@ export class TasksApi {
       mockTasks.unshift(newTask);
 
       return { ...newTask };
-
     } catch (error) {
-      throw new Error(`Failed to create task: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to create task: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -329,9 +353,16 @@ export class TasksApi {
       const now = new Date();
 
       // Handle status transitions
-      const isCompleting = updates.status === TaskStatus.COMPLETED && existingTask.status !== TaskStatus.COMPLETED;
-      const completedAt = isCompleting ? now : (updates.completedAt || existingTask.completedAt);
-      const progress = updates.status === TaskStatus.COMPLETED ? 100 : (updates.progress || existingTask.progress);
+      const isCompleting =
+        updates.status === TaskStatus.COMPLETED &&
+        existingTask.status !== TaskStatus.COMPLETED;
+      const completedAt = isCompleting
+        ? now
+        : updates.completedAt || existingTask.completedAt;
+      const progress =
+        updates.status === TaskStatus.COMPLETED
+          ? 100
+          : updates.progress || existingTask.progress;
 
       const updatedTask: Task = {
         ...existingTask,
@@ -350,12 +381,13 @@ export class TasksApi {
       mockTasks[taskIndex] = updatedTask;
 
       return { ...updatedTask };
-
     } catch (error) {
       if ((error as any).status === 404) {
         throw error;
       }
-      throw new Error(`Failed to update task: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to update task: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -397,7 +429,9 @@ export class TasksApi {
         mockSubtasks
           .filter(s => s.taskId === id)
           .forEach(subtask => {
-            const subtaskIndex = mockSubtasks.findIndex(s => s.id === subtask.id);
+            const subtaskIndex = mockSubtasks.findIndex(
+              s => s.id === subtask.id
+            );
             if (subtaskIndex !== -1) {
               mockSubtasks[subtaskIndex] = {
                 ...mockSubtasks[subtaskIndex],
@@ -410,12 +444,13 @@ export class TasksApi {
             }
           });
       }
-
     } catch (error) {
       if ((error as any).status === 404) {
         throw error;
       }
-      throw new Error(`Failed to delete task: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to delete task: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -434,8 +469,12 @@ export class TasksApi {
       throw new Error('Progress must be between 0 and 100');
     }
 
-    const status = progress === 100 ? TaskStatus.COMPLETED :
-                  progress > 0 ? TaskStatus.IN_PROGRESS : TaskStatus.TODO;
+    const status =
+      progress === 100
+        ? TaskStatus.COMPLETED
+        : progress > 0
+          ? TaskStatus.IN_PROGRESS
+          : TaskStatus.TODO;
 
     return this.updateTask(id, { progress, status });
   }
@@ -457,9 +496,10 @@ export class TasksApi {
       return mockSubtasks
         .filter(subtask => subtask.taskId === taskId && !subtask.isDeleted)
         .map(subtask => ({ ...subtask }));
-
     } catch (error) {
-      throw new Error(`Failed to fetch subtasks: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to fetch subtasks: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -485,6 +525,7 @@ export class TasksApi {
         description: request.description,
         status: TaskStatus.TODO,
         priority: request.priority,
+        order: 0,
         assignedTo: request.assignedTo,
         estimatedHours: request.estimatedHours,
         actualHours: undefined,
@@ -502,23 +543,29 @@ export class TasksApi {
       mockSubtasks.unshift(newSubtask);
 
       return { ...newSubtask };
-
     } catch (error) {
-      throw new Error(`Failed to create subtask: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to create subtask: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   /**
    * Update an existing subtask
    */
-  async updateSubtask(id: string, updates: UpdateSubtaskRequest): Promise<Subtask> {
+  async updateSubtask(
+    id: string,
+    updates: UpdateSubtaskRequest
+  ): Promise<Subtask> {
     try {
       await simulateDelay(400);
       simulateRandomError();
 
       initializeMockTasks();
 
-      const subtaskIndex = mockSubtasks.findIndex(s => s.id === id && !s.isDeleted);
+      const subtaskIndex = mockSubtasks.findIndex(
+        s => s.id === id && !s.isDeleted
+      );
       if (subtaskIndex === -1) {
         const error = new Error('Subtask not found') as any;
         error.status = 404;
@@ -529,9 +576,16 @@ export class TasksApi {
       const now = new Date();
 
       // Handle status transitions
-      const isCompleting = updates.status === TaskStatus.COMPLETED && existingSubtask.status !== TaskStatus.COMPLETED;
-      const completedAt = isCompleting ? now : (updates.completedAt || existingSubtask.completedAt);
-      const progress = updates.status === TaskStatus.COMPLETED ? 100 : (updates.progress || existingSubtask.progress);
+      const isCompleting =
+        updates.status === TaskStatus.COMPLETED &&
+        existingSubtask.status !== TaskStatus.COMPLETED;
+      const completedAt = isCompleting
+        ? now
+        : updates.completedAt || existingSubtask.completedAt;
+      const progress =
+        updates.status === TaskStatus.COMPLETED
+          ? 100
+          : updates.progress || existingSubtask.progress;
 
       const updatedSubtask: Subtask = {
         ...existingSubtask,
@@ -549,12 +603,13 @@ export class TasksApi {
       mockSubtasks[subtaskIndex] = updatedSubtask;
 
       return { ...updatedSubtask };
-
     } catch (error) {
       if ((error as any).status === 404) {
         throw error;
       }
-      throw new Error(`Failed to update subtask: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to update subtask: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -588,12 +643,13 @@ export class TasksApi {
           updatedBy: 'current-user',
         };
       }
-
     } catch (error) {
       if ((error as any).status === 404) {
         throw error;
       }
-      throw new Error(`Failed to delete subtask: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to delete subtask: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -604,32 +660,38 @@ export class TasksApi {
   /**
    * Add checklist item to task
    */
-  async addChecklistItem(taskId: string, title: string, description?: string, isRequired: boolean = false): Promise<Task> {
+  async addChecklistItem(
+    taskId: string,
+    title: string,
+    description?: string,
+    _isRequired: boolean = false
+  ): Promise<Task> {
     try {
       await simulateDelay(300);
 
-      const task = await this.getTask(taskId);
+      await this.getTask(taskId);
 
-      const newItem: ChecklistItem = {
-        id: `checklist-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: 'current-user',
-        updatedBy: 'current-user',
-        title,
-        description,
-        isCompleted: false,
-        order: task.checklist.length + 1,
-        isRequired,
-      };
+      // const _newItem: ChecklistItem = {
+      //   id: `checklist-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      //   createdBy: 'current-user',
+      //   updatedBy: 'current-user',
+      //   title,
+      //   description,
+      //   isCompleted: false,
+      //   order: task.checklist.length + 1,
+      //   isRequired,
+      // };
 
       return this.updateTask(taskId, {
         // We would need to update the checklist array, but since we're using mock data
         // this would need special handling in the update logic
       });
-
     } catch (error) {
-      throw new Error(`Failed to add checklist item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to add checklist item: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -640,7 +702,10 @@ export class TasksApi {
   /**
    * Bulk update task statuses
    */
-  async bulkUpdateTaskStatus(ids: string[], status: TaskStatus): Promise<Task[]> {
+  async bulkUpdateTaskStatus(
+    ids: string[],
+    status: TaskStatus
+  ): Promise<Task[]> {
     try {
       await simulateDelay(600);
       simulateRandomError();
@@ -658,16 +723,20 @@ export class TasksApi {
       }
 
       return updatedTasks;
-
     } catch (error) {
-      throw new Error(`Bulk task status update failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Bulk task status update failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
   /**
    * Bulk delete tasks
    */
-  async bulkDeleteTasks(ids: string[], permanent: boolean = false): Promise<void> {
+  async bulkDeleteTasks(
+    ids: string[],
+    permanent: boolean = false
+  ): Promise<void> {
     try {
       await simulateDelay(600);
       simulateRandomError();
@@ -680,9 +749,10 @@ export class TasksApi {
           // Continue with other tasks
         }
       }
-
     } catch (error) {
-      throw new Error(`Bulk task deletion failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Bulk task deletion failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -702,15 +772,21 @@ export class TasksApi {
 
       const total = tasks.length;
 
-      const byStatus = Object.values(TaskStatus).reduce((acc, status) => {
-        acc[status] = tasks.filter(t => t.status === status).length;
-        return acc;
-      }, {} as Record<TaskStatus, number>);
+      const byStatus = Object.values(TaskStatus).reduce(
+        (acc, status) => {
+          acc[status] = tasks.filter(t => t.status === status).length;
+          return acc;
+        },
+        {} as Record<TaskStatus, number>
+      );
 
-      const byPriority = Object.values(GoalPriority).reduce((acc, priority) => {
-        acc[priority] = tasks.filter(t => t.priority === priority).length;
-        return acc;
-      }, {} as Record<GoalPriority, number>);
+      const byPriority = Object.values(GoalPriority).reduce(
+        (acc, priority) => {
+          acc[priority] = tasks.filter(t => t.priority === priority).length;
+          return acc;
+        },
+        {} as Record<GoalPriority, number>
+      );
 
       const completedTasks = byStatus[TaskStatus.COMPLETED] || 0;
       const completionRate = total > 0 ? (completedTasks / total) * 100 : 0;
@@ -719,14 +795,21 @@ export class TasksApi {
       const averageProgress = total > 0 ? totalProgress / total : 0;
 
       const now = new Date();
-      const overdueCount = tasks.filter(task =>
-        task.dueDate &&
-        task.dueDate < now &&
-        task.status !== TaskStatus.COMPLETED
+      const overdueCount = tasks.filter(
+        task =>
+          task.dueDate &&
+          task.dueDate < now &&
+          task.status !== TaskStatus.COMPLETED
       ).length;
 
-      const totalEstimatedHours = tasks.reduce((sum, task) => sum + (task.estimatedHours || 0), 0);
-      const totalActualHours = tasks.reduce((sum, task) => sum + (task.actualHours || 0), 0);
+      const totalEstimatedHours = tasks.reduce(
+        (sum, task) => sum + (task.estimatedHours || 0),
+        0
+      );
+      const totalActualHours = tasks.reduce(
+        (sum, task) => sum + (task.actualHours || 0),
+        0
+      );
 
       return {
         total,
@@ -738,9 +821,10 @@ export class TasksApi {
         totalEstimatedHours,
         totalActualHours,
       };
-
     } catch (error) {
-      throw new Error(`Failed to get task stats: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to get task stats: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 
@@ -759,20 +843,24 @@ export class TasksApi {
       }
 
       const now = new Date();
-      const overdueTasks = tasks.filter(task =>
-        task.dueDate &&
-        task.dueDate < now &&
-        task.status !== TaskStatus.COMPLETED
+      const overdueTasks = tasks.filter(
+        task =>
+          task.dueDate &&
+          task.dueDate < now &&
+          task.status !== TaskStatus.COMPLETED
       );
 
       // Add subtasks to each task
       return overdueTasks.map(task => ({
         ...task,
-        subtasks: mockSubtasks.filter(subtask => subtask.taskId === task.id && !subtask.isDeleted),
+        subtasks: mockSubtasks.filter(
+          subtask => subtask.taskId === task.id && !subtask.isDeleted
+        ),
       }));
-
     } catch (error) {
-      throw new Error(`Failed to get overdue tasks: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Failed to get overdue tasks: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   }
 

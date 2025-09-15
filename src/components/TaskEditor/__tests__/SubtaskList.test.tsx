@@ -23,7 +23,9 @@ jest.mock('sonner', () => ({
 
 // Mock drag and drop
 jest.mock('@dnd-kit/core', () => ({
-  DndContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DndContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   useSensor: jest.fn(),
   useSensors: jest.fn(() => []),
   PointerSensor: jest.fn(),
@@ -32,7 +34,9 @@ jest.mock('@dnd-kit/core', () => ({
 }));
 
 jest.mock('@dnd-kit/sortable', () => ({
-  SortableContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   arrayMove: jest.fn((array, from, to) => {
     const result = [...array];
     const [removed] = result.splice(from, 1);
@@ -110,6 +114,7 @@ const mockAssignees = [
 
 const defaultProps = {
   subtasks: mockSubtasks,
+  taskId: 'task-1',
   onSubtasksChange: jest.fn(),
   onSubtaskAdd: jest.fn(),
   onSubtaskUpdate: jest.fn(),
@@ -166,27 +171,25 @@ describe('SubtaskList Component', () => {
 
   describe('Empty State', () => {
     it('renders empty state when no subtasks', () => {
-      render(
-        <SubtaskList
-          {...defaultProps}
-          subtasks={[]}
-        />
-      );
+      render(<SubtaskList {...defaultProps} subtasks={[]} />);
 
       expect(screen.getByText('No subtasks yet')).toBeInTheDocument();
-      expect(screen.getByText('Break down this task into smaller, manageable subtasks.')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /add first subtask/i })).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Break down this task into smaller, manageable subtasks.'
+        )
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /add first subtask/i })
+      ).toBeInTheDocument();
     });
 
     it('shows add subtask button in empty state', () => {
-      render(
-        <SubtaskList
-          {...defaultProps}
-          subtasks={[]}
-        />
-      );
+      render(<SubtaskList {...defaultProps} subtasks={[]} />);
 
-      const addButton = screen.getByRole('button', { name: /add first subtask/i });
+      const addButton = screen.getByRole('button', {
+        name: /add first subtask/i,
+      });
       fireEvent.click(addButton);
 
       expect(screen.getByText('Add New Subtask')).toBeInTheDocument();
@@ -216,18 +219,15 @@ describe('SubtaskList Component', () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/subtask title must be at least 3 characters long/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/subtask title must be at least 3 characters long/i)
+        ).toBeInTheDocument();
       });
     });
 
     it('calls onSubtaskAdd when valid form is submitted', async () => {
       const mockOnSubtaskAdd = jest.fn();
-      render(
-        <SubtaskList
-          {...defaultProps}
-          onSubtaskAdd={mockOnSubtaskAdd}
-        />
-      );
+      render(<SubtaskList {...defaultProps} onSubtaskAdd={mockOnSubtaskAdd} />);
 
       const addButton = screen.getByRole('button', { name: /add subtask/i });
       fireEvent.click(addButton);
@@ -236,7 +236,9 @@ describe('SubtaskList Component', () => {
       const descriptionInput = screen.getByLabelText(/description/i);
 
       fireEvent.change(titleInput, { target: { value: 'New Subtask Title' } });
-      fireEvent.change(descriptionInput, { target: { value: 'New subtask description' } });
+      fireEvent.change(descriptionInput, {
+        target: { value: 'New subtask description' },
+      });
 
       const submitButton = screen.getByRole('button', { name: /add subtask/i });
       fireEvent.click(submitButton);
@@ -274,9 +276,10 @@ describe('SubtaskList Component', () => {
 
       const editButtons = screen.getAllByRole('button', { name: '' });
       // Find the edit button (first button in the action group)
-      const editButton = editButtons.find(button =>
-        button.querySelector('svg') &&
-        !button.classList.contains('text-destructive')
+      const editButton = editButtons.find(
+        button =>
+          button.querySelector('svg') &&
+          !button.classList.contains('text-destructive')
       );
 
       if (editButton) {
@@ -289,23 +292,23 @@ describe('SubtaskList Component', () => {
     it('calls onSubtaskUpdate when subtask is saved', async () => {
       const mockOnSubtaskUpdate = jest.fn();
       render(
-        <SubtaskList
-          {...defaultProps}
-          onSubtaskUpdate={mockOnSubtaskUpdate}
-        />
+        <SubtaskList {...defaultProps} onSubtaskUpdate={mockOnSubtaskUpdate} />
       );
 
       const editButtons = screen.getAllByRole('button', { name: '' });
-      const editButton = editButtons.find(button =>
-        button.querySelector('svg') &&
-        !button.classList.contains('text-destructive')
+      const editButton = editButtons.find(
+        button =>
+          button.querySelector('svg') &&
+          !button.classList.contains('text-destructive')
       );
 
       if (editButton) {
         fireEvent.click(editButton);
 
         const titleInput = screen.getByDisplayValue('First Subtask');
-        fireEvent.change(titleInput, { target: { value: 'Updated Subtask Title' } });
+        fireEvent.change(titleInput, {
+          target: { value: 'Updated Subtask Title' },
+        });
 
         const saveButton = screen.getByRole('button', { name: /save/i });
         fireEvent.click(saveButton);
@@ -325,9 +328,10 @@ describe('SubtaskList Component', () => {
       render(<SubtaskList {...defaultProps} />);
 
       const editButtons = screen.getAllByRole('button', { name: '' });
-      const editButton = editButtons.find(button =>
-        button.querySelector('svg') &&
-        !button.classList.contains('text-destructive')
+      const editButton = editButtons.find(
+        button =>
+          button.querySelector('svg') &&
+          !button.classList.contains('text-destructive')
       );
 
       if (editButton) {
@@ -348,10 +352,7 @@ describe('SubtaskList Component', () => {
       const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
       render(
-        <SubtaskList
-          {...defaultProps}
-          onSubtaskDelete={mockOnSubtaskDelete}
-        />
+        <SubtaskList {...defaultProps} onSubtaskDelete={mockOnSubtaskDelete} />
       );
 
       const deleteButtons = screen.getAllByRole('button', { name: '' });
@@ -364,7 +365,9 @@ describe('SubtaskList Component', () => {
 
         await waitFor(() => {
           expect(confirmSpy).toHaveBeenCalledWith(
-            expect.stringContaining('Are you sure you want to delete subtask "First Subtask"?')
+            expect.stringContaining(
+              'Are you sure you want to delete subtask "First Subtask"?'
+            )
           );
           expect(mockOnSubtaskDelete).toHaveBeenCalledWith('subtask-1');
         });
@@ -378,10 +381,7 @@ describe('SubtaskList Component', () => {
       const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
 
       render(
-        <SubtaskList
-          {...defaultProps}
-          onSubtaskDelete={mockOnSubtaskDelete}
-        />
+        <SubtaskList {...defaultProps} onSubtaskDelete={mockOnSubtaskDelete} />
       );
 
       const deleteButtons = screen.getAllByRole('button', { name: '' });
@@ -429,14 +429,11 @@ describe('SubtaskList Component', () => {
 
   describe('Read-Only Mode', () => {
     it('hides action buttons in read-only mode', () => {
-      render(
-        <SubtaskList
-          {...defaultProps}
-          isReadOnly={true}
-        />
-      );
+      render(<SubtaskList {...defaultProps} isReadOnly={true} />);
 
-      expect(screen.queryByRole('button', { name: /add subtask/i })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /add subtask/i })
+      ).not.toBeInTheDocument();
 
       // Edit and delete buttons should not be visible
       const actionButtons = screen.queryAllByRole('button', { name: '' });
@@ -444,16 +441,12 @@ describe('SubtaskList Component', () => {
     });
 
     it('shows read-only empty state correctly', () => {
-      render(
-        <SubtaskList
-          {...defaultProps}
-          subtasks={[]}
-          isReadOnly={true}
-        />
-      );
+      render(<SubtaskList {...defaultProps} subtasks={[]} isReadOnly={true} />);
 
       expect(screen.getByText('No subtasks yet')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /add first subtask/i })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /add first subtask/i })
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -465,31 +458,33 @@ describe('SubtaskList Component', () => {
       const dndCore = await import('@dnd-kit/core');
       const originalDndContext = dndCore.DndContext;
 
-      jest.spyOn(dndCore, 'DndContext').mockImplementation(({ onDragEnd, children }) => {
-        // Simulate a drag end event
-        setTimeout(() => {
-          if (onDragEnd) {
-            onDragEnd({
-              active: {
-                id: 'subtask-1',
-                data: { current: {} },
-                rect: { current: { initial: null, translated: null } }
-              } as any,
-              over: {
-                id: 'subtask-2',
-                data: { current: {} },
-                rect: { current: { initial: null, translated: null } },
-                disabled: false
-              } as any,
-              collisions: [],
-              delta: { x: 0, y: 0 },
-              activatorEvent: null
-            } as any);
-          }
-        }, 0);
+      jest
+        .spyOn(dndCore, 'DndContext')
+        .mockImplementation(({ onDragEnd, children }) => {
+          // Simulate a drag end event
+          setTimeout(() => {
+            if (onDragEnd) {
+              onDragEnd({
+                active: {
+                  id: 'subtask-1',
+                  data: { current: {} },
+                  rect: { current: { initial: null, translated: null } },
+                } as any,
+                over: {
+                  id: 'subtask-2',
+                  data: { current: {} },
+                  rect: { current: { initial: null, translated: null } },
+                  disabled: false,
+                } as any,
+                collisions: [],
+                delta: { x: 0, y: 0 },
+                activatorEvent: null,
+              } as any);
+            }
+          }, 0);
 
-        return originalDndContext({ onDragEnd, children });
-      });
+          return originalDndContext({ onDragEnd, children });
+        });
 
       render(
         <SubtaskList
@@ -518,12 +513,7 @@ describe('SubtaskList Component', () => {
         status: TaskStatus.COMPLETED,
       }));
 
-      render(
-        <SubtaskList
-          {...defaultProps}
-          subtasks={allCompletedSubtasks}
-        />
-      );
+      render(<SubtaskList {...defaultProps} subtasks={allCompletedSubtasks} />);
 
       expect(screen.getByText('2 of 2 completed')).toBeInTheDocument();
     });

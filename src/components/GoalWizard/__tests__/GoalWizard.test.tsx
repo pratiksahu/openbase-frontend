@@ -22,13 +22,13 @@ vi.mock('../steps/ContextStep', () => ({
       <input
         data-testid="current-situation"
         value={data.currentSituation || ''}
-        onChange={(e) => onChange({ currentSituation: e.target.value })}
+        onChange={e => onChange({ currentSituation: e.target.value })}
         placeholder="Describe current situation"
       />
       <select
         data-testid="category-select"
         value={data.category || ''}
-        onChange={(e) => onChange({ category: e.target.value })}
+        onChange={e => onChange({ category: e.target.value })}
       >
         <option value="">Select category</option>
         <option value={GoalCategory.PROFESSIONAL}>Professional</option>
@@ -45,13 +45,13 @@ vi.mock('../steps/SpecificStep', () => ({
       <input
         data-testid="goal-title"
         value={data.title || ''}
-        onChange={(e) => onChange({ title: e.target.value })}
+        onChange={e => onChange({ title: e.target.value })}
         placeholder="Enter goal title"
       />
       <textarea
         data-testid="goal-description"
         value={data.description || ''}
-        onChange={(e) => onChange({ description: e.target.value })}
+        onChange={e => onChange({ description: e.target.value })}
         placeholder="Describe your goal"
       />
     </div>
@@ -59,7 +59,7 @@ vi.mock('../steps/SpecificStep', () => ({
 }));
 
 vi.mock('../steps/MeasurableStep', () => ({
-  default: ({ data, onChange }: any) => (
+  default: ({ data: _data, onChange: _onChange }: any) => (
     <div data-testid="measurable-step">
       <h2>Make it Measurable</h2>
       <p>Measurable step content</p>
@@ -68,7 +68,7 @@ vi.mock('../steps/MeasurableStep', () => ({
 }));
 
 vi.mock('../steps/AchievableStep', () => ({
-  default: ({ data, onChange }: any) => (
+  default: ({ data: _data, onChange: _onChange }: any) => (
     <div data-testid="achievable-step">
       <h2>Make it Achievable</h2>
       <p>Achievable step content</p>
@@ -78,10 +78,8 @@ vi.mock('../steps/AchievableStep', () => ({
 
 // Mock the SmartScoreBadge component
 vi.mock('@/components/SmartScoreBadge/SmartScoreBadge', () => ({
-  SmartScoreBadge: ({ goal }: any) => (
-    <div data-testid="smart-score-badge">
-      SMART Score: 75/100
-    </div>
+  SmartScoreBadge: ({ goal: _goal }: any) => (
+    <div data-testid="smart-score-badge">SMART Score: 75/100</div>
   ),
 }));
 
@@ -144,7 +142,7 @@ describe('GoalWizard', () => {
 
       await waitFor(() => {
         // Stepper should not be visible
-        const contextStepperItem = screen.queryByText('Context');
+        screen.queryByText('Context');
         // The step content will still have "Set the Context" but stepper won't
         expect(screen.getByText('Set the Context')).toBeInTheDocument();
       });
@@ -184,7 +182,9 @@ describe('GoalWizard', () => {
       await user.click(nextButton);
 
       await waitFor(() => {
-        expect(mockProps.onStepChange).toHaveBeenCalledWith(WizardStep.SPECIFIC);
+        expect(mockProps.onStepChange).toHaveBeenCalledWith(
+          WizardStep.SPECIFIC
+        );
         expect(screen.getByTestId('specific-step')).toBeInTheDocument();
       });
     });
@@ -281,8 +281,12 @@ describe('GoalWizard', () => {
       });
 
       // Data should be persisted
-      expect(screen.getByTestId('current-situation')).toHaveValue('Test situation');
-      expect(screen.getByTestId('category-select')).toHaveValue(GoalCategory.PROFESSIONAL);
+      expect(screen.getByTestId('current-situation')).toHaveValue(
+        'Test situation'
+      );
+      expect(screen.getByTestId('category-select')).toHaveValue(
+        GoalCategory.PROFESSIONAL
+      );
     });
   });
 
@@ -330,7 +334,9 @@ describe('GoalWizard', () => {
 
       await waitFor(() => {
         expect(screen.getByText('Cancel Goal Creation?')).toBeInTheDocument();
-        expect(screen.getByText('You have unsaved changes')).toBeInTheDocument();
+        expect(
+          screen.getByText('You have unsaved changes')
+        ).toBeInTheDocument();
       });
     });
 
@@ -398,7 +404,9 @@ describe('GoalWizard', () => {
       fireEvent.keyDown(document, { key: 'Enter', ctrlKey: true });
 
       await waitFor(() => {
-        expect(mockProps.onStepChange).toHaveBeenCalledWith(WizardStep.SPECIFIC);
+        expect(mockProps.onStepChange).toHaveBeenCalledWith(
+          WizardStep.SPECIFIC
+        );
       });
     });
   });

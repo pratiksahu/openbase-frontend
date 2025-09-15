@@ -45,7 +45,6 @@ import { DEFAULT_STEPS } from './GoalWizard.utils';
 import { WizardContextProvider, useWizardContext } from './WizardContext';
 import { WizardStepper } from './WizardStepper';
 
-
 // Lazy load step components for better performance
 const ContextStep = lazy(() => import('./steps/ContextStep'));
 const SpecificStep = lazy(() => import('./steps/SpecificStep'));
@@ -55,58 +54,59 @@ const AchievableStep = lazy(() => import('./steps/AchievableStep'));
 // Placeholder components for remaining steps
 const RelevantStep = lazy(() =>
   Promise.resolve({
-    default: ({ data, onChange }: any) => (
+    default: () => (
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Make it Relevant</h2>
         <p className="text-muted-foreground">
-          This step is under construction. Define strategic alignment and business value.
+          This step is under construction. Define strategic alignment and
+          business value.
         </p>
-        <div className="p-8 text-center bg-muted/50 rounded-lg">
+        <div className="bg-muted/50 rounded-lg p-8 text-center">
           <div className="text-lg font-medium">Coming Soon</div>
-          <div className="text-sm text-muted-foreground mt-2">
+          <div className="text-muted-foreground mt-2 text-sm">
             Relevant step component will be implemented next
           </div>
         </div>
       </div>
-    )
+    ),
   })
 );
 
 const TimeboundStep = lazy(() =>
   Promise.resolve({
-    default: ({ data, onChange }: any) => (
+    default: () => (
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Make it Time-bound</h2>
         <p className="text-muted-foreground">
           This step is under construction. Set deadlines and create timeline.
         </p>
-        <div className="p-8 text-center bg-muted/50 rounded-lg">
+        <div className="bg-muted/50 rounded-lg p-8 text-center">
           <div className="text-lg font-medium">Coming Soon</div>
-          <div className="text-sm text-muted-foreground mt-2">
+          <div className="text-muted-foreground mt-2 text-sm">
             Time-bound step component will be implemented next
           </div>
         </div>
       </div>
-    )
+    ),
   })
 );
 
 const PreviewStep = lazy(() =>
   Promise.resolve({
-    default: ({ data, onChange, formData, smartScore }: any) => (
+    default: () => (
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">Preview & Finalize</h2>
         <p className="text-muted-foreground">
           Review your complete SMART goal before saving.
         </p>
-        <div className="p-8 text-center bg-muted/50 rounded-lg">
+        <div className="bg-muted/50 rounded-lg p-8 text-center">
           <div className="text-lg font-medium">Coming Soon</div>
-          <div className="text-sm text-muted-foreground mt-2">
+          <div className="text-muted-foreground mt-2 text-sm">
             Preview step component will be implemented next
           </div>
         </div>
       </div>
-    )
+    ),
   })
 );
 
@@ -118,7 +118,7 @@ const StepLoadingFallback: React.FC = () => (
   <div className="flex items-center justify-center py-12">
     <div className="flex items-center space-x-2">
       <Loader2 className="h-4 w-4 animate-spin" />
-      <span className="text-sm text-muted-foreground">Loading step...</span>
+      <span className="text-muted-foreground text-sm">Loading step...</span>
     </div>
   </div>
 );
@@ -145,17 +145,22 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   className,
 }) => {
   return (
-    <div className={cn('flex items-center justify-between pt-6 border-t border-border', className)}>
+    <div
+      className={cn(
+        'border-border flex items-center justify-between border-t pt-6',
+        className
+      )}
+    >
       <div className="flex items-center space-x-2">
         {config.showCancel && (
           <Button variant="outline" onClick={onCancel}>
-            <X className="h-4 w-4 mr-2" />
+            <X className="mr-2 h-4 w-4" />
             {config.cancelText || 'Cancel'}
           </Button>
         )}
         {config.showSaveDraft && (
           <Button variant="outline" onClick={onSaveDraft}>
-            <Save className="h-4 w-4 mr-2" />
+            <Save className="mr-2 h-4 w-4" />
             {config.saveDraftText || 'Save Draft'}
           </Button>
         )}
@@ -168,17 +173,14 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
             onClick={onPrevious}
             disabled={config.previousDisabled}
           >
-            <ChevronLeft className="h-4 w-4 mr-2" />
+            <ChevronLeft className="mr-2 h-4 w-4" />
             {config.previousText || 'Previous'}
           </Button>
         )}
         {config.showNext && (
-          <Button
-            onClick={onNext}
-            disabled={config.nextDisabled}
-          >
+          <Button onClick={onNext} disabled={config.nextDisabled}>
             {config.nextText || 'Next'}
-            <ChevronRight className="h-4 w-4 ml-2" />
+            <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         )}
       </div>
@@ -192,14 +194,17 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
 
 const StepContentRenderer: React.FC = () => {
   const { state, dataManagement } = useWizardContext();
-  const { currentStep, formData, validationResults } = state;
+  const { currentStep, validationResults } = state;
 
   const stepData = dataManagement.getStepData(currentStep);
   const validation = validationResults[currentStep];
 
-  const handleStepChange = useCallback((data: any) => {
-    dataManagement.updateStepData(currentStep, data);
-  }, [currentStep, dataManagement]);
+  const handleStepChange = useCallback(
+    (data: any) => {
+      dataManagement.updateStepData(currentStep, data);
+    },
+    [currentStep, dataManagement]
+  );
 
   const renderStep = () => {
     // Ensure stepData has required properties for each step
@@ -279,7 +284,10 @@ const StepContentRenderer: React.FC = () => {
               warnings={validation?.warnings}
               suggestions={validation?.suggestions}
               readOnly={false}
-              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+              config={
+                DEFAULT_STEPS.find(s => s.step === currentStep) ||
+                DEFAULT_STEPS[0]
+              }
             />
           </Suspense>
         );
@@ -294,7 +302,10 @@ const StepContentRenderer: React.FC = () => {
               warnings={validation?.warnings}
               suggestions={validation?.suggestions}
               readOnly={false}
-              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+              config={
+                DEFAULT_STEPS.find(s => s.step === currentStep) ||
+                DEFAULT_STEPS[0]
+              }
             />
           </Suspense>
         );
@@ -309,7 +320,10 @@ const StepContentRenderer: React.FC = () => {
               warnings={validation?.warnings}
               suggestions={validation?.suggestions}
               readOnly={false}
-              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+              config={
+                DEFAULT_STEPS.find(s => s.step === currentStep) ||
+                DEFAULT_STEPS[0]
+              }
               goalId="wizard-goal"
             />
           </Suspense>
@@ -325,7 +339,10 @@ const StepContentRenderer: React.FC = () => {
               warnings={validation?.warnings}
               suggestions={validation?.suggestions}
               readOnly={false}
-              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
+              config={
+                DEFAULT_STEPS.find(s => s.step === currentStep) ||
+                DEFAULT_STEPS[0]
+              }
             />
           </Suspense>
         );
@@ -333,56 +350,30 @@ const StepContentRenderer: React.FC = () => {
       case WizardStep.RELEVANT:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <RelevantStep
-              data={getStepDataWithDefaults()}
-              onChange={handleStepChange}
-              errors={validation?.errors || {}}
-              warnings={validation?.warnings}
-              suggestions={validation?.suggestions}
-              readOnly={false}
-              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
-            />
+            <RelevantStep />
           </Suspense>
         );
 
       case WizardStep.TIMEBOUND:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <TimeboundStep
-              data={getStepDataWithDefaults()}
-              onChange={handleStepChange}
-              errors={validation?.errors || {}}
-              warnings={validation?.warnings}
-              suggestions={validation?.suggestions}
-              readOnly={false}
-              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
-            />
+            <TimeboundStep />
           </Suspense>
         );
 
       case WizardStep.PREVIEW:
         return (
           <Suspense fallback={<StepLoadingFallback />}>
-            <PreviewStep
-              data={getStepDataWithDefaults()}
-              onChange={handleStepChange}
-              errors={validation?.errors || {}}
-              warnings={validation?.warnings}
-              suggestions={validation?.suggestions}
-              readOnly={false}
-              config={DEFAULT_STEPS.find(s => s.step === currentStep) || DEFAULT_STEPS[0]}
-              formData={formData}
-              smartScore={state.smartScore}
-            />
+            <PreviewStep />
           </Suspense>
         );
 
       default:
         return (
-          <div className="text-center py-12">
-            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">Unknown Step</h3>
-            <p className="text-sm text-muted-foreground">
+          <div className="py-12 text-center">
+            <AlertCircle className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+            <h3 className="mb-2 text-lg font-medium">Unknown Step</h3>
+            <p className="text-muted-foreground text-sm">
               The requested step could not be found.
             </p>
           </div>
@@ -390,11 +381,7 @@ const StepContentRenderer: React.FC = () => {
     }
   };
 
-  return (
-    <div className="min-h-[600px]">
-      {renderStep()}
-    </div>
-  );
+  return <div className="min-h-[600px]">{renderStep()}</div>;
 };
 
 // =============================================================================
@@ -409,7 +396,12 @@ const WizardContent: React.FC<Omit<GoalWizardProps, 'initialGoal'>> = ({
   className,
   showProgress = true,
 }) => {
-  const { state, navigation, draftManagement, export: exportFunctions } = useWizardContext();
+  const {
+    state,
+    navigation,
+    draftManagement,
+    export: exportFunctions,
+  } = useWizardContext();
   const [showCancelDialog, setShowCancelDialog] = React.useState(false);
   const [isDraftSaving, setIsDraftSaving] = React.useState(false);
 
@@ -450,7 +442,7 @@ const WizardContent: React.FC<Omit<GoalWizardProps, 'initialGoal'>> = ({
 
     setIsDraftSaving(true);
     try {
-      const draftId = draftManagement.saveDraft();
+      draftManagement.saveDraft();
       onSaveDraft?.(state.formData);
       // You could show a toast notification here
     } catch (error) {
@@ -509,9 +501,12 @@ const WizardContent: React.FC<Omit<GoalWizardProps, 'initialGoal'>> = ({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight">Create SMART Goal</h1>
+              <h1 className="text-3xl font-bold tracking-tight">
+                Create SMART Goal
+              </h1>
               <p className="text-muted-foreground">
-                Follow the guided process to create a comprehensive, achievable goal
+                Follow the guided process to create a comprehensive, achievable
+                goal
               </p>
             </div>
             {state.smartScore && (
@@ -558,15 +553,15 @@ const WizardContent: React.FC<Omit<GoalWizardProps, 'initialGoal'>> = ({
 
         {/* Auto-save indicator */}
         {state.autoSaveEnabled && state.hasUnsavedChanges && (
-          <div className="flex items-center justify-center text-xs text-muted-foreground">
-            <Save className="h-3 w-3 mr-1" />
+          <div className="text-muted-foreground flex items-center justify-center text-xs">
+            <Save className="mr-1 h-3 w-3" />
             Auto-saving changes...
           </div>
         )}
 
         {state.lastSaved && (
-          <div className="flex items-center justify-center text-xs text-muted-foreground">
-            <CheckCircle className="h-3 w-3 mr-1" />
+          <div className="text-muted-foreground flex items-center justify-center text-xs">
+            <CheckCircle className="mr-1 h-3 w-3" />
             Last saved: {state.lastSaved.toLocaleTimeString()}
           </div>
         )}
@@ -578,8 +573,8 @@ const WizardContent: React.FC<Omit<GoalWizardProps, 'initialGoal'>> = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Cancel Goal Creation?</AlertDialogTitle>
             <AlertDialogDescription>
-              You have unsaved changes. Are you sure you want to cancel?
-              Your progress will be lost unless you save it as a draft first.
+              You have unsaved changes. Are you sure you want to cancel? Your
+              progress will be lost unless you save it as a draft first.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -593,9 +588,9 @@ const WizardContent: React.FC<Omit<GoalWizardProps, 'initialGoal'>> = ({
               disabled={isDraftSaving}
             >
               {isDraftSaving ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
-                <Save className="h-4 w-4 mr-2" />
+                <Save className="mr-2 h-4 w-4" />
               )}
               Save Draft & Exit
             </Button>
@@ -617,8 +612,8 @@ const WizardContent: React.FC<Omit<GoalWizardProps, 'initialGoal'>> = ({
 // =============================================================================
 
 export const GoalWizard: React.FC<GoalWizardProps> = ({
-  initialGoal,
-  autoSaveEnabled = true,
+  initialGoal: _initialGoal,
+  autoSaveEnabled: _autoSaveEnabled = true,
   autoSaveInterval = 30000,
   ...props
 }) => {

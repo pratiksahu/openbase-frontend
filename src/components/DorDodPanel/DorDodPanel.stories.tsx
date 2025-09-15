@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 // Action utilities not available in Storybook 9
-const action = (name: string) => (...args: any[]) => console.log(name, ...args);
+// Removed unused action function - can be re-enabled if needed for debugging
+// const action = (name: string) => (...args: any[]) => console.log(name, ...args);
 import { defaultTemplates } from './defaultTemplates';
 import { DorDodPanel } from './DorDodPanel';
 import type { Criterion } from './DorDodPanel.types';
@@ -13,7 +14,8 @@ const meta: Meta<typeof DorDodPanel> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A comprehensive panel component for managing Definition of Ready (DoR) and Definition of Done (DoD) criteria. Supports templates, progress tracking, validation, and approval workflows.',
+        component:
+          'A comprehensive panel component for managing Definition of Ready (DoR) and Definition of Done (DoD) criteria. Supports templates, progress tracking, validation, and approval workflows.',
       },
     },
   },
@@ -45,7 +47,8 @@ const sampleDorCriteria: Criterion[] = [
     id: 'dor-1',
     description: 'Requirements are clearly defined and documented',
     category: 'required',
-    helpText: 'All functional and non-functional requirements should be specified',
+    helpText:
+      'All functional and non-functional requirements should be specified',
     isCompleted: true,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
@@ -92,7 +95,8 @@ const sampleDodCriteria: Criterion[] = [
     id: 'dod-1',
     description: 'Code is complete and follows coding standards',
     category: 'required',
-    helpText: 'Implementation matches requirements and follows team conventions',
+    helpText:
+      'Implementation matches requirements and follows team conventions',
     isCompleted: true,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
@@ -146,7 +150,8 @@ export const Empty: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Shows the panel in its initial empty state with no criteria defined.',
+        story:
+          'Shows the panel in its initial empty state with no criteria defined.',
       },
     },
   },
@@ -164,7 +169,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Default panel with sample DoR and DoD criteria showing mixed completion states.',
+        story:
+          'Default panel with sample DoR and DoD criteria showing mixed completion states.',
       },
     },
   },
@@ -196,7 +202,8 @@ export const SoftwareDevelopmentTemplate: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Panel populated with the software development template criteria.',
+        story:
+          'Panel populated with the software development template criteria.',
       },
     },
   },
@@ -209,7 +216,7 @@ export const PartiallyComplete: Story = {
       dorCriteria: sampleDorCriteria.map(c => ({ ...c, isCompleted: true })),
       dodCriteria: sampleDodCriteria.map((c, index) => ({
         ...c,
-        isCompleted: index < 2
+        isCompleted: index < 2,
       })),
     },
     showProgressIndicators: true,
@@ -217,7 +224,8 @@ export const PartiallyComplete: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Shows a partially complete state where DoR is ready but DoD is in progress.',
+        story:
+          'Shows a partially complete state where DoR is ready but DoD is in progress.',
       },
     },
   },
@@ -241,7 +249,8 @@ export const FullyComplete: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Shows a fully completed state with all criteria marked as done.',
+        story:
+          'Shows a fully completed state with all criteria marked as done.',
       },
     },
   },
@@ -297,7 +306,8 @@ export const WithValidationErrors: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Shows validation errors when required criteria are not completed.',
+        story:
+          'Shows validation errors when required criteria are not completed.',
       },
     },
   },
@@ -348,7 +358,8 @@ export const PrintMode: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Print-friendly view of the panel optimized for printing or PDF export.',
+        story:
+          'Print-friendly view of the panel optimized for printing or PDF export.',
       },
     },
   },
@@ -427,7 +438,8 @@ export const FullFeatures: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Panel with all features enabled including time tracking, approval workflow, and audit logging.',
+        story:
+          'Panel with all features enabled including time tracking, approval workflow, and audit logging.',
       },
     },
   },

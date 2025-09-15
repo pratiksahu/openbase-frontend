@@ -544,6 +544,7 @@ export function createMockSubtask(
     description: 'Detailed description of the subtask',
     status,
     priority: randomElement(Object.values(GoalPriority)),
+    order: randomNumber(0, 10),
     assignedTo: randomElement(SAMPLE_USERS),
     estimatedHours: randomNumber(2, 16),
     actualHours: Math.random() > 0.3 ? randomNumber(1, 20) : undefined,

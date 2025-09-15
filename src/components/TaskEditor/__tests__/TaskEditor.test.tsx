@@ -14,7 +14,6 @@ import type { Task } from '@/types/smart-goals.types';
 import { TaskEditor } from '../TaskEditor';
 import { TaskEditorMode } from '../TaskEditor.types';
 
-
 // Mock sonner toast
 jest.mock('sonner', () => ({
   toast: {
@@ -29,7 +28,9 @@ jest.mock('date-fns', () => ({
   format: jest.fn((date, _formatStr) => date.toISOString().slice(0, 16)),
   isAfter: jest.fn(() => true),
   isBefore: jest.fn(() => false),
-  addDays: jest.fn((date, days) => new Date(date.getTime() + days * 24 * 60 * 60 * 1000)),
+  addDays: jest.fn(
+    (date, days) => new Date(date.getTime() + days * 24 * 60 * 60 * 1000)
+  ),
 }));
 
 const mockTask: Task = {
@@ -77,32 +78,26 @@ describe('TaskEditor Component', () => {
 
   describe('Create Mode', () => {
     it('renders empty form in create mode', () => {
-      render(
-        <TaskEditor
-          {...defaultProps}
-          mode={TaskEditorMode.CREATE}
-        />
-      );
+      render(<TaskEditor {...defaultProps} mode={TaskEditorMode.CREATE} />);
 
       expect(screen.getByText('Create Task')).toBeInTheDocument();
       expect(screen.getByLabelText(/title/i)).toHaveValue('');
       expect(screen.getByLabelText(/description/i)).toHaveValue('');
-      expect(screen.getByRole('button', { name: /save task/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /save task/i })
+      ).toBeInTheDocument();
     });
 
     it('validates required fields', async () => {
-      render(
-        <TaskEditor
-          {...defaultProps}
-          mode={TaskEditorMode.CREATE}
-        />
-      );
+      render(<TaskEditor {...defaultProps} mode={TaskEditorMode.CREATE} />);
 
       const saveButton = screen.getByRole('button', { name: /save task/i });
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/title must be at least 3 characters long/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/title must be at least 3 characters long/i)
+        ).toBeInTheDocument();
       });
     });
 
@@ -112,7 +107,7 @@ describe('TaskEditor Component', () => {
         <TaskEditor
           {...defaultProps}
           mode={TaskEditorMode.CREATE}
-          onSave={mockOnSave}
+          onSave={mockOnSave as any}
         />
       );
 
@@ -121,7 +116,9 @@ describe('TaskEditor Component', () => {
       const descriptionInput = screen.getByLabelText(/description/i);
 
       fireEvent.change(titleInput, { target: { value: 'New Test Task' } });
-      fireEvent.change(descriptionInput, { target: { value: 'Test description' } });
+      fireEvent.change(descriptionInput, {
+        target: { value: 'Test description' },
+      });
 
       const saveButton = screen.getByRole('button', { name: /save task/i });
       fireEvent.click(saveButton);
@@ -153,7 +150,9 @@ describe('TaskEditor Component', () => {
       expect(screen.getByText('Edit Task')).toBeInTheDocument();
       expect(screen.getByDisplayValue('Test Task')).toBeInTheDocument();
       expect(screen.getByDisplayValue('Test description')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /delete/i })
+      ).toBeInTheDocument();
     });
 
     it('shows task progress and statistics', () => {
@@ -168,7 +167,7 @@ describe('TaskEditor Component', () => {
             title: 'Subtask 1',
             status: TaskStatus.COMPLETED,
             taskId: 'task-1',
-          }
+          },
         ],
         checklist: [
           {
@@ -181,7 +180,7 @@ describe('TaskEditor Component', () => {
             updatedAt: new Date(),
             createdBy: 'user-1',
             updatedBy: 'user-1',
-          }
+          },
         ],
       };
 
@@ -255,12 +254,7 @@ describe('TaskEditor Component', () => {
 
   describe('Form Validation', () => {
     it('validates title length', async () => {
-      render(
-        <TaskEditor
-          {...defaultProps}
-          mode={TaskEditorMode.CREATE}
-        />
-      );
+      render(<TaskEditor {...defaultProps} mode={TaskEditorMode.CREATE} />);
 
       const titleInput = screen.getByLabelText(/title/i);
       fireEvent.change(titleInput, { target: { value: 'A' } }); // Too short
@@ -269,17 +263,14 @@ describe('TaskEditor Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/title must be at least 3 characters long/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/title must be at least 3 characters long/i)
+        ).toBeInTheDocument();
       });
     });
 
     it('validates estimated hours', async () => {
-      render(
-        <TaskEditor
-          {...defaultProps}
-          mode={TaskEditorMode.CREATE}
-        />
-      );
+      render(<TaskEditor {...defaultProps} mode={TaskEditorMode.CREATE} />);
 
       const titleInput = screen.getByLabelText(/title/i);
       const estimatedHoursInput = screen.getByLabelText(/estimated hours/i);
@@ -291,29 +282,30 @@ describe('TaskEditor Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/estimated hours must be at least/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/estimated hours must be at least/i)
+        ).toBeInTheDocument();
       });
     });
 
     it('validates description length', async () => {
-      render(
-        <TaskEditor
-          {...defaultProps}
-          mode={TaskEditorMode.CREATE}
-        />
-      );
+      render(<TaskEditor {...defaultProps} mode={TaskEditorMode.CREATE} />);
 
       const titleInput = screen.getByLabelText(/title/i);
       const descriptionInput = screen.getByLabelText(/description/i);
 
       fireEvent.change(titleInput, { target: { value: 'Valid Task Title' } });
-      fireEvent.change(descriptionInput, { target: { value: 'A'.repeat(501) } }); // Too long
+      fireEvent.change(descriptionInput, {
+        target: { value: 'A'.repeat(501) },
+      }); // Too long
 
       const saveButton = screen.getByRole('button', { name: /save task/i });
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(screen.getByText(/description must be less than 500 characters/i)).toBeInTheDocument();
+        expect(
+          screen.getByText(/description must be less than 500 characters/i)
+        ).toBeInTheDocument();
       });
     });
   });
@@ -344,10 +336,14 @@ describe('TaskEditor Component', () => {
       expect(screen.getByText(/no checklist items yet/i)).toBeInTheDocument();
 
       // Click acceptance criteria tab
-      const acceptanceTab = screen.getByRole('tab', { name: /acceptance criteria/i });
+      const acceptanceTab = screen.getByRole('tab', {
+        name: /acceptance criteria/i,
+      });
       fireEvent.click(acceptanceTab);
 
-      expect(screen.getByText(/define clear, testable requirements/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/define clear, testable requirements/i)
+      ).toBeInTheDocument();
     });
   });
 
@@ -365,7 +361,9 @@ describe('TaskEditor Component', () => {
       );
 
       const statusSelect = screen.getByDisplayValue('todo');
-      fireEvent.change(statusSelect, { target: { value: TaskStatus.IN_PROGRESS } });
+      fireEvent.change(statusSelect, {
+        target: { value: TaskStatus.IN_PROGRESS },
+      });
 
       await waitFor(() => {
         expect(mockOnStatusChange).toHaveBeenCalledWith(
@@ -386,7 +384,7 @@ describe('TaskEditor Component', () => {
           {...defaultProps}
           task={mockTask}
           mode={TaskEditorMode.EDIT}
-          onSave={mockOnSave}
+          onSave={mockOnSave as any}
           autoSave={true}
           autoSaveDelay={100}
         />
@@ -410,7 +408,7 @@ describe('TaskEditor Component', () => {
         <TaskEditor
           {...defaultProps}
           mode={TaskEditorMode.CREATE}
-          onSave={mockOnSave}
+          onSave={mockOnSave as any}
           autoSave={true}
           autoSaveDelay={100}
         />
@@ -489,19 +487,18 @@ describe('TaskEditor Component', () => {
       const titleInput = screen.getByDisplayValue('Test Task');
       expect(titleInput).toBeDisabled();
 
-      expect(screen.queryByRole('button', { name: /save/i })).not.toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /save/i })
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /delete/i })
+      ).not.toBeInTheDocument();
     });
   });
 
   describe('Accessibility', () => {
     it('has proper labels for form inputs', () => {
-      render(
-        <TaskEditor
-          {...defaultProps}
-          mode={TaskEditorMode.CREATE}
-        />
-      );
+      render(<TaskEditor {...defaultProps} mode={TaskEditorMode.CREATE} />);
 
       expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
@@ -510,19 +507,16 @@ describe('TaskEditor Component', () => {
     });
 
     it('shows validation errors with proper ARIA attributes', async () => {
-      render(
-        <TaskEditor
-          {...defaultProps}
-          mode={TaskEditorMode.CREATE}
-        />
-      );
+      render(<TaskEditor {...defaultProps} mode={TaskEditorMode.CREATE} />);
 
       const saveButton = screen.getByRole('button', { name: /save task/i });
       fireEvent.click(saveButton);
 
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i);
-        const errorMessage = screen.getByText(/title must be at least 3 characters long/i);
+        const errorMessage = screen.getByText(
+          /title must be at least 3 characters long/i
+        );
 
         expect(titleInput).toHaveAttribute('aria-invalid', 'true');
         expect(errorMessage).toBeInTheDocument();
@@ -538,7 +532,7 @@ describe('TaskEditor Component', () => {
         <TaskEditor
           {...defaultProps}
           mode={TaskEditorMode.CREATE}
-          onSave={mockOnSave}
+          onSave={mockOnSave as any}
         />
       );
 
@@ -551,12 +545,16 @@ describe('TaskEditor Component', () => {
       await waitFor(() => {
         expect(mockOnSave).toHaveBeenCalled();
         // The component should handle the error and not crash
-        expect(screen.getByRole('button', { name: /save task/i })).toBeInTheDocument();
+        expect(
+          screen.getByRole('button', { name: /save task/i })
+        ).toBeInTheDocument();
       });
     });
 
     it('handles delete errors gracefully', async () => {
-      const mockOnDelete = jest.fn().mockRejectedValue(new Error('Delete failed'));
+      const mockOnDelete = jest
+        .fn()
+        .mockRejectedValue(new Error('Delete failed'));
       const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
       render(
@@ -574,7 +572,9 @@ describe('TaskEditor Component', () => {
       await waitFor(() => {
         expect(mockOnDelete).toHaveBeenCalled();
         // The component should handle the error and not crash
-        expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument();
+        expect(
+          screen.getByRole('button', { name: /delete/i })
+        ).toBeInTheDocument();
       });
 
       confirmSpy.mockRestore();
@@ -583,13 +583,15 @@ describe('TaskEditor Component', () => {
 
   describe('Loading States', () => {
     it('shows saving state when form is being submitted', async () => {
-      const mockOnSave = jest.fn(() => new Promise(resolve => setTimeout(resolve, 100)));
+      const mockOnSave = jest.fn(
+        () => new Promise(resolve => setTimeout(resolve, 100))
+      );
 
       render(
         <TaskEditor
           {...defaultProps}
           mode={TaskEditorMode.CREATE}
-          onSave={mockOnSave}
+          onSave={mockOnSave as any}
         />
       );
 

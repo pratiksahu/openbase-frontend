@@ -12,19 +12,15 @@ export default function DorDodPanelTestPage() {
 
   const handleStateChange = (newState: DorDodState) => {
     setState(newState);
-    // eslint-disable-next-line no-console
-    console.log('State changed:', newState);
   };
 
   const handleValidationChange = (result: ValidationResult) => {
     setValidationResult(result);
-    // eslint-disable-next-line no-console
-    console.log('Validation changed:', result);
   };
 
-  const handleApprovalRequest = (criteria: Criterion[]) => {
-    // eslint-disable-next-line no-console
-    console.log('Approval requested for:', criteria);
+  const handleApprovalRequest = (_criteria: Criterion[]) => {
+    // This function can be used to handle approval requests
+    // Currently empty for testing purposes
   };
 
   return (

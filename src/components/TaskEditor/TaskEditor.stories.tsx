@@ -1,7 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 // Action utilities not available in Storybook 9
-const action = (name: string) => (...args: any[]) => console.log(name, ...args);
+const action =
+  (name: string) =>
+  (...args: any[]) => {
+    // Action handler for Storybook events
+    // In a production environment, these would be replaced with actual action handlers
+  };
 
 import { TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 import type { Task, Subtask, ChecklistItem } from '@/types/smart-goals.types';
@@ -182,7 +187,8 @@ const mockChecklist: ChecklistItem[] = [
 const mockExistingTask: Task = {
   id: 'task-123',
   title: 'Implement User Dashboard',
-  description: 'Create a comprehensive dashboard for users to view their data, manage settings, and track progress.',
+  description:
+    'Create a comprehensive dashboard for users to view their data, manage settings, and track progress.',
   status: TaskStatus.IN_PROGRESS,
   priority: GoalPriority.HIGH,
   assignedTo: '1',
@@ -213,8 +219,8 @@ export const CreateNewTask: Story = {
   args: {
     goalId: 'goal-1',
     mode: TaskEditorMode.CREATE,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
     availableAssignees: mockAssignees,
     availableTasks: mockAvailableTasks,
     autoSave: false,
@@ -222,7 +228,8 @@ export const CreateNewTask: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor in create mode with an empty form ready for new task creation.',
+        story:
+          'TaskEditor in create mode with an empty form ready for new task creation.',
       },
     },
   },
@@ -236,10 +243,10 @@ export const EditExistingTask: Story = {
     task: mockExistingTask,
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: action(),
-    onCancel: action(),
-    onDelete: action(),
-    onStatusChange: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
+    onDelete: async () => action('onDelete')(),
+    onStatusChange: async () => action('onStatusChange')(),
     availableAssignees: mockAssignees,
     availableTasks: mockAvailableTasks,
     autoSave: true,
@@ -248,7 +255,8 @@ export const EditExistingTask: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor in edit mode with a fully populated task including subtasks and checklist items.',
+        story:
+          'TaskEditor in edit mode with a fully populated task including subtasks and checklist items.',
       },
     },
   },
@@ -266,7 +274,8 @@ export const TaskWithSubtasks: Story = {
         {
           id: 'subtask-4',
           title: 'Write comprehensive unit tests',
-          description: 'Achieve 90%+ code coverage for all dashboard components',
+          description:
+            'Achieve 90%+ code coverage for all dashboard components',
           status: TaskStatus.BLOCKED,
           priority: GoalPriority.CRITICAL,
           assignedTo: '3',
@@ -287,14 +296,15 @@ export const TaskWithSubtasks: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
     availableAssignees: mockAssignees,
   },
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor showing a task with multiple subtasks in various states including blocked status.',
+        story:
+          'TaskEditor showing a task with multiple subtasks in various states including blocked status.',
       },
     },
   },
@@ -312,7 +322,8 @@ export const TaskWithChecklist: Story = {
         {
           id: 'check-5',
           title: 'Performance benchmarks met',
-          description: '**Core Web Vitals** scores:\n- LCP < 2.5s\n- FID < 100ms\n- CLS < 0.1',
+          description:
+            '**Core Web Vitals** scores:\n- LCP < 2.5s\n- FID < 100ms\n- CLS < 0.1',
           isCompleted: false,
           isRequired: true,
           order: 4,
@@ -339,14 +350,15 @@ export const TaskWithChecklist: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
     availableAssignees: mockAssignees,
   },
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor showing a task with a comprehensive checklist including required and optional items.',
+        story:
+          'TaskEditor showing a task with a comprehensive checklist including required and optional items.',
       },
     },
   },
@@ -360,14 +372,15 @@ export const TaskWithGherkinCriteria: Story = {
     task: mockExistingTask,
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
     availableAssignees: mockAssignees,
   },
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor with Gherkin-formatted acceptance criteria for BDD testing.',
+        story:
+          'TaskEditor with Gherkin-formatted acceptance criteria for BDD testing.',
       },
     },
     // Pre-configure with Gherkin format
@@ -408,8 +421,8 @@ export const TaskWithValidationErrors: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
     availableAssignees: mockAssignees,
   },
   parameters: {
@@ -446,14 +459,15 @@ export const CompletedTask: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.VIEW,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
     availableAssignees: mockAssignees,
   },
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor in view mode showing a completed task with all subtasks and checklist items done.',
+        story:
+          'TaskEditor in view mode showing a completed task with all subtasks and checklist items done.',
       },
     },
   },
@@ -516,14 +530,15 @@ export const UrgentTask: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
     availableAssignees: mockAssignees,
   },
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor showing a critical, high-priority task with urgent deadline.',
+        story:
+          'TaskEditor showing a critical, high-priority task with urgent deadline.',
       },
     },
   },
@@ -537,8 +552,8 @@ export const TaskWithAutoSave: Story = {
     task: mockExistingTask,
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
     availableAssignees: mockAssignees,
     autoSave: true,
     autoSaveDelay: 1000, // 1 second for demo
@@ -546,7 +561,8 @@ export const TaskWithAutoSave: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor with auto-save enabled, automatically saving changes after 1 second of inactivity.',
+        story:
+          'TaskEditor with auto-save enabled, automatically saving changes after 1 second of inactivity.',
       },
     },
   },
@@ -576,13 +592,14 @@ export const MinimalTask: Story = {
     },
     goalId: 'goal-1',
     mode: TaskEditorMode.EDIT,
-    onSave: action(),
-    onCancel: action(),
+    onSave: async () => action('onSave')(),
+    onCancel: action('onCancel'),
   },
   parameters: {
     docs: {
       description: {
-        story: 'TaskEditor with minimal task configuration showing only required fields.',
+        story:
+          'TaskEditor with minimal task configuration showing only required fields.',
       },
     },
   },
@@ -594,21 +611,22 @@ export const MinimalTask: Story = {
 export const LoadingState: Story = {
   args: {
     goalId: 'goal-1',
-    onSave: async () => {}
+    onSave: async () => {},
+    onCancel: () => {},
   },
   render: () => {
     // This would typically come from a loading hook or state
     return (
       <div className="p-4">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="h-8 w-1/4 rounded bg-gray-200"></div>
           <div className="space-y-2">
-            <div className="h-4 bg-gray-200 rounded w-full"></div>
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 w-full rounded bg-gray-200"></div>
+            <div className="h-4 w-3/4 rounded bg-gray-200"></div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="h-10 bg-gray-200 rounded"></div>
-            <div className="h-10 bg-gray-200 rounded"></div>
+            <div className="h-10 rounded bg-gray-200"></div>
+            <div className="h-10 rounded bg-gray-200"></div>
           </div>
         </div>
       </div>

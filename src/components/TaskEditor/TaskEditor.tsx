@@ -25,7 +25,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 // Component imports
@@ -55,7 +61,6 @@ import {
   debounce,
   generateId,
 } from './TaskEditor.utils';
-
 
 /**
  * TaskEditor Component
@@ -89,12 +94,15 @@ export function TaskEditor({
 
   // Subtasks and checklist state
   const [subtasks, setSubtasks] = useState<Subtask[]>(task?.subtasks || []);
-  const [checklist, setChecklist] = useState<ChecklistItem[]>(task?.checklist || []);
-  const [acceptanceCriteria, setAcceptanceCriteria] = useState<AcceptanceCriteriaData>({
-    format: AcceptanceCriteriaFormat.PLAIN_TEXT,
-    content: '',
-    isValid: true,
-  });
+  const [checklist, setChecklist] = useState<ChecklistItem[]>(
+    task?.checklist || []
+  );
+  const [acceptanceCriteria, setAcceptanceCriteria] =
+    useState<AcceptanceCriteriaData>({
+      format: AcceptanceCriteriaFormat.PLAIN_TEXT,
+      content: '',
+      isValid: true,
+    });
 
   // Form setup
   const {
@@ -107,15 +115,17 @@ export function TaskEditor({
     // reset,
   } = useForm<TaskFormData>({
     resolver: zodResolver(taskFormSchema),
-    defaultValues: task ? taskToFormData(task) : {
-      title: '',
-      description: '',
-      status: TaskStatus.TODO,
-      priority: GoalPriority.MEDIUM,
-      tags: [],
-      dependencies: [],
-      order: 0,
-    },
+    defaultValues: task
+      ? taskToFormData(task)
+      : {
+          title: '',
+          description: '',
+          status: TaskStatus.TODO,
+          priority: GoalPriority.MEDIUM,
+          tags: [],
+          dependencies: [],
+          order: 0,
+        },
     mode: 'onChange',
   });
 
@@ -126,16 +136,22 @@ export function TaskEditor({
   // =============================================================================
 
   const debouncedAutoSave = useMemo(
-    () => debounce(async () => {
-      if (autoSave && isDirty && currentMode === TaskEditorMode.EDIT && task) {
-        try {
-          await handleSave(true);
-        } catch {
-          // Auto-save failed - silently handle
-          toast.error('Auto-save failed');
+    () =>
+      debounce(async () => {
+        if (
+          autoSave &&
+          isDirty &&
+          currentMode === TaskEditorMode.EDIT &&
+          task
+        ) {
+          try {
+            await handleSave(true);
+          } catch {
+            // Auto-save failed - silently handle
+            toast.error('Auto-save failed');
+          }
         }
-      }
-    }, autoSaveDelay),
+      }, autoSaveDelay),
     [autoSave, isDirty, currentMode, task, autoSaveDelay]
   );
 
@@ -145,7 +161,11 @@ export function TaskEditor({
 
   // Track dirty state
   useEffect(() => {
-    setIsDirty(formIsDirty || subtasks !== task?.subtasks || checklist !== task?.checklist);
+    setIsDirty(
+      formIsDirty ||
+        subtasks !== task?.subtasks ||
+        checklist !== task?.checklist
+    );
   }, [formIsDirty, subtasks, checklist, task]);
 
   // Auto-save trigger
@@ -153,60 +173,73 @@ export function TaskEditor({
     if (isDirty && autoSave) {
       debouncedAutoSave();
     }
-  }, [watchedValues, subtasks, checklist, acceptanceCriteria, isDirty, autoSave, debouncedAutoSave]);
+  }, [
+    watchedValues,
+    subtasks,
+    checklist,
+    acceptanceCriteria,
+    isDirty,
+    autoSave,
+    debouncedAutoSave,
+  ]);
 
   // =============================================================================
   // Handlers
   // =============================================================================
 
-  const handleSave = useCallback(async (isAutoSave = false) => {
-    if (!isAutoSave) setIsSaving(true);
+  const handleSave = useCallback(
+    async (isAutoSave = false) => {
+      if (!isAutoSave) setIsSaving(true);
 
-    try {
-      const formData = getValues();
-      const validation = validateTaskForm(formData);
+      try {
+        const formData = getValues();
+        const validation = validateTaskForm(formData);
 
-      if (!validation.isValid) {
-        if (!isAutoSave) {
-          toast.error('Please fix validation errors before saving');
+        if (!validation.isValid) {
+          if (!isAutoSave) {
+            toast.error('Please fix validation errors before saving');
+          }
+          return;
         }
-        return;
-      }
 
-      // Create task object
-      const taskData: Partial<Task> = {
-        ...formDataToTask(formData, task),
-        goalId,
-        subtasks,
-        checklist,
-        progress: task ? calculateTaskProgress({ ...task, subtasks, checklist } as Task) : 0,
-        id: task?.id || generateId(),
-        createdAt: task?.createdAt || new Date(),
-        updatedAt: new Date(),
-        createdBy: task?.createdBy || 'current-user', // TODO: Get from auth
-        updatedBy: 'current-user', // TODO: Get from auth
-      };
+        // Create task object
+        const taskData: Partial<Task> = {
+          ...formDataToTask(formData, task),
+          goalId,
+          subtasks,
+          checklist,
+          progress: task
+            ? calculateTaskProgress({ ...task, subtasks, checklist } as Task)
+            : 0,
+          id: task?.id || generateId(),
+          createdAt: task?.createdAt || new Date(),
+          updatedAt: new Date(),
+          createdBy: task?.createdBy || 'current-user', // TODO: Get from auth
+          updatedBy: 'current-user', // TODO: Get from auth
+        };
 
-      await onSave(taskData as Task);
+        await onSave(taskData as Task);
 
-      if (!isAutoSave) {
-        toast.success('Task saved successfully');
-        setCurrentMode(TaskEditorMode.EDIT);
-      }
+        if (!isAutoSave) {
+          toast.success('Task saved successfully');
+          setCurrentMode(TaskEditorMode.EDIT);
+        }
 
-      setLastSaved(new Date());
-      setIsDirty(false);
-    } catch {
-      // Save failed - handle gracefully
-      if (!isAutoSave) {
-        toast.error('Failed to save task');
+        setLastSaved(new Date());
+        setIsDirty(false);
+      } catch {
+        // Save failed - handle gracefully
+        if (!isAutoSave) {
+          toast.error('Failed to save task');
+        }
+      } finally {
+        if (!isAutoSave) {
+          setIsSaving(false);
+        }
       }
-    } finally {
-      if (!isAutoSave) {
-        setIsSaving(false);
-      }
-    }
-  }, [getValues, task, goalId, subtasks, checklist, onSave]);
+    },
+    [getValues, task, goalId, subtasks, checklist, onSave]
+  );
 
   const handleCancel = useCallback(() => {
     if (isDirty) {
@@ -266,12 +299,16 @@ export function TaskEditor({
 
   const totalEstimatedHours = useMemo(() => {
     const mainTaskHours = watchedValues.estimatedHours || 0;
-    const subtaskHours = subtasks.reduce((sum, subtask) => sum + (subtask.estimatedHours || 0), 0);
+    const subtaskHours = subtasks.reduce(
+      (sum, subtask) => sum + (subtask.estimatedHours || 0),
+      0
+    );
     return mainTaskHours + subtaskHours;
   }, [watchedValues.estimatedHours, subtasks]);
 
   const completedSubtasks = useMemo(() => {
-    return subtasks.filter(subtask => subtask.status === TaskStatus.COMPLETED).length;
+    return subtasks.filter(subtask => subtask.status === TaskStatus.COMPLETED)
+      .length;
   }, [subtasks]);
 
   const completedChecklistItems = useMemo(() => {
@@ -295,7 +332,7 @@ export function TaskEditor({
         </CardTitle>
         <div className="flex items-center gap-2">
           {lastSaved && (
-            <span className="text-sm text-muted-foreground">
+            <span className="text-muted-foreground text-sm">
               Last saved: {format(lastSaved, 'HH:mm:ss')}
             </span>
           )}
@@ -312,7 +349,7 @@ export function TaskEditor({
         </div>
       </div>
       {task && (
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex items-center gap-4 text-sm">
           <div className="flex items-center gap-1">
             <CheckCircle className="h-4 w-4" />
             Progress: {currentProgress}%
@@ -352,7 +389,7 @@ export function TaskEditor({
           )}
         />
         {errors.title && (
-          <p className="text-sm text-destructive">{errors.title.message}</p>
+          <p className="text-destructive text-sm">{errors.title.message}</p>
         )}
       </div>
 
@@ -373,7 +410,9 @@ export function TaskEditor({
           )}
         />
         {errors.description && (
-          <p className="text-sm text-destructive">{errors.description.message}</p>
+          <p className="text-destructive text-sm">
+            {errors.description.message}
+          </p>
         )}
       </div>
 
@@ -390,10 +429,12 @@ export function TaskEditor({
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.values(TaskStatus).map((status) => (
+                  {Object.values(TaskStatus).map(status => (
                     <SelectItem key={status} value={status}>
                       <div className="flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${getStatusColor(status)}`} />
+                        <span
+                          className={`h-2 w-2 rounded-full ${getStatusColor(status)}`}
+                        />
                         {status.replace('_', ' ')}
                       </div>
                     </SelectItem>
@@ -416,10 +457,12 @@ export function TaskEditor({
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.values(GoalPriority).map((priority) => (
+                  {Object.values(GoalPriority).map(priority => (
                     <SelectItem key={priority} value={priority}>
                       <div className="flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${getPriorityColor(priority)}`} />
+                        <span
+                          className={`h-2 w-2 rounded-full ${getPriorityColor(priority)}`}
+                        />
                         {priority}
                       </div>
                     </SelectItem>
@@ -445,7 +488,7 @@ export function TaskEditor({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="unassigned">Unassigned</SelectItem>
-                  {availableAssignees.map((assignee) => (
+                  {availableAssignees.map(assignee => (
                     <SelectItem key={assignee.id} value={assignee.id}>
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4" />
@@ -474,13 +517,19 @@ export function TaskEditor({
                 min="0"
                 max="1000"
                 value={value || ''}
-                onChange={(e) => onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                onChange={e =>
+                  onChange(
+                    e.target.value ? parseFloat(e.target.value) : undefined
+                  )
+                }
                 placeholder="0"
               />
             )}
           />
           {errors.estimatedHours && (
-            <p className="text-sm text-destructive">{errors.estimatedHours.message}</p>
+            <p className="text-destructive text-sm">
+              {errors.estimatedHours.message}
+            </p>
           )}
         </div>
       </div>
@@ -498,12 +547,16 @@ export function TaskEditor({
                 id="dueDate"
                 type="datetime-local"
                 value={value ? format(value, "yyyy-MM-dd'T'HH:mm") : ''}
-                onChange={(e) => onChange(e.target.value ? new Date(e.target.value) : undefined)}
+                onChange={e =>
+                  onChange(
+                    e.target.value ? new Date(e.target.value) : undefined
+                  )
+                }
               />
             )}
           />
           {errors.dueDate && (
-            <p className="text-sm text-destructive">{errors.dueDate.message}</p>
+            <p className="text-destructive text-sm">{errors.dueDate.message}</p>
           )}
         </div>
 
@@ -519,7 +572,11 @@ export function TaskEditor({
                 id="startDate"
                 type="datetime-local"
                 value={value ? format(value, "yyyy-MM-dd'T'HH:mm") : ''}
-                onChange={(e) => onChange(e.target.value ? new Date(e.target.value) : undefined)}
+                onChange={e =>
+                  onChange(
+                    e.target.value ? new Date(e.target.value) : undefined
+                  )
+                }
               />
             )}
           />
@@ -532,7 +589,7 @@ export function TaskEditor({
           <Label>Progress</Label>
           <div className="space-y-2">
             <Progress value={currentProgress} className="w-full" />
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {currentProgress}% complete
             </p>
           </div>
@@ -545,26 +602,33 @@ export function TaskEditor({
     <div className="flex items-center justify-between pt-6">
       <div className="flex items-center gap-2">
         {isDirty && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2 text-sm">
             <AlertCircle className="h-4 w-4" />
             You have unsaved changes
           </div>
         )}
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" onClick={handleCancel} disabled={isSaving || isLoading}>
-          <X className="h-4 w-4 mr-2" />
+        <Button
+          variant="outline"
+          onClick={handleCancel}
+          disabled={isSaving || isLoading}
+        >
+          <X className="mr-2 h-4 w-4" />
           Cancel
         </Button>
-        <Button onClick={handleSubmit(() => handleSave())} disabled={isSaving || isLoading}>
+        <Button
+          onClick={handleSubmit(() => handleSave())}
+          disabled={isSaving || isLoading}
+        >
           {isSaving ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+              <div className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-white" />
               Saving...
             </>
           ) : (
             <>
-              <Save className="h-4 w-4 mr-2" />
+              <Save className="mr-2 h-4 w-4" />
               Save Task
             </>
           )}
@@ -581,7 +645,7 @@ export function TaskEditor({
     return (
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+          <div className="border-primary h-8 w-8 animate-spin rounded-full border-b-2" />
         </CardContent>
       </Card>
     );
@@ -600,20 +664,19 @@ export function TaskEditor({
             <TabsTrigger value="checklist">
               Checklist ({checklist.length})
             </TabsTrigger>
-            <TabsTrigger value="acceptance">
-              Acceptance Criteria
-            </TabsTrigger>
+            <TabsTrigger value="acceptance">Acceptance Criteria</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="details" className="space-y-6 mt-6">
+          <TabsContent value="details" className="mt-6 space-y-6">
             {renderBasicFields()}
           </TabsContent>
 
           <TabsContent value="subtasks" className="mt-6">
             <SubtaskList
               subtasks={subtasks}
+              taskId={task?.id || 'new-task'}
               onSubtasksChange={setSubtasks}
-              onSubtaskAdd={(subtask) => {
+              onSubtaskAdd={subtask => {
                 const newSubtask = {
                   ...subtask,
                   id: generateId(),
@@ -629,14 +692,18 @@ export function TaskEditor({
                 setSubtasks(prev => [...prev, newSubtask as Subtask]);
               }}
               onSubtaskUpdate={(subtaskId, changes) => {
-                setSubtasks(prev => prev.map(subtask =>
-                  subtask.id === subtaskId
-                    ? { ...subtask, ...changes, updatedAt: new Date() }
-                    : subtask
-                ));
+                setSubtasks(prev =>
+                  prev.map(subtask =>
+                    subtask.id === subtaskId
+                      ? { ...subtask, ...changes, updatedAt: new Date() }
+                      : subtask
+                  )
+                );
               }}
-              onSubtaskDelete={(subtaskId) => {
-                setSubtasks(prev => prev.filter(subtask => subtask.id !== subtaskId));
+              onSubtaskDelete={subtaskId => {
+                setSubtasks(prev =>
+                  prev.filter(subtask => subtask.id !== subtaskId)
+                );
               }}
               onSubtaskReorder={(fromIndex, toIndex) => {
                 setSubtasks(prev => {
@@ -658,7 +725,7 @@ export function TaskEditor({
             <ChecklistEditor
               checklist={checklist}
               onChecklistChange={setChecklist}
-              onItemAdd={(item) => {
+              onItemAdd={item => {
                 const newItem = {
                   ...item,
                   id: generateId(),
@@ -670,26 +737,32 @@ export function TaskEditor({
                 setChecklist(prev => [...prev, newItem as ChecklistItem]);
               }}
               onItemUpdate={(itemId, changes) => {
-                setChecklist(prev => prev.map(item =>
-                  item.id === itemId
-                    ? { ...item, ...changes, updatedAt: new Date() }
-                    : item
-                ));
+                setChecklist(prev =>
+                  prev.map(item =>
+                    item.id === itemId
+                      ? { ...item, ...changes, updatedAt: new Date() }
+                      : item
+                  )
+                );
               }}
-              onItemDelete={(itemId) => {
+              onItemDelete={itemId => {
                 setChecklist(prev => prev.filter(item => item.id !== itemId));
               }}
-              onItemToggle={(itemId) => {
-                setChecklist(prev => prev.map(item =>
-                  item.id === itemId
-                    ? {
-                        ...item,
-                        isCompleted: !item.isCompleted,
-                        completedAt: !item.isCompleted ? new Date() : undefined,
-                        updatedAt: new Date(),
-                      }
-                    : item
-                ));
+              onItemToggle={itemId => {
+                setChecklist(prev =>
+                  prev.map(item =>
+                    item.id === itemId
+                      ? {
+                          ...item,
+                          isCompleted: !item.isCompleted,
+                          completedAt: !item.isCompleted
+                            ? new Date()
+                            : undefined,
+                          updatedAt: new Date(),
+                        }
+                      : item
+                  )
+                );
               }}
               onItemReorder={(fromIndex, toIndex) => {
                 setChecklist(prev => {
@@ -724,7 +797,7 @@ export function TaskEditor({
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
               Please fix the following errors:
-              <ul className="list-disc list-inside mt-2">
+              <ul className="mt-2 list-inside list-disc">
                 {Object.entries(errors).map(([field, error]) => (
                   <li key={field} className="text-sm">
                     {field}: {error?.message}

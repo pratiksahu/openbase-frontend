@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 // Action utilities not available in Storybook 9
-const action = (name: string) => (...args: any[]) => console.log(name, ...args);
+const action = (_name: string) => (..._args: any[]) => {
+  // Action handler for Storybook events
+  // In a production environment, these would be replaced with actual action handlers
+};
 
 import type { ChecklistItem } from '@/types/smart-goals.types';
 
@@ -579,23 +582,23 @@ export const Interactive: Story = {
     checklist: basicChecklistItems.slice(0, 3), // Start with fewer items for demo
     onChecklistChange: action('onChecklistChange'),
     onItemAdd: (item) => {
-      console.log('Adding item:', item);
+      // Adding item: item
       action('onItemAdd')(item);
     },
     onItemUpdate: (id, changes) => {
-      console.log('Updating item:', id, changes);
+      // Updating item: id, changes
       action('onItemUpdate')(id, changes);
     },
     onItemDelete: (id) => {
-      console.log('Deleting item:', id);
+      // Deleting item: id
       action('onItemDelete')(id);
     },
     onItemToggle: (id) => {
-      console.log('Toggling item:', id);
+      // Toggling item: id
       action('onItemDelete')(id);
     },
     onItemReorder: (fromIndex, toIndex) => {
-      console.log('Reordering from', fromIndex, 'to', toIndex);
+      // Reordering from fromIndex to toIndex
       action('onItemReorder')(fromIndex, toIndex);
     },
     supportMarkdown: true,

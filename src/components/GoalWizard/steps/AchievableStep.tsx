@@ -28,7 +28,13 @@ import React, { useState, useMemo } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
@@ -50,10 +56,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Resource, RequiredSkill, Constraint } from '@/types/smart-goals.types';
 
-import {
-  AchievableStepProps,
-  AchievableStepData,
-} from '../GoalWizard.types';
+import { AchievableStepProps, AchievableStepData } from '../GoalWizard.types';
 
 // =============================================================================
 // Resource Categories
@@ -64,31 +67,56 @@ const RESOURCE_CATEGORIES = {
     name: 'Human Resources',
     icon: Users,
     color: 'text-blue-600',
-    examples: ['Team members', 'Contractors', 'Consultants', 'Subject matter experts'],
+    examples: [
+      'Team members',
+      'Contractors',
+      'Consultants',
+      'Subject matter experts',
+    ],
   },
   financial: {
     name: 'Financial Resources',
     icon: DollarSign,
     color: 'text-green-600',
-    examples: ['Budget allocation', 'Investment funds', 'Operating expenses', 'Emergency fund'],
+    examples: [
+      'Budget allocation',
+      'Investment funds',
+      'Operating expenses',
+      'Emergency fund',
+    ],
   },
   technical: {
     name: 'Technical Resources',
     icon: Wrench,
     color: 'text-purple-600',
-    examples: ['Software tools', 'Hardware equipment', 'Infrastructure', 'Technology stack'],
+    examples: [
+      'Software tools',
+      'Hardware equipment',
+      'Infrastructure',
+      'Technology stack',
+    ],
   },
   knowledge: {
     name: 'Knowledge & Information',
     icon: BookOpen,
     color: 'text-orange-600',
-    examples: ['Training materials', 'Documentation', 'Research data', 'Best practices'],
+    examples: [
+      'Training materials',
+      'Documentation',
+      'Research data',
+      'Best practices',
+    ],
   },
   time: {
     name: 'Time & Schedule',
     icon: Clock,
     color: 'text-red-600',
-    examples: ['Project timeline', 'Resource availability', 'Scheduling windows', 'Deadlines'],
+    examples: [
+      'Project timeline',
+      'Resource availability',
+      'Scheduling windows',
+      'Deadlines',
+    ],
   },
 };
 
@@ -97,13 +125,37 @@ const RESOURCE_CATEGORIES = {
 // =============================================================================
 
 const CONSTRAINT_TYPES = {
-  time: { name: 'Time Constraints', icon: Clock, color: 'bg-red-50 text-red-700' },
-  resource: { name: 'Resource Limitations', icon: DollarSign, color: 'bg-green-50 text-green-700' },
+  time: {
+    name: 'Time Constraints',
+    icon: Clock,
+    color: 'bg-red-50 text-red-700',
+  },
+  resource: {
+    name: 'Resource Limitations',
+    icon: DollarSign,
+    color: 'bg-green-50 text-green-700',
+  },
   skill: { name: 'Skill Gaps', icon: User, color: 'bg-blue-50 text-blue-700' },
-  external: { name: 'External Dependencies', icon: Users, color: 'bg-purple-50 text-purple-700' },
-  regulatory: { name: 'Regulatory/Compliance', icon: Shield, color: 'bg-yellow-50 text-yellow-700' },
-  technical: { name: 'Technical Limitations', icon: Wrench, color: 'bg-gray-50 text-gray-700' },
-  financial: { name: 'Budget Constraints', icon: Calculator, color: 'bg-orange-50 text-orange-700' },
+  external: {
+    name: 'External Dependencies',
+    icon: Users,
+    color: 'bg-purple-50 text-purple-700',
+  },
+  regulatory: {
+    name: 'Regulatory/Compliance',
+    icon: Shield,
+    color: 'bg-yellow-50 text-yellow-700',
+  },
+  technical: {
+    name: 'Technical Limitations',
+    icon: Wrench,
+    color: 'bg-gray-50 text-gray-700',
+  },
+  financial: {
+    name: 'Budget Constraints',
+    icon: Calculator,
+    color: 'bg-orange-50 text-orange-700',
+  },
 };
 
 // =============================================================================
@@ -125,7 +177,12 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (resource.name?.trim() && resource.type && resource.quantity && resource.unit) {
+    if (
+      resource.name?.trim() &&
+      resource.type &&
+      resource.quantity &&
+      resource.unit
+    ) {
       onAdd({
         id: `resource-${Date.now()}`,
         name: resource.name,
@@ -140,17 +197,18 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
     }
   };
 
-  const categoryInfo = RESOURCE_CATEGORIES[resource.type as keyof typeof RESOURCE_CATEGORIES];
-  const IconComponent = categoryInfo?.icon || User;
+  const categoryInfo =
+    RESOURCE_CATEGORIES[resource.type as keyof typeof RESOURCE_CATEGORIES];
+  categoryInfo?.icon || User;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <Label>Resource Name *</Label>
           <Input
             value={resource.name || ''}
-            onChange={(e) => setResource({ ...resource, name: e.target.value })}
+            onChange={e => setResource({ ...resource, name: e.target.value })}
             placeholder="Enter resource name"
             required
           />
@@ -160,7 +218,7 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
           <Label>Category *</Label>
           <Select
             value={resource.type}
-            onValueChange={(value) => setResource({ ...resource, type: value })}
+            onValueChange={value => setResource({ ...resource, type: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -186,7 +244,9 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
           <Input
             type="number"
             value={resource.quantity}
-            onChange={(e) => setResource({ ...resource, quantity: Number(e.target.value) })}
+            onChange={e =>
+              setResource({ ...resource, quantity: Number(e.target.value) })
+            }
             min="0"
             step="0.1"
             required
@@ -197,7 +257,7 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
           <Label>Unit *</Label>
           <Input
             value={resource.unit || ''}
-            onChange={(e) => setResource({ ...resource, unit: e.target.value })}
+            onChange={e => setResource({ ...resource, unit: e.target.value })}
             placeholder="e.g., hours, people, licenses"
             required
           />
@@ -208,7 +268,12 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
           <Input
             type="number"
             value={resource.acquisitionCost || ''}
-            onChange={(e) => setResource({ ...resource, acquisitionCost: Number(e.target.value) || undefined })}
+            onChange={e =>
+              setResource({
+                ...resource,
+                acquisitionCost: Number(e.target.value) || undefined,
+              })
+            }
             placeholder="Cost in $"
             min="0"
           />
@@ -219,7 +284,12 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
           <Input
             type="number"
             value={resource.acquisitionTime || ''}
-            onChange={(e) => setResource({ ...resource, acquisitionTime: Number(e.target.value) || undefined })}
+            onChange={e =>
+              setResource({
+                ...resource,
+                acquisitionTime: Number(e.target.value) || undefined,
+              })
+            }
             placeholder="Days needed"
             min="0"
           />
@@ -230,7 +300,9 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
         <Label>Description</Label>
         <Textarea
           value={resource.description || ''}
-          onChange={(e) => setResource({ ...resource, description: e.target.value })}
+          onChange={e =>
+            setResource({ ...resource, description: e.target.value })
+          }
           placeholder="Additional details about this resource..."
           rows={2}
         />
@@ -241,7 +313,9 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
           type="checkbox"
           id="isAvailable"
           checked={resource.isAvailable}
-          onChange={(e) => setResource({ ...resource, isAvailable: e.target.checked })}
+          onChange={e =>
+            setResource({ ...resource, isAvailable: e.target.checked })
+          }
           className="rounded"
         />
         <Label htmlFor="isAvailable">Resource is currently available</Label>
@@ -252,7 +326,7 @@ const ResourceForm: React.FC<ResourceFormProps> = ({ onAdd, onCancel }) => {
           Cancel
         </Button>
         <Button type="submit">
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Add Resource
         </Button>
       </div>
@@ -278,7 +352,11 @@ const SkillForm: React.FC<SkillFormProps> = ({ onAdd, onCancel }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (skill.name?.trim() && skill.requiredLevel && skill.currentLevel !== undefined) {
+    if (
+      skill.name?.trim() &&
+      skill.requiredLevel &&
+      skill.currentLevel !== undefined
+    ) {
       onAdd({
         id: `skill-${Date.now()}`,
         name: skill.name,
@@ -295,12 +373,12 @@ const SkillForm: React.FC<SkillFormProps> = ({ onAdd, onCancel }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <Label>Skill Name *</Label>
           <Input
             value={skill.name || ''}
-            onChange={(e) => setSkill({ ...skill, name: e.target.value })}
+            onChange={e => setSkill({ ...skill, name: e.target.value })}
             placeholder="e.g., Project Management, Python Programming"
             required
           />
@@ -311,7 +389,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onAdd, onCancel }) => {
             type="checkbox"
             id="isCritical"
             checked={skill.isCritical}
-            onChange={(e) => setSkill({ ...skill, isCritical: e.target.checked })}
+            onChange={e => setSkill({ ...skill, isCritical: e.target.checked })}
             className="rounded"
           />
           <Label htmlFor="isCritical">Critical for success</Label>
@@ -322,7 +400,9 @@ const SkillForm: React.FC<SkillFormProps> = ({ onAdd, onCancel }) => {
           <Input
             type="number"
             value={skill.requiredLevel}
-            onChange={(e) => setSkill({ ...skill, requiredLevel: Number(e.target.value) })}
+            onChange={e =>
+              setSkill({ ...skill, requiredLevel: Number(e.target.value) })
+            }
             min="1"
             max="10"
             required
@@ -334,7 +414,9 @@ const SkillForm: React.FC<SkillFormProps> = ({ onAdd, onCancel }) => {
           <Input
             type="number"
             value={skill.currentLevel}
-            onChange={(e) => setSkill({ ...skill, currentLevel: Number(e.target.value) })}
+            onChange={e =>
+              setSkill({ ...skill, currentLevel: Number(e.target.value) })
+            }
             min="1"
             max="10"
             required
@@ -346,7 +428,12 @@ const SkillForm: React.FC<SkillFormProps> = ({ onAdd, onCancel }) => {
           <Input
             type="number"
             value={skill.timeToAcquire || ''}
-            onChange={(e) => setSkill({ ...skill, timeToAcquire: Number(e.target.value) || undefined })}
+            onChange={e =>
+              setSkill({
+                ...skill,
+                timeToAcquire: Number(e.target.value) || undefined,
+              })
+            }
             placeholder="Weeks needed to reach required level"
             min="0"
           />
@@ -357,18 +444,21 @@ const SkillForm: React.FC<SkillFormProps> = ({ onAdd, onCancel }) => {
         <Label>Development Plan</Label>
         <Textarea
           value={skill.developmentPlan || ''}
-          onChange={(e) => setSkill({ ...skill, developmentPlan: e.target.value })}
+          onChange={e =>
+            setSkill({ ...skill, developmentPlan: e.target.value })
+          }
           placeholder="How will you develop this skill? (training, courses, mentoring, etc.)"
           rows={3}
         />
       </div>
 
       {skillGap > 0 && (
-        <div className="p-3 bg-yellow-50 dark:bg-yellow-950/30 rounded-lg border border-yellow-200 dark:border-yellow-800">
+        <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-3 dark:border-yellow-800 dark:bg-yellow-950/30">
           <div className="flex items-center space-x-2 text-yellow-700 dark:text-yellow-300">
             <AlertTriangle className="h-4 w-4" />
             <span className="text-sm font-medium">
-              Skill gap identified: {skillGap} point{skillGap > 1 ? 's' : ''} to reach required level
+              Skill gap identified: {skillGap} point{skillGap > 1 ? 's' : ''} to
+              reach required level
             </span>
           </div>
         </div>
@@ -379,7 +469,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onAdd, onCancel }) => {
           Cancel
         </Button>
         <Button type="submit">
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Add Skill
         </Button>
       </div>
@@ -420,7 +510,8 @@ const ConstraintForm: React.FC<ConstraintFormProps> = ({ onAdd, onCancel }) => {
     }
   };
 
-  const riskLevel = (constraint.impactLevel || 5) * (constraint.probability || 0.5);
+  const riskLevel =
+    (constraint.impactLevel || 5) * (constraint.probability || 0.5);
   const getRiskColor = () => {
     if (riskLevel >= 7) return 'text-red-600';
     if (riskLevel >= 4) return 'text-yellow-600';
@@ -433,19 +524,23 @@ const ConstraintForm: React.FC<ConstraintFormProps> = ({ onAdd, onCancel }) => {
         <Label>Constraint Description *</Label>
         <Textarea
           value={constraint.description || ''}
-          onChange={(e) => setConstraint({ ...constraint, description: e.target.value })}
+          onChange={e =>
+            setConstraint({ ...constraint, description: e.target.value })
+          }
           placeholder="Describe the constraint or obstacle..."
           rows={2}
           required
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="space-y-2">
           <Label>Type *</Label>
           <Select
             value={constraint.type}
-            onValueChange={(value: any) => setConstraint({ ...constraint, type: value })}
+            onValueChange={(value: any) =>
+              setConstraint({ ...constraint, type: value })
+            }
           >
             <SelectTrigger>
               <SelectValue />
@@ -471,7 +566,12 @@ const ConstraintForm: React.FC<ConstraintFormProps> = ({ onAdd, onCancel }) => {
           <Input
             type="number"
             value={constraint.impactLevel}
-            onChange={(e) => setConstraint({ ...constraint, impactLevel: Number(e.target.value) })}
+            onChange={e =>
+              setConstraint({
+                ...constraint,
+                impactLevel: Number(e.target.value),
+              })
+            }
             min="1"
             max="10"
             required
@@ -483,7 +583,12 @@ const ConstraintForm: React.FC<ConstraintFormProps> = ({ onAdd, onCancel }) => {
           <Input
             type="number"
             value={constraint.probability}
-            onChange={(e) => setConstraint({ ...constraint, probability: Number(e.target.value) })}
+            onChange={e =>
+              setConstraint({
+                ...constraint,
+                probability: Number(e.target.value),
+              })
+            }
             min="0"
             max="1"
             step="0.1"
@@ -492,7 +597,7 @@ const ConstraintForm: React.FC<ConstraintFormProps> = ({ onAdd, onCancel }) => {
         </div>
       </div>
 
-      <div className="p-3 bg-secondary rounded-lg">
+      <div className="bg-secondary rounded-lg p-3">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Risk Score</span>
           <span className={cn('text-sm font-bold', getRiskColor())}>
@@ -508,7 +613,9 @@ const ConstraintForm: React.FC<ConstraintFormProps> = ({ onAdd, onCancel }) => {
         <Label>Mitigation Strategy</Label>
         <Textarea
           value={constraint.mitigationStrategy || ''}
-          onChange={(e) => setConstraint({ ...constraint, mitigationStrategy: e.target.value })}
+          onChange={e =>
+            setConstraint({ ...constraint, mitigationStrategy: e.target.value })
+          }
           placeholder="How will you mitigate this constraint?"
           rows={2}
         />
@@ -518,7 +625,9 @@ const ConstraintForm: React.FC<ConstraintFormProps> = ({ onAdd, onCancel }) => {
         <Label>Contingency Plan</Label>
         <Textarea
           value={constraint.contingencyPlan || ''}
-          onChange={(e) => setConstraint({ ...constraint, contingencyPlan: e.target.value })}
+          onChange={e =>
+            setConstraint({ ...constraint, contingencyPlan: e.target.value })
+          }
           placeholder="What's your backup plan if mitigation fails?"
           rows={2}
         />
@@ -529,7 +638,7 @@ const ConstraintForm: React.FC<ConstraintFormProps> = ({ onAdd, onCancel }) => {
           Cancel
         </Button>
         <Button type="submit">
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Add Constraint
         </Button>
       </div>
@@ -565,7 +674,9 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
 
     // Resources assessment (0-30 points)
     maxScore += 30;
-    const availableResources = data.requiredResources.filter(r => r.isAvailable).length;
+    const availableResources = data.requiredResources.filter(
+      r => r.isAvailable
+    ).length;
     const totalResources = data.requiredResources.length;
     if (totalResources > 0) {
       score += (availableResources / totalResources) * 30;
@@ -575,10 +686,15 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
 
     // Skills assessment (0-30 points)
     maxScore += 30;
-    const skillGaps = data.requiredSkills.map(s => Math.max(0, s.requiredLevel - s.currentLevel));
-    const avgSkillGap = skillGaps.length > 0 ? skillGaps.reduce((a, b) => a + b, 0) / skillGaps.length : 0;
+    const skillGaps = data.requiredSkills.map(s =>
+      Math.max(0, s.requiredLevel - s.currentLevel)
+    );
+    const avgSkillGap =
+      skillGaps.length > 0
+        ? skillGaps.reduce((a, b) => a + b, 0) / skillGaps.length
+        : 0;
     if (skillGaps.length > 0) {
-      score += Math.max(0, 30 - (avgSkillGap * 3));
+      score += Math.max(0, 30 - avgSkillGap * 3);
     } else {
       score += 15; // Partial score if no skills identified
     }
@@ -586,12 +702,17 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
     // Risk assessment (0-20 points)
     maxScore += 20;
     const riskScores = data.constraints.map(c => c.impactLevel * c.probability);
-    const avgRisk = riskScores.length > 0 ? riskScores.reduce((a, b) => a + b, 0) / riskScores.length : 5;
-    score += Math.max(0, 20 - (avgRisk * 2));
+    const avgRisk =
+      riskScores.length > 0
+        ? riskScores.reduce((a, b) => a + b, 0) / riskScores.length
+        : 5;
+    score += Math.max(0, 20 - avgRisk * 2);
 
     // Risk mitigation (0-20 points)
     maxScore += 20;
-    const mitigatedConstraints = data.constraints.filter(c => c.mitigationStrategy?.trim()).length;
+    const mitigatedConstraints = data.constraints.filter(c =>
+      c.mitigationStrategy?.trim()
+    ).length;
     if (data.constraints.length > 0) {
       score += (mitigatedConstraints / data.constraints.length) * 20;
     } else {
@@ -619,9 +740,12 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
       <div className={cn('space-y-8', className)}>
         {/* Step Header */}
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold tracking-tight">Make it Achievable</h2>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Make it Achievable
+          </h2>
           <p className="text-muted-foreground">
-            Assess the feasibility of your goal by identifying resources, skills, and potential constraints.
+            Assess the feasibility of your goal by identifying resources,
+            skills, and potential constraints.
           </p>
         </div>
 
@@ -638,7 +762,10 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                   Based on your resources, skills, and risk analysis
                 </CardDescription>
               </div>
-              <Badge variant="outline" className={cn('text-lg px-3 py-1', getScoreColor())}>
+              <Badge
+                variant="outline"
+                className={cn('px-3 py-1 text-lg', getScoreColor())}
+              >
                 {achievabilityScore}%
               </Badge>
             </div>
@@ -652,11 +779,12 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                 </span>
               </div>
               <Progress value={achievabilityScore} className="h-2" />
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
                 <div>
                   <span className="text-muted-foreground">Resources:</span>
                   <div className="font-medium">
-                    {data.requiredResources.filter(r => r.isAvailable).length}/{data.requiredResources.length} Available
+                    {data.requiredResources.filter(r => r.isAvailable).length}/
+                    {data.requiredResources.length} Available
                   </div>
                 </div>
                 <div>
@@ -674,7 +802,8 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                 <div>
                   <span className="text-muted-foreground">Mitigated:</span>
                   <div className="font-medium">
-                    {data.constraints.filter(c => c.mitigationStrategy).length}/{data.constraints.length}
+                    {data.constraints.filter(c => c.mitigationStrategy).length}/
+                    {data.constraints.length}
                   </div>
                 </div>
               </div>
@@ -690,24 +819,29 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                 Required Resources
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="sm" className="h-auto p-0 ml-1">
-                      <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="ml-1 h-auto p-0"
+                    >
+                      <HelpCircle className="text-muted-foreground h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p className="max-w-xs">
-                      Identify all resources (people, budget, tools, time) needed to achieve your goal.
+                      Identify all resources (people, budget, tools, time)
+                      needed to achieve your goal.
                     </p>
                   </TooltipContent>
                 </Tooltip>
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 What resources do you need to achieve this goal?
               </p>
             </div>
             {!readOnly && (
               <Button onClick={() => setShowResourceForm(true)}>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className="mr-2 h-4 w-4" />
                 Add Resource
               </Button>
             )}
@@ -720,8 +854,11 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
               </CardHeader>
               <CardContent>
                 <ResourceForm
-                  onAdd={(resource) => {
-                    handleChange('requiredResources', [...data.requiredResources, resource]);
+                  onAdd={resource => {
+                    handleChange('requiredResources', [
+                      ...data.requiredResources,
+                      resource,
+                    ]);
                     setShowResourceForm(false);
                   }}
                   onCancel={() => setShowResourceForm(false)}
@@ -733,37 +870,50 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
           {data.requiredResources.length > 0 ? (
             <div className="space-y-3">
               {data.requiredResources.map((resource, index) => {
-                const categoryInfo = RESOURCE_CATEGORIES[resource.type as keyof typeof RESOURCE_CATEGORIES];
+                const categoryInfo =
+                  RESOURCE_CATEGORIES[
+                    resource.type as keyof typeof RESOURCE_CATEGORIES
+                  ];
                 const IconComponent = categoryInfo?.icon || User;
 
                 return (
                   <Card key={resource.id}>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
-                        <div className="flex items-start space-x-3 flex-1">
-                          <div className={cn('p-2 rounded-lg bg-secondary')}>
-                            <IconComponent className={cn('h-4 w-4', categoryInfo?.color)} />
+                        <div className="flex flex-1 items-start space-x-3">
+                          <div className={cn('bg-secondary rounded-lg p-2')}>
+                            <IconComponent
+                              className={cn('h-4 w-4', categoryInfo?.color)}
+                            />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center space-x-2">
                               <h4 className="font-medium">{resource.name}</h4>
                               <Badge
-                                variant={resource.isAvailable ? 'default' : 'destructive'}
+                                variant={
+                                  resource.isAvailable
+                                    ? 'default'
+                                    : 'destructive'
+                                }
                                 className="text-xs"
                               >
-                                {resource.isAvailable ? 'Available' : 'Not Available'}
+                                {resource.isAvailable
+                                  ? 'Available'
+                                  : 'Not Available'}
                               </Badge>
                               <Badge variant="outline" className="text-xs">
                                 {categoryInfo?.name || resource.type}
                               </Badge>
                             </div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className="text-muted-foreground text-sm">
                               Quantity: {resource.quantity} {resource.unit}
-                              {resource.acquisitionCost && ` • Cost: $${resource.acquisitionCost}`}
-                              {resource.acquisitionTime && ` • Time: ${resource.acquisitionTime} days`}
+                              {resource.acquisitionCost &&
+                                ` • Cost: $${resource.acquisitionCost}`}
+                              {resource.acquisitionTime &&
+                                ` • Time: ${resource.acquisitionTime} days`}
                             </div>
                             {resource.description && (
-                              <div className="text-sm text-muted-foreground mt-1">
+                              <div className="text-muted-foreground mt-1 text-sm">
                                 {resource.description}
                               </div>
                             )}
@@ -774,7 +924,10 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newResources = data.requiredResources.filter((_, i) => i !== index);
+                              const newResources =
+                                data.requiredResources.filter(
+                                  (_, i) => i !== index
+                                );
                               handleChange('requiredResources', newResources);
                             }}
                           >
@@ -788,10 +941,12 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
               })}
             </div>
           ) : (
-            <div className="p-6 text-center text-muted-foreground border-2 border-dashed rounded-lg">
-              <User className="h-8 w-8 mx-auto mb-2 opacity-50" />
+            <div className="text-muted-foreground rounded-lg border-2 border-dashed p-6 text-center">
+              <User className="mx-auto mb-2 h-8 w-8 opacity-50" />
               <p>No resources identified yet</p>
-              <p className="text-sm">Add resources needed to achieve your goal</p>
+              <p className="text-sm">
+                Add resources needed to achieve your goal
+              </p>
             </div>
           )}
         </div>
@@ -803,13 +958,13 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
           <div className="flex items-center justify-between">
             <div className="space-y-2">
               <Label className="text-base font-semibold">Required Skills</Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 What skills or competencies are needed for success?
               </p>
             </div>
             {!readOnly && (
               <Button onClick={() => setShowSkillForm(true)}>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className="mr-2 h-4 w-4" />
                 Add Skill
               </Button>
             )}
@@ -822,8 +977,11 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
               </CardHeader>
               <CardContent>
                 <SkillForm
-                  onAdd={(skill) => {
-                    handleChange('requiredSkills', [...data.requiredSkills, skill]);
+                  onAdd={skill => {
+                    handleChange('requiredSkills', [
+                      ...data.requiredSkills,
+                      skill,
+                    ]);
                     setShowSkillForm(false);
                   }}
                   onCancel={() => setShowSkillForm(false)}
@@ -836,14 +994,15 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
             <div className="space-y-3">
               {data.requiredSkills.map((skill, index) => {
                 const skillGap = skill.requiredLevel - skill.currentLevel;
-                const progressPercentage = (skill.currentLevel / skill.requiredLevel) * 100;
+                const progressPercentage =
+                  (skill.currentLevel / skill.requiredLevel) * 100;
 
                 return (
                   <Card key={skill.id}>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-2">
+                          <div className="mb-2 flex items-center space-x-2">
                             <h4 className="font-medium">{skill.name}</h4>
                             {skill.isCritical && (
                               <Badge variant="destructive" className="text-xs">
@@ -852,14 +1011,22 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                             )}
                           </div>
 
-                          <div className="grid grid-cols-2 gap-4 text-sm mb-3">
+                          <div className="mb-3 grid grid-cols-2 gap-4 text-sm">
                             <div>
-                              <span className="text-muted-foreground">Required Level:</span>
-                              <div className="font-medium">{skill.requiredLevel}/10</div>
+                              <span className="text-muted-foreground">
+                                Required Level:
+                              </span>
+                              <div className="font-medium">
+                                {skill.requiredLevel}/10
+                              </div>
                             </div>
                             <div>
-                              <span className="text-muted-foreground">Current Level:</span>
-                              <div className="font-medium">{skill.currentLevel}/10</div>
+                              <span className="text-muted-foreground">
+                                Current Level:
+                              </span>
+                              <div className="font-medium">
+                                {skill.currentLevel}/10
+                              </div>
                             </div>
                           </div>
 
@@ -868,19 +1035,24 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                               <span>Skill Progress</span>
                               <span>{Math.round(progressPercentage)}%</span>
                             </div>
-                            <Progress value={progressPercentage} className="h-2" />
+                            <Progress
+                              value={progressPercentage}
+                              className="h-2"
+                            />
                           </div>
 
                           {skillGap > 0 && (
-                            <div className="mt-2 p-2 bg-yellow-50 dark:bg-yellow-950/30 rounded text-xs text-yellow-700 dark:text-yellow-300">
+                            <div className="mt-2 rounded bg-yellow-50 p-2 text-xs text-yellow-700 dark:bg-yellow-950/30 dark:text-yellow-300">
                               Gap: {skillGap} point{skillGap > 1 ? 's' : ''}
-                              {skill.timeToAcquire && ` • Est. ${skill.timeToAcquire} weeks to develop`}
+                              {skill.timeToAcquire &&
+                                ` • Est. ${skill.timeToAcquire} weeks to develop`}
                             </div>
                           )}
 
                           {skill.developmentPlan && (
-                            <div className="mt-2 text-sm text-muted-foreground">
-                              <strong>Development Plan:</strong> {skill.developmentPlan}
+                            <div className="text-muted-foreground mt-2 text-sm">
+                              <strong>Development Plan:</strong>{' '}
+                              {skill.developmentPlan}
                             </div>
                           )}
                         </div>
@@ -889,7 +1061,9 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newSkills = data.requiredSkills.filter((_, i) => i !== index);
+                              const newSkills = data.requiredSkills.filter(
+                                (_, i) => i !== index
+                              );
                               handleChange('requiredSkills', newSkills);
                             }}
                           >
@@ -903,8 +1077,8 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
               })}
             </div>
           ) : (
-            <div className="p-6 text-center text-muted-foreground border-2 border-dashed rounded-lg">
-              <BookOpen className="h-8 w-8 mx-auto mb-2 opacity-50" />
+            <div className="text-muted-foreground rounded-lg border-2 border-dashed p-6 text-center">
+              <BookOpen className="mx-auto mb-2 h-8 w-8 opacity-50" />
               <p>No skills identified yet</p>
               <p className="text-sm">Add skills needed for success</p>
             </div>
@@ -917,14 +1091,16 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-2">
-              <Label className="text-base font-semibold">Constraints & Risks</Label>
-              <p className="text-sm text-muted-foreground">
+              <Label className="text-base font-semibold">
+                Constraints & Risks
+              </Label>
+              <p className="text-muted-foreground text-sm">
                 What obstacles or limitations might prevent success?
               </p>
             </div>
             {!readOnly && (
               <Button onClick={() => setShowConstraintForm(true)}>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className="mr-2 h-4 w-4" />
                 Add Constraint
               </Button>
             )}
@@ -937,8 +1113,11 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
               </CardHeader>
               <CardContent>
                 <ConstraintForm
-                  onAdd={(constraint) => {
-                    handleChange('constraints', [...data.constraints, constraint]);
+                  onAdd={constraint => {
+                    handleChange('constraints', [
+                      ...data.constraints,
+                      constraint,
+                    ]);
                     setShowConstraintForm(false);
                   }}
                   onCancel={() => setShowConstraintForm(false)}
@@ -950,44 +1129,64 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
           {data.constraints.length > 0 ? (
             <div className="space-y-3">
               {data.constraints.map((constraint, index) => {
-                const typeInfo = CONSTRAINT_TYPES[constraint.type as keyof typeof CONSTRAINT_TYPES];
+                const typeInfo =
+                  CONSTRAINT_TYPES[
+                    constraint.type as keyof typeof CONSTRAINT_TYPES
+                  ];
                 const IconComponent = typeInfo?.icon || AlertTriangle;
-                const riskScore = constraint.impactLevel * constraint.probability;
+                const riskScore =
+                  constraint.impactLevel * constraint.probability;
 
                 return (
                   <Card key={constraint.id}>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <IconComponent className="h-4 w-4 text-muted-foreground" />
-                            <Badge variant="outline" className={typeInfo?.color}>
+                          <div className="mb-2 flex items-center space-x-2">
+                            <IconComponent className="text-muted-foreground h-4 w-4" />
+                            <Badge
+                              variant="outline"
+                              className={typeInfo?.color}
+                            >
                               {typeInfo?.name}
                             </Badge>
                             <Badge
-                              variant={riskScore >= 7 ? 'destructive' : riskScore >= 4 ? 'secondary' : 'default'}
+                              variant={
+                                riskScore >= 7
+                                  ? 'destructive'
+                                  : riskScore >= 4
+                                    ? 'secondary'
+                                    : 'default'
+                              }
                               className="text-xs"
                             >
                               Risk: {riskScore.toFixed(1)}/10
                             </Badge>
                           </div>
 
-                          <p className="text-sm mb-2">{constraint.description}</p>
+                          <p className="mb-2 text-sm">
+                            {constraint.description}
+                          </p>
 
-                          <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground mb-2">
+                          <div className="text-muted-foreground mb-2 grid grid-cols-2 gap-4 text-xs">
                             <div>Impact: {constraint.impactLevel}/10</div>
-                            <div>Probability: {(constraint.probability * 100).toFixed(0)}%</div>
+                            <div>
+                              Probability:{' '}
+                              {(constraint.probability * 100).toFixed(0)}%
+                            </div>
                           </div>
 
                           {constraint.mitigationStrategy && (
-                            <div className="mt-2 p-2 bg-green-50 dark:bg-green-950/30 rounded text-xs">
-                              <strong>Mitigation:</strong> {constraint.mitigationStrategy}
+                            <div className="mt-2 rounded bg-green-50 p-2 text-xs dark:bg-green-950/30">
+                              <strong>Mitigation:</strong>{' '}
+                              {constraint.mitigationStrategy}
                             </div>
                           )}
 
                           {constraint.contingencyPlan && (
-                            <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-950/30 rounded text-xs">
-                              <strong>Contingency:</strong> {constraint.contingencyPlan}
+                            <div className="mt-2 rounded bg-blue-50 p-2 text-xs dark:bg-blue-950/30">
+                              <strong>Contingency:</strong>{' '}
+                              {constraint.contingencyPlan}
                             </div>
                           )}
                         </div>
@@ -996,7 +1195,9 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              const newConstraints = data.constraints.filter((_, i) => i !== index);
+                              const newConstraints = data.constraints.filter(
+                                (_, i) => i !== index
+                              );
                               handleChange('constraints', newConstraints);
                             }}
                           >
@@ -1010,10 +1211,12 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
               })}
             </div>
           ) : (
-            <div className="p-6 text-center text-muted-foreground border-2 border-dashed rounded-lg">
-              <Shield className="h-8 w-8 mx-auto mb-2 opacity-50" />
+            <div className="text-muted-foreground rounded-lg border-2 border-dashed p-6 text-center">
+              <Shield className="mx-auto mb-2 h-8 w-8 opacity-50" />
               <p>No constraints identified yet</p>
-              <p className="text-sm">Consider potential obstacles or limitations</p>
+              <p className="text-sm">
+                Consider potential obstacles or limitations
+              </p>
             </div>
           )}
         </div>
@@ -1023,23 +1226,24 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
           <Label className="text-base font-semibold">
             Overall Risk Assessment *
           </Label>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Provide a summary of the overall risk and feasibility assessment.
           </p>
 
           <Textarea
             value={data.riskAssessment}
-            onChange={(e) => handleChange('riskAssessment', e.target.value)}
+            onChange={e => handleChange('riskAssessment', e.target.value)}
             placeholder="Summarize the overall risk level, key challenges, and your confidence in achieving this goal..."
             rows={4}
             disabled={readOnly}
             className={cn(
-              errors.riskAssessment && 'border-destructive focus:ring-destructive'
+              errors.riskAssessment &&
+                'border-destructive focus:ring-destructive'
             )}
           />
 
           {errors.riskAssessment && (
-            <div className="text-sm text-destructive">
+            <div className="text-destructive text-sm">
               {errors.riskAssessment[0]}
             </div>
           )}
@@ -1047,8 +1251,10 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
 
         {/* Mitigation Strategies */}
         <div className="space-y-4">
-          <Label className="text-base font-semibold">Mitigation Strategies</Label>
-          <p className="text-sm text-muted-foreground">
+          <Label className="text-base font-semibold">
+            Mitigation Strategies
+          </Label>
+          <p className="text-muted-foreground text-sm">
             List general strategies to increase the likelihood of success.
           </p>
 
@@ -1056,7 +1262,7 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
             <div key={index} className="flex items-center space-x-2">
               <Input
                 value={strategy}
-                onChange={(e) => {
+                onChange={e => {
                   const newStrategies = [...data.mitigationStrategies];
                   newStrategies[index] = e.target.value;
                   handleChange('mitigationStrategies', newStrategies);
@@ -1069,7 +1275,9 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    const newStrategies = data.mitigationStrategies.filter((_, i) => i !== index);
+                    const newStrategies = data.mitigationStrategies.filter(
+                      (_, i) => i !== index
+                    );
                     handleChange('mitigationStrategies', newStrategies);
                   }}
                 >
@@ -1083,10 +1291,13 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
             <Button
               variant="outline"
               onClick={() => {
-                handleChange('mitigationStrategies', [...data.mitigationStrategies, '']);
+                handleChange('mitigationStrategies', [
+                  ...data.mitigationStrategies,
+                  '',
+                ]);
               }}
             >
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Strategy
             </Button>
           )}
@@ -1097,13 +1308,16 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
           <div className="space-y-4">
             {warnings && warnings.length > 0 && (
               <div className="space-y-2">
-                <div className="text-sm font-medium text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-amber-600 dark:text-amber-400">
                   <AlertTriangle className="h-4 w-4" />
                   Suggestions for improvement:
                 </div>
                 {warnings.map((warning, index) => (
-                  <div key={index} className="flex items-start space-x-2 text-sm text-amber-700 dark:text-amber-300">
-                    <div className="w-1 h-1 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
+                  <div
+                    key={index}
+                    className="flex items-start space-x-2 text-sm text-amber-700 dark:text-amber-300"
+                  >
+                    <div className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-amber-500" />
                     <span>{warning}</span>
                   </div>
                 ))}
@@ -1112,13 +1326,16 @@ export const AchievableStep: React.FC<AchievableStepProps> = ({
 
             {suggestions && suggestions.length > 0 && (
               <div className="space-y-2">
-                <div className="text-sm font-medium text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400">
                   <CheckCircle2 className="h-4 w-4" />
                   Additional suggestions:
                 </div>
                 {suggestions.map((suggestion, index) => (
-                  <div key={index} className="flex items-start space-x-2 text-sm text-blue-700 dark:text-blue-300">
-                    <div className="w-1 h-1 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                  <div
+                    key={index}
+                    className="flex items-start space-x-2 text-sm text-blue-700 dark:text-blue-300"
+                  >
+                    <div className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-blue-500" />
                     <span>{suggestion}</span>
                   </div>
                 ))}

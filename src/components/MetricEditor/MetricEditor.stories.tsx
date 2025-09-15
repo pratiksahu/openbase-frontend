@@ -8,20 +8,30 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { addDays, subDays } from 'date-fns';
 
 // Action utilities not available in Storybook 9
-const action = (name: string) => (...args: any[]) => console.log(name, ...args);
+const action =
+  (name: string) =>
+  (...args: any[]) => {
+    // Action handler for Storybook events
+    // In a production environment, these would be replaced with actual action handlers
+  };
 
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { MeasurableSpec, MetricCheckpoint, MetricType, Frequency } from '@/types/smart-goals.types';
+import {
+  MeasurableSpec,
+  MetricCheckpoint,
+  MetricType,
+  Frequency,
+} from '@/types/smart-goals.types';
 
 import { CheckpointTracker } from './CheckpointTracker';
 import { MetricChart } from './MetricChart';
 import { MetricEditor } from './MetricEditor';
+import { ExtendedMetricType, ChartType } from './MetricEditor.types';
 import {
-  ExtendedMetricType,
-  ChartType,
-} from './MetricEditor.types';
-import { MetricTypeSelector, MetricTypeGrid, MetricTypeCompact } from './MetricTypeSelector';
-
+  MetricTypeSelector,
+  MetricTypeGrid,
+  MetricTypeCompact,
+} from './MetricTypeSelector';
 
 // Sample data for stories
 const sampleMetric: MeasurableSpec = {
@@ -42,14 +52,15 @@ const generateSampleCheckpoints = (count: number = 8): MetricCheckpoint[] => {
   const baseDate = subDays(new Date(), count * 7); // Start from 8 weeks ago
 
   for (let i = 0; i < count; i++) {
-    const value = 45 + (i * 4) + Math.random() * 5; // Trending upward with some variance
+    const value = 45 + i * 4 + Math.random() * 5; // Trending upward with some variance
 
     checkpoints.push({
       id: `checkpoint-${i}`,
       goalId: 'sample-goal-id',
       value,
       recordedDate: addDays(baseDate, i * 7),
-      note: i % 3 === 0 ? `Week ${i + 1} - Quarterly review completed` : undefined,
+      note:
+        i % 3 === 0 ? `Week ${i + 1} - Quarterly review completed` : undefined,
       isAutomatic: i % 4 === 0,
       source: i % 2 === 0 ? 'Analytics Dashboard' : 'Manual Entry',
       confidence: 0.7 + Math.random() * 0.3, // High confidence
@@ -73,16 +84,17 @@ const meta: Meta<typeof MetricEditor> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A comprehensive metric editor for creating and managing measurable specifications with progress tracking.',
+        component:
+          'A comprehensive metric editor for creating and managing measurable specifications with progress tracking.',
       },
     },
   },
   decorators: [
-    (Story) => (
+    Story => (
       <TooltipProvider>
-        <div className="min-h-screen bg-background">
+        <div className="bg-background min-h-screen">
           <div className="container mx-auto py-8">
-            <div className="max-w-6xl mx-auto">
+            <div className="mx-auto max-w-6xl">
               <Story />
             </div>
           </div>
@@ -137,7 +149,7 @@ export const WithFullProgress: Story = {
 
 // MetricTypeSelector Stories
 export const TypeSelector: StoryObj<typeof MetricTypeSelector> = {
-  render: (args) => <MetricTypeSelector {...args} />,
+  render: args => <MetricTypeSelector {...args} />,
   args: {
     value: ExtendedMetricType.PERCENTAGE,
     onChange: action('type-changed'),
@@ -145,7 +157,7 @@ export const TypeSelector: StoryObj<typeof MetricTypeSelector> = {
 };
 
 export const TypeSelectorGrid: StoryObj<typeof MetricTypeGrid> = {
-  render: (args) => <MetricTypeGrid {...args} />,
+  render: args => <MetricTypeGrid {...args} />,
   args: {
     value: ExtendedMetricType.CURRENCY,
     onChange: action('type-changed'),
@@ -153,7 +165,7 @@ export const TypeSelectorGrid: StoryObj<typeof MetricTypeGrid> = {
 };
 
 export const TypeSelectorCompact: StoryObj<typeof MetricTypeCompact> = {
-  render: (args) => <MetricTypeCompact {...args} />,
+  render: args => <MetricTypeCompact {...args} />,
   args: {
     value: ExtendedMetricType.RATING,
     onChange: action('type-changed'),
@@ -161,7 +173,7 @@ export const TypeSelectorCompact: StoryObj<typeof MetricTypeCompact> = {
 };
 
 export const TypeSelectorDisabled: StoryObj<typeof MetricTypeSelector> = {
-  render: (args) => <MetricTypeSelector {...args} />,
+  render: args => <MetricTypeSelector {...args} />,
   args: {
     value: ExtendedMetricType.DURATION,
     onChange: action('type-changed'),
@@ -171,7 +183,7 @@ export const TypeSelectorDisabled: StoryObj<typeof MetricTypeSelector> = {
 
 // CheckpointTracker Stories
 export const CheckpointTrackerEmpty: StoryObj<typeof CheckpointTracker> = {
-  render: (args) => <CheckpointTracker {...args} />,
+  render: args => <CheckpointTracker {...args} />,
   args: {
     checkpoints: [],
     metric: sampleMetric,
@@ -180,7 +192,7 @@ export const CheckpointTrackerEmpty: StoryObj<typeof CheckpointTracker> = {
 };
 
 export const CheckpointTrackerWithData: StoryObj<typeof CheckpointTracker> = {
-  render: (args) => <CheckpointTracker {...args} />,
+  render: args => <CheckpointTracker {...args} />,
   args: {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
@@ -189,7 +201,7 @@ export const CheckpointTrackerWithData: StoryObj<typeof CheckpointTracker> = {
 };
 
 export const CheckpointTrackerReadOnly: StoryObj<typeof CheckpointTracker> = {
-  render: (args) => <CheckpointTracker {...args} />,
+  render: args => <CheckpointTracker {...args} />,
   args: {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
@@ -200,7 +212,7 @@ export const CheckpointTrackerReadOnly: StoryObj<typeof CheckpointTracker> = {
 
 // MetricChart Stories
 export const ChartLineChart: StoryObj<typeof MetricChart> = {
-  render: (args) => <MetricChart {...args} />,
+  render: args => <MetricChart {...args} />,
   args: {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
@@ -212,7 +224,7 @@ export const ChartLineChart: StoryObj<typeof MetricChart> = {
 };
 
 export const ChartAreaChart: StoryObj<typeof MetricChart> = {
-  render: (args) => <MetricChart {...args} />,
+  render: args => <MetricChart {...args} />,
   args: {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
@@ -224,7 +236,7 @@ export const ChartAreaChart: StoryObj<typeof MetricChart> = {
 };
 
 export const ChartBarChart: StoryObj<typeof MetricChart> = {
-  render: (args) => <MetricChart {...args} />,
+  render: args => <MetricChart {...args} />,
   args: {
     checkpoints: sampleCheckpoints,
     metric: sampleMetric,
@@ -235,7 +247,7 @@ export const ChartBarChart: StoryObj<typeof MetricChart> = {
 };
 
 export const ChartNoData: StoryObj<typeof MetricChart> = {
-  render: (args) => <MetricChart {...args} />,
+  render: args => <MetricChart {...args} />,
   args: {
     checkpoints: [],
     metric: sampleMetric,
@@ -245,7 +257,7 @@ export const ChartNoData: StoryObj<typeof MetricChart> = {
 };
 
 export const ChartLargeDataset: StoryObj<typeof MetricChart> = {
-  render: (args) => <MetricChart {...args} />,
+  render: args => <MetricChart {...args} />,
   args: {
     checkpoints: generateSampleCheckpoints(20),
     metric: sampleMetric,
@@ -294,7 +306,7 @@ export const DurationMetric: Story = {
     } as MeasurableSpec,
     initialCheckpoints: generateSampleCheckpoints(10).map(cp => ({
       ...cp,
-      value: 5 - (cp.value / 20), // Decreasing trend
+      value: 5 - cp.value / 20, // Decreasing trend
     })),
     onSave: action('onSave'),
     onCancel: action('onCancel'),
@@ -315,7 +327,7 @@ export const BooleanMetric: Story = {
       calculationMethod: 'System uptime check',
       dataSource: 'Monitoring dashboard',
     } as MeasurableSpec,
-    initialCheckpoints: generateSampleCheckpoints(14).map((cp, index) => ({
+    initialCheckpoints: generateSampleCheckpoints(14).map((cp, _index) => ({
       ...cp,
       value: Math.random() > 0.1 ? 1 : 0, // 90% uptime
     })),
@@ -340,7 +352,10 @@ export const MetricWithVariedConfidence: Story = {
     initialCheckpoints: sampleCheckpoints.map((cp, index) => ({
       ...cp,
       confidence: [0.3, 0.6, 0.8, 0.95][index % 4], // Vary confidence levels
-      note: index % 3 === 0 ? `Checkpoint ${index + 1} with detailed notes about the measurement context and any relevant observations.` : undefined,
+      note:
+        index % 3 === 0
+          ? `Checkpoint ${index + 1} with detailed notes about the measurement context and any relevant observations.`
+          : undefined,
     })),
     onSave: action('onSave'),
     onCancel: action('onCancel'),
@@ -368,20 +383,23 @@ export const MetricCompleted: Story = {
       ...sampleMetric,
       currentValue: 88, // Above target
     },
-    initialCheckpoints: [...sampleCheckpoints, {
-      id: 'final-checkpoint',
-      goalId: 'sample-goal-id',
-      value: 88,
-      recordedDate: new Date(),
-      note: 'Target achieved! 🎉',
-      isAutomatic: false,
-      source: 'Final Review',
-      confidence: 0.95,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      createdBy: 'john.doe@example.com',
-      updatedBy: 'john.doe@example.com',
-    }],
+    initialCheckpoints: [
+      ...sampleCheckpoints,
+      {
+        id: 'final-checkpoint',
+        goalId: 'sample-goal-id',
+        value: 88,
+        recordedDate: new Date(),
+        note: 'Target achieved! 🎉',
+        isAutomatic: false,
+        source: 'Final Review',
+        confidence: 0.95,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        createdBy: 'john.doe@example.com',
+        updatedBy: 'john.doe@example.com',
+      },
+    ],
     onSave: action('onSave'),
     onCancel: action('onCancel'),
   },

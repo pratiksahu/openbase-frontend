@@ -19,7 +19,7 @@ import {
   Archive,
   Edit,
   Trash2,
-  Copy
+  Copy,
 } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState, useMemo } from 'react';
@@ -45,7 +45,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { mockGoals } from '@/lib/mock-data/smart-goals';
-import type { SmartGoal, GoalStatus, GoalPriority } from '@/types/smart-goals.types';
+import type {
+  SmartGoal,
+  GoalStatus,
+  GoalPriority,
+} from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types and Interfaces
@@ -88,28 +92,30 @@ const getStatusColor = (status: GoalStatus): string => {
   }
 };
 
-const getPriorityColor = (priority: GoalPriority): string => {
-  switch (priority) {
-    case 'critical':
-      return 'text-red-600 dark:text-red-400';
-    case 'high':
-      return 'text-orange-600 dark:text-orange-400';
-    case 'medium':
-      return 'text-yellow-600 dark:text-yellow-400';
-    case 'low':
-      return 'text-green-600 dark:text-green-400';
-    default:
-      return 'text-gray-600 dark:text-gray-400';
-  }
-};
+// Removed unused getPriorityColor function
+// const getPriorityColor = (priority: GoalPriority): string => {
+//   switch (priority) {
+//     case 'critical':
+//       return 'text-red-600 dark:text-red-400';
+//     case 'high':
+//       return 'text-orange-600 dark:text-orange-400';
+//     case 'medium':
+//       return 'text-yellow-600 dark:text-yellow-400';
+//     case 'low':
+//       return 'text-green-600 dark:text-green-400';
+//     default:
+//       return 'text-gray-600 dark:text-gray-400';
+//   }
+// };
 
-const formatDate = (date: Date): string => {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(date);
-};
+// Removed unused formatDate function
+// const formatDate = (date: Date): string => {
+//   return new Intl.DateTimeFormat('en-US', {
+//     month: 'short',
+//     day: 'numeric',
+//     year: 'numeric',
+//   }).format(date);
+// };
 
 const getDaysRemaining = (targetDate: Date): number => {
   const today = new Date();
@@ -137,27 +143,27 @@ const GoalCard: React.FC<GoalCardProps> = ({
   onEdit,
   onClone,
   onArchive,
-  onDelete
+  onDelete,
 }) => {
   const daysRemaining = getDaysRemaining(goal.timebound.targetDate);
   const isOverdue = daysRemaining < 0;
 
   if (viewMode === 'list') {
     return (
-      <Card className="hover:shadow-md transition-shadow">
+      <Card className="transition-shadow hover:shadow-md">
         <CardContent className="p-4">
           <div className="flex items-center justify-between space-x-4">
             {/* Goal Info */}
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="flex items-start space-x-3">
                 <div className="flex-1">
                   <Link
                     href={`/goals/${goal.id}`}
-                    className="text-lg font-semibold hover:text-primary line-clamp-1"
+                    className="hover:text-primary line-clamp-1 text-lg font-semibold"
                   >
                     {goal.title}
                   </Link>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                  <p className="text-muted-foreground mt-1 line-clamp-2 text-sm">
                     {goal.description}
                   </p>
                 </div>
@@ -168,8 +174,10 @@ const GoalCard: React.FC<GoalCardProps> = ({
             <div className="flex items-center space-x-4">
               {/* Progress */}
               <div className="min-w-[120px]">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-muted-foreground">Progress</span>
+                <div className="mb-1 flex items-center justify-between">
+                  <span className="text-muted-foreground text-xs">
+                    Progress
+                  </span>
                   <span className="text-xs font-medium">{goal.progress}%</span>
                 </div>
                 <Progress value={goal.progress} className="h-2" />
@@ -184,17 +192,25 @@ const GoalCard: React.FC<GoalCardProps> = ({
               </Badge>
 
               {/* Due Date */}
-              <div className="text-right min-w-[80px]">
-                <div className="text-xs text-muted-foreground">Due</div>
-                <div className={`text-sm font-medium ${isOverdue ? 'text-red-600' : ''}`}>
-                  {isOverdue ? `${Math.abs(daysRemaining)}d ago` : `${daysRemaining}d`}
+              <div className="min-w-[80px] text-right">
+                <div className="text-muted-foreground text-xs">Due</div>
+                <div
+                  className={`text-sm font-medium ${isOverdue ? 'text-red-600' : ''}`}
+                >
+                  {isOverdue
+                    ? `${Math.abs(daysRemaining)}d ago`
+                    : `${daysRemaining}d`}
                 </div>
               </div>
 
               {/* Owner */}
               <Avatar className="h-8 w-8">
-                <AvatarImage src={`https://api.dicebear.com/7.x/avatars/svg?seed=${goal.ownerId}`} />
-                <AvatarFallback>{goal.ownerId.slice(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarImage
+                  src={`https://api.dicebear.com/7.x/avatars/svg?seed=${goal.ownerId}`}
+                />
+                <AvatarFallback>
+                  {goal.ownerId.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
 
               {/* Actions */}
@@ -207,28 +223,28 @@ const GoalCard: React.FC<GoalCardProps> = ({
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem asChild>
                     <Link href={`/goals/${goal.id}`}>
-                      <Eye className="h-4 w-4 mr-2" />
+                      <Eye className="mr-2 h-4 w-4" />
                       View
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => onEdit?.(goal)}>
-                    <Edit className="h-4 w-4 mr-2" />
+                    <Edit className="mr-2 h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => onClone?.(goal)}>
-                    <Copy className="h-4 w-4 mr-2" />
+                    <Copy className="mr-2 h-4 w-4" />
                     Clone
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => onArchive?.(goal)}>
-                    <Archive className="h-4 w-4 mr-2" />
+                    <Archive className="mr-2 h-4 w-4" />
                     Archive
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => onDelete?.(goal)}
                     className="text-red-600"
                   >
-                    <Trash2 className="h-4 w-4 mr-2" />
+                    <Trash2 className="mr-2 h-4 w-4" />
                     Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -242,17 +258,20 @@ const GoalCard: React.FC<GoalCardProps> = ({
 
   // Grid view
   return (
-    <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+    <Card className="group cursor-pointer transition-shadow hover:shadow-lg">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <Link href={`/goals/${goal.id}`}>
-              <h3 className="font-semibold group-hover:text-primary line-clamp-2">
+              <h3 className="group-hover:text-primary line-clamp-2 font-semibold">
                 {goal.title}
               </h3>
             </Link>
-            <div className="flex items-center space-x-2 mt-2">
-              <Badge className={getStatusColor(goal.status)} variant="secondary">
+            <div className="mt-2 flex items-center space-x-2">
+              <Badge
+                className={getStatusColor(goal.status)}
+                variant="secondary"
+              >
                 {goal.status.replace('_', ' ')}
               </Badge>
               <SmartScoreBadge goal={goal} size="sm" />
@@ -261,35 +280,39 @@ const GoalCard: React.FC<GoalCardProps> = ({
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="opacity-0 group-hover:opacity-100"
+              >
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem asChild>
                 <Link href={`/goals/${goal.id}`}>
-                  <Eye className="h-4 w-4 mr-2" />
+                  <Eye className="mr-2 h-4 w-4" />
                   View
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onEdit?.(goal)}>
-                <Edit className="h-4 w-4 mr-2" />
+                <Edit className="mr-2 h-4 w-4" />
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onClone?.(goal)}>
-                <Copy className="h-4 w-4 mr-2" />
+                <Copy className="mr-2 h-4 w-4" />
                 Clone
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => onArchive?.(goal)}>
-                <Archive className="h-4 w-4 mr-2" />
+                <Archive className="mr-2 h-4 w-4" />
                 Archive
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => onDelete?.(goal)}
                 className="text-red-600"
               >
-                <Trash2 className="h-4 w-4 mr-2" />
+                <Trash2 className="mr-2 h-4 w-4" />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -298,12 +321,12 @@ const GoalCard: React.FC<GoalCardProps> = ({
       </CardHeader>
 
       <CardContent className="pt-0">
-        <p className="text-sm text-muted-foreground line-clamp-3 mb-4">
+        <p className="text-muted-foreground mb-4 line-clamp-3 text-sm">
           {goal.description}
         </p>
 
         {/* Progress */}
-        <div className="space-y-2 mb-4">
+        <div className="mb-4 space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Progress</span>
             <span className="font-medium">{goal.progress}%</span>
@@ -312,11 +335,13 @@ const GoalCard: React.FC<GoalCardProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="text-muted-foreground flex items-center justify-between text-xs">
           <div className="flex items-center space-x-1">
             <Calendar className="h-3 w-3" />
-            <span className={isOverdue ? 'text-red-600 font-medium' : ''}>
-              {isOverdue ? `${Math.abs(daysRemaining)} days overdue` : `${daysRemaining} days left`}
+            <span className={isOverdue ? 'font-medium text-red-600' : ''}>
+              {isOverdue
+                ? `${Math.abs(daysRemaining)} days overdue`
+                : `${daysRemaining} days left`}
             </span>
           </div>
 
@@ -328,8 +353,12 @@ const GoalCard: React.FC<GoalCardProps> = ({
               </div>
             )}
             <Avatar className="h-5 w-5">
-              <AvatarImage src={`https://api.dicebear.com/7.x/avatars/svg?seed=${goal.ownerId}`} />
-              <AvatarFallback className="text-xs">{goal.ownerId.slice(0, 2).toUpperCase()}</AvatarFallback>
+              <AvatarImage
+                src={`https://api.dicebear.com/7.x/avatars/svg?seed=${goal.ownerId}`}
+              />
+              <AvatarFallback className="text-xs">
+                {goal.ownerId.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
           </div>
         </div>
@@ -345,19 +374,18 @@ const GoalCard: React.FC<GoalCardProps> = ({
 const EmptyState: React.FC<{ hasFilters: boolean }> = ({ hasFilters }) => {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
-      <Target className="h-12 w-12 text-muted-foreground/50 mb-4" />
-      <h3 className="text-lg font-semibold mb-2">
+      <Target className="text-muted-foreground/50 mb-4 h-12 w-12" />
+      <h3 className="mb-2 text-lg font-semibold">
         {hasFilters ? 'No goals found' : 'No goals yet'}
       </h3>
       <p className="text-muted-foreground mb-6 max-w-sm">
         {hasFilters
           ? 'Try adjusting your filters to see more goals.'
-          : 'Create your first SMART goal to get started on your journey to success.'
-        }
+          : 'Create your first SMART goal to get started on your journey to success.'}
       </p>
       <Button asChild>
         <Link href="/goals/new">
-          <Plus className="h-4 w-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Create Your First Goal
         </Link>
       </Button>
@@ -371,9 +399,16 @@ const EmptyState: React.FC<{ hasFilters: boolean }> = ({ hasFilters }) => {
 
 export default function GoalsPage() {
   const [goals] = useState<SmartGoal[]>(mockGoals);
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
-  const [filters, setFilters] = useState<GoalFilters>({});
-  const [sort, setSort] = useState<GoalSort>({ field: 'updatedAt', direction: 'desc' });
+  // viewMode and setViewMode are not currently used - kept for future implementation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [viewMode, _setViewMode] = useState<ViewMode>('grid');
+  // filters and setFilters are not currently used - kept for future implementation
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [filters, _setFilters] = useState<GoalFilters>({});
+  const [sort, setSort] = useState<GoalSort>({
+    field: 'updatedAt',
+    direction: 'desc',
+  });
 
   // Filter and sort goals
   const filteredGoals = useMemo(() => {
@@ -384,7 +419,10 @@ export default function GoalsPage() {
       }
 
       // Priority filter
-      if (filters.priority?.length && !filters.priority.includes(goal.priority)) {
+      if (
+        filters.priority?.length &&
+        !filters.priority.includes(goal.priority)
+      ) {
         return false;
       }
 
@@ -421,24 +459,24 @@ export default function GoalsPage() {
     return filtered;
   }, [goals, filters, sort]);
 
-  const handleGoalEdit = (goal: SmartGoal) => {
+  const handleGoalEdit = (_goal: SmartGoal) => {
     // TODO: Navigate to edit page
-    console.log('Edit goal:', goal.id);
+    // Will implement navigation when edit page is ready
   };
 
-  const handleGoalClone = (goal: SmartGoal) => {
+  const handleGoalClone = (_goal: SmartGoal) => {
     // TODO: Clone goal
-    console.log('Clone goal:', goal.id);
+    // Will implement cloning functionality
   };
 
-  const handleGoalArchive = (goal: SmartGoal) => {
+  const handleGoalArchive = (_goal: SmartGoal) => {
     // TODO: Archive goal
-    console.log('Archive goal:', goal.id);
+    // Will implement archiving functionality
   };
 
-  const handleGoalDelete = (goal: SmartGoal) => {
+  const handleGoalDelete = (_goal: SmartGoal) => {
     // TODO: Delete goal
-    console.log('Delete goal:', goal.id);
+    // Will implement deletion functionality
   };
 
   const hasFilters = Object.values(filters).some(value =>
@@ -448,14 +486,14 @@ export default function GoalsPage() {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center space-x-2">
               <Target className="h-5 w-5 text-blue-600" />
               <div>
                 <div className="text-2xl font-bold">{goals.length}</div>
-                <div className="text-xs text-muted-foreground">Total Goals</div>
+                <div className="text-muted-foreground text-xs">Total Goals</div>
               </div>
             </div>
           </CardContent>
@@ -469,7 +507,9 @@ export default function GoalsPage() {
                 <div className="text-2xl font-bold">
                   {goals.filter(g => g.status === 'active').length}
                 </div>
-                <div className="text-xs text-muted-foreground">Active Goals</div>
+                <div className="text-muted-foreground text-xs">
+                  Active Goals
+                </div>
               </div>
             </div>
           </CardContent>
@@ -481,9 +521,13 @@ export default function GoalsPage() {
               <Clock className="h-5 w-5 text-orange-600" />
               <div>
                 <div className="text-2xl font-bold">
-                  {goals.filter(g => getDaysRemaining(g.timebound.targetDate) < 0).length}
+                  {
+                    goals.filter(
+                      g => getDaysRemaining(g.timebound.targetDate) < 0
+                    ).length
+                  }
                 </div>
-                <div className="text-xs text-muted-foreground">Overdue</div>
+                <div className="text-muted-foreground text-xs">Overdue</div>
               </div>
             </div>
           </CardContent>
@@ -495,9 +539,15 @@ export default function GoalsPage() {
               <Users className="h-5 w-5 text-purple-600" />
               <div>
                 <div className="text-2xl font-bold">
-                  {Math.round(goals.reduce((acc, goal) => acc + goal.progress, 0) / goals.length) || 0}%
+                  {Math.round(
+                    goals.reduce((acc, goal) => acc + goal.progress, 0) /
+                      goals.length
+                  ) || 0}
+                  %
                 </div>
-                <div className="text-xs text-muted-foreground">Avg Progress</div>
+                <div className="text-muted-foreground text-xs">
+                  Avg Progress
+                </div>
               </div>
             </div>
           </CardContent>
@@ -506,7 +556,11 @@ export default function GoalsPage() {
 
       {/* Filters and Sort */}
       <div className="flex items-center space-x-4">
-        <Select onValueChange={(value) => setSort({ ...sort, field: value as any })}>
+        <Select
+          onValueChange={value =>
+            setSort({ ...sort, field: value as GoalSort['field'] })
+          }
+        >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Sort by..." />
           </SelectTrigger>
@@ -522,7 +576,12 @@ export default function GoalsPage() {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setSort({ ...sort, direction: sort.direction === 'asc' ? 'desc' : 'asc' })}
+          onClick={() =>
+            setSort({
+              ...sort,
+              direction: sort.direction === 'asc' ? 'desc' : 'asc',
+            })
+          }
         >
           {sort.direction === 'asc' ? '↑' : '↓'}
         </Button>
@@ -532,12 +591,14 @@ export default function GoalsPage() {
       {filteredGoals.length === 0 ? (
         <EmptyState hasFilters={hasFilters} />
       ) : (
-        <div className={
-          viewMode === 'grid'
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-            : 'space-y-4'
-        }>
-          {filteredGoals.map((goal) => (
+        <div
+          className={
+            viewMode === 'grid'
+              ? 'grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'
+              : 'space-y-4'
+          }
+        >
+          {filteredGoals.map(goal => (
             <GoalCard
               key={goal.id}
               goal={goal}

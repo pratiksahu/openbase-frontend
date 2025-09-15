@@ -30,181 +30,185 @@ export { MetricDirection } from './MetricEditor.types';
 // =============================================================================
 
 /** Configuration for all metric types */
-export const METRIC_TYPE_CONFIGS: Record<ExtendedMetricType, MetricTypeConfig> = {
-  [ExtendedMetricType.NUMBER]: {
-    label: 'Number',
-    icon: 'Hash',
-    description: 'Raw numeric value',
-    defaultUnit: '',
-    allowDecimals: true,
-    formatValue: (value, unit = '') => `${value.toLocaleString()}${unit ? ' ' + unit : ''}`,
-    parseValue: (input) => {
-      const parsed = parseFloat(input);
-      return isNaN(parsed) ? null : parsed;
+export const METRIC_TYPE_CONFIGS: Record<ExtendedMetricType, MetricTypeConfig> =
+  {
+    [ExtendedMetricType.NUMBER]: {
+      label: 'Number',
+      icon: 'Hash',
+      description: 'Raw numeric value',
+      defaultUnit: '',
+      allowDecimals: true,
+      formatValue: (value, unit = '') =>
+        `${value.toLocaleString()}${unit ? ' ' + unit : ''}`,
+      parseValue: input => {
+        const parsed = parseFloat(input);
+        return isNaN(parsed) ? null : parsed;
+      },
+      examples: ['1000', '42.5', '250000'],
+      defaultDirection: MetricDirection.INCREASE,
     },
-    examples: ['1000', '42.5', '250000'],
-    defaultDirection: MetricDirection.INCREASE,
-  },
-  [ExtendedMetricType.PERCENTAGE]: {
-    label: 'Percentage',
-    icon: 'Percent',
-    description: 'Percentage value (0-100)',
-    defaultUnit: '%',
-    allowDecimals: true,
-    validationPattern: /^(\d{1,2}(\.\d+)?|100(\.0+)?)$/,
-    formatValue: (value, unit = '%') => `${value.toFixed(1)}${unit}`,
-    parseValue: (input) => {
-      const parsed = parseFloat(input.replace('%', ''));
-      return isNaN(parsed) || parsed < 0 || parsed > 100 ? null : parsed;
+    [ExtendedMetricType.PERCENTAGE]: {
+      label: 'Percentage',
+      icon: 'Percent',
+      description: 'Percentage value (0-100)',
+      defaultUnit: '%',
+      allowDecimals: true,
+      validationPattern: /^(\d{1,2}(\.\d+)?|100(\.0+)?)$/,
+      formatValue: (value, unit = '%') => `${value.toFixed(1)}${unit}`,
+      parseValue: input => {
+        const parsed = parseFloat(input.replace('%', ''));
+        return isNaN(parsed) || parsed < 0 || parsed > 100 ? null : parsed;
+      },
+      examples: ['85%', '92.5%', '100%'],
+      defaultDirection: MetricDirection.INCREASE,
     },
-    examples: ['85%', '92.5%', '100%'],
-    defaultDirection: MetricDirection.INCREASE,
-  },
-  [ExtendedMetricType.CURRENCY]: {
-    label: 'Currency',
-    icon: 'DollarSign',
-    description: 'Monetary value',
-    defaultUnit: '$',
-    allowDecimals: true,
-    formatValue: (value, unit = '$') => `${unit}${value.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`,
-    parseValue: (input) => {
-      const cleaned = input.replace(/[$,]/g, '');
-      const parsed = parseFloat(cleaned);
-      return isNaN(parsed) ? null : parsed;
+    [ExtendedMetricType.CURRENCY]: {
+      label: 'Currency',
+      icon: 'DollarSign',
+      description: 'Monetary value',
+      defaultUnit: '$',
+      allowDecimals: true,
+      formatValue: (value, unit = '$') =>
+        `${unit}${value.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`,
+      parseValue: input => {
+        const cleaned = input.replace(/[$,]/g, '');
+        const parsed = parseFloat(cleaned);
+        return isNaN(parsed) ? null : parsed;
+      },
+      examples: ['$10,000', '$1,500.50', '$250,000'],
+      defaultDirection: MetricDirection.INCREASE,
     },
-    examples: ['$10,000', '$1,500.50', '$250,000'],
-    defaultDirection: MetricDirection.INCREASE,
-  },
-  [ExtendedMetricType.DURATION]: {
-    label: 'Duration',
-    icon: 'Clock',
-    description: 'Time-based measurement',
-    defaultUnit: 'hours',
-    allowDecimals: true,
-    formatValue: (value, unit = 'hours') => {
-      if (unit === 'seconds' && value >= 60) {
-        const minutes = Math.floor(value / 60);
-        const seconds = value % 60;
-        return `${minutes}m ${seconds}s`;
-      }
-      if (unit === 'minutes' && value >= 60) {
-        const hours = Math.floor(value / 60);
-        const minutes = value % 60;
-        return `${hours}h ${minutes}m`;
-      }
-      return `${value} ${unit}`;
+    [ExtendedMetricType.DURATION]: {
+      label: 'Duration',
+      icon: 'Clock',
+      description: 'Time-based measurement',
+      defaultUnit: 'hours',
+      allowDecimals: true,
+      formatValue: (value, unit = 'hours') => {
+        if (unit === 'seconds' && value >= 60) {
+          const minutes = Math.floor(value / 60);
+          const seconds = value % 60;
+          return `${minutes}m ${seconds}s`;
+        }
+        if (unit === 'minutes' && value >= 60) {
+          const hours = Math.floor(value / 60);
+          const minutes = value % 60;
+          return `${hours}h ${minutes}m`;
+        }
+        return `${value} ${unit}`;
+      },
+      parseValue: input => {
+        const parsed = parseFloat(input);
+        return isNaN(parsed) ? null : parsed;
+      },
+      examples: ['2.5 hours', '45 minutes', '120 seconds'],
+      defaultDirection: MetricDirection.DECREASE,
     },
-    parseValue: (input) => {
-      const parsed = parseFloat(input);
-      return isNaN(parsed) ? null : parsed;
+    [ExtendedMetricType.BOOLEAN]: {
+      label: 'Yes/No',
+      icon: 'CheckSquare',
+      description: 'Binary true/false value',
+      defaultUnit: '',
+      allowDecimals: false,
+      formatValue: value => (value ? 'Yes' : 'No'),
+      parseValue: input => {
+        const lower = input.toLowerCase();
+        if (['yes', 'true', '1', 'on'].includes(lower)) return 1;
+        if (['no', 'false', '0', 'off'].includes(lower)) return 0;
+        return null;
+      },
+      examples: ['Yes', 'No', 'True', 'False'],
+      defaultDirection: MetricDirection.MAINTAIN,
     },
-    examples: ['2.5 hours', '45 minutes', '120 seconds'],
-    defaultDirection: MetricDirection.DECREASE,
-  },
-  [ExtendedMetricType.BOOLEAN]: {
-    label: 'Yes/No',
-    icon: 'CheckSquare',
-    description: 'Binary true/false value',
-    defaultUnit: '',
-    allowDecimals: false,
-    formatValue: (value) => value ? 'Yes' : 'No',
-    parseValue: (input) => {
-      const lower = input.toLowerCase();
-      if (['yes', 'true', '1', 'on'].includes(lower)) return 1;
-      if (['no', 'false', '0', 'off'].includes(lower)) return 0;
-      return null;
+    [ExtendedMetricType.RATING]: {
+      label: 'Rating',
+      icon: 'Star',
+      description: 'Rating scale (1-10)',
+      defaultUnit: '/10',
+      allowDecimals: true,
+      validationPattern: /^([1-9](\.\d+)?|10(\.0+)?)$/,
+      formatValue: (value, unit = '/10') => `${value.toFixed(1)}${unit}`,
+      parseValue: input => {
+        const parsed = parseFloat(input.replace('/10', ''));
+        return isNaN(parsed) || parsed < 1 || parsed > 10 ? null : parsed;
+      },
+      examples: ['8.5/10', '7/10', '9.2/10'],
+      defaultDirection: MetricDirection.INCREASE,
     },
-    examples: ['Yes', 'No', 'True', 'False'],
-    defaultDirection: MetricDirection.MAINTAIN,
-  },
-  [ExtendedMetricType.RATING]: {
-    label: 'Rating',
-    icon: 'Star',
-    description: 'Rating scale (1-10)',
-    defaultUnit: '/10',
-    allowDecimals: true,
-    validationPattern: /^([1-9](\.\d+)?|10(\.0+)?)$/,
-    formatValue: (value, unit = '/10') => `${value.toFixed(1)}${unit}`,
-    parseValue: (input) => {
-      const parsed = parseFloat(input.replace('/10', ''));
-      return isNaN(parsed) || parsed < 1 || parsed > 10 ? null : parsed;
+    [ExtendedMetricType.ABSOLUTE]: {
+      label: 'Absolute',
+      icon: 'Target',
+      description: 'Raw number without scaling',
+      defaultUnit: 'units',
+      allowDecimals: true,
+      formatValue: (value, unit = 'units') =>
+        `${value.toLocaleString()} ${unit}`,
+      parseValue: input => {
+        const parsed = parseFloat(input);
+        return isNaN(parsed) ? null : parsed;
+      },
+      examples: ['1500 units', '42.7 items', '999 records'],
+      defaultDirection: MetricDirection.INCREASE,
     },
-    examples: ['8.5/10', '7/10', '9.2/10'],
-    defaultDirection: MetricDirection.INCREASE,
-  },
-  [ExtendedMetricType.ABSOLUTE]: {
-    label: 'Absolute',
-    icon: 'Target',
-    description: 'Raw number without scaling',
-    defaultUnit: 'units',
-    allowDecimals: true,
-    formatValue: (value, unit = 'units') => `${value.toLocaleString()} ${unit}`,
-    parseValue: (input) => {
-      const parsed = parseFloat(input);
-      return isNaN(parsed) ? null : parsed;
+    [ExtendedMetricType.RATIO]: {
+      label: 'Ratio',
+      icon: 'Divide',
+      description: 'Ratio format (x:y)',
+      defaultUnit: ':1',
+      allowDecimals: true,
+      validationPattern: /^\d+(\.\d+)?:\d+(\.\d+)?$/,
+      formatValue: (value, unit) => {
+        if (unit && unit.includes(':')) {
+          return `${value}${unit}`;
+        }
+        return `${value}:1`;
+      },
+      parseValue: input => {
+        if (input.includes(':')) {
+          const [numerator, denominator] = input.split(':');
+          const num = parseFloat(numerator);
+          const den = parseFloat(denominator);
+          return isNaN(num) || isNaN(den) || den === 0 ? null : num / den;
+        }
+        const parsed = parseFloat(input);
+        return isNaN(parsed) ? null : parsed;
+      },
+      examples: ['3:1', '1.5:1', '10:3'],
+      defaultDirection: MetricDirection.INCREASE,
     },
-    examples: ['1500 units', '42.7 items', '999 records'],
-    defaultDirection: MetricDirection.INCREASE,
-  },
-  [ExtendedMetricType.RATIO]: {
-    label: 'Ratio',
-    icon: 'Divide',
-    description: 'Ratio format (x:y)',
-    defaultUnit: ':1',
-    allowDecimals: true,
-    validationPattern: /^\d+(\.\d+)?:\d+(\.\d+)?$/,
-    formatValue: (value, unit) => {
-      if (unit && unit.includes(':')) {
-        return `${value}${unit}`;
-      }
-      return `${value}:1`;
+    [ExtendedMetricType.COUNT]: {
+      label: 'Count',
+      icon: 'Plus',
+      description: 'Integer count only',
+      defaultUnit: 'items',
+      allowDecimals: false,
+      validationPattern: /^\d+$/,
+      formatValue: (value, unit = 'items') => `${Math.round(value)} ${unit}`,
+      parseValue: input => {
+        const parsed = parseInt(input, 10);
+        return isNaN(parsed) ? null : parsed;
+      },
+      examples: ['25 users', '150 orders', '7 tasks'],
+      defaultDirection: MetricDirection.INCREASE,
     },
-    parseValue: (input) => {
-      if (input.includes(':')) {
-        const [numerator, denominator] = input.split(':');
-        const num = parseFloat(numerator);
-        const den = parseFloat(denominator);
-        return isNaN(num) || isNaN(den) || den === 0 ? null : num / den;
-      }
-      const parsed = parseFloat(input);
-      return isNaN(parsed) ? null : parsed;
+    [ExtendedMetricType.RATE]: {
+      label: 'Rate',
+      icon: 'TrendingUp',
+      description: 'Value per unit of time',
+      defaultUnit: 'per day',
+      allowDecimals: true,
+      formatValue: (value, unit = 'per day') => `${value.toFixed(2)} ${unit}`,
+      parseValue: input => {
+        const parsed = parseFloat(input.replace(/per\s+\w+/, '').trim());
+        return isNaN(parsed) ? null : parsed;
+      },
+      examples: ['5.2 per day', '150 per hour', '1000 per month'],
+      defaultDirection: MetricDirection.INCREASE,
     },
-    examples: ['3:1', '1.5:1', '10:3'],
-    defaultDirection: MetricDirection.INCREASE,
-  },
-  [ExtendedMetricType.COUNT]: {
-    label: 'Count',
-    icon: 'Plus',
-    description: 'Integer count only',
-    defaultUnit: 'items',
-    allowDecimals: false,
-    validationPattern: /^\d+$/,
-    formatValue: (value, unit = 'items') => `${Math.round(value)} ${unit}`,
-    parseValue: (input) => {
-      const parsed = parseInt(input, 10);
-      return isNaN(parsed) ? null : parsed;
-    },
-    examples: ['25 users', '150 orders', '7 tasks'],
-    defaultDirection: MetricDirection.INCREASE,
-  },
-  [ExtendedMetricType.RATE]: {
-    label: 'Rate',
-    icon: 'TrendingUp',
-    description: 'Value per unit of time',
-    defaultUnit: 'per day',
-    allowDecimals: true,
-    formatValue: (value, unit = 'per day') => `${value.toFixed(2)} ${unit}`,
-    parseValue: (input) => {
-      const parsed = parseFloat(input.replace(/per\s+\w+/, '').trim());
-      return isNaN(parsed) ? null : parsed;
-    },
-    examples: ['5.2 per day', '150 per hour', '1000 per month'],
-    defaultDirection: MetricDirection.INCREASE,
-  },
-};
+  };
 
 // =============================================================================
 // Validation Functions
@@ -271,7 +275,7 @@ function validateMetricForm(data: Partial<MetricFormData>): ValidationErrors {
  */
 function validateCheckpoint(
   checkpoint: Partial<MetricCheckpoint>,
-  metric: MeasurableSpec
+  _metric: MeasurableSpec
 ): string[] {
   const errors: string[] = [];
 
@@ -342,7 +346,9 @@ function determineProgressStatus(
   }
 
   if (!daysToTarget || daysToTarget <= 0) {
-    return progressPercentage >= 80 ? ProgressStatus.ON_TRACK : ProgressStatus.OFF_TRACK;
+    return progressPercentage >= 80
+      ? ProgressStatus.ON_TRACK
+      : ProgressStatus.OFF_TRACK;
   }
 
   // Calculate required daily progress
@@ -374,7 +380,10 @@ function calculateVelocity(checkpoints: MetricCheckpoint[]): number {
 
   const firstPoint = recent[0];
   const lastPoint = recent[recent.length - 1];
-  const daysDifference = differenceInDays(lastPoint.recordedDate, firstPoint.recordedDate);
+  const daysDifference = differenceInDays(
+    lastPoint.recordedDate,
+    firstPoint.recordedDate
+  );
 
   if (daysDifference === 0) return 0;
 
@@ -393,12 +402,25 @@ function analyzeProgress(
   const baseline = metric.minimumValue || 0;
   const current = metric.currentValue;
   const target = metric.targetValue;
-  const direction = metric.higherIsBetter ? MetricDirection.INCREASE : MetricDirection.DECREASE;
+  const direction = metric.higherIsBetter
+    ? MetricDirection.INCREASE
+    : MetricDirection.DECREASE;
 
-  const progressPercentage = calculateProgressPercentage(baseline, current, target, direction);
+  const progressPercentage = calculateProgressPercentage(
+    baseline,
+    current,
+    target,
+    direction
+  );
   const velocity = calculateVelocity(checkpoints);
-  const daysToTarget = targetDate ? differenceInDays(targetDate, new Date()) : undefined;
-  const status = determineProgressStatus(progressPercentage, velocity, daysToTarget);
+  const daysToTarget = targetDate
+    ? differenceInDays(targetDate, new Date())
+    : undefined;
+  const status = determineProgressStatus(
+    progressPercentage,
+    velocity,
+    daysToTarget
+  );
 
   // Estimate completion date
   let estimatedCompletion: Date | undefined;
@@ -415,7 +437,8 @@ function analyzeProgress(
     const first = recentCheckpoints[0].value;
     const last = recentCheckpoints[recentCheckpoints.length - 1].value;
     const change = last - first;
-    if (Math.abs(change) < target * 0.01) { // Less than 1% change
+    if (Math.abs(change) < target * 0.01) {
+      // Less than 1% change
       trend = 'stable';
     } else if (change > 0) {
       trend = 'increasing';
@@ -434,7 +457,8 @@ function analyzeProgress(
     velocity,
     estimatedCompletion,
     daysToTarget,
-    onTrackToTarget: status === ProgressStatus.ON_TRACK || status === ProgressStatus.COMPLETED,
+    onTrackToTarget:
+      status === ProgressStatus.ON_TRACK || status === ProgressStatus.COMPLETED,
     projectionConfidence,
   };
 }
@@ -442,12 +466,16 @@ function analyzeProgress(
 /**
  * Calculate confidence in projections based on data consistency
  */
-function calculateProjectionConfidence(checkpoints: MetricCheckpoint[]): number {
+function calculateProjectionConfidence(
+  checkpoints: MetricCheckpoint[]
+): number {
   if (checkpoints.length < 3) return 0.3; // Low confidence with limited data
 
   const values = checkpoints.map(cp => cp.value);
   const mean = values.reduce((a, b) => a + b, 0) / values.length;
-  const variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / values.length;
+  const variance =
+    values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) /
+    values.length;
   const standardDeviation = Math.sqrt(variance);
   const coefficientOfVariation = standardDeviation / mean;
 
@@ -462,7 +490,9 @@ function calculateProjectionConfidence(checkpoints: MetricCheckpoint[]): number 
 /**
  * Calculate comprehensive statistics for checkpoints
  */
-function calculateCheckpointStatistics(checkpoints: MetricCheckpoint[]): CheckpointStatistics {
+function calculateCheckpointStatistics(
+  checkpoints: MetricCheckpoint[]
+): CheckpointStatistics {
   if (checkpoints.length === 0) {
     return {
       count: 0,
@@ -484,7 +514,8 @@ function calculateCheckpointStatistics(checkpoints: MetricCheckpoint[]): Checkpo
   const maximum = Math.max(...values);
 
   // Calculate standard deviation
-  const variance = values.reduce((acc, val) => acc + Math.pow(val - average, 2), 0) / count;
+  const variance =
+    values.reduce((acc, val) => acc + Math.pow(val - average, 2), 0) / count;
   const standardDeviation = Math.sqrt(variance);
 
   // Calculate linear regression slope
@@ -494,11 +525,14 @@ function calculateCheckpointStatistics(checkpoints: MetricCheckpoint[]): Checkpo
   const correlation = calculateCorrelation(checkpoints);
 
   // Calculate moving average
-  const movingAverage = calculateMovingAverage(values, Math.min(5, Math.floor(count / 2)));
+  const movingAverage = calculateMovingAverage(
+    values,
+    Math.min(5, Math.floor(count / 2))
+  );
 
   // Identify outliers (values more than 2 standard deviations from mean)
-  const outliers = checkpoints.filter(cp =>
-    Math.abs(cp.value - average) > 2 * standardDeviation
+  const outliers = checkpoints.filter(
+    cp => Math.abs(cp.value - average) > 2 * standardDeviation
   );
 
   return {
@@ -517,7 +551,9 @@ function calculateCheckpointStatistics(checkpoints: MetricCheckpoint[]): Checkpo
 /**
  * Calculate linear regression slope for trend analysis
  */
-function calculateLinearRegressionSlope(checkpoints: MetricCheckpoint[]): number {
+function calculateLinearRegressionSlope(
+  checkpoints: MetricCheckpoint[]
+): number {
   if (checkpoints.length < 2) return 0;
 
   const sortedCheckpoints = [...checkpoints].sort(
@@ -558,7 +594,9 @@ function calculateCorrelation(checkpoints: MetricCheckpoint[]): number {
   const sumYY = yValues.reduce((acc, y) => acc + y * y, 0);
 
   const numerator = n * sumXY - sumX * sumY;
-  const denominator = Math.sqrt((n * sumXX - sumX * sumX) * (n * sumYY - sumY * sumY));
+  const denominator = Math.sqrt(
+    (n * sumXX - sumX * sumX) * (n * sumYY - sumY * sumY)
+  );
 
   return denominator === 0 ? 0 : numerator / denominator;
 }
@@ -566,7 +604,10 @@ function calculateCorrelation(checkpoints: MetricCheckpoint[]): number {
 /**
  * Calculate moving average
  */
-function calculateMovingAverage(values: number[], windowSize: number): number[] {
+function calculateMovingAverage(
+  values: number[],
+  windowSize: number
+): number[] {
   if (values.length < windowSize) return values;
 
   const movingAverage: number[] = [];
@@ -673,7 +714,11 @@ export const COMMON_METRIC_TEMPLATES: MetricTemplate[] = [
       excellent: 5.0,
       poor: 1.0,
     },
-    examples: ['E-commerce conversion rate', 'Lead conversion rate', 'Sign-up conversion rate'],
+    examples: [
+      'E-commerce conversion rate',
+      'Lead conversion rate',
+      'Sign-up conversion rate',
+    ],
     tags: ['business', 'marketing', 'performance'],
   },
   {
@@ -736,7 +781,11 @@ export const COMMON_METRIC_TEMPLATES: MetricTemplate[] = [
       excellent: 20,
       poor: 5,
     },
-    examples: ['Monthly recurring revenue growth', 'Quarterly revenue growth', 'Year-over-year growth'],
+    examples: [
+      'Monthly recurring revenue growth',
+      'Quarterly revenue growth',
+      'Year-over-year growth',
+    ],
     tags: ['financial', 'revenue', 'growth'],
   },
 ];

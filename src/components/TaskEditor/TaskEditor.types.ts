@@ -13,7 +13,7 @@ import {
   Subtask,
   ChecklistItem,
   TaskStatus,
-  GoalPriority
+  GoalPriority,
 } from '@/types/smart-goals.types';
 
 // =============================================================================
@@ -94,7 +94,11 @@ export interface AcceptanceCriteriaData {
 /** Valid status transitions */
 export const STATUS_TRANSITIONS: Record<TaskStatus, TaskStatus[]> = {
   [TaskStatus.TODO]: [TaskStatus.IN_PROGRESS],
-  [TaskStatus.IN_PROGRESS]: [TaskStatus.BLOCKED, TaskStatus.COMPLETED, TaskStatus.TODO],
+  [TaskStatus.IN_PROGRESS]: [
+    TaskStatus.BLOCKED,
+    TaskStatus.COMPLETED,
+    TaskStatus.TODO,
+  ],
   [TaskStatus.BLOCKED]: [TaskStatus.IN_PROGRESS, TaskStatus.TODO],
   [TaskStatus.COMPLETED]: [], // Terminal state
   [TaskStatus.CANCELLED]: [TaskStatus.TODO], // Can resurrect cancelled tasks
@@ -195,7 +199,13 @@ export interface TimeEntry {
   endTime?: Date;
   duration: number; // in minutes
   description?: string;
-  category: 'development' | 'testing' | 'review' | 'meeting' | 'research' | 'other';
+  category:
+    | 'development'
+    | 'testing'
+    | 'review'
+    | 'meeting'
+    | 'research'
+    | 'other';
   userId: string;
   isActive: boolean;
   createdAt: Date;
@@ -329,7 +339,11 @@ export interface TaskEditorProps {
   onSave: (task: Task) => Promise<void>;
   onCancel: () => void;
   onDelete?: (taskId: string) => Promise<void>;
-  onStatusChange?: (taskId: string, fromStatus: TaskStatus, toStatus: TaskStatus) => Promise<void>;
+  onStatusChange?: (
+    taskId: string,
+    fromStatus: TaskStatus,
+    toStatus: TaskStatus
+  ) => Promise<void>;
   availableAssignees?: Array<{ id: string; name: string; email: string }>;
   availableTasks?: Array<{ id: string; title: string }>; // For dependencies
   templates?: TaskTemplate[];
@@ -341,8 +355,14 @@ export interface TaskEditorProps {
 /** SubtaskList component props */
 export interface SubtaskListProps {
   subtasks: Subtask[];
+  taskId: string;
   onSubtasksChange: (subtasks: Subtask[]) => void;
-  onSubtaskAdd: (subtask: Omit<Subtask, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'>) => void;
+  onSubtaskAdd: (
+    subtask: Omit<
+      Subtask,
+      'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'
+    >
+  ) => void;
   onSubtaskUpdate: (subtaskId: string, changes: Partial<Subtask>) => void;
   onSubtaskDelete: (subtaskId: string) => void;
   onSubtaskReorder: (fromIndex: number, toIndex: number) => void;
@@ -355,7 +375,12 @@ export interface SubtaskListProps {
 export interface ChecklistEditorProps {
   checklist: ChecklistItem[];
   onChecklistChange: (checklist: ChecklistItem[]) => void;
-  onItemAdd: (item: Omit<ChecklistItem, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'>) => void;
+  onItemAdd: (
+    item: Omit<
+      ChecklistItem,
+      'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'
+    >
+  ) => void;
   onItemUpdate: (itemId: string, changes: Partial<ChecklistItem>) => void;
   onItemDelete: (itemId: string) => void;
   onItemToggle: (itemId: string) => void;
@@ -395,7 +420,11 @@ export interface UseTaskEditorReturn {
   updateSubtasks: (subtasks: Subtask[]) => void;
   updateChecklist: (checklist: ChecklistItem[]) => void;
   updateAcceptanceCriteria: (criteria: AcceptanceCriteriaData) => void;
-  changeStatus: (newStatus: TaskStatus, reason?: string, comment?: string) => Promise<void>;
+  changeStatus: (
+    newStatus: TaskStatus,
+    reason?: string,
+    comment?: string
+  ) => Promise<void>;
   saveTask: () => Promise<void>;
   cancelEditing: () => void;
   resetForm: () => void;
@@ -432,8 +461,15 @@ export type FormFieldPath =
   | `acceptanceCriteria.${keyof AcceptanceCriteriaData}`;
 
 /** Utility type for creating new entities */
-export type CreateEntity<T extends { id: string; createdAt: Date; updatedAt: Date; createdBy: string; updatedBy: string }> =
-  Omit<T, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'>;
+export type CreateEntity<
+  T extends {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    createdBy: string;
+    updatedBy: string;
+  },
+> = Omit<T, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'>;
 
 // =============================================================================
 // Export all types

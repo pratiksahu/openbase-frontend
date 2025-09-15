@@ -43,7 +43,6 @@ import {
 } from 'lucide-react';
 import React, { useState, useCallback, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-
 // UI Components
 import { toast } from 'sonner';
 
@@ -51,25 +50,23 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
-
-
 // Types and utilities
 import type { ChecklistItem } from '@/types/smart-goals.types';
 
-import {
-  ChecklistEditorProps,
-  ChecklistFormData,
-} from './TaskEditor.types';
-import {
-  checklistItemSchema,
-} from './TaskEditor.utils';
-
+import { ChecklistEditorProps, ChecklistFormData } from './TaskEditor.types';
+import { checklistItemSchema } from './TaskEditor.utils';
 // =============================================================================
 // Sortable Checklist Item Component
 // =============================================================================
@@ -146,7 +143,10 @@ function SortableChecklistItem({
     return content
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`(.*?)`/g, '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>');
+      .replace(
+        /`(.*?)`/g,
+        '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>'
+      );
   };
 
   if (isEditing) {
@@ -154,16 +154,16 @@ function SortableChecklistItem({
       <div
         ref={setNodeRef}
         style={style}
-        className={`border rounded-lg p-4 bg-background ${isDragging ? 'opacity-50' : ''}`}
+        className={`bg-background rounded-lg border p-4 ${isDragging ? 'opacity-50' : ''}`}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="flex items-center gap-2 mb-4">
+          <div className="mb-4 flex items-center gap-2">
             <div
               {...attributes}
               {...listeners}
               className="cursor-grab hover:cursor-grabbing"
             >
-              <GripVertical className="h-4 w-4 text-muted-foreground" />
+              <GripVertical className="text-muted-foreground h-4 w-4" />
             </div>
             <h4 className="font-medium">Edit Checklist Item</h4>
           </div>
@@ -184,7 +184,7 @@ function SortableChecklistItem({
               )}
             />
             {errors.title && (
-              <p className="text-sm text-destructive">{errors.title.message}</p>
+              <p className="text-destructive text-sm">{errors.title.message}</p>
             )}
           </div>
 
@@ -202,7 +202,11 @@ function SortableChecklistItem({
                   onClick={onTogglePreview}
                   className="h-8 px-2"
                 >
-                  {showPreview ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPreview ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                   {showPreview ? 'Edit' : 'Preview'}
                 </Button>
               )}
@@ -210,10 +214,10 @@ function SortableChecklistItem({
             <Controller
               name="description"
               control={control}
-              render={({ field }) => (
+              render={({ field }) =>
                 showPreview && supportMarkdown && field.value ? (
                   <div
-                    className="min-h-[80px] p-3 border rounded-md bg-muted"
+                    className="bg-muted min-h-[80px] rounded-md border p-3"
                     dangerouslySetInnerHTML={{
                       __html: renderMarkdownContent(field.value),
                     }}
@@ -222,14 +226,15 @@ function SortableChecklistItem({
                   <Textarea
                     {...field}
                     id={`description-${item.id}`}
-                    placeholder={supportMarkdown
-                      ? "Optional description... Use **bold**, *italic*, `code` for formatting"
-                      : "Optional description..."
+                    placeholder={
+                      supportMarkdown
+                        ? 'Optional description... Use **bold**, *italic*, `code` for formatting'
+                        : 'Optional description...'
                     }
                     rows={3}
                   />
                 )
-              )}
+              }
             />
           </div>
 
@@ -269,11 +274,11 @@ function SortableChecklistItem({
 
           <div className="flex items-center justify-end gap-2">
             <Button type="button" variant="outline" onClick={onCancel}>
-              <X className="h-4 w-4 mr-2" />
+              <X className="mr-2 h-4 w-4" />
               Cancel
             </Button>
             <Button type="submit">
-              <Check className="h-4 w-4 mr-2" />
+              <Check className="mr-2 h-4 w-4" />
               Save
             </Button>
           </div>
@@ -286,36 +291,38 @@ function SortableChecklistItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`group flex items-start gap-3 p-3 border rounded-lg hover:bg-muted/50 ${
+      className={`group hover:bg-muted/50 flex items-start gap-3 rounded-lg border p-3 ${
         isDragging ? 'opacity-50' : ''
-      } ${item.isCompleted ? 'bg-green-50 border-green-200' : ''}`}
+      } ${item.isCompleted ? 'border-green-200 bg-green-50' : ''}`}
     >
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab hover:cursor-grabbing mt-1 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="mt-1 cursor-grab opacity-0 transition-opacity group-hover:opacity-100 hover:cursor-grabbing"
       >
-        <GripVertical className="h-4 w-4 text-muted-foreground" />
+        <GripVertical className="text-muted-foreground h-4 w-4" />
       </div>
 
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <div className="flex items-start gap-2">
           <button
             onClick={onToggle}
-            className="mt-0.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+            className="focus:ring-primary mt-0.5 rounded focus:ring-2 focus:ring-offset-2 focus:outline-none"
             disabled={isReadOnly}
           >
             {item.isCompleted ? (
               <CheckSquare className="h-5 w-5 text-green-600" />
             ) : (
-              <Square className="h-5 w-5 text-muted-foreground hover:text-primary" />
+              <Square className="text-muted-foreground hover:text-primary h-5 w-5" />
             )}
           </button>
 
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <h4 className={`font-medium ${item.isCompleted ? 'line-through text-muted-foreground' : ''}`}>
+              <div className="min-w-0 flex-1">
+                <h4
+                  className={`font-medium ${item.isCompleted ? 'text-muted-foreground line-through' : ''}`}
+                >
                   {item.title}
                   {item.isRequired && (
                     <Badge variant="secondary" className="ml-2 text-xs">
@@ -325,7 +332,7 @@ function SortableChecklistItem({
                 </h4>
 
                 {item.description && (
-                  <div className="mt-1 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground mt-1 text-sm">
                     {supportMarkdown && showPreview ? (
                       <div
                         dangerouslySetInnerHTML={{
@@ -339,14 +346,14 @@ function SortableChecklistItem({
                 )}
 
                 {item.completedAt && (
-                  <p className="text-xs text-green-600 mt-1">
+                  <p className="mt-1 text-xs text-green-600">
                     Completed {new Date(item.completedAt).toLocaleDateString()}
                   </p>
                 )}
               </div>
 
               {!isReadOnly && (
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                   <Button
                     variant="ghost"
                     size="sm"
@@ -359,7 +366,7 @@ function SortableChecklistItem({
                     variant="ghost"
                     size="sm"
                     onClick={onDelete}
-                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                    className="text-destructive hover:text-destructive h-8 w-8 p-0"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -379,7 +386,7 @@ function SortableChecklistItem({
 
 export function ChecklistEditor({
   checklist,
-  onChecklistChange,
+  onChecklistChange: _onChecklistChange,
   onItemAdd,
   onItemUpdate,
   onItemDelete,
@@ -441,32 +448,39 @@ export function ChecklistEditor({
     return checklist.filter(item => item.isRequired && item.isCompleted).length;
   }, [checklist]);
 
-  const progressPercentage = checklist.length > 0 ? (completedCount / checklist.length) * 100 : 0;
+  const progressPercentage =
+    checklist.length > 0 ? (completedCount / checklist.length) * 100 : 0;
 
   // =============================================================================
   // Handlers
   // =============================================================================
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-    if (over && active.id !== over.id) {
-      const oldIndex = checklist.findIndex(item => item.id === active.id);
-      const newIndex = checklist.findIndex(item => item.id === over.id);
+      if (over && active.id !== over.id) {
+        const oldIndex = checklist.findIndex(item => item.id === active.id);
+        const newIndex = checklist.findIndex(item => item.id === over.id);
 
-      onItemReorder(oldIndex, newIndex);
-    }
-  }, [checklist, onItemReorder]);
+        onItemReorder(oldIndex, newIndex);
+      }
+    },
+    [checklist, onItemReorder]
+  );
 
   const handleEdit = useCallback((itemId: string) => {
     setEditingId(itemId);
   }, []);
 
-  const handleSave = useCallback((itemId: string, data: ChecklistFormData) => {
-    onItemUpdate(itemId, data);
-    setEditingId(null);
-    toast.success('Checklist item updated');
-  }, [onItemUpdate]);
+  const handleSave = useCallback(
+    (itemId: string, data: ChecklistFormData) => {
+      onItemUpdate(itemId, data);
+      setEditingId(null);
+      toast.success('Checklist item updated');
+    },
+    [onItemUpdate]
+  );
 
   const handleCancel = useCallback(() => {
     setEditingId(null);
@@ -474,27 +488,36 @@ export function ChecklistEditor({
     resetAddForm();
   }, [resetAddForm]);
 
-  const handleDelete = useCallback((itemId: string, itemTitle: string) => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete "${itemTitle}"?`
-    );
+  const handleDelete = useCallback(
+    (itemId: string, itemTitle: string) => {
+      const confirmDelete = window.confirm(
+        `Are you sure you want to delete "${itemTitle}"?`
+      );
 
-    if (!confirmDelete) return;
+      if (!confirmDelete) return;
 
-    onItemDelete(itemId);
-    toast.success('Checklist item deleted');
-  }, [onItemDelete]);
+      onItemDelete(itemId);
+      toast.success('Checklist item deleted');
+    },
+    [onItemDelete]
+  );
 
-  const handleToggle = useCallback((itemId: string) => {
-    onItemToggle(itemId);
-  }, [onItemToggle]);
+  const handleToggle = useCallback(
+    (itemId: string) => {
+      onItemToggle(itemId);
+    },
+    [onItemToggle]
+  );
 
-  const handleAddNew = useCallback((data: ChecklistFormData) => {
-    onItemAdd(data);
-    setIsAddingNew(false);
-    resetAddForm();
-    toast.success('Checklist item added');
-  }, [onItemAdd, resetAddForm]);
+  const handleAddNew = useCallback(
+    (data: ChecklistFormData) => {
+      onItemAdd(data);
+      setIsAddingNew(false);
+      resetAddForm();
+      toast.success('Checklist item added');
+    },
+    [onItemAdd, resetAddForm]
+  );
 
   const handleBulkCheckAll = useCallback(() => {
     const allCompleted = completedCount === checklist.length;
@@ -530,10 +553,10 @@ export function ChecklistEditor({
 
   return (
     <div className={className}>
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="space-y-1">
           <h3 className="text-lg font-semibold">Checklist</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             {completedCount} of {checklist.length} completed
             {requiredCount > 0 && (
               <span className="ml-2">
@@ -553,8 +576,10 @@ export function ChecklistEditor({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={handleBulkCheckAll}>
-                  <CheckCircle2 className="h-4 w-4 mr-2" />
-                  {completedCount === checklist.length ? 'Uncheck All' : 'Check All'}
+                  <CheckCircle2 className="mr-2 h-4 w-4" />
+                  {completedCount === checklist.length
+                    ? 'Uncheck All'
+                    : 'Check All'}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -562,7 +587,7 @@ export function ChecklistEditor({
                   disabled={completedCount === 0}
                   className="text-destructive"
                 >
-                  <Trash2 className="h-4 w-4 mr-2" />
+                  <Trash2 className="mr-2 h-4 w-4" />
                   Remove Completed ({completedCount})
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -575,16 +600,17 @@ export function ChecklistEditor({
               size="sm"
               onClick={() => setShowPreview(!showPreview)}
             >
-              {showPreview ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPreview ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
             </Button>
           )}
 
           {!isReadOnly && (
-            <Button
-              onClick={() => setIsAddingNew(true)}
-              disabled={isAddingNew}
-            >
-              <Plus className="h-4 w-4 mr-2" />
+            <Button onClick={() => setIsAddingNew(true)} disabled={isAddingNew}>
+              <Plus className="mr-2 h-4 w-4" />
               Add Item
             </Button>
           )}
@@ -594,15 +620,18 @@ export function ChecklistEditor({
       {checklist.length > 0 && (
         <div className="mb-4">
           <Progress value={progressPercentage} className="h-2" />
-          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+          <div className="text-muted-foreground mt-1 flex justify-between text-xs">
             <span>{Math.round(progressPercentage)}% complete</span>
             {requiredCount > 0 && (
               <span>
                 {completedRequiredCount === requiredCount ? (
-                  <span className="text-green-600">All required items completed</span>
+                  <span className="text-green-600">
+                    All required items completed
+                  </span>
                 ) : (
                   <span className="text-amber-600">
-                    {requiredCount - completedRequiredCount} required items remaining
+                    {requiredCount - completedRequiredCount} required items
+                    remaining
                   </span>
                 )}
               </span>
@@ -616,8 +645,11 @@ export function ChecklistEditor({
         {isAddingNew && (
           <Card>
             <CardContent className="p-4">
-              <form onSubmit={handleAddSubmit(handleAddNew)} className="space-y-4">
-                <h4 className="font-medium mb-4">Add New Checklist Item</h4>
+              <form
+                onSubmit={handleAddSubmit(handleAddNew)}
+                className="space-y-4"
+              >
+                <h4 className="mb-4 font-medium">Add New Checklist Item</h4>
 
                 {/* Title */}
                 <div className="space-y-2">
@@ -635,7 +667,9 @@ export function ChecklistEditor({
                     )}
                   />
                   {addErrors.title && (
-                    <p className="text-sm text-destructive">{addErrors.title.message}</p>
+                    <p className="text-destructive text-sm">
+                      {addErrors.title.message}
+                    </p>
                   )}
                 </div>
 
@@ -653,7 +687,11 @@ export function ChecklistEditor({
                         onClick={() => setShowPreview(!showPreview)}
                         className="h-8 px-2"
                       >
-                        {showPreview ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPreview ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                         {showPreview ? 'Edit' : 'Preview'}
                       </Button>
                     )}
@@ -661,29 +699,33 @@ export function ChecklistEditor({
                   <Controller
                     name="description"
                     control={addControl}
-                    render={({ field }) => (
+                    render={({ field }) =>
                       showPreview && supportMarkdown && field.value ? (
                         <div
-                          className="min-h-[80px] p-3 border rounded-md bg-muted"
+                          className="bg-muted min-h-[80px] rounded-md border p-3"
                           dangerouslySetInnerHTML={{
                             __html: field.value
                               .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                               .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                              .replace(/`(.*?)`/g, '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>'),
+                              .replace(
+                                /`(.*?)`/g,
+                                '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>'
+                              ),
                           }}
                         />
                       ) : (
                         <Textarea
                           {...field}
                           id="add-description"
-                          placeholder={supportMarkdown
-                            ? "Optional description... Use **bold**, *italic*, `code` for formatting"
-                            : "Optional description..."
+                          placeholder={
+                            supportMarkdown
+                              ? 'Optional description... Use **bold**, *italic*, `code` for formatting'
+                              : 'Optional description...'
                           }
                           rows={3}
                         />
                       )
-                    )}
+                    }
                   />
                 </div>
 
@@ -705,12 +747,16 @@ export function ChecklistEditor({
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Button type="button" variant="outline" onClick={handleCancel}>
-                      <X className="h-4 w-4 mr-2" />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleCancel}
+                    >
+                      <X className="mr-2 h-4 w-4" />
                       Cancel
                     </Button>
                     <Button type="submit">
-                      <Plus className="h-4 w-4 mr-2" />
+                      <Plus className="mr-2 h-4 w-4" />
                       Add Item
                     </Button>
                   </div>
@@ -727,14 +773,17 @@ export function ChecklistEditor({
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext items={checklist.map(item => item.id)} strategy={verticalListSortingStrategy}>
-              {checklist.map((item) => (
+            <SortableContext
+              items={checklist.map(item => item.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {checklist.map(item => (
                 <SortableChecklistItem
                   key={item.id}
                   item={item}
                   isEditing={editingId === item.id}
                   onEdit={() => handleEdit(item.id)}
-                  onSave={(data) => handleSave(item.id, data)}
+                  onSave={data => handleSave(item.id, data)}
                   onCancel={handleCancel}
                   onDelete={() => handleDelete(item.id, item.title)}
                   onToggle={() => handleToggle(item.id)}
@@ -749,14 +798,17 @@ export function ChecklistEditor({
         ) : !isAddingNew ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <CheckCircle2 className="h-8 w-8 mx-auto text-muted-foreground mb-4" />
-              <h4 className="font-medium text-muted-foreground mb-2">No checklist items yet</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Create a checklist to track specific requirements and deliverables.
+              <CheckCircle2 className="text-muted-foreground mx-auto mb-4 h-8 w-8" />
+              <h4 className="text-muted-foreground mb-2 font-medium">
+                No checklist items yet
+              </h4>
+              <p className="text-muted-foreground mb-4 text-sm">
+                Create a checklist to track specific requirements and
+                deliverables.
               </p>
               {!isReadOnly && (
                 <Button onClick={() => setIsAddingNew(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="mr-2 h-4 w-4" />
                   Add First Item
                 </Button>
               )}

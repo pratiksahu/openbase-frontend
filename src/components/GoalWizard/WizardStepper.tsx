@@ -63,11 +63,12 @@ interface StatusIconProps {
   className?: string;
 }
 
-const StatusIcon: React.FC<StatusIconProps> = ({ status, isActive, className }) => {
-  const iconClass = cn(
-    'h-4 w-4',
-    className
-  );
+const StatusIcon: React.FC<StatusIconProps> = ({
+  status,
+  isActive,
+  className,
+}) => {
+  const iconClass = cn('h-4 w-4', className);
 
   switch (status) {
     case StepStatus.COMPLETED:
@@ -75,7 +76,11 @@ const StatusIcon: React.FC<StatusIconProps> = ({ status, isActive, className }) 
     case StepStatus.ERROR:
       return <AlertCircle className={iconClass} />;
     case StepStatus.IN_PROGRESS:
-      return isActive ? <Clock className={iconClass} /> : <Circle className={iconClass} />;
+      return isActive ? (
+        <Clock className={iconClass} />
+      ) : (
+        <Circle className={iconClass} />
+      );
     case StepStatus.NOT_STARTED:
     default:
       return <Circle className={iconClass} />;
@@ -105,7 +110,8 @@ const StepItem: React.FC<StepItemProps> = ({
   showEstimatedTime,
   onClick,
 }) => {
-  const IconComponent = STEP_ICONS[config.icon as keyof typeof STEP_ICONS] || Circle;
+  const IconComponent =
+    STEP_ICONS[config.icon as keyof typeof STEP_ICONS] || Circle;
 
   // Determine colors based on status and active state
   const getStepColors = () => {
@@ -161,7 +167,7 @@ const StepItem: React.FC<StepItemProps> = ({
           'relative flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all duration-200',
           colors.border,
           colors.background,
-          isClickable && 'hover:scale-105 cursor-pointer',
+          isClickable && 'cursor-pointer hover:scale-105',
           !isClickable && 'cursor-not-allowed opacity-60'
         )}
       >
@@ -169,23 +175,27 @@ const StepItem: React.FC<StepItemProps> = ({
         <IconComponent className={cn('h-5 w-5', colors.text)} />
 
         {/* Status Indicator */}
-        <div className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-background border border-border">
-          <StatusIcon status={status} isActive={isActive} className="h-2.5 w-2.5" />
+        <div className="bg-background border-border absolute -right-1 -bottom-1 flex h-4 w-4 items-center justify-center rounded-full border">
+          <StatusIcon
+            status={status}
+            isActive={isActive}
+            className="h-2.5 w-2.5"
+          />
         </div>
       </div>
 
       {/* Step Label */}
       <div className="text-center">
-        <div className={cn('font-medium text-sm', colors.label)}>
+        <div className={cn('text-sm font-medium', colors.label)}>
           {config.title}
         </div>
         {showDescriptions && (
-          <div className="text-xs text-muted-foreground mt-1 max-w-24 leading-tight">
+          <div className="text-muted-foreground mt-1 max-w-24 text-xs leading-tight">
             {config.description}
           </div>
         )}
         {showEstimatedTime && config.estimatedTime && (
-          <div className="text-xs text-muted-foreground mt-1">
+          <div className="text-muted-foreground mt-1 text-xs">
             {config.estimatedTime}min
           </div>
         )}
@@ -212,13 +222,15 @@ const StepItem: React.FC<StepItemProps> = ({
         <TooltipContent side="bottom" className="max-w-sm">
           <div className="space-y-1">
             <div className="font-medium">{config.title}</div>
-            <div className="text-sm text-muted-foreground">{config.description}</div>
+            <div className="text-muted-foreground text-sm">
+              {config.description}
+            </div>
             {config.helpContent && (
-              <div className="text-xs text-muted-foreground pt-1 border-t border-border">
+              <div className="text-muted-foreground border-border border-t pt-1 text-xs">
                 {config.helpContent}
               </div>
             )}
-            <div className="flex items-center justify-between text-xs text-muted-foreground pt-1">
+            <div className="text-muted-foreground flex items-center justify-between pt-1 text-xs">
               {config.estimatedTime && (
                 <span>Est. {config.estimatedTime} minutes</span>
               )}
@@ -240,16 +252,19 @@ interface ConnectionLineProps {
   isActive: boolean;
 }
 
-const ConnectionLine: React.FC<ConnectionLineProps> = ({ isCompleted, isActive }) => {
+const ConnectionLine: React.FC<ConnectionLineProps> = ({
+  isCompleted,
+  isActive,
+}) => {
   return (
-    <div className="flex-1 flex items-center px-2">
+    <div className="flex flex-1 items-center px-2">
       <div
         className={cn(
           'h-0.5 w-full rounded transition-all duration-300',
           isCompleted
             ? 'bg-green-500'
             : isActive
-              ? 'bg-gradient-to-r from-primary to-muted'
+              ? 'from-primary to-muted bg-gradient-to-r'
               : 'bg-muted'
         )}
       />
@@ -285,13 +300,19 @@ export const WizardStepper: React.FC<WizardStepperProps> = ({
     if (targetIndex === -1) return false;
 
     // Can always click current step or completed steps
-    if (targetStep === currentStep || stepStatus[targetStep] === StepStatus.COMPLETED) {
+    if (
+      targetStep === currentStep ||
+      stepStatus[targetStep] === StepStatus.COMPLETED
+    ) {
       return true;
     }
 
     // Can click next step if current is completed
     const currentIndex = steps.findIndex(step => step.step === currentStep);
-    if (targetIndex === currentIndex + 1 && stepStatus[currentStep] === StepStatus.COMPLETED) {
+    if (
+      targetIndex === currentIndex + 1 &&
+      stepStatus[currentStep] === StepStatus.COMPLETED
+    ) {
       return true;
     }
 
@@ -307,10 +328,7 @@ export const WizardStepper: React.FC<WizardStepperProps> = ({
           <span className="text-muted-foreground">Progress</span>
           <span className="font-medium">{progressPercentage}%</span>
         </div>
-        <Progress
-          value={progressPercentage}
-          className="h-2"
-        />
+        <Progress value={progressPercentage} className="h-2" />
       </div>
 
       {/* Steps */}
@@ -318,7 +336,7 @@ export const WizardStepper: React.FC<WizardStepperProps> = ({
         {/* Mobile/Compact View */}
         <div className="block sm:hidden">
           <div className="space-y-2">
-            {steps.map((stepConfig, index) => {
+            {steps.map((stepConfig, _index) => {
               const isActive = stepConfig.step === currentStep;
               const status = stepStatus[stepConfig.step];
               const isClickable = canNavigateToStep(stepConfig.step);
@@ -327,7 +345,7 @@ export const WizardStepper: React.FC<WizardStepperProps> = ({
                 <div
                   key={stepConfig.step}
                   className={cn(
-                    'flex items-center space-x-3 p-3 rounded-lg border',
+                    'flex items-center space-x-3 rounded-lg border p-3',
                     isActive
                       ? 'border-primary bg-primary/5'
                       : 'border-border bg-card hover:bg-accent/50'
@@ -344,20 +362,22 @@ export const WizardStepper: React.FC<WizardStepperProps> = ({
                       onClick={() => onStepClick(stepConfig.step)}
                     />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className={cn(
-                      'font-medium text-sm',
-                      isActive ? 'text-primary' : 'text-foreground'
-                    )}>
+                  <div className="min-w-0 flex-1">
+                    <div
+                      className={cn(
+                        'text-sm font-medium',
+                        isActive ? 'text-primary' : 'text-foreground'
+                      )}
+                    >
                       {stepConfig.title}
                     </div>
                     {showDescriptions && (
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-muted-foreground text-sm">
                         {stepConfig.description}
                       </div>
                     )}
                     {showEstimatedTime && stepConfig.estimatedTime && (
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-muted-foreground text-xs">
                         Est. {stepConfig.estimatedTime} minutes
                       </div>
                     )}
@@ -376,7 +396,7 @@ export const WizardStepper: React.FC<WizardStepperProps> = ({
         </div>
 
         {/* Desktop/Wide View */}
-        <div className="hidden sm:flex items-center justify-between">
+        <div className="hidden items-center justify-between sm:flex">
           {steps.map((stepConfig, index) => {
             const isActive = stepConfig.step === currentStep;
             const status = stepStatus[stepConfig.step];
@@ -412,9 +432,10 @@ export const WizardStepper: React.FC<WizardStepperProps> = ({
       </div>
 
       {/* Step Summary */}
-      <div className="flex justify-between items-center text-sm text-muted-foreground">
+      <div className="text-muted-foreground flex items-center justify-between text-sm">
         <div>
-          Step {steps.findIndex(step => step.step === currentStep) + 1} of {steps.length}
+          Step {steps.findIndex(step => step.step === currentStep) + 1} of{' '}
+          {steps.length}
         </div>
         <div>
           {completedSteps} completed, {steps.length - completedSteps} remaining

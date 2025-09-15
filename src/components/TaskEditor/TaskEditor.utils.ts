@@ -11,13 +11,8 @@
 import { format, isAfter, isBefore } from 'date-fns';
 import { z } from 'zod';
 
-import type {
-  Task,
-} from '@/types/smart-goals.types';
-import {
-  TaskStatus,
-  GoalPriority,
-} from '@/types/smart-goals.types';
+import type { Task } from '@/types/smart-goals.types';
+import { TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 
 import {
   TaskFormData,
@@ -37,65 +32,69 @@ import {
 
 /** Task form validation schema */
 export const taskFormSchema = z.object({
-  title: z.string()
+  title: z
+    .string()
     .min(3, 'Title must be at least 3 characters long')
     .max(100, 'Title must be less than 100 characters'),
 
-  description: z.string()
+  description: z
+    .string()
     .max(500, 'Description must be less than 500 characters')
     .optional(),
 
   status: z.nativeEnum(TaskStatus, {
-    required_error: 'Please select a valid status',
-    invalid_type_error: 'Please select a valid status'
+    message: 'Please select a valid status',
   }),
 
   priority: z.nativeEnum(GoalPriority, {
-    required_error: 'Please select a valid priority',
-    invalid_type_error: 'Please select a valid priority'
+    message: 'Please select a valid priority',
   }),
 
-  assignedTo: z.string()
-    .optional(),
+  assignedTo: z.string().optional(),
 
-  estimatedHours: z.number()
+  estimatedHours: z
+    .number()
     .min(0.1, 'Estimated hours must be at least 0.1')
     .max(1000, 'Estimated hours must be less than 1000')
     .optional(),
 
-  actualHours: z.number()
+  actualHours: z
+    .number()
     .min(0, 'Actual hours cannot be negative')
     .max(2000, 'Actual hours must be less than 2000')
     .optional(),
 
-  dueDate: z.date()
+  dueDate: z
+    .date()
     .refine(
-      (date) => !date || isAfter(date, new Date()),
+      date => !date || isAfter(date, new Date()),
       'Due date must be in the future'
     )
     .optional(),
 
-  startDate: z.date()
-    .optional(),
+  startDate: z.date().optional(),
 
-  tags: z.array(z.string().min(1, 'Tag cannot be empty'))
+  tags: z
+    .array(z.string().min(1, 'Tag cannot be empty'))
     .max(10, 'Maximum 10 tags allowed'),
 
-  dependencies: z.array(z.string())
-    .max(20, 'Maximum 20 dependencies allowed'),
+  dependencies: z.array(z.string()).max(20, 'Maximum 20 dependencies allowed'),
 
-  order: z.number()
+  order: z
+    .number()
     .int('Order must be an integer')
     .min(0, 'Order cannot be negative'),
 });
 
 /** Subtask form validation schema */
 export const subtaskFormSchema = z.object({
-  title: z.string()
+  title: z
+    .string()
     .min(3, 'Subtask title must be at least 3 characters long')
     .max(100, 'Subtask title must be less than 100 characters'),
 
-  description: z.string()
+  description: z
+    .string()
     .max(300, 'Subtask description must be less than 300 characters')
     .optional(),
 
@@ -104,14 +103,16 @@ export const subtaskFormSchema = z.object({
 
   assignedTo: z.string().optional(),
 
-  estimatedHours: z.number()
+  estimatedHours: z
+    .number()
     .min(0.1, 'Estimated hours must be at least 0.1')
     .max(100, 'Estimated hours must be less than 100')
     .optional(),
 
-  dueDate: z.date()
+  dueDate: z
+    .date()
     .refine(
-      (date) => !date || isAfter(date, new Date()),
+      date => !date || isAfter(date, new Date()),
       'Due date must be in the future'
     )
     .optional(),
@@ -122,11 +123,13 @@ export const subtaskFormSchema = z.object({
 
 /** Checklist item validation schema */
 export const checklistItemSchema = z.object({
-  title: z.string()
+  title: z
+    .string()
     .min(1, 'Checklist item title is required')
     .max(200, 'Checklist item title must be less than 200 characters'),
 
-  description: z.string()
+  description: z
+    .string()
     .max(300, 'Description must be less than 300 characters')
     .optional(),
 
@@ -150,7 +153,10 @@ export const acceptanceCriteriaSchema = z.object({
 /**
  * Check if a status transition is valid
  */
-export function isValidStatusTransition(from: TaskStatus, to: TaskStatus): boolean {
+export function isValidStatusTransition(
+  from: TaskStatus,
+  to: TaskStatus
+): boolean {
   const allowedTransitions = STATUS_TRANSITIONS[from];
   return allowedTransitions.includes(to);
 }
@@ -178,7 +184,8 @@ export function getStatusChangeConfirmation(
   let warningMessage: string | undefined;
 
   if (to === TaskStatus.COMPLETED) {
-    confirmationMessage = 'Are you sure you want to mark this task as completed?';
+    confirmationMessage =
+      'Are you sure you want to mark this task as completed?';
   } else if (to === TaskStatus.CANCELLED) {
     confirmationMessage = 'Are you sure you want to cancel this task?';
     warningMessage = 'This action can be undone, but progress will be lost.';
@@ -229,7 +236,10 @@ export function getPriorityColor(priority: GoalPriority): string {
 /**
  * Validate Gherkin syntax
  */
-export function validateGherkinSyntax(content: string): { isValid: boolean; errors: string[] } {
+export function validateGherkinSyntax(content: string): {
+  isValid: boolean;
+  errors: string[];
+} {
   const errors: string[] = [];
   const lines = content.split('\n').map(line => line.trim());
 
@@ -241,7 +251,9 @@ export function validateGherkinSyntax(content: string): { isValid: boolean; erro
     if (!line) continue;
 
     const keywords = ['Given', 'When', 'Then', 'And', 'But'];
-    const startsWithKeyword = keywords.some(keyword => line.startsWith(keyword + ' '));
+    const startsWithKeyword = keywords.some(keyword =>
+      line.startsWith(keyword + ' ')
+    );
 
     if (!startsWithKeyword && line.length > 0) {
       errors.push(`Line "${line}" doesn't start with a valid Gherkin keyword`);
@@ -266,7 +278,10 @@ export function validateGherkinSyntax(content: string): { isValid: boolean; erro
  * Parse Gherkin content into structured data
  */
 export function parseGherkinContent(content: string): GherkinCriteria {
-  const lines = content.split('\n').map(line => line.trim()).filter(Boolean);
+  const lines = content
+    .split('\n')
+    .map(line => line.trim())
+    .filter(Boolean);
 
   const criteria: GherkinCriteria = {
     given: [],
@@ -317,7 +332,9 @@ export function gherkinToContent(criteria: GherkinCriteria): string {
 /**
  * Validate acceptance criteria content based on format
  */
-export function validateAcceptanceCriteria(criteria: AcceptanceCriteriaData): AcceptanceCriteriaData {
+export function validateAcceptanceCriteria(
+  criteria: AcceptanceCriteriaData
+): AcceptanceCriteriaData {
   const errors: string[] = [];
   let isValid = true;
 
@@ -352,16 +369,22 @@ export function calculateTimeTrackingSummary(
   task: Task,
   timeEntries: any[] = []
 ): TimeTrackingSummary {
-  const totalEstimated = (task.estimatedHours || 0) +
-    task.subtasks.reduce((sum, subtask) => sum + (subtask.estimatedHours || 0), 0);
+  const totalEstimated =
+    (task.estimatedHours || 0) +
+    task.subtasks.reduce(
+      (sum, subtask) => sum + (subtask.estimatedHours || 0),
+      0
+    );
 
-  const totalActual = (task.actualHours || 0) +
+  const totalActual =
+    (task.actualHours || 0) +
     task.subtasks.reduce((sum, subtask) => sum + (subtask.actualHours || 0), 0);
 
   const totalRemaining = Math.max(0, totalEstimated - totalActual);
   const isOverEstimate = totalActual > totalEstimated;
   const overageAmount = Math.max(0, totalActual - totalEstimated);
-  const overagePercentage = totalEstimated > 0 ? (overageAmount / totalEstimated) * 100 : 0;
+  const overagePercentage =
+    totalEstimated > 0 ? (overageAmount / totalEstimated) * 100 : 0;
 
   // Calculate daily and category breakdowns
   const dailyBreakdown: Record<string, number> = {};
@@ -370,7 +393,8 @@ export function calculateTimeTrackingSummary(
   for (const entry of timeEntries) {
     const day = format(new Date(entry.startTime), 'yyyy-MM-dd');
     dailyBreakdown[day] = (dailyBreakdown[day] || 0) + entry.duration;
-    categoryBreakdown[entry.category] = (categoryBreakdown[entry.category] || 0) + entry.duration;
+    categoryBreakdown[entry.category] =
+      (categoryBreakdown[entry.category] || 0) + entry.duration;
   }
 
   return {
@@ -423,7 +447,8 @@ export function formDataToTask(
     description: formData.description,
     status: formData.status,
     priority: formData.priority,
-    assignedTo: formData.assignedTo === 'unassigned' ? undefined : formData.assignedTo,
+    assignedTo:
+      formData.assignedTo === 'unassigned' ? undefined : formData.assignedTo,
     estimatedHours: formData.estimatedHours,
     actualHours: formData.actualHours,
     dueDate: formData.dueDate,
@@ -446,12 +471,22 @@ export function validateTaskForm(formData: TaskFormData): FormValidation {
     const warnings: string[] = [];
 
     // Additional business logic validations
-    if (formData.dueDate && formData.startDate && isBefore(formData.dueDate, formData.startDate)) {
+    if (
+      formData.dueDate &&
+      formData.startDate &&
+      isBefore(formData.dueDate, formData.startDate)
+    ) {
       errors.dueDate = ['Due date cannot be before start date'];
     }
 
-    if (formData.estimatedHours && formData.actualHours && formData.actualHours > formData.estimatedHours * 2) {
-      warnings.push('Actual hours significantly exceed estimate. Consider updating estimate.');
+    if (
+      formData.estimatedHours &&
+      formData.actualHours &&
+      formData.actualHours > formData.estimatedHours * 2
+    ) {
+      warnings.push(
+        'Actual hours significantly exceed estimate. Consider updating estimate.'
+      );
     }
 
     if (formData.status === TaskStatus.COMPLETED && !formData.actualHours) {
@@ -540,22 +575,31 @@ export function calculateTaskProgress(task: Task): number {
   if (task.status === TaskStatus.TODO) return 0;
 
   // Calculate based on subtasks and checklist completion
-  const subtaskProgress = task.subtasks.length > 0
-    ? task.subtasks.reduce((sum, subtask) => {
-        return sum + (subtask.status === TaskStatus.COMPLETED ? 100 : subtask.progress);
-      }, 0) / task.subtasks.length
-    : 0;
+  const subtaskProgress =
+    task.subtasks.length > 0
+      ? task.subtasks.reduce((sum, subtask) => {
+          return (
+            sum +
+            (subtask.status === TaskStatus.COMPLETED ? 100 : subtask.progress)
+          );
+        }, 0) / task.subtasks.length
+      : 0;
 
-  const checklistProgress = task.checklist.length > 0
-    ? (task.checklist.filter(item => item.isCompleted).length / task.checklist.length) * 100
-    : 0;
+  const checklistProgress =
+    task.checklist.length > 0
+      ? (task.checklist.filter(item => item.isCompleted).length /
+          task.checklist.length) *
+        100
+      : 0;
 
   // Weight subtasks more heavily than checklist
   const subtaskWeight = 0.7;
   const checklistWeight = 0.3;
 
   if (task.subtasks.length > 0 && task.checklist.length > 0) {
-    return Math.round(subtaskProgress * subtaskWeight + checklistProgress * checklistWeight);
+    return Math.round(
+      subtaskProgress * subtaskWeight + checklistProgress * checklistWeight
+    );
   } else if (task.subtasks.length > 0) {
     return Math.round(subtaskProgress);
   } else if (task.checklist.length > 0) {
@@ -603,7 +647,11 @@ export function formatDate(date: Date, formatStr = 'MMM dd, yyyy'): string {
  * Check if task is overdue
  */
 export function isTaskOverdue(task: Task): boolean {
-  if (!task.dueDate || task.status === TaskStatus.COMPLETED || task.status === TaskStatus.CANCELLED) {
+  if (
+    !task.dueDate ||
+    task.status === TaskStatus.COMPLETED ||
+    task.status === TaskStatus.CANCELLED
+  ) {
     return false;
   }
   return isBefore(task.dueDate, new Date());
@@ -612,11 +660,15 @@ export function isTaskOverdue(task: Task): boolean {
 /**
  * Get task urgency level
  */
-export function getTaskUrgency(task: Task): 'low' | 'medium' | 'high' | 'critical' {
+export function getTaskUrgency(
+  task: Task
+): 'low' | 'medium' | 'high' | 'critical' {
   if (!task.dueDate) return 'low';
 
   const now = new Date();
-  const daysUntilDue = Math.ceil((task.dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  const daysUntilDue = Math.ceil(
+    (task.dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+  );
 
   if (daysUntilDue < 0) return 'critical'; // Overdue
   if (daysUntilDue <= 1) return 'high';
@@ -642,7 +694,7 @@ export function debounce<T extends (...args: any[]) => void>(
 
   return (...args: Parameters<T>) => {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(null, args), delay);
+    timeoutId = setTimeout(() => func(...args), delay);
   };
 }
 

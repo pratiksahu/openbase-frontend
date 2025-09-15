@@ -24,16 +24,37 @@ import { z } from 'zod';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { MeasurableSpec, MetricCheckpoint, Frequency } from '@/types/smart-goals.types';
+import {
+  MeasurableSpec,
+  MetricCheckpoint,
+  Frequency,
+} from '@/types/smart-goals.types';
 
 import { CheckpointTracker } from './CheckpointTracker';
 import { MetricChart } from './MetricChart';
@@ -51,10 +72,12 @@ import {
 } from './MetricEditor.utils';
 import { MetricTypeSelector } from './MetricTypeSelector';
 
-
 // Zod schema for form validation
 const metricFormSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters').max(100, 'Name must be less than 100 characters'),
+  name: z
+    .string()
+    .min(3, 'Name must be at least 3 characters')
+    .max(100, 'Name must be less than 100 characters'),
   metricType: z.nativeEnum(ExtendedMetricType),
   baselineValue: z.number().optional(),
   targetValue: z.number(),
@@ -82,26 +105,38 @@ export function MetricEditor({
   onSave,
   onCancel,
   readOnly = false,
-  goalId,
+  goalId: _goalId,
   className,
 }: MetricEditorProps): React.JSX.Element {
   // Form state
-  const [checkpoints, setCheckpoints] = useState<MetricCheckpoint[]>(initialCheckpoints);
+  const [checkpoints, setCheckpoints] =
+    useState<MetricCheckpoint[]>(initialCheckpoints);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [activeTab, setActiveTab] = useState<'config' | 'checkpoints' | 'analysis'>('config');
+  const [activeTab, setActiveTab] = useState<
+    'config' | 'checkpoints' | 'analysis'
+  >('config');
 
   // Initialize form with default values
   const defaultValues: Partial<FormData> = {
-    name: initialMetric?.metricType ? METRIC_TYPE_CONFIGS[initialMetric.metricType as unknown as ExtendedMetricType]?.label : '',
-    metricType: (initialMetric?.metricType as unknown as ExtendedMetricType) || ExtendedMetricType.NUMBER,
+    name: initialMetric?.metricType
+      ? METRIC_TYPE_CONFIGS[
+          initialMetric.metricType as unknown as ExtendedMetricType
+        ]?.label
+      : '',
+    metricType:
+      (initialMetric?.metricType as unknown as ExtendedMetricType) ||
+      ExtendedMetricType.NUMBER,
     baselineValue: initialMetric?.minimumValue,
     targetValue: initialMetric?.targetValue || 100,
     currentValue: initialMetric?.currentValue || 0,
     unit: initialMetric?.unit || '',
-    direction: initialMetric?.higherIsBetter ? MetricDirection.INCREASE : MetricDirection.DECREASE,
+    direction: initialMetric?.higherIsBetter
+      ? MetricDirection.INCREASE
+      : MetricDirection.DECREASE,
     minimumValue: initialMetric?.minimumValue,
     maximumValue: initialMetric?.maximumValue,
-    measurementFrequency: (initialMetric?.measurementFrequency as Frequency) || Frequency.WEEKLY,
+    measurementFrequency:
+      (initialMetric?.measurementFrequency as Frequency) || Frequency.WEEKLY,
     description: initialMetric?.calculationMethod || '',
     dataSource: initialMetric?.dataSource || '',
     calculationMethod: initialMetric?.calculationMethod || '',
@@ -122,7 +157,14 @@ export function MetricEditor({
 
   // Watch form values for real-time updates
   const watchedValues = watch();
-  const { metricType, direction, targetValue, currentValue, baselineValue, unit } = watchedValues;
+  const {
+    metricType,
+    direction,
+    targetValue,
+    currentValue,
+    baselineValue,
+    unit,
+  } = watchedValues;
 
   // Auto-update unit when metric type changes
   useEffect(() => {
@@ -159,7 +201,14 @@ export function MetricEditor({
 
     const spec = buildMeasurableSpec(getValues());
     return analyzeProgress(spec, checkpoints);
-  }, [currentValue, targetValue, baselineValue, direction, checkpoints, getValues]);
+  }, [
+    currentValue,
+    targetValue,
+    baselineValue,
+    direction,
+    checkpoints,
+    getValues,
+  ]);
 
   // Handle form submission
   const onSubmit = (data: FormData) => {
@@ -192,14 +241,11 @@ export function MetricEditor({
               onClick={onCancel}
               disabled={readOnly}
             >
-              <X className="w-4 h-4 mr-2" />
+              <X className="mr-2 h-4 w-4" />
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={!isValid || !isDirty || readOnly}
-            >
-              <Save className="w-4 h-4 mr-2" />
+            <Button type="submit" disabled={!isValid || !isDirty || readOnly}>
+              <Save className="mr-2 h-4 w-4" />
               Save Metric
             </Button>
           </div>
@@ -212,7 +258,9 @@ export function MetricEditor({
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-base">Progress Preview</CardTitle>
-                  <CardDescription>Real-time analysis based on current values</CardDescription>
+                  <CardDescription>
+                    Real-time analysis based on current values
+                  </CardDescription>
                 </div>
                 <Badge className={getStatusColor(progressAnalysis.status)}>
                   {progressAnalysis.status.replace('_', ' ')}
@@ -223,7 +271,10 @@ export function MetricEditor({
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
                   <div className="flex-1">
-                    <Progress value={progressAnalysis.progressPercentage} className="h-3" />
+                    <Progress
+                      value={progressAnalysis.progressPercentage}
+                      className="h-3"
+                    />
                   </div>
                   <div className="text-sm font-medium">
                     {progressAnalysis.progressPercentage.toFixed(1)}%
@@ -232,18 +283,28 @@ export function MetricEditor({
                 <div className="grid grid-cols-3 gap-4 text-sm">
                   <div>
                     <span className="text-muted-foreground">Current:</span>
-                    <div className="font-medium">{formatDisplayValue(currentValue)}</div>
+                    <div className="font-medium">
+                      {formatDisplayValue(currentValue)}
+                    </div>
                   </div>
                   <div>
                     <span className="text-muted-foreground">Target:</span>
-                    <div className="font-medium">{formatDisplayValue(targetValue)}</div>
+                    <div className="font-medium">
+                      {formatDisplayValue(targetValue)}
+                    </div>
                   </div>
                   <div>
                     <span className="text-muted-foreground">Trend:</span>
                     <div className="flex items-center gap-1 font-medium">
-                      {progressAnalysis.trend === 'increasing' && <TrendingUp className="w-4 h-4 text-green-500" />}
-                      {progressAnalysis.trend === 'decreasing' && <TrendingDown className="w-4 h-4 text-red-500" />}
-                      {progressAnalysis.trend === 'stable' && <Minus className="w-4 h-4 text-gray-500" />}
+                      {progressAnalysis.trend === 'increasing' && (
+                        <TrendingUp className="h-4 w-4 text-green-500" />
+                      )}
+                      {progressAnalysis.trend === 'decreasing' && (
+                        <TrendingDown className="h-4 w-4 text-red-500" />
+                      )}
+                      {progressAnalysis.trend === 'stable' && (
+                        <Minus className="h-4 w-4 text-gray-500" />
+                      )}
                       {progressAnalysis.trend}
                     </div>
                   </div>
@@ -254,10 +315,16 @@ export function MetricEditor({
         )}
 
         {/* Main Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab as any} className="w-full">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab as any}
+          className="w-full"
+        >
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="config">Configuration</TabsTrigger>
-            <TabsTrigger value="checkpoints">Checkpoints ({checkpoints.length})</TabsTrigger>
+            <TabsTrigger value="checkpoints">
+              Checkpoints ({checkpoints.length})
+            </TabsTrigger>
             <TabsTrigger value="analysis">Analysis</TabsTrigger>
           </TabsList>
 
@@ -267,7 +334,7 @@ export function MetricEditor({
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="w-5 h-5" />
+                  <Target className="h-5 w-5" />
                   Basic Configuration
                 </CardTitle>
                 <CardDescription>
@@ -282,7 +349,7 @@ export function MetricEditor({
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Info className="inline-block w-4 h-4 ml-1 text-muted-foreground cursor-help" />
+                          <Info className="text-muted-foreground ml-1 inline-block h-4 w-4 cursor-help" />
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>A clear, descriptive name for your metric</p>
@@ -304,7 +371,9 @@ export function MetricEditor({
                     )}
                   />
                   {errors.name && (
-                    <p className="text-sm text-red-500">{errors.name.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
@@ -324,12 +393,10 @@ export function MetricEditor({
                 </div>
 
                 {/* Values Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   {/* Current Value */}
                   <div className="space-y-2">
-                    <Label htmlFor="currentValue">
-                      Current Value *
-                    </Label>
+                    <Label htmlFor="currentValue">Current Value *</Label>
                     <Controller
                       name="currentValue"
                       control={control}
@@ -338,22 +405,28 @@ export function MetricEditor({
                           {...field}
                           id="currentValue"
                           type="number"
-                          step={METRIC_TYPE_CONFIGS[metricType]?.allowDecimals ? '0.01' : '1'}
+                          step={
+                            METRIC_TYPE_CONFIGS[metricType]?.allowDecimals
+                              ? '0.01'
+                              : '1'
+                          }
                           disabled={readOnly}
-                          onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                          onChange={e =>
+                            field.onChange(parseFloat(e.target.value) || 0)
+                          }
                         />
                       )}
                     />
                     {errors.currentValue && (
-                      <p className="text-sm text-red-500">{errors.currentValue.message}</p>
+                      <p className="text-sm text-red-500">
+                        {errors.currentValue.message}
+                      </p>
                     )}
                   </div>
 
                   {/* Target Value */}
                   <div className="space-y-2">
-                    <Label htmlFor="targetValue">
-                      Target Value *
-                    </Label>
+                    <Label htmlFor="targetValue">Target Value *</Label>
                     <Controller
                       name="targetValue"
                       control={control}
@@ -362,22 +435,28 @@ export function MetricEditor({
                           {...field}
                           id="targetValue"
                           type="number"
-                          step={METRIC_TYPE_CONFIGS[metricType]?.allowDecimals ? '0.01' : '1'}
+                          step={
+                            METRIC_TYPE_CONFIGS[metricType]?.allowDecimals
+                              ? '0.01'
+                              : '1'
+                          }
                           disabled={readOnly}
-                          onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                          onChange={e =>
+                            field.onChange(parseFloat(e.target.value) || 0)
+                          }
                         />
                       )}
                     />
                     {errors.targetValue && (
-                      <p className="text-sm text-red-500">{errors.targetValue.message}</p>
+                      <p className="text-sm text-red-500">
+                        {errors.targetValue.message}
+                      </p>
                     )}
                   </div>
 
                   {/* Unit */}
                   <div className="space-y-2">
-                    <Label htmlFor="unit">
-                      Unit *
-                    </Label>
+                    <Label htmlFor="unit">Unit *</Label>
                     <Controller
                       name="unit"
                       control={control}
@@ -391,13 +470,15 @@ export function MetricEditor({
                       )}
                     />
                     {errors.unit && (
-                      <p className="text-sm text-red-500">{errors.unit.message}</p>
+                      <p className="text-sm text-red-500">
+                        {errors.unit.message}
+                      </p>
                     )}
                   </div>
                 </div>
 
                 {/* Direction and Frequency */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   {/* Direction */}
                   <div className="space-y-2">
                     <Label htmlFor="direction">Direction</Label>
@@ -405,26 +486,30 @@ export function MetricEditor({
                       name="direction"
                       control={control}
                       render={({ field }) => (
-                        <Select value={field.value} onValueChange={field.onChange} disabled={readOnly}>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={readOnly}
+                        >
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value={MetricDirection.INCREASE}>
                               <div className="flex items-center gap-2">
-                                <TrendingUp className="w-4 h-4" />
+                                <TrendingUp className="h-4 w-4" />
                                 Increase (Higher is Better)
                               </div>
                             </SelectItem>
                             <SelectItem value={MetricDirection.DECREASE}>
                               <div className="flex items-center gap-2">
-                                <TrendingDown className="w-4 h-4" />
+                                <TrendingDown className="h-4 w-4" />
                                 Decrease (Lower is Better)
                               </div>
                             </SelectItem>
                             <SelectItem value={MetricDirection.MAINTAIN}>
                               <div className="flex items-center gap-2">
-                                <Target className="w-4 h-4" />
+                                <Target className="h-4 w-4" />
                                 Maintain (Target Specific Value)
                               </div>
                             </SelectItem>
@@ -436,19 +521,26 @@ export function MetricEditor({
 
                   {/* Measurement Frequency */}
                   <div className="space-y-2">
-                    <Label htmlFor="measurementFrequency">Measurement Frequency</Label>
+                    <Label htmlFor="measurementFrequency">
+                      Measurement Frequency
+                    </Label>
                     <Controller
                       name="measurementFrequency"
                       control={control}
                       render={({ field }) => (
-                        <Select value={field.value} onValueChange={field.onChange} disabled={readOnly}>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={readOnly}
+                        >
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {Object.values(Frequency).map((freq) => (
+                            {Object.values(Frequency).map(freq => (
                               <SelectItem key={freq} value={freq}>
-                                {freq.charAt(0).toUpperCase() + freq.slice(1).replace('_', ' ')}
+                                {freq.charAt(0).toUpperCase() +
+                                  freq.slice(1).replace('_', ' ')}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -483,7 +575,7 @@ export function MetricEditor({
               {showAdvanced && (
                 <CardContent className="space-y-4">
                   {/* Baseline and Range */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                     <div className="space-y-2">
                       <Label htmlFor="baselineValue">Baseline Value</Label>
                       <Controller
@@ -494,10 +586,20 @@ export function MetricEditor({
                             {...field}
                             id="baselineValue"
                             type="number"
-                            step={METRIC_TYPE_CONFIGS[metricType]?.allowDecimals ? '0.01' : '1'}
+                            step={
+                              METRIC_TYPE_CONFIGS[metricType]?.allowDecimals
+                                ? '0.01'
+                                : '1'
+                            }
                             disabled={readOnly}
                             value={field.value || ''}
-                            onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={e =>
+                              field.onChange(
+                                e.target.value
+                                  ? parseFloat(e.target.value)
+                                  : undefined
+                              )
+                            }
                           />
                         )}
                       />
@@ -512,10 +614,20 @@ export function MetricEditor({
                             {...field}
                             id="minimumValue"
                             type="number"
-                            step={METRIC_TYPE_CONFIGS[metricType]?.allowDecimals ? '0.01' : '1'}
+                            step={
+                              METRIC_TYPE_CONFIGS[metricType]?.allowDecimals
+                                ? '0.01'
+                                : '1'
+                            }
                             disabled={readOnly}
                             value={field.value || ''}
-                            onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={e =>
+                              field.onChange(
+                                e.target.value
+                                  ? parseFloat(e.target.value)
+                                  : undefined
+                              )
+                            }
                           />
                         )}
                       />
@@ -530,10 +642,20 @@ export function MetricEditor({
                             {...field}
                             id="maximumValue"
                             type="number"
-                            step={METRIC_TYPE_CONFIGS[metricType]?.allowDecimals ? '0.01' : '1'}
+                            step={
+                              METRIC_TYPE_CONFIGS[metricType]?.allowDecimals
+                                ? '0.01'
+                                : '1'
+                            }
                             disabled={readOnly}
                             value={field.value || ''}
-                            onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={e =>
+                              field.onChange(
+                                e.target.value
+                                  ? parseFloat(e.target.value)
+                                  : undefined
+                              )
+                            }
                           />
                         )}
                       />
@@ -579,7 +701,9 @@ export function MetricEditor({
 
                   {/* Calculation Method */}
                   <div className="space-y-2">
-                    <Label htmlFor="calculationMethod">Calculation Method</Label>
+                    <Label htmlFor="calculationMethod">
+                      Calculation Method
+                    </Label>
                     <Controller
                       name="calculationMethod"
                       control={control}
@@ -624,11 +748,12 @@ export function MetricEditor({
             ) : (
               <Card>
                 <CardContent className="flex items-center justify-center py-12">
-                  <div className="text-center space-y-2">
-                    <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto" />
+                  <div className="space-y-2 text-center">
+                    <AlertCircle className="text-muted-foreground mx-auto h-12 w-12" />
                     <h3 className="text-lg font-medium">No Data to Analyze</h3>
                     <p className="text-muted-foreground max-w-sm">
-                      Add some checkpoints in the Checkpoints tab to see progress analysis and charts.
+                      Add some checkpoints in the Checkpoints tab to see
+                      progress analysis and charts.
                     </p>
                   </div>
                 </CardContent>

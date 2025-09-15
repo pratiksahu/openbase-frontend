@@ -70,15 +70,17 @@ export interface ErrorReportingOptions {
 // Type Guards
 // =============================================================================
 
-function isAppError(error: unknown): error is AppError {
-  return error !== null &&
+function isAppErrorInternal(error: unknown): error is AppError {
+  return (
+    error !== null &&
     typeof error === 'object' &&
     'type' in error &&
     'severity' in error &&
     'message' in error &&
     'retryable' in error &&
     'userFriendly' in error &&
-    'timestamp' in error;
+    'timestamp' in error
+  );
 }
 
 // Error Classification
@@ -86,7 +88,7 @@ function isAppError(error: unknown): error is AppError {
 
 export class ErrorClassifier {
   static classifyError(error: unknown): AppError {
-    if (isAppError(error)) {
+    if (isAppErrorInternal(error)) {
       return error;
     }
 
@@ -185,7 +187,9 @@ export class ErrorClassifier {
     return {
       type,
       severity,
-      message: error.message || `HTTP ${statusCode}: ${error.statusText || 'Unknown error'}`,
+      message:
+        error.message ||
+        `HTTP ${statusCode}: ${error.statusText || 'Unknown error'}`,
       originalError: error instanceof Error ? error : undefined,
       statusCode,
       retryable,
@@ -224,7 +228,7 @@ export class ErrorRecovery {
       maxRetries = 3,
       retryDelay = 1000,
       exponentialBackoff = true,
-      retryCondition = (error) => error.retryable,
+      retryCondition = error => error.retryable,
       onRetry,
       onMaxRetriesReached,
     } = options;
@@ -339,7 +343,7 @@ export class OfflineHandler {
     }
 
     return new Promise((resolve, reject) => {
-      const cleanup = this.onStatusChange((online) => {
+      const cleanup = this.onStatusChange(online => {
         if (online) {
           cleanup();
           if (timeoutId) clearTimeout(timeoutId);
@@ -377,12 +381,14 @@ export class ErrorReporter {
     // Enhance error with additional context
     const enhancedError = {
       ...error,
-      ...(includeUserAgent && typeof navigator !== 'undefined' && {
-        userAgent: navigator.userAgent,
-      }),
-      ...(includeUrl && typeof window !== 'undefined' && {
-        url: window.location.href,
-      }),
+      ...(includeUserAgent &&
+        typeof navigator !== 'undefined' && {
+          userAgent: navigator.userAgent,
+        }),
+      ...(includeUrl &&
+        typeof window !== 'undefined' && {
+          url: window.location.href,
+        }),
       ...(includeTimestamp && {
         reportedAt: new Date(),
       }),
@@ -471,10 +477,13 @@ export class ErrorReporter {
 
     return {
       navigation: window.performance.navigation?.type,
-      timing: window.performance.timing ? {
-        loadEventEnd: window.performance.timing.loadEventEnd,
-        domContentLoadedEventEnd: window.performance.timing.domContentLoadedEventEnd,
-      } : null,
+      timing: window.performance.timing
+        ? {
+            loadEventEnd: window.performance.timing.loadEventEnd,
+            domContentLoadedEventEnd:
+              window.performance.timing.domContentLoadedEventEnd,
+          }
+        : null,
     };
   }
 
@@ -486,7 +495,10 @@ export class ErrorReporter {
 
     if (error.message) {
       // Remove email patterns
-      error.message = error.message.replace(/[\w\.-]+@[\w\.-]+\.\w+/g, '[EMAIL]');
+      error.message = error.message.replace(
+        /[\w\.-]+@[\w\.-]+\.\w+/g,
+        '[EMAIL]'
+      );
       // Remove potential tokens
       error.message = error.message.replace(/\b[A-Za-z0-9]{20,}\b/g, '[TOKEN]');
     }
@@ -516,7 +528,7 @@ export class ErrorMessageFormatter {
     },
     [ErrorType.AUTHORIZATION]: {
       title: 'Permission Denied',
-      message: 'You don\'t have permission to perform this action.',
+      message: "You don't have permission to perform this action.",
       action: 'Contact Support',
     },
     [ErrorType.NOT_FOUND]: {
@@ -541,7 +553,7 @@ export class ErrorMessageFormatter {
     },
     [ErrorType.OFFLINE]: {
       title: 'No Internet Connection',
-      message: 'You\'re currently offline. Please check your connection.',
+      message: "You're currently offline. Please check your connection.",
       action: 'Retry When Online',
     },
     [ErrorType.UNKNOWN]: {
@@ -556,7 +568,8 @@ export class ErrorMessageFormatter {
     message: string;
     action: string;
   } {
-    const template = this.messages[error.type] || this.messages[ErrorType.UNKNOWN];
+    const template =
+      this.messages[error.type] || this.messages[ErrorType.UNKNOWN];
 
     return {
       title: template.title,
@@ -584,13 +597,13 @@ export function initializeErrorHandling(): void {
   // Set up global error handlers
   if (typeof window !== 'undefined') {
     // Catch unhandled promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener('unhandledrejection', event => {
       const error = ErrorClassifier.classifyError(event.reason);
       ErrorReporter.report(error);
     });
 
     // Catch global JavaScript errors
-    window.addEventListener('error', (event) => {
+    window.addEventListener('error', event => {
       const error = ErrorClassifier.classifyError(event.error);
       ErrorReporter.report(error);
     });
@@ -618,12 +631,14 @@ export function createAppError(
 }
 
 export function isAppError(error: unknown): error is AppError {
-  return typeof error === 'object' &&
-         error !== null &&
-         'type' in error &&
-         'severity' in error &&
-         'message' in error &&
-         'timestamp' in error;
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'type' in error &&
+    'severity' in error &&
+    'message' in error &&
+    'timestamp' in error
+  );
 }
 
 // Types and classes are already exported above as named exports

@@ -9,7 +9,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { mockGoals } from '@/lib/mock-data/smart-goals';
-import type { SmartGoal, GoalFilters, GoalSort } from '@/types/smart-goals.types';
+import type {
+  SmartGoal,
+  GoalFilters,
+  GoalSort,
+  GoalStatus,
+  GoalPriority,
+  GoalCategory,
+} from '@/types/smart-goals.types';
 
 // =============================================================================
 // Types
@@ -39,19 +46,19 @@ const parseFilters = (searchParams: URLSearchParams): GoalFilters => {
   // Status filter
   const status = searchParams.get('status');
   if (status) {
-    filters.status = status.split(',') as any[];
+    filters.status = status.split(',') as GoalStatus[];
   }
 
   // Priority filter
   const priority = searchParams.get('priority');
   if (priority) {
-    filters.priority = priority.split(',') as any[];
+    filters.priority = priority.split(',') as GoalPriority[];
   }
 
   // Category filter
   const category = searchParams.get('category');
   if (category) {
-    filters.category = category.split(',') as any[];
+    filters.category = category.split(',') as GoalCategory[];
   }
 
   // Owner filter
@@ -95,7 +102,10 @@ const parseSort = (searchParams: URLSearchParams): GoalSort => {
   };
 };
 
-const applyFilters = (goals: SmartGoal[], filters: GoalFilters): SmartGoal[] => {
+const applyFilters = (
+  goals: SmartGoal[],
+  filters: GoalFilters
+): SmartGoal[] => {
   return goals.filter(goal => {
     // Status filter
     if (filters.status?.length && !filters.status.includes(goal.status)) {
@@ -120,7 +130,9 @@ const applyFilters = (goals: SmartGoal[], filters: GoalFilters): SmartGoal[] => 
     // Tags filter
     if (filters.tags?.length) {
       const hasMatchingTag = filters.tags.some(tag =>
-        goal.tags.some(goalTag => goalTag.toLowerCase().includes(tag.toLowerCase()))
+        goal.tags.some(goalTag =>
+          goalTag.toLowerCase().includes(tag.toLowerCase())
+        )
       );
       if (!hasMatchingTag) return false;
     }
@@ -128,7 +140,10 @@ const applyFilters = (goals: SmartGoal[], filters: GoalFilters): SmartGoal[] => 
     // Date range filter
     if (filters.dateRange) {
       const goalDate = new Date(goal.createdAt);
-      if (goalDate < filters.dateRange.start || goalDate > filters.dateRange.end) {
+      if (
+        goalDate < filters.dateRange.start ||
+        goalDate > filters.dateRange.end
+      ) {
         return false;
       }
     }
@@ -142,7 +157,9 @@ const applyFilters = (goals: SmartGoal[], filters: GoalFilters): SmartGoal[] => 
         goal.specificObjective,
         ...goal.tags,
         ...goal.successCriteria,
-      ].join(' ').toLowerCase();
+      ]
+        .join(' ')
+        .toLowerCase();
 
       if (!searchFields.includes(searchTerm)) {
         return false;
@@ -205,7 +222,11 @@ export async function GET(request: NextRequest) {
     filteredGoals = applySort(filteredGoals, sort);
 
     // Apply pagination
-    const { goals: paginatedGoals, hasMore } = applyPagination(filteredGoals, page, limit);
+    const { goals: paginatedGoals, hasMore } = applyPagination(
+      filteredGoals,
+      page,
+      limit
+    );
 
     const response: GoalsListResponse = {
       goals: paginatedGoals,
@@ -294,21 +315,30 @@ export async function POST(request: NextRequest) {
 
 export async function PUT() {
   return NextResponse.json(
-    { error: 'Method Not Allowed', message: 'PUT method not allowed on this endpoint' },
+    {
+      error: 'Method Not Allowed',
+      message: 'PUT method not allowed on this endpoint',
+    },
     { status: 405 }
   );
 }
 
 export async function DELETE() {
   return NextResponse.json(
-    { error: 'Method Not Allowed', message: 'DELETE method not allowed on this endpoint' },
+    {
+      error: 'Method Not Allowed',
+      message: 'DELETE method not allowed on this endpoint',
+    },
     { status: 405 }
   );
 }
 
 export async function PATCH() {
   return NextResponse.json(
-    { error: 'Method Not Allowed', message: 'PATCH method not allowed on this endpoint' },
+    {
+      error: 'Method Not Allowed',
+      message: 'PATCH method not allowed on this endpoint',
+    },
     { status: 405 }
   );
 }

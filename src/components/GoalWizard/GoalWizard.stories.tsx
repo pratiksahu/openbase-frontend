@@ -6,7 +6,10 @@
  */
 
 // Action utilities not available in Storybook 9
-const action = (name: string) => (...args: any[]) => console.log(name, ...args);
+const action = (_name: string) => (..._args: any[]) => {
+  // Action handler for Storybook events
+  // In a production environment, these would be replaced with actual action handlers
+};
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 // Temporarily commented out - @storybook/test package not installed
 // import { within, expect, userEvent } from '@storybook/test';

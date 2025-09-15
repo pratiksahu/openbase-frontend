@@ -8,13 +8,27 @@
 
 'use client';
 
-import { Plus, BarChart3, Target, TrendingUp, AlertCircle, Lightbulb, HelpCircle } from 'lucide-react';
+import {
+  Plus,
+  BarChart3,
+  Target,
+  TrendingUp,
+  AlertCircle,
+  Lightbulb,
+  HelpCircle,
+} from 'lucide-react';
 import React, { useState } from 'react';
 
 import { MetricEditor } from '@/components/MetricEditor/MetricEditor';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Collapsible,
   CollapsibleContent,
@@ -39,10 +53,7 @@ import {
 import { cn } from '@/lib/utils';
 import { MeasurableSpec, MetricCheckpoint } from '@/types/smart-goals.types';
 
-import {
-  MeasurableStepProps,
-  MeasurableStepData,
-} from '../GoalWizard.types';
+import { MeasurableStepProps, MeasurableStepData } from '../GoalWizard.types';
 
 // =============================================================================
 // Measurement Template Data
@@ -70,7 +81,8 @@ const MEASUREMENT_TEMPLATES = {
     name: 'Objectives & Key Results (OKRs)',
     description: 'Ambitious objectives with specific, time-bound key results',
     icon: Target,
-    color: 'bg-green-50 border-green-200 hover:bg-green-100 dark:bg-green-950/30',
+    color:
+      'bg-green-50 border-green-200 hover:bg-green-100 dark:bg-green-950/30',
     examples: [
       'Improve product quality',
       'Increase user engagement',
@@ -85,9 +97,11 @@ const MEASUREMENT_TEMPLATES = {
   },
   balanced_scorecard: {
     name: 'Balanced Scorecard',
-    description: 'Multi-perspective measurement covering financial, customer, process, and learning',
+    description:
+      'Multi-perspective measurement covering financial, customer, process, and learning',
     icon: TrendingUp,
-    color: 'bg-purple-50 border-purple-200 hover:bg-purple-100 dark:bg-purple-950/30',
+    color:
+      'bg-purple-50 border-purple-200 hover:bg-purple-100 dark:bg-purple-950/30',
     examples: [
       'Financial Performance',
       'Customer Perspective',
@@ -123,14 +137,14 @@ const COMMON_SUCCESS_DEFINITIONS = [
 
 interface TemplateCardProps {
   templateKey: keyof typeof MEASUREMENT_TEMPLATES;
-  template: typeof MEASUREMENT_TEMPLATES[keyof typeof MEASUREMENT_TEMPLATES];
+  template: (typeof MEASUREMENT_TEMPLATES)[keyof typeof MEASUREMENT_TEMPLATES];
   isSelected: boolean;
   onSelect: () => void;
   disabled?: boolean;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
-  templateKey,
+  templateKey: _templateKey,
   template,
   isSelected,
   onSelect,
@@ -143,15 +157,15 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       className={cn(
         'cursor-pointer transition-all duration-200 hover:shadow-md',
         template.color,
-        isSelected && 'ring-2 ring-primary shadow-md',
-        disabled && 'opacity-50 cursor-not-allowed'
+        isSelected && 'ring-primary shadow-md ring-2',
+        disabled && 'cursor-not-allowed opacity-50'
       )}
       onClick={() => !disabled && onSelect()}
     >
       <CardHeader className="pb-3">
         <div className="flex items-center space-x-3">
-          <div className="p-2 rounded-lg bg-white/50 dark:bg-black/20">
-            <IconComponent className="h-5 w-5 text-primary" />
+          <div className="rounded-lg bg-white/50 p-2 dark:bg-black/20">
+            <IconComponent className="text-primary h-5 w-5" />
           </div>
           <div>
             <CardTitle className="text-base">{template.name}</CardTitle>
@@ -159,15 +173,15 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
         </div>
       </CardHeader>
       <CardContent className="pt-0">
-        <CardDescription className="text-sm mb-3">
+        <CardDescription className="mb-3 text-sm">
           {template.description}
         </CardDescription>
         <div className="space-y-1">
-          <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+          <div className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
             Examples:
           </div>
           {template.examples.slice(0, 2).map((example, index) => (
-            <div key={index} className="text-xs text-muted-foreground">
+            <div key={index} className="text-muted-foreground text-xs">
               • {example}
             </div>
           ))}
@@ -219,14 +233,14 @@ const SuccessDefinitionList: React.FC<SuccessDefinitionListProps> = ({
           {definitions.map((definition, index) => (
             <div
               key={index}
-              className="flex items-center justify-between p-3 bg-secondary rounded-md"
+              className="bg-secondary flex items-center justify-between rounded-md p-3"
             >
               <span className="text-sm">{definition}</span>
               {!disabled && (
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-auto p-1 hover:bg-destructive/20"
+                  className="hover:bg-destructive/20 h-auto p-1"
                   onClick={() => removeDefinition(index)}
                 >
                   ×
@@ -240,16 +254,20 @@ const SuccessDefinitionList: React.FC<SuccessDefinitionListProps> = ({
       {/* Add Common Definitions */}
       {!disabled && (
         <div className="space-y-3">
-          <div className="text-sm font-medium">Add common success definitions:</div>
+          <div className="text-sm font-medium">
+            Add common success definitions:
+          </div>
           <div className="flex flex-wrap gap-2">
-            {COMMON_SUCCESS_DEFINITIONS.filter(def => !definitions.includes(def))
+            {COMMON_SUCCESS_DEFINITIONS.filter(
+              def => !definitions.includes(def)
+            )
               .slice(0, 4)
               .map((definition, index) => (
                 <Button
                   key={index}
                   variant="outline"
                   size="sm"
-                  className="h-auto py-1 px-2 text-xs"
+                  className="h-auto px-2 py-1 text-xs"
                   onClick={() => addDefinition(definition)}
                 >
                   + {definition}
@@ -261,7 +279,7 @@ const SuccessDefinitionList: React.FC<SuccessDefinitionListProps> = ({
           <div className="flex space-x-2">
             <Textarea
               value={customDefinition}
-              onChange={(e) => setCustomDefinition(e.target.value)}
+              onChange={e => setCustomDefinition(e.target.value)}
               placeholder="Add a custom success definition..."
               rows={2}
               className="flex-1"
@@ -292,7 +310,8 @@ interface MetricSummaryProps {
 const MetricSummary: React.FC<MetricSummaryProps> = ({ metric }) => {
   const progressPercentage = Math.round(
     ((metric.currentValue - (metric.minimumValue || 0)) /
-     (metric.targetValue - (metric.minimumValue || 0))) * 100
+      (metric.targetValue - (metric.minimumValue || 0))) *
+      100
   );
 
   return (
@@ -300,9 +319,7 @@ const MetricSummary: React.FC<MetricSummaryProps> = ({ metric }) => {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base">Primary Metric</CardTitle>
-          <Badge variant="outline">
-            {metric.metricType}
-          </Badge>
+          <Badge variant="outline">{metric.metricType}</Badge>
         </div>
       </CardHeader>
       <CardContent>
@@ -332,7 +349,7 @@ const MetricSummary: React.FC<MetricSummaryProps> = ({ metric }) => {
               <span>Progress</span>
               <span>{progressPercentage}%</span>
             </div>
-            <div className="w-full bg-secondary rounded-full h-2">
+            <div className="bg-secondary h-2 w-full rounded-full">
               <div
                 className={cn(
                   'h-2 rounded-full transition-all',
@@ -342,7 +359,9 @@ const MetricSummary: React.FC<MetricSummaryProps> = ({ metric }) => {
                       ? 'bg-blue-500'
                       : 'bg-orange-500'
                 )}
-                style={{ width: `${Math.min(100, Math.max(0, progressPercentage))}%` }}
+                style={{
+                  width: `${Math.min(100, Math.max(0, progressPercentage))}%`,
+                }}
               />
             </div>
           </div>
@@ -367,15 +386,17 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
   goalId,
 }) => {
   const [showMetricEditor, setShowMetricEditor] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<keyof typeof MEASUREMENT_TEMPLATES | null>(
-    data.measurementTemplate || null
-  );
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    keyof typeof MEASUREMENT_TEMPLATES | null
+  >(data.measurementTemplate || null);
 
   const handleChange = (field: keyof MeasurableStepData, value: any) => {
     onChange({ [field]: value });
   };
 
-  const handleTemplateSelect = (template: keyof typeof MEASUREMENT_TEMPLATES) => {
+  const handleTemplateSelect = (
+    template: keyof typeof MEASUREMENT_TEMPLATES
+  ) => {
     setSelectedTemplate(template);
     handleChange('measurementTemplate', template);
 
@@ -386,22 +407,27 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
     }
   };
 
-  const handleMetricSave = (metric: MeasurableSpec, checkpoints: MetricCheckpoint[]) => {
+  const handleMetricSave = (
+    metric: MeasurableSpec,
+    _checkpoints: MetricCheckpoint[]
+  ) => {
     handleChange('measurable', metric);
     setShowMetricEditor(false);
   };
 
-  const handleAddAdditionalMetric = (metric: MeasurableSpec) => {
-    const currentAdditional = data.additionalMetrics || [];
-    handleChange('additionalMetrics', [...currentAdditional, metric]);
-  };
+  // const _handleAddAdditionalMetric = (metric: MeasurableSpec) => {
+  //   const currentAdditional = data.additionalMetrics || [];
+  //   handleChange('additionalMetrics', [...currentAdditional, metric]);
+  // };
 
   return (
     <TooltipProvider>
       <div className={cn('space-y-8', className)}>
         {/* Step Header */}
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold tracking-tight">Make it Measurable</h2>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Make it Measurable
+          </h2>
           <p className="text-muted-foreground">
             Define clear, quantifiable metrics to track progress and success.
           </p>
@@ -413,13 +439,18 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
             <Label className="text-base font-semibold">
               Choose a Measurement Framework (Optional)
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Select a framework to guide your measurement approach.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {(Object.entries(MEASUREMENT_TEMPLATES) as [keyof typeof MEASUREMENT_TEMPLATES, typeof MEASUREMENT_TEMPLATES[keyof typeof MEASUREMENT_TEMPLATES]][]).map(([key, template]) => (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {(
+              Object.entries(MEASUREMENT_TEMPLATES) as [
+                keyof typeof MEASUREMENT_TEMPLATES,
+                (typeof MEASUREMENT_TEMPLATES)[keyof typeof MEASUREMENT_TEMPLATES],
+              ][]
+            ).map(([key, template]) => (
               <TemplateCard
                 key={key}
                 templateKey={key}
@@ -432,9 +463,12 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
           </div>
 
           {selectedTemplate && (
-            <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg border border-primary/20">
+            <div className="bg-primary/5 border-primary/20 flex items-center justify-between rounded-lg border p-3">
               <div className="flex items-center space-x-2 text-sm">
-                <Badge variant="outline" className="text-primary border-primary">
+                <Badge
+                  variant="outline"
+                  className="text-primary border-primary"
+                >
                   Framework Selected
                 </Badge>
                 <span className="font-medium">
@@ -466,19 +500,20 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
               Primary Metric *
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="sm" className="h-auto p-0 ml-1">
-                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                  <Button variant="ghost" size="sm" className="ml-1 h-auto p-0">
+                    <HelpCircle className="text-muted-foreground h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="max-w-xs">
                     The main metric that will determine success for this goal.
-                    This should be specific, quantifiable, and directly related to your objective.
+                    This should be specific, quantifiable, and directly related
+                    to your objective.
                   </p>
                 </TooltipContent>
               </Tooltip>
             </Label>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Define the main metric that will measure success for this goal.
             </p>
           </div>
@@ -488,13 +523,14 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
               <MetricSummary metric={data.measurable} />
               {!readOnly && (
                 <div className="flex space-x-2">
-                  <Dialog open={showMetricEditor} onOpenChange={setShowMetricEditor}>
+                  <Dialog
+                    open={showMetricEditor}
+                    onOpenChange={setShowMetricEditor}
+                  >
                     <DialogTrigger asChild>
-                      <Button variant="outline">
-                        Edit Metric
-                      </Button>
+                      <Button variant="outline">Edit Metric</Button>
                     </DialogTrigger>
-                    <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle>Edit Primary Metric</DialogTitle>
                       </DialogHeader>
@@ -519,14 +555,17 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
           ) : (
             <div className="space-y-4">
               {!readOnly && (
-                <Dialog open={showMetricEditor} onOpenChange={setShowMetricEditor}>
+                <Dialog
+                  open={showMetricEditor}
+                  onOpenChange={setShowMetricEditor}
+                >
                   <DialogTrigger asChild>
                     <Button className="w-full" size="lg">
-                      <Plus className="h-4 w-4 mr-2" />
+                      <Plus className="mr-2 h-4 w-4" />
                       Create Primary Metric
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                  <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
                     <DialogHeader>
                       <DialogTitle>Create Primary Metric</DialogTitle>
                     </DialogHeader>
@@ -540,17 +579,19 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
               )}
 
               {errors.measurable && (
-                <div className="text-sm text-destructive">
+                <div className="text-destructive text-sm">
                   {errors.measurable[0]}
                 </div>
               )}
 
-              <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
                 <div className="flex items-start space-x-2">
-                  <Lightbulb className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <Lightbulb className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-600" />
                   <div className="text-sm text-blue-700 dark:text-blue-300">
-                    <div className="font-medium mb-1">Tips for good metrics:</div>
-                    <ul className="list-disc list-inside space-y-1 text-xs">
+                    <div className="mb-1 font-medium">
+                      Tips for good metrics:
+                    </div>
+                    <ul className="list-inside list-disc space-y-1 text-xs">
                       <li>Be specific and unambiguous</li>
                       <li>Include clear target values</li>
                       <li>Define the measurement frequency</li>
@@ -569,19 +610,22 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
             <Label className="text-base font-semibold">
               Success Definitions *
             </Label>
-            <p className="text-sm text-muted-foreground">
-              Define what success looks like beyond just hitting the target number.
+            <p className="text-muted-foreground text-sm">
+              Define what success looks like beyond just hitting the target
+              number.
             </p>
           </div>
 
           <SuccessDefinitionList
             definitions={data.successDefinitions}
-            onChange={(definitions) => handleChange('successDefinitions', definitions)}
+            onChange={definitions =>
+              handleChange('successDefinitions', definitions)
+            }
             disabled={readOnly}
           />
 
           {errors.successDefinitions && (
-            <div className="text-sm text-destructive">
+            <div className="text-destructive text-sm">
               {errors.successDefinitions[0]}
             </div>
           )}
@@ -591,7 +635,7 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
         <Collapsible>
           <CollapsibleTrigger asChild>
             <Button variant="outline" className="w-full justify-start">
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Additional Metrics (Optional)
               {data.additionalMetrics && data.additionalMetrics.length > 0 && (
                 <Badge variant="secondary" className="ml-2">
@@ -600,10 +644,11 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
               )}
             </Button>
           </CollapsibleTrigger>
-          <CollapsibleContent className="space-y-6 mt-6">
+          <CollapsibleContent className="mt-6 space-y-6">
             <div className="space-y-4">
-              <div className="text-sm text-muted-foreground">
-                Add supporting metrics that provide additional context or validation for your primary goal.
+              <div className="text-muted-foreground text-sm">
+                Add supporting metrics that provide additional context or
+                validation for your primary goal.
               </div>
 
               {data.additionalMetrics && data.additionalMetrics.length > 0 && (
@@ -613,11 +658,13 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
-                            <div className="font-medium text-sm">
-                              {metric.metricType}: {metric.currentValue} → {metric.targetValue} {metric.unit}
+                            <div className="text-sm font-medium">
+                              {metric.metricType}: {metric.currentValue} →{' '}
+                              {metric.targetValue} {metric.unit}
                             </div>
-                            <div className="text-xs text-muted-foreground">
-                              {metric.higherIsBetter ? 'Increase' : 'Decrease'} • {metric.measurementFrequency}
+                            <div className="text-muted-foreground text-xs">
+                              {metric.higherIsBetter ? 'Increase' : 'Decrease'}{' '}
+                              • {metric.measurementFrequency}
                             </div>
                           </div>
                           {!readOnly && (
@@ -625,7 +672,10 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
                               variant="ghost"
                               size="sm"
                               onClick={() => {
-                                const newMetrics = data.additionalMetrics?.filter((_, i) => i !== index) || [];
+                                const newMetrics =
+                                  data.additionalMetrics?.filter(
+                                    (_, i) => i !== index
+                                  ) || [];
                                 handleChange('additionalMetrics', newMetrics);
                               }}
                             >
@@ -641,7 +691,7 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
 
               {!readOnly && (
                 <Button variant="outline" className="w-full">
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="mr-2 h-4 w-4" />
                   Add Supporting Metric
                 </Button>
               )}
@@ -654,13 +704,16 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
           <div className="space-y-4">
             {warnings && warnings.length > 0 && (
               <div className="space-y-2">
-                <div className="text-sm font-medium text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-amber-600 dark:text-amber-400">
                   <AlertCircle className="h-4 w-4" />
                   Suggestions for improvement:
                 </div>
                 {warnings.map((warning, index) => (
-                  <div key={index} className="flex items-start space-x-2 text-sm text-amber-700 dark:text-amber-300">
-                    <div className="w-1 h-1 bg-amber-500 rounded-full mt-2 flex-shrink-0" />
+                  <div
+                    key={index}
+                    className="flex items-start space-x-2 text-sm text-amber-700 dark:text-amber-300"
+                  >
+                    <div className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-amber-500" />
                     <span>{warning}</span>
                   </div>
                 ))}
@@ -669,13 +722,16 @@ export const MeasurableStep: React.FC<MeasurableStepProps> = ({
 
             {suggestions && suggestions.length > 0 && (
               <div className="space-y-2">
-                <div className="text-sm font-medium text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400">
                   <Lightbulb className="h-4 w-4" />
                   Additional suggestions:
                 </div>
                 {suggestions.map((suggestion, index) => (
-                  <div key={index} className="flex items-start space-x-2 text-sm text-blue-700 dark:text-blue-300">
-                    <div className="w-1 h-1 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
+                  <div
+                    key={index}
+                    className="flex items-start space-x-2 text-sm text-blue-700 dark:text-blue-300"
+                  >
+                    <div className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-blue-500" />
                     <span>{suggestion}</span>
                   </div>
                 ))}

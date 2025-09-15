@@ -36,11 +36,33 @@ import {
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 
 import {
@@ -52,7 +74,6 @@ import {
   formatMetricValue,
   calculateCheckpointStatistics,
 } from './MetricEditor.utils';
-
 
 // Chart theme colors
 const CHART_COLORS = {
@@ -68,13 +89,15 @@ function CustomTooltip({ active, payload, label }: any) {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
-        <p className="text-sm font-medium">{format(new Date(label as string), 'MMM dd, yyyy')}</p>
-        <div className="space-y-1 mt-2">
+      <div className="bg-background border-border rounded-lg border p-3 shadow-lg">
+        <p className="text-sm font-medium">
+          {format(new Date(label as string), 'MMM dd, yyyy')}
+        </p>
+        <div className="mt-2 space-y-1">
           {payload.map((entry: any, index: number) => (
             <div key={index} className="flex items-center gap-2 text-sm">
               <div
-                className="w-2 h-2 rounded"
+                className="h-2 w-2 rounded"
                 style={{ backgroundColor: entry.color }}
               />
               <span className="text-muted-foreground">{entry.name}:</span>
@@ -82,7 +105,9 @@ function CustomTooltip({ active, payload, label }: any) {
             </div>
           ))}
           {data.note && (
-            <p className="text-xs text-muted-foreground mt-2 italic">{data.note}</p>
+            <p className="text-muted-foreground mt-2 text-xs italic">
+              {data.note}
+            </p>
           )}
         </div>
       </div>
@@ -107,7 +132,7 @@ export function MetricChart({
   className,
 }: MetricChartProps): React.JSX.Element {
   const [showTrendLine, setShowTrendLine] = useState(true);
-  const [showConfidenceInterval, setShowConfidenceInterval] = useState(false);
+  // const [_showConfidenceInterval, _setShowConfidenceInterval] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Prepare chart data
@@ -164,7 +189,11 @@ export function MetricChart({
 
   // Format value for display
   const formatValue = (value: number) => {
-    return formatMetricValue(value, metric.metricType as unknown as ExtendedMetricType, metric.unit);
+    return formatMetricValue(
+      value,
+      metric.metricType as unknown as ExtendedMetricType,
+      metric.unit
+    );
   };
 
   // Handle export
@@ -179,7 +208,7 @@ export function MetricChart({
     };
 
     navigator.clipboard.writeText(JSON.stringify(exportData, null, 2));
-    console.log('Chart data exported to clipboard');
+    // Chart data exported to clipboard
   };
 
   // Chart components based on type
@@ -203,7 +232,7 @@ export function MetricChart({
             <YAxis
               tick={{ fontSize: 12 }}
               tickLine={{ opacity: 0.5 }}
-              tickFormatter={(value) => formatValue(value)}
+              tickFormatter={value => formatValue(value)}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
@@ -213,7 +242,7 @@ export function MetricChart({
                 y={metric.targetValue}
                 stroke={CHART_COLORS.target}
                 strokeDasharray="5 5"
-                label={{ value: "Target", position: "insideTopRight" }}
+                label={{ value: 'Target', position: 'insideTopRight' }}
               />
             )}
 
@@ -222,7 +251,7 @@ export function MetricChart({
                 y={metric.minimumValue}
                 stroke={CHART_COLORS.baseline}
                 strokeDasharray="3 3"
-                label={{ value: "Baseline", position: "insideTopRight" }}
+                label={{ value: 'Baseline', position: 'insideTopRight' }}
               />
             )}
 
@@ -262,7 +291,7 @@ export function MetricChart({
             <YAxis
               tick={{ fontSize: 12 }}
               tickLine={{ opacity: 0.5 }}
-              tickFormatter={(value) => formatValue(value)}
+              tickFormatter={value => formatValue(value)}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
@@ -272,7 +301,7 @@ export function MetricChart({
                 y={metric.targetValue}
                 stroke={CHART_COLORS.target}
                 strokeDasharray="5 5"
-                label={{ value: "Target", position: "insideTopRight" }}
+                label={{ value: 'Target', position: 'insideTopRight' }}
               />
             )}
 
@@ -300,7 +329,7 @@ export function MetricChart({
             <YAxis
               tick={{ fontSize: 12 }}
               tickLine={{ opacity: 0.5 }}
-              tickFormatter={(value) => formatValue(value)}
+              tickFormatter={value => formatValue(value)}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
@@ -310,7 +339,7 @@ export function MetricChart({
                 y={metric.targetValue}
                 stroke={CHART_COLORS.target}
                 strokeDasharray="5 5"
-                label={{ value: "Target", position: "insideTopRight" }}
+                label={{ value: 'Target', position: 'insideTopRight' }}
               />
             )}
 
@@ -343,19 +372,19 @@ export function MetricChart({
               <SelectContent>
                 <SelectItem value={ChartType.LINE}>
                   <div className="flex items-center gap-2">
-                    <LineChartIcon className="w-4 h-4" />
+                    <LineChartIcon className="h-4 w-4" />
                     Line
                   </div>
                 </SelectItem>
                 <SelectItem value={ChartType.AREA}>
                   <div className="flex items-center gap-2">
-                    <AreaChartIcon className="w-4 h-4" />
+                    <AreaChartIcon className="h-4 w-4" />
                     Area
                   </div>
                 </SelectItem>
                 <SelectItem value={ChartType.BAR}>
                   <div className="flex items-center gap-2">
-                    <BarChart3 className="w-4 h-4" />
+                    <BarChart3 className="h-4 w-4" />
                     Bar
                   </div>
                 </SelectItem>
@@ -368,13 +397,19 @@ export function MetricChart({
             <div className="flex items-center gap-1">
               <span className="text-muted-foreground">Trend:</span>
               <Badge variant="outline">
-                {statistics.trendSlope > 0 ? '↗' : statistics.trendSlope < 0 ? '↘' : '→'}
+                {statistics.trendSlope > 0
+                  ? '↗'
+                  : statistics.trendSlope < 0
+                    ? '↘'
+                    : '→'}
                 {statistics.trendSlope.toFixed(2)}/period
               </Badge>
             </div>
             <div className="flex items-center gap-1">
               <span className="text-muted-foreground">Avg:</span>
-              <span className="font-medium">{formatValue(statistics.average)}</span>
+              <span className="font-medium">
+                {formatValue(statistics.average)}
+              </span>
             </div>
           </div>
         </div>
@@ -384,7 +419,7 @@ export function MetricChart({
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="sm">
-                <Settings className="w-4 h-4" />
+                <Settings className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-64">
@@ -392,7 +427,9 @@ export function MetricChart({
                 <h4 className="font-medium">Chart Options</h4>
 
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="show-target" className="text-sm">Show Target Line</Label>
+                  <Label htmlFor="show-target" className="text-sm">
+                    Show Target Line
+                  </Label>
                   <Switch
                     id="show-target"
                     checked={showTarget}
@@ -402,7 +439,9 @@ export function MetricChart({
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="show-baseline" className="text-sm">Show Baseline</Label>
+                  <Label htmlFor="show-baseline" className="text-sm">
+                    Show Baseline
+                  </Label>
                   <Switch
                     id="show-baseline"
                     checked={showBaseline}
@@ -413,7 +452,9 @@ export function MetricChart({
 
                 {chartType === ChartType.LINE && (
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="show-trend" className="text-sm">Show Trend Line</Label>
+                    <Label htmlFor="show-trend" className="text-sm">
+                      Show Trend Line
+                    </Label>
                     <Switch
                       id="show-trend"
                       checked={showTrendLine}
@@ -427,21 +468,21 @@ export function MetricChart({
 
           {/* Export Button */}
           <Button variant="ghost" size="sm" onClick={handleExport}>
-            <Download className="w-4 h-4" />
+            <Download className="h-4 w-4" />
           </Button>
 
           {/* Fullscreen Toggle */}
           <Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
             <DialogTrigger asChild>
               <Button variant="ghost" size="sm">
-                <Maximize2 className="w-4 h-4" />
+                <Maximize2 className="h-4 w-4" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-6xl max-h-[90vh]">
+            <DialogContent className="max-h-[90vh] max-w-6xl">
               <DialogHeader>
                 <DialogTitle>Metric Progress Chart</DialogTitle>
               </DialogHeader>
-              <div className="w-full h-[70vh]">
+              <div className="h-[70vh] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   {renderChart() || <div>Chart not available</div>}
                 </ResponsiveContainer>
@@ -464,8 +505,8 @@ export function MetricChart({
     return (
       <Card className={className}>
         <CardContent className="flex items-center justify-center py-12">
-          <div className="text-center space-y-2">
-            <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto" />
+          <div className="space-y-2 text-center">
+            <BarChart3 className="text-muted-foreground mx-auto h-12 w-12" />
             <h3 className="text-lg font-medium">No Data to Display</h3>
             <p className="text-muted-foreground max-w-sm">
               Add some checkpoints to see your progress visualized in charts
@@ -482,21 +523,17 @@ export function MetricChart({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5" />
+              <TrendingUp className="h-5 w-5" />
               Progress Visualization
             </CardTitle>
             <CardDescription>
               Track your metric progress over time with interactive charts
             </CardDescription>
           </div>
-          <Badge variant="outline">
-            {checkpoints.length} checkpoints
-          </Badge>
+          <Badge variant="outline">{checkpoints.length} checkpoints</Badge>
         </div>
       </CardHeader>
-      <CardContent>
-        {chartContent}
-      </CardContent>
+      <CardContent>{chartContent}</CardContent>
     </Card>
   );
 }

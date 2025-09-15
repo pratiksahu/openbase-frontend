@@ -26,7 +26,6 @@ import {
   BookOpen,
 } from 'lucide-react';
 import React, { useState, useCallback, useMemo } from 'react';
-
 // UI Components
 import { toast } from 'sonner';
 
@@ -34,13 +33,23 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-
 
 // Types and utilities
 import {
@@ -147,29 +156,54 @@ interface SyntaxHighlighterProps {
   className?: string;
 }
 
-function SyntaxHighlighter({ content, format, className = '' }: SyntaxHighlighterProps) {
+function SyntaxHighlighter({
+  content,
+  format,
+  className = '',
+}: SyntaxHighlighterProps) {
   const getHighlightedContent = () => {
     if (format === AcceptanceCriteriaFormat.GHERKIN) {
       return content
-        .replace(/^(Given|When|Then|And|But)(\s+)/gm, '<span class="text-blue-600 font-semibold">$1</span>$2')
-        .replace(/^(\s*)(•|\*|-|\d+\.)\s/gm, '$1<span class="text-purple-600">$2</span> ');
+        .replace(
+          /^(Given|When|Then|And|But)(\s+)/gm,
+          '<span class="text-blue-600 font-semibold">$1</span>$2'
+        )
+        .replace(
+          /^(\s*)(•|\*|-|\d+\.)\s/gm,
+          '$1<span class="text-purple-600">$2</span> '
+        );
     }
 
     if (format === AcceptanceCriteriaFormat.MARKDOWN) {
       return content
-        .replace(/^(#{1,6})\s+(.+)$/gm, '<span class="text-blue-600 font-bold">$1</span> <span class="font-semibold">$2</span>')
-        .replace(/\*\*(.*?)\*\*/g, '<span class="font-bold text-gray-900">$1</span>')
+        .replace(
+          /^(#{1,6})\s+(.+)$/gm,
+          '<span class="text-blue-600 font-bold">$1</span> <span class="font-semibold">$2</span>'
+        )
+        .replace(
+          /\*\*(.*?)\*\*/g,
+          '<span class="font-bold text-gray-900">$1</span>'
+        )
         .replace(/\*(.*?)\*/g, '<span class="italic text-gray-700">$1</span>')
-        .replace(/`([^`]+)`/g, '<span class="bg-gray-100 text-red-600 px-1 rounded font-mono text-sm">$1</span>')
-        .replace(/^(\s*)(•|\*|-|\d+\.)\s/gm, '$1<span class="text-purple-600">$2</span> ');
+        .replace(
+          /`([^`]+)`/g,
+          '<span class="bg-gray-100 text-red-600 px-1 rounded font-mono text-sm">$1</span>'
+        )
+        .replace(
+          /^(\s*)(•|\*|-|\d+\.)\s/gm,
+          '$1<span class="text-purple-600">$2</span> '
+        );
     }
 
-    return content.replace(/^(\s*)(•|\*|-|\d+\.)\s/gm, '$1<span class="text-purple-600">$2</span> ');
+    return content.replace(
+      /^(\s*)(•|\*|-|\d+\.)\s/gm,
+      '$1<span class="text-purple-600">$2</span> '
+    );
   };
 
   return (
     <pre
-      className={`whitespace-pre-wrap font-mono text-sm leading-relaxed ${className}`}
+      className={`font-mono text-sm leading-relaxed whitespace-pre-wrap ${className}`}
       dangerouslySetInnerHTML={{ __html: getHighlightedContent() }}
     />
   );
@@ -201,7 +235,10 @@ export function AcceptanceCriteria({
   }, [criteria]);
 
   const gherkinData = useMemo(() => {
-    if (criteria.format === AcceptanceCriteriaFormat.GHERKIN && criteria.content) {
+    if (
+      criteria.format === AcceptanceCriteriaFormat.GHERKIN &&
+      criteria.content
+    ) {
       return parseGherkinContent(criteria.content);
     }
     return null;
@@ -211,34 +248,43 @@ export function AcceptanceCriteria({
   // Handlers
   // =============================================================================
 
-  const handleFormatChange = useCallback((newFormat: AcceptanceCriteriaFormat) => {
-    const updatedCriteria: AcceptanceCriteriaData = {
-      ...criteria,
-      format: newFormat,
-    };
+  const handleFormatChange = useCallback(
+    (newFormat: AcceptanceCriteriaFormat) => {
+      const updatedCriteria: AcceptanceCriteriaData = {
+        ...criteria,
+        format: newFormat,
+      };
 
-    onCriteriaChange(validateAcceptanceCriteria(updatedCriteria));
-  }, [criteria, onCriteriaChange]);
+      onCriteriaChange(validateAcceptanceCriteria(updatedCriteria));
+    },
+    [criteria, onCriteriaChange]
+  );
 
-  const handleContentChange = useCallback((newContent: string) => {
-    const updatedCriteria: AcceptanceCriteriaData = {
-      ...criteria,
-      content: newContent,
-    };
+  const handleContentChange = useCallback(
+    (newContent: string) => {
+      const updatedCriteria: AcceptanceCriteriaData = {
+        ...criteria,
+        content: newContent,
+      };
 
-    onCriteriaChange(validateAcceptanceCriteria(updatedCriteria));
-  }, [criteria, onCriteriaChange]);
+      onCriteriaChange(validateAcceptanceCriteria(updatedCriteria));
+    },
+    [criteria, onCriteriaChange]
+  );
 
-  const handleTemplateApply = useCallback((template: TemplateSnippet) => {
-    const updatedCriteria: AcceptanceCriteriaData = {
-      format: template.format,
-      content: template.content,
-      isValid: true,
-    };
+  const handleTemplateApply = useCallback(
+    (template: TemplateSnippet) => {
+      const updatedCriteria: AcceptanceCriteriaData = {
+        format: template.format,
+        content: template.content,
+        isValid: true,
+      };
 
-    onCriteriaChange(validateAcceptanceCriteria(updatedCriteria));
-    toast.success(`Applied template: ${template.name}`);
-  }, [onCriteriaChange]);
+      onCriteriaChange(validateAcceptanceCriteria(updatedCriteria));
+      toast.success(`Applied template: ${template.name}`);
+    },
+    [onCriteriaChange]
+  );
 
   const handleCopyContent = useCallback(async () => {
     try {
@@ -246,16 +292,19 @@ export function AcceptanceCriteria({
       setHasCopied(true);
       toast.success('Content copied to clipboard');
       setTimeout(() => setHasCopied(false), 2000);
-    } catch (error) {
+    } catch {
       toast.error('Failed to copy content');
     }
   }, [criteria.content]);
 
-  const handleAddGherkinSection = useCallback((keyword: string) => {
-    const newLine = criteria.content ? '\n' : '';
-    const newContent = criteria.content + `${newLine}${keyword} `;
-    handleContentChange(newContent);
-  }, [criteria.content, handleContentChange]);
+  const handleAddGherkinSection = useCallback(
+    (keyword: string) => {
+      const newLine = criteria.content ? '\n' : '';
+      const newContent = criteria.content + `${newLine}${keyword} `;
+      handleContentChange(newContent);
+    },
+    [criteria.content, handleContentChange]
+  );
 
   // =============================================================================
   // Render Helpers
@@ -313,35 +362,35 @@ export function AcceptanceCriteria({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm">
-            <BookOpen className="h-4 w-4 mr-2" />
+            <BookOpen className="mr-2 h-4 w-4" />
             Templates
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-80">
           <div className="p-2">
-            <h4 className="font-medium mb-2">Template Library</h4>
-            <p className="text-sm text-muted-foreground mb-3">
+            <h4 className="mb-2 font-medium">Template Library</h4>
+            <p className="text-muted-foreground mb-3 text-sm">
               Choose a template to get started quickly
             </p>
           </div>
           <Separator />
-          {filteredTemplates.map((template) => (
+          {filteredTemplates.map(template => (
             <DropdownMenuItem
               key={template.id}
               onClick={() => handleTemplateApply(template)}
               className="flex-col items-start p-3"
             >
-              <div className="flex items-center justify-between w-full">
+              <div className="flex w-full items-center justify-between">
                 <span className="font-medium">{template.name}</span>
                 <Badge variant="outline" className="text-xs">
                   {template.format}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-muted-foreground mt-1 text-sm">
                 {template.description}
               </p>
-              <div className="flex gap-1 mt-2">
-                {template.keywords.map((keyword) => (
+              <div className="mt-2 flex gap-1">
+                {template.keywords.map(keyword => (
                   <Badge key={keyword} variant="secondary" className="text-xs">
                     {keyword}
                   </Badge>
@@ -361,8 +410,8 @@ export function AcceptanceCriteria({
 
     return (
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">Quick add:</span>
-        {['Given', 'When', 'Then', 'And', 'But'].map((keyword) => (
+        <span className="text-muted-foreground text-sm">Quick add:</span>
+        {['Given', 'When', 'Then', 'And', 'But'].map(keyword => (
           <Button
             key={keyword}
             variant="ghost"
@@ -384,12 +433,12 @@ export function AcceptanceCriteria({
           <Label htmlFor="criteria-content">
             Acceptance Criteria
             {criteria.format === AcceptanceCriteriaFormat.GHERKIN && (
-              <span className="text-sm text-muted-foreground ml-2">
+              <span className="text-muted-foreground ml-2 text-sm">
                 (Use Given/When/Then format)
               </span>
             )}
             {criteria.format === AcceptanceCriteriaFormat.MARKDOWN && (
-              <span className="text-sm text-muted-foreground ml-2">
+              <span className="text-muted-foreground ml-2 text-sm">
                 (Markdown supported)
               </span>
             )}
@@ -416,7 +465,11 @@ export function AcceptanceCriteria({
                 onClick={() => setIsPreviewMode(!isPreviewMode)}
                 className="h-8 px-2"
               >
-                {isPreviewMode ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {isPreviewMode ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
                 {isPreviewMode ? 'Edit' : 'Preview'}
               </Button>
             )}
@@ -437,13 +490,13 @@ export function AcceptanceCriteria({
           <Textarea
             id="criteria-content"
             value={criteria.content}
-            onChange={(e) => handleContentChange(e.target.value)}
+            onChange={e => handleContentChange(e.target.value)}
             placeholder={
               criteria.format === AcceptanceCriteriaFormat.GHERKIN
-                ? "Given I am a user\nWhen I perform an action\nThen I should see the expected result"
+                ? 'Given I am a user\nWhen I perform an action\nThen I should see the expected result'
                 : criteria.format === AcceptanceCriteriaFormat.MARKDOWN
-                ? "## Requirements\n\n- **Must have:** Feature works correctly\n- *Should have:* Good user experience\n\n### Acceptance\n\n✅ All tests pass"
-                : "• User can perform the main action\n• System responds within expected timeframe\n• Error cases are handled gracefully\n• Data is persisted correctly"
+                  ? '## Requirements\n\n- **Must have:** Feature works correctly\n- *Should have:* Good user experience\n\n### Acceptance\n\n✅ All tests pass'
+                  : '• User can perform the main action\n• System responds within expected timeframe\n• Error cases are handled gracefully\n• Data is persisted correctly'
             }
             rows={12}
             className={`font-mono text-sm ${!validatedCriteria.isValid ? 'border-destructive' : ''}`}
@@ -461,7 +514,7 @@ export function AcceptanceCriteria({
           <AlertDescription>
             <div className="space-y-1">
               <p className="font-medium">Validation Errors:</p>
-              <ul className="list-disc list-inside text-sm">
+              <ul className="list-inside list-disc text-sm">
                 {validatedCriteria.validationErrors.map((error, index) => (
                   <li key={index}>{error}</li>
                 ))}
@@ -476,12 +529,20 @@ export function AcceptanceCriteria({
         <Alert>
           <Lightbulb className="h-4 w-4" />
           <AlertDescription>
-            <p className="font-medium mb-2">Gherkin Syntax Tips:</p>
-            <ul className="text-sm space-y-1 list-disc list-inside">
-              <li><strong>Given:</strong> Sets up the initial context</li>
-              <li><strong>When:</strong> Describes the action or event</li>
-              <li><strong>Then:</strong> Specifies the expected outcome</li>
-              <li><strong>And/But:</strong> Adds additional conditions</li>
+            <p className="mb-2 font-medium">Gherkin Syntax Tips:</p>
+            <ul className="list-inside list-disc space-y-1 text-sm">
+              <li>
+                <strong>Given:</strong> Sets up the initial context
+              </li>
+              <li>
+                <strong>When:</strong> Describes the action or event
+              </li>
+              <li>
+                <strong>Then:</strong> Specifies the expected outcome
+              </li>
+              <li>
+                <strong>And/But:</strong> Adds additional conditions
+              </li>
             </ul>
           </AlertDescription>
         </Alert>
@@ -498,7 +559,9 @@ export function AcceptanceCriteria({
 
         {gherkinData.given.length > 0 && (
           <div>
-            <h5 className="text-sm font-medium text-blue-600 mb-2">Given (Context)</h5>
+            <h5 className="mb-2 text-sm font-medium text-blue-600">
+              Given (Context)
+            </h5>
             <ul className="space-y-1 text-sm">
               {gherkinData.given.map((item, index) => (
                 <li key={index} className="flex items-start gap-2">
@@ -512,7 +575,9 @@ export function AcceptanceCriteria({
 
         {gherkinData.when.length > 0 && (
           <div>
-            <h5 className="text-sm font-medium text-purple-600 mb-2">When (Actions)</h5>
+            <h5 className="mb-2 text-sm font-medium text-purple-600">
+              When (Actions)
+            </h5>
             <ul className="space-y-1 text-sm">
               {gherkinData.when.map((item, index) => (
                 <li key={index} className="flex items-start gap-2">
@@ -526,7 +591,9 @@ export function AcceptanceCriteria({
 
         {gherkinData.then.length > 0 && (
           <div>
-            <h5 className="text-sm font-medium text-green-600 mb-2">Then (Outcomes)</h5>
+            <h5 className="mb-2 text-sm font-medium text-green-600">
+              Then (Outcomes)
+            </h5>
             <ul className="space-y-1 text-sm">
               {gherkinData.then.map((item, index) => (
                 <li key={index} className="flex items-start gap-2">
@@ -538,9 +605,11 @@ export function AcceptanceCriteria({
           </div>
         )}
 
-        {(gherkinData.and && gherkinData.and.length > 0) && (
+        {gherkinData.and && gherkinData.and.length > 0 && (
           <div>
-            <h5 className="text-sm font-medium text-gray-600 mb-2">Additional Conditions</h5>
+            <h5 className="mb-2 text-sm font-medium text-gray-600">
+              Additional Conditions
+            </h5>
             <ul className="space-y-1 text-sm">
               {gherkinData.and.map((item, index) => (
                 <li key={index} className="flex items-start gap-2">
@@ -561,19 +630,25 @@ export function AcceptanceCriteria({
 
   return (
     <div className={className}>
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="space-y-1">
           <h3 className="text-lg font-semibold">Acceptance Criteria</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Define clear, testable requirements for this task
             {validatedCriteria.isValid ? (
-              <Badge variant="outline" className="ml-2 text-green-700 border-green-300">
-                <Check className="h-3 w-3 mr-1" />
+              <Badge
+                variant="outline"
+                className="ml-2 border-green-300 text-green-700"
+              >
+                <Check className="mr-1 h-3 w-3" />
                 Valid
               </Badge>
             ) : (
-              <Badge variant="outline" className="ml-2 text-red-700 border-red-300">
-                <AlertCircle className="h-3 w-3 mr-1" />
+              <Badge
+                variant="outline"
+                className="ml-2 border-red-300 text-red-700"
+              >
+                <AlertCircle className="mr-1 h-3 w-3" />
                 Invalid
               </Badge>
             )}
@@ -589,9 +664,10 @@ export function AcceptanceCriteria({
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="editor">Editor</TabsTrigger>
-          {criteria.format === AcceptanceCriteriaFormat.GHERKIN && gherkinData && (
-            <TabsTrigger value="structure">Structure</TabsTrigger>
-          )}
+          {criteria.format === AcceptanceCriteriaFormat.GHERKIN &&
+            gherkinData && (
+              <TabsTrigger value="structure">Structure</TabsTrigger>
+            )}
         </TabsList>
 
         <TabsContent value="editor" className="mt-6">

@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 // Action utilities not available in Storybook 9
-const action = (name: string) => (...args: any[]) => console.log(name, ...args);
+const action = (_name: string) => (..._args: any[]) => {
+  // Action handler for Storybook events
+  // In a production environment, these would be replaced with actual action handlers
+};
 
 import { AcceptanceCriteria } from './AcceptanceCriteria';
 import { AcceptanceCriteriaFormat, type AcceptanceCriteriaData, type TemplateSnippet } from './TaskEditor.types';
@@ -639,7 +642,7 @@ export const Interactive: Story = {
       isValid: true,
     },
     onCriteriaChange: (criteria) => {
-      console.log('Criteria changed:', criteria);
+      // Criteria changed: criteria
       action('onCriteriaChange')(criteria);
     },
     templates: mockTemplates,

@@ -8,7 +8,8 @@
 import { test, expect, Page } from '@playwright/test';
 
 // Test Configuration
-const GOALS_BASE_URL = '/goals';
+// Removed unused GOALS_BASE_URL - only NEW_GOAL_URL is used in this file
+// const GOALS_BASE_URL = '/goals';
 const NEW_GOAL_URL = '/goals/new';
 
 test.describe('Goal Creation Workflow', () => {
@@ -26,14 +27,20 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('h1')).toContainText(/Create.*Goal/i);
 
     // Check for wizard elements
-    await expect(page.locator('[data-testid="goal-wizard"], .wizard')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="goal-wizard"], .wizard')
+    ).toBeVisible();
 
     // Should show wizard steps
-    await expect(page.locator('[data-testid="wizard-stepper"], .stepper')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="wizard-stepper"], .stepper')
+    ).toBeVisible();
 
     // Should show navigation buttons
     await expect(page.getByRole('button', { name: /next/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /back|previous/i })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /back|previous/i })
+    ).toBeVisible();
   });
 
   test('should navigate through wizard steps', async ({ page }) => {
@@ -41,10 +48,14 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/Context/i')).toBeVisible();
 
     // Fill minimal context data
-    const titleInput = page.getByLabel(/Goal Title/i).or(page.locator('input[name="title"]'));
+    const titleInput = page
+      .getByLabel(/Goal Title/i)
+      .or(page.locator('input[name="title"]'));
     await titleInput.fill('Test SMART Goal');
 
-    const descriptionInput = page.getByLabel(/Description/i).or(page.locator('textarea[name="description"]'));
+    const descriptionInput = page
+      .getByLabel(/Description/i)
+      .or(page.locator('textarea[name="description"]'));
     await descriptionInput.fill('This is a test goal for E2E testing');
 
     // Navigate to next step
@@ -52,18 +63,26 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/Specific/i')).toBeVisible();
 
     // Fill specific objective
-    const objectiveInput = page.getByLabel(/Specific Objective/i).or(page.locator('textarea[name="specificObjective"]'));
-    await objectiveInput.fill('Complete the comprehensive testing of SMART Goals feature');
+    const objectiveInput = page
+      .getByLabel(/Specific Objective/i)
+      .or(page.locator('textarea[name="specificObjective"]'));
+    await objectiveInput.fill(
+      'Complete the comprehensive testing of SMART Goals feature'
+    );
 
     // Navigate to measurable step
     await page.getByRole('button', { name: /next/i }).click();
     await expect(page.locator('text=/Measurable/i')).toBeVisible();
 
     // Fill measurable data
-    const targetInput = page.getByLabel(/Target Value/i).or(page.locator('input[name="targetValue"]'));
+    const targetInput = page
+      .getByLabel(/Target Value/i)
+      .or(page.locator('input[name="targetValue"]'));
     await targetInput.fill('100');
 
-    const unitInput = page.getByLabel(/Unit/i).or(page.locator('input[name="unit"]'));
+    const unitInput = page
+      .getByLabel(/Unit/i)
+      .or(page.locator('input[name="unit"]'));
     await unitInput.fill('percent');
 
     // Continue through remaining steps
@@ -77,7 +96,9 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/Time-bound/i')).toBeVisible();
 
     // Set target date
-    const targetDateInput = page.getByLabel(/Target Date/i).or(page.locator('input[type="date"]'));
+    const targetDateInput = page
+      .getByLabel(/Target Date/i)
+      .or(page.locator('input[type="date"]'));
     const futureDate = new Date();
     futureDate.setMonth(futureDate.getMonth() + 3);
     await targetDateInput.fill(futureDate.toISOString().split('T')[0]);
@@ -95,7 +116,9 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/title.*required/i')).toBeVisible();
 
     // Fill title and try again
-    const titleInput = page.getByLabel(/Goal Title/i).or(page.locator('input[name="title"]'));
+    const titleInput = page
+      .getByLabel(/Goal Title/i)
+      .or(page.locator('input[name="title"]'));
     await titleInput.fill('Test Goal');
 
     // Try to navigate without description
@@ -113,7 +136,9 @@ test.describe('Goal Creation Workflow', () => {
     await navigateToPreview();
 
     // Should display SMART score badge
-    await expect(page.locator('[data-testid="smart-score"], .smart-score')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="smart-score"], .smart-score')
+    ).toBeVisible();
 
     // Score should be visible
     await expect(page.locator('text=/\\d+/').first()).toBeVisible();
@@ -150,7 +175,9 @@ test.describe('Goal Creation Workflow', () => {
     await expect(page.locator('text=/Context/i')).toBeVisible();
 
     // Data should be preserved
-    const titleInput = page.getByLabel(/Goal Title/i).or(page.locator('input[name="title"]'));
+    const titleInput = page
+      .getByLabel(/Goal Title/i)
+      .or(page.locator('input[name="title"]'));
     await expect(titleInput).toHaveValue('Test SMART Goal');
   });
 
@@ -159,7 +186,9 @@ test.describe('Goal Creation Workflow', () => {
     await fillBasicGoalInfo();
 
     // Wait for auto-save indicator (if implemented)
-    const autoSaveIndicator = page.locator('[data-testid="auto-save"], text=/saved|saving/i');
+    const autoSaveIndicator = page.locator(
+      '[data-testid="auto-save"], text=/saved|saving/i'
+    );
     if (await autoSaveIndicator.isVisible({ timeout: 3000 })) {
       await expect(autoSaveIndicator).toBeVisible();
     }
@@ -168,7 +197,9 @@ test.describe('Goal Creation Workflow', () => {
     await page.reload();
 
     // Data should be preserved
-    const titleInput = page.getByLabel(/Goal Title/i).or(page.locator('input[name="title"]'));
+    const titleInput = page
+      .getByLabel(/Goal Title/i)
+      .or(page.locator('input[name="title"]'));
     await expect(titleInput).toHaveValue('Test SMART Goal');
   });
 
@@ -184,7 +215,9 @@ test.describe('Goal Creation Workflow', () => {
     const confirmDialog = page.locator('[role="dialog"], .dialog');
     if (await confirmDialog.isVisible({ timeout: 2000 })) {
       await expect(confirmDialog).toBeVisible();
-      await expect(confirmDialog.locator('text=/unsaved.*changes/i')).toBeVisible();
+      await expect(
+        confirmDialog.locator('text=/unsaved.*changes/i')
+      ).toBeVisible();
 
       // Cancel to stay
       await page.getByRole('button', { name: /cancel|stay/i }).click();
@@ -208,11 +241,17 @@ test.describe('Goal Creation Workflow', () => {
 
   // Helper functions
   async function fillBasicGoalInfo() {
-    const titleInput = page.getByLabel(/Goal Title/i).or(page.locator('input[name="title"]'));
+    const titleInput = page
+      .getByLabel(/Goal Title/i)
+      .or(page.locator('input[name="title"]'));
     await titleInput.fill('Test SMART Goal');
 
-    const descriptionInput = page.getByLabel(/Description/i).or(page.locator('textarea[name="description"]'));
-    await descriptionInput.fill('This is a comprehensive test goal for E2E testing of the SMART Goals system');
+    const descriptionInput = page
+      .getByLabel(/Description/i)
+      .or(page.locator('textarea[name="description"]'));
+    await descriptionInput.fill(
+      'This is a comprehensive test goal for E2E testing of the SMART Goals system'
+    );
   }
 
   async function fillCompleteGoalInfo() {
@@ -221,15 +260,23 @@ test.describe('Goal Creation Workflow', () => {
 
     // Move to specific step
     await page.getByRole('button', { name: /next/i }).click();
-    const objectiveInput = page.getByLabel(/Specific Objective/i).or(page.locator('textarea[name="specificObjective"]'));
-    await objectiveInput.fill('Successfully complete all E2E tests with 100% pass rate');
+    const objectiveInput = page
+      .getByLabel(/Specific Objective/i)
+      .or(page.locator('textarea[name="specificObjective"]'));
+    await objectiveInput.fill(
+      'Successfully complete all E2E tests with 100% pass rate'
+    );
 
     // Move to measurable step
     await page.getByRole('button', { name: /next/i }).click();
-    const targetInput = page.getByLabel(/Target Value/i).or(page.locator('input[name="targetValue"]'));
+    const targetInput = page
+      .getByLabel(/Target Value/i)
+      .or(page.locator('input[name="targetValue"]'));
     await targetInput.fill('100');
 
-    const unitInput = page.getByLabel(/Unit/i).or(page.locator('input[name="unit"]'));
+    const unitInput = page
+      .getByLabel(/Unit/i)
+      .or(page.locator('input[name="unit"]'));
     await unitInput.fill('percent');
 
     // Move to achievable step
@@ -238,14 +285,20 @@ test.describe('Goal Creation Workflow', () => {
 
     // Move to relevant step
     await page.getByRole('button', { name: /next/i }).click();
-    const rationale = page.getByLabel(/Rationale/i).or(page.locator('textarea[name="rationale"]'));
+    const rationale = page
+      .getByLabel(/Rationale/i)
+      .or(page.locator('textarea[name="rationale"]'));
     if (await rationale.isVisible()) {
-      await rationale.fill('This goal is highly relevant for ensuring product quality');
+      await rationale.fill(
+        'This goal is highly relevant for ensuring product quality'
+      );
     }
 
     // Move to time-bound step
     await page.getByRole('button', { name: /next/i }).click();
-    const targetDateInput = page.getByLabel(/Target Date/i).or(page.locator('input[type="date"]'));
+    const targetDateInput = page
+      .getByLabel(/Target Date/i)
+      .or(page.locator('input[type="date"]'));
     const futureDate = new Date();
     futureDate.setMonth(futureDate.getMonth() + 3);
     await targetDateInput.fill(futureDate.toISOString().split('T')[0]);
@@ -278,13 +331,17 @@ test.describe('Goal Templates', () => {
 
   test('should display goal templates if available', async ({ page }) => {
     // Look for template section
-    const templateSection = page.locator('[data-testid="templates"], text=/templates/i');
+    const templateSection = page.locator(
+      '[data-testid="templates"], text=/templates/i'
+    );
 
     if (await templateSection.isVisible()) {
       await expect(templateSection).toBeVisible();
 
       // Check for template cards
-      const templateCards = page.locator('[data-testid="template-card"], .template');
+      const templateCards = page.locator(
+        '[data-testid="template-card"], .template'
+      );
       const cardCount = await templateCards.count();
 
       if (cardCount > 0) {
@@ -295,7 +352,9 @@ test.describe('Goal Templates', () => {
 
   test('should apply template when selected', async ({ page }) => {
     // Look for template selection
-    const templateCard = page.locator('[data-testid="template-card"], .template').first();
+    const templateCard = page
+      .locator('[data-testid="template-card"], .template')
+      .first();
 
     if (await templateCard.isVisible()) {
       await templateCard.click();
@@ -303,7 +362,9 @@ test.describe('Goal Templates', () => {
       // Should populate form fields
       await page.waitForTimeout(500);
 
-      const titleInput = page.getByLabel(/Goal Title/i).or(page.locator('input[name="title"]'));
+      const titleInput = page
+        .getByLabel(/Goal Title/i)
+        .or(page.locator('input[name="title"]'));
       const titleValue = await titleInput.inputValue();
 
       expect(titleValue.length).toBeGreaterThan(0);

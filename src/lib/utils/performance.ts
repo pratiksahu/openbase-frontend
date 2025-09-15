@@ -38,7 +38,10 @@ export interface PerformanceMetrics {
 // =============================================================================
 
 export class MemoryCache<K, V> {
-  private cache = new Map<K, { value: V; timestamp: number; accessed: number }>();
+  private cache = new Map<
+    K,
+    { value: V; timestamp: number; accessed: number }
+  >();
   private readonly ttl: number;
   private readonly maxSize: number;
   private cleanupTimer: NodeJS.Timeout | null = null;
@@ -199,7 +202,8 @@ export function useMemoizedValue<T>(
 
   return useMemo(() => {
     // Check if dependencies have changed
-    const depsChanged = !depsRef.current ||
+    const depsChanged =
+      !depsRef.current ||
       deps.length !== depsRef.current.length ||
       deps.some((dep, index) => dep !== depsRef.current![index]);
 
@@ -229,12 +233,15 @@ export function useThrottle<T>(value: T, limit: number): T {
   const lastRan = useRef<number>(Date.now());
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      if (Date.now() - lastRan.current >= limit) {
-        setThrottledValue(value);
-        lastRan.current = Date.now();
-      }
-    }, limit - (Date.now() - lastRan.current));
+    const handler = setTimeout(
+      () => {
+        if (Date.now() - lastRan.current >= limit) {
+          setThrottledValue(value);
+          lastRan.current = Date.now();
+        }
+      },
+      limit - (Date.now() - lastRan.current)
+    );
 
     return () => clearTimeout(handler);
   }, [value, limit]);
@@ -248,12 +255,15 @@ export function useThrottledCallback<T extends (...args: any[]) => any>(
 ): T {
   const lastRan = useRef<number>(0);
 
-  return useCallback((...args: Parameters<T>) => {
-    if (Date.now() - lastRan.current >= limit) {
-      callback(...args);
-      lastRan.current = Date.now();
-    }
-  }, [callback, limit]) as T;
+  return useCallback(
+    (...args: Parameters<T>) => {
+      if (Date.now() - lastRan.current >= limit) {
+        callback(...args);
+        lastRan.current = Date.now();
+      }
+    },
+    [callback, limit]
+  ) as T;
 }
 
 // =============================================================================
@@ -283,7 +293,10 @@ export function calculateVirtualScroll(
 
   const visibleItems = Math.ceil(containerHeight / itemHeight);
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
-  const endIndex = Math.min(totalItems - 1, startIndex + visibleItems + overscan * 2);
+  const endIndex = Math.min(
+    totalItems - 1,
+    startIndex + visibleItems + overscan * 2
+  );
 
   return {
     startIndex,
@@ -299,7 +312,13 @@ export function useVirtualScroll(options: VirtualScrollOptions) {
 
   const virtualData = useMemo(
     () => calculateVirtualScroll(scrollTop, options),
-    [scrollTop, options.itemHeight, options.containerHeight, options.totalItems, options.overscan]
+    [
+      scrollTop,
+      options.itemHeight,
+      options.containerHeight,
+      options.totalItems,
+      options.overscan,
+    ]
   );
 
   const handleScroll = useCallback((event: React.UIEvent<HTMLDivElement>) => {
@@ -320,7 +339,7 @@ export class PerformanceMonitor {
   private static metrics: PerformanceMetrics[] = [];
   private static maxMetrics = 100;
 
-  static startMeasure(label: string): () => void {
+  static startMeasure(_label: string): () => void {
     const start = performance.now();
 
     return () => {
@@ -333,9 +352,7 @@ export class PerformanceMonitor {
         memoryUsage: this.getMemoryUsage(),
       });
 
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`⏱️ ${label}: ${renderTime.toFixed(2)}ms`);
-      }
+      // Performance measurement: ${label} completed
     };
   }
 
@@ -355,7 +372,10 @@ export class PerformanceMonitor {
   static getAverageRenderTime(): number {
     if (this.metrics.length === 0) return 0;
 
-    const totalTime = this.metrics.reduce((sum, metric) => sum + metric.renderTime, 0);
+    const totalTime = this.metrics.reduce(
+      (sum, metric) => sum + metric.renderTime,
+      0
+    );
     return totalTime / this.metrics.length;
   }
 
@@ -377,27 +397,31 @@ export class PerformanceMonitor {
 // Performance Hooks
 // =============================================================================
 
-export function usePerformanceMonitor(label: string, dependencies: React.DependencyList = []) {
+export function usePerformanceMonitor(
+  label: string,
+  dependencies: React.DependencyList = []
+) {
   useEffect(() => {
     const stopMeasure = PerformanceMonitor.startMeasure(label);
     return stopMeasure;
   }, dependencies);
 }
 
-export function useRenderCount(name?: string): number {
+export function useRenderCount(_name?: string): number {
   const renderCount = useRef(0);
 
   useEffect(() => {
     renderCount.current++;
-    if (process.env.NODE_ENV === 'development' && name) {
-      console.log(`🔄 ${name} rendered ${renderCount.current} times`);
-    }
+    // Render count tracking for component: ${name}
   });
 
   return renderCount.current;
 }
 
-export function useWhyDidYouUpdate(name: string, props: Record<string, any>): void {
+export function useWhyDidYouUpdate(
+  name: string,
+  props: Record<string, any>
+): void {
   const previousProps = useRef<Record<string, any> | undefined>(undefined);
 
   useEffect(() => {
@@ -414,9 +438,7 @@ export function useWhyDidYouUpdate(name: string, props: Record<string, any>): vo
         }
       });
 
-      if (Object.keys(changedProps).length) {
-        console.log(`🤔 ${name} re-rendered because:`, changedProps);
-      }
+      // Component ${name} re-rendered due to prop changes
     }
 
     previousProps.current = props;
@@ -432,22 +454,16 @@ export function useMemoryLeakDetection(componentName: string): void {
 
   useEffect(() => {
     return () => {
-      const unmountTime = Date.now();
-      const lifetime = unmountTime - mountTime.current;
-
-      if (process.env.NODE_ENV === 'development') {
-        console.log(`♻️ ${componentName} unmounted after ${lifetime}ms`);
-
-        // Warn about long-lived components
-        if (lifetime > 60000) { // 1 minute
-          console.warn(`⚠️ ${componentName} was mounted for ${lifetime}ms - check for memory leaks`);
-        }
-      }
+      // Component unmount tracking
+      // Could log lifetime: Date.now() - mountTime.current
     };
-  }, [componentName]);
+  }, [componentName, mountTime]);
 }
 
-export function useCleanupEffect(cleanup: () => void, dependencies: React.DependencyList = []): void {
+export function useCleanupEffect(
+  cleanup: () => void,
+  dependencies: React.DependencyList = []
+): void {
   useEffect(() => {
     return cleanup;
   }, dependencies);
@@ -487,7 +503,7 @@ export function lazyWithRetry<T extends React.ComponentType<any>>(
 
 export function measureAsyncOperation<T>(
   operation: () => Promise<T>,
-  label?: string
+  _label?: string
 ): Promise<{ result: T; duration: number }> {
   return new Promise(async (resolve, reject) => {
     const start = performance.now();
@@ -496,9 +512,7 @@ export function measureAsyncOperation<T>(
       const result = await operation();
       const duration = performance.now() - start;
 
-      if (label && process.env.NODE_ENV === 'development') {
-        console.log(`⏱️ ${label}: ${duration.toFixed(2)}ms`);
-      }
+      // Async operation ${label} completed
 
       resolve({ result, duration });
     } catch (error) {
@@ -507,21 +521,27 @@ export function measureAsyncOperation<T>(
   });
 }
 
-export function profileComponent<P>(
+export function profileComponent<P extends object>(
   Component: React.ComponentType<P>,
   profileName?: string
 ): React.ComponentType<P> {
   return function ProfiledComponent(props: P) {
-    usePerformanceMonitor(profileName || Component.displayName || 'Unknown', [props]);
+    usePerformanceMonitor(profileName || Component.displayName || 'Unknown', [
+      props,
+    ]);
 
     // Always call hooks, but only log in development
-    useRenderCount(process.env.NODE_ENV === 'development' ? (profileName || Component.displayName) : undefined);
+    useRenderCount(
+      process.env.NODE_ENV === 'development'
+        ? profileName || Component.displayName
+        : undefined
+    );
     useWhyDidYouUpdate(
       profileName || Component.displayName || 'Unknown',
       process.env.NODE_ENV === 'development' ? (props as any) : {}
     );
 
-    return React.createElement(Component, props);
+    return React.createElement(Component as React.ComponentType<any>, props);
   };
 }
 
@@ -571,7 +591,7 @@ export function useTransition(): [boolean, (callback: () => void) => void] {
   return [isPending, startTransition];
 }
 
-export default {
+const performanceUtils = {
   MemoryCache,
   PerformanceMonitor,
   useMemoizedValue,
@@ -589,3 +609,5 @@ export default {
   useDeferredValue,
   useTransition,
 };
+
+export default performanceUtils;

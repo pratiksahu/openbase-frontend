@@ -131,7 +131,9 @@ describe('DorDodPanel', () => {
         />
       );
 
-      expect(screen.getByText('Definition of Ready & Done')).toBeInTheDocument();
+      expect(
+        screen.getByText('Definition of Ready & Done')
+      ).toBeInTheDocument();
       // In print mode, action buttons should not be present
       expect(screen.queryByText('Add Criterion')).not.toBeInTheDocument();
     });
@@ -327,7 +329,8 @@ describe('DorDodPanel', () => {
 
   describe('Responsive Behavior', () => {
     it('handles collapsed sections', async () => {
-      const user = userEvent.setup();
+      // User event setup removed - not used in this test
+      // const user = userEvent.setup();
       render(
         <DorDodPanel
           {...defaultProps}
@@ -393,7 +396,9 @@ describe('DorDodPanel', () => {
       expect(screen.getByText('Requirements are clear')).toBeInTheDocument();
 
       // Re-render with same props
-      rerender(<DorDodPanel {...defaultProps} initialState={mockInitialState} />);
+      rerender(
+        <DorDodPanel {...defaultProps} initialState={mockInitialState} />
+      );
 
       expect(screen.getByText('Requirements are clear')).toBeInTheDocument();
     });

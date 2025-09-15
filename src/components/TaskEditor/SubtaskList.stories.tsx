@@ -1,7 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 // Action utilities not available in Storybook 9
-const action = (name: string) => (...args: any[]) => console.log(name, ...args);
+const action =
+  (name: string) =>
+  (...args: any[]) => {
+    // Action handler for Storybook events
+    // In a production environment, these would be replaced with actual action handlers
+  };
 
 import { TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 import type { Subtask } from '@/types/smart-goals.types';
@@ -59,7 +64,8 @@ const mockSubtasks: Subtask[] = [
   {
     id: 'subtask-1',
     title: 'Design user interface mockups',
-    description: 'Create wireframes and mockups for the main dashboard using Figma',
+    description:
+      'Create wireframes and mockups for the main dashboard using Figma',
     status: TaskStatus.COMPLETED,
     priority: GoalPriority.HIGH,
     assignedTo: '1',
@@ -82,7 +88,8 @@ const mockSubtasks: Subtask[] = [
   {
     id: 'subtask-2',
     title: 'Implement responsive layout',
-    description: 'Make the dashboard work seamlessly on mobile, tablet, and desktop devices',
+    description:
+      'Make the dashboard work seamlessly on mobile, tablet, and desktop devices',
     status: TaskStatus.IN_PROGRESS,
     priority: GoalPriority.MEDIUM,
     assignedTo: '2',
@@ -103,7 +110,8 @@ const mockSubtasks: Subtask[] = [
   {
     id: 'subtask-3',
     title: 'Add interactive components',
-    description: 'Implement dropdowns, modals, tooltips, and other interactive elements',
+    description:
+      'Implement dropdowns, modals, tooltips, and other interactive elements',
     status: TaskStatus.TODO,
     priority: GoalPriority.LOW,
     estimatedHours: 6,
@@ -122,7 +130,8 @@ const mockSubtasks: Subtask[] = [
   {
     id: 'subtask-4',
     title: 'Write comprehensive unit tests',
-    description: 'Achieve 90%+ code coverage for all dashboard components and utilities',
+    description:
+      'Achieve 90%+ code coverage for all dashboard components and utilities',
     status: TaskStatus.BLOCKED,
     priority: GoalPriority.CRITICAL,
     assignedTo: '3',
@@ -149,6 +158,7 @@ const mockSubtasks: Subtask[] = [
 export const Default: Story = {
   args: {
     subtasks: mockSubtasks,
+    taskId: 'task-1',
     onSubtasksChange: action('onSubtasksChange'),
     onSubtaskAdd: action('onSubtaskAdd'),
     onSubtaskUpdate: action('onSubtaskUpdate'),
@@ -160,7 +170,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Default subtask list showing various subtasks in different states with assignees and due dates.',
+        story:
+          'Default subtask list showing various subtasks in different states with assignees and due dates.',
       },
     },
   },
@@ -172,6 +183,7 @@ export const Default: Story = {
 export const Empty: Story = {
   args: {
     subtasks: [],
+    taskId: 'task-1',
     onSubtasksChange: action('onSubtasksChange'),
     onSubtaskAdd: action('onSubtaskAdd'),
     onSubtaskUpdate: action('onSubtaskUpdate'),
@@ -195,6 +207,7 @@ export const Empty: Story = {
 export const ReadOnly: Story = {
   args: {
     subtasks: mockSubtasks,
+    taskId: 'task-1',
     onSubtasksChange: action('onSubtasksChange'),
     onSubtaskAdd: action('onSubtaskAdd'),
     onSubtaskUpdate: action('onSubtaskUpdate'),
@@ -206,7 +219,8 @@ export const ReadOnly: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Read-only mode where subtasks can be viewed but not edited or reordered.',
+        story:
+          'Read-only mode where subtasks can be viewed but not edited or reordered.',
       },
     },
   },
@@ -217,6 +231,7 @@ export const ReadOnly: Story = {
  */
 export const AllCompleted: Story = {
   args: {
+    taskId: 'task-1',
     subtasks: mockSubtasks.map(subtask => ({
       ...subtask,
       status: TaskStatus.COMPLETED,
@@ -235,7 +250,8 @@ export const AllCompleted: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Subtask list where all subtasks are completed, showing progress completion.',
+        story:
+          'Subtask list where all subtasks are completed, showing progress completion.',
       },
     },
   },
@@ -246,6 +262,7 @@ export const AllCompleted: Story = {
  */
 export const MixedPriorities: Story = {
   args: {
+    taskId: 'task-1',
     subtasks: [
       {
         ...mockSubtasks[0],
@@ -287,7 +304,8 @@ export const MixedPriorities: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Subtasks with different priority levels from critical to low, showing color-coded priority badges.',
+        story:
+          'Subtasks with different priority levels from critical to low, showing color-coded priority badges.',
       },
     },
   },
@@ -298,10 +316,14 @@ export const MixedPriorities: Story = {
  */
 export const OverdueSubtasks: Story = {
   args: {
+    taskId: 'task-1',
     subtasks: mockSubtasks.map(subtask => ({
       ...subtask,
       dueDate: new Date('2024-01-10T17:00:00Z'), // Past date
-      status: subtask.status === TaskStatus.COMPLETED ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS,
+      status:
+        subtask.status === TaskStatus.COMPLETED
+          ? TaskStatus.COMPLETED
+          : TaskStatus.IN_PROGRESS,
     })),
     onSubtasksChange: action('onSubtasksChange'),
     onSubtaskAdd: action('onSubtaskAdd'),
@@ -314,7 +336,8 @@ export const OverdueSubtasks: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Subtasks with past due dates, showing how overdue items are highlighted.',
+        story:
+          'Subtasks with past due dates, showing how overdue items are highlighted.',
       },
     },
   },
@@ -325,6 +348,7 @@ export const OverdueSubtasks: Story = {
  */
 export const UnassignedSubtasks: Story = {
   args: {
+    taskId: 'task-1',
     subtasks: mockSubtasks.map(subtask => ({
       ...subtask,
       assignedTo: undefined,
@@ -340,7 +364,8 @@ export const UnassignedSubtasks: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Subtasks without assigned team members, showing unassigned state.',
+        story:
+          'Subtasks without assigned team members, showing unassigned state.',
       },
     },
   },
@@ -351,6 +376,7 @@ export const UnassignedSubtasks: Story = {
  */
 export const LongDescriptions: Story = {
   args: {
+    taskId: 'task-1',
     subtasks: [
       {
         ...mockSubtasks[0],
@@ -405,7 +431,8 @@ Caching Strategy Implementation:
   parameters: {
     docs: {
       description: {
-        story: 'Subtasks with extensive descriptions showing how long content is handled.',
+        story:
+          'Subtasks with extensive descriptions showing how long content is handled.',
       },
     },
   },
@@ -416,6 +443,7 @@ Caching Strategy Implementation:
  */
 export const BlockedSubtasks: Story = {
   args: {
+    taskId: 'task-1',
     subtasks: [
       {
         ...mockSubtasks[0],
@@ -457,7 +485,8 @@ export const BlockedSubtasks: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Subtasks in blocked state showing dependencies and reasons for blocking.',
+        story:
+          'Subtasks in blocked state showing dependencies and reasons for blocking.',
       },
     },
   },
@@ -468,6 +497,7 @@ export const BlockedSubtasks: Story = {
  */
 export const TimeTrackingDetails: Story = {
   args: {
+    taskId: 'task-1',
     subtasks: mockSubtasks.map(subtask => ({
       ...subtask,
       estimatedHours: Math.floor(Math.random() * 20) + 4,
@@ -484,7 +514,8 @@ export const TimeTrackingDetails: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Subtasks showing estimated vs actual hours for time tracking analysis.',
+        story:
+          'Subtasks showing estimated vs actual hours for time tracking analysis.',
       },
     },
   },
@@ -495,22 +526,23 @@ export const TimeTrackingDetails: Story = {
  */
 export const Interactive: Story = {
   args: {
+    taskId: 'task-1',
     subtasks: mockSubtasks.slice(0, 2), // Start with fewer items for demo
     onSubtasksChange: action('onSubtasksChange'),
-    onSubtaskAdd: (subtask) => {
-      console.log('Adding subtask:', subtask);
+    onSubtaskAdd: subtask => {
+      // Adding subtask: subtask
       action('onSubtaskAdd')(subtask);
     },
     onSubtaskUpdate: (id, changes) => {
-      console.log('Updating subtask:', id, changes);
+      // Updating subtask: id, changes
       action('onSubtaskUpdate')(id, changes);
     },
-    onSubtaskDelete: (id) => {
-      console.log('Deleting subtask:', id);
+    onSubtaskDelete: id => {
+      // Deleting subtask: id
       action('onSubtaskDelete')(id);
     },
     onSubtaskReorder: (fromIndex, toIndex) => {
-      console.log('Reordering from', fromIndex, 'to', toIndex);
+      // Reordering from fromIndex to toIndex
       action('onSubtaskReorder')(fromIndex, toIndex);
     },
     availableAssignees: mockAssignees,
@@ -519,7 +551,8 @@ export const Interactive: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Interactive demo showing add, edit, delete, and reorder operations with console logging.',
+        story:
+          'Interactive demo showing add, edit, delete, and reorder operations with console logging.',
       },
     },
   },

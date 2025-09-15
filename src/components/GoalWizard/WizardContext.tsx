@@ -80,10 +80,14 @@ function wizardReducer(state: WizardState, action: WizardAction): WizardState {
         ...state,
         formData: {
           ...state.formData,
-          [step]: {
-            ...(state.formData[step as keyof WizardFormData] || {}),
-            ...(data && typeof data === 'object' && !Array.isArray(data) ? data : {}),
-          },
+          [step]: Object.assign(
+            {},
+            typeof state.formData[step as keyof WizardFormData] === 'object' &&
+              state.formData[step as keyof WizardFormData] !== null
+              ? state.formData[step as keyof WizardFormData]
+              : {},
+            data && typeof data === 'object' && !Array.isArray(data) ? data : {}
+          ),
         },
         hasUnsavedChanges: true,
       };
@@ -193,7 +197,10 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
   autoSaveInterval = 30000, // 30 seconds
   onAutoSave,
 }) => {
-  const [state, dispatch] = useReducer(wizardReducer, createInitialWizardState());
+  const [state, dispatch] = useReducer(
+    wizardReducer,
+    createInitialWizardState()
+  );
 
   // =============================================================================
   // Auto-save Effect
@@ -205,10 +212,10 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
     }
 
     const autoSaveTimer = setTimeout(() => {
-      const draftId = saveDraftToStorage(state.formData, state);
+      saveDraftToStorage(state.formData, state);
       onAutoSave?.(state.formData);
       dispatch({ type: WizardActionType.SAVE_DRAFT });
-      console.log('Auto-saved draft:', draftId);
+      // Auto-save complete
     }, autoSaveInterval);
 
     return () => clearTimeout(autoSaveTimer);
@@ -228,13 +235,15 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
     // Calculate SMART score when form data changes
     if (Object.keys(state.formData).length > 0) {
       try {
-        const smartGoal = transformToSmartGoal(state.formData as WizardFormData);
+        const smartGoal = transformToSmartGoal(
+          state.formData as WizardFormData
+        );
         const scoreResult = calculateSmartScore(smartGoal);
         dispatch({
           type: WizardActionType.UPDATE_SMART_SCORE,
           payload: scoreResult,
         });
-      } catch (error) {
+      } catch {
         // Ignore errors during transformation - score will be undefined
       }
     }
@@ -255,20 +264,28 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
       goNext: () => {
         const nextStep = getNextStep(state.currentStep);
         if (nextStep && canNavigateToStep(nextStep, state.stepStatus)) {
-          dispatch({ type: WizardActionType.SET_CURRENT_STEP, payload: nextStep });
+          dispatch({
+            type: WizardActionType.SET_CURRENT_STEP,
+            payload: nextStep,
+          });
         }
       },
 
       goPrevious: () => {
         const previousStep = getPreviousStep(state.currentStep);
         if (previousStep) {
-          dispatch({ type: WizardActionType.SET_CURRENT_STEP, payload: previousStep });
+          dispatch({
+            type: WizardActionType.SET_CURRENT_STEP,
+            payload: previousStep,
+          });
         }
       },
 
       canGoNext: () => {
         const nextStep = getNextStep(state.currentStep);
-        return nextStep !== null && canNavigateToStep(nextStep, state.stepStatus);
+        return (
+          nextStep !== null && canNavigateToStep(nextStep, state.stepStatus)
+        );
       },
 
       canGoPrevious: () => {
@@ -327,13 +344,19 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
           case WizardStep.SPECIFIC:
             return validateSpecificStep(stepData as Partial<SpecificStepData>);
           case WizardStep.MEASURABLE:
-            return validateMeasurableStep(stepData as Partial<MeasurableStepData>);
+            return validateMeasurableStep(
+              stepData as Partial<MeasurableStepData>
+            );
           case WizardStep.ACHIEVABLE:
-            return validateAchievableStep(stepData as Partial<AchievableStepData>);
+            return validateAchievableStep(
+              stepData as Partial<AchievableStepData>
+            );
           case WizardStep.RELEVANT:
             return validateRelevantStep(stepData as Partial<RelevantStepData>);
           case WizardStep.TIMEBOUND:
-            return validateTimeboundStep(stepData as Partial<TimeboundStepData>);
+            return validateTimeboundStep(
+              stepData as Partial<TimeboundStepData>
+            );
           case WizardStep.PREVIEW:
             return { isValid: true, errors: {} };
           default:
@@ -463,7 +486,9 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
     () => ({
       exportGoal: async (options: ExportOptions): Promise<ExportResult> => {
         try {
-          const smartGoal = transformToSmartGoal(state.formData as WizardFormData);
+          const smartGoal = transformToSmartGoal(
+            state.formData as WizardFormData
+          );
 
           switch (options.format) {
             case 'json':
@@ -475,7 +500,11 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
               };
 
             case 'markdown':
-              const markdownContent = generateMarkdownExport(smartGoal, state.smartScore, options);
+              const markdownContent = generateMarkdownExport(
+                smartGoal,
+                state.smartScore,
+                options
+              );
               return {
                 success: true,
                 content: markdownContent,
@@ -514,7 +543,11 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
     export: exportFunctions,
   };
 
-  return <WizardContext.Provider value={contextValue}>{children}</WizardContext.Provider>;
+  return (
+    <WizardContext.Provider value={contextValue}>
+      {children}
+    </WizardContext.Provider>
+  );
 };
 
 // =============================================================================
@@ -527,7 +560,9 @@ export const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
 export const useWizardContext = (): WizardContextValue => {
   const context = useContext(WizardContext);
   if (context === undefined) {
-    throw new Error('useWizardContext must be used within a WizardContextProvider');
+    throw new Error(
+      'useWizardContext must be used within a WizardContextProvider'
+    );
   }
   return context;
 };
@@ -570,16 +605,24 @@ function generateMarkdownExport(
 
   // Measurable
   sections.push(`### Measurable`);
-  sections.push(`**Target:** ${goal.measurable.targetValue} ${goal.measurable.unit}`);
-  sections.push(`**Current:** ${goal.measurable.currentValue} ${goal.measurable.unit}`);
-  sections.push(`**Measurement Frequency:** ${goal.measurable.measurementFrequency}\n`);
+  sections.push(
+    `**Target:** ${goal.measurable.targetValue} ${goal.measurable.unit}`
+  );
+  sections.push(
+    `**Current:** ${goal.measurable.currentValue} ${goal.measurable.unit}`
+  );
+  sections.push(
+    `**Measurement Frequency:** ${goal.measurable.measurementFrequency}\n`
+  );
 
   // Achievable
   if (goal.achievability.requiredResources.length > 0) {
     sections.push(`### Achievable`);
     sections.push(`**Required Resources:**`);
     goal.achievability.requiredResources.forEach(resource => {
-      sections.push(`- ${resource.name}: ${resource.quantity} ${resource.unit}`);
+      sections.push(
+        `- ${resource.name}: ${resource.quantity} ${resource.unit}`
+      );
     });
     sections.push('');
   }
@@ -604,7 +647,9 @@ function generateMarkdownExport(
 
   // Tags
   if (goal.tags.length > 0) {
-    sections.push(`## Tags\n${goal.tags.map(tag => `\`${tag}\``).join(', ')}\n`);
+    sections.push(
+      `## Tags\n${goal.tags.map(tag => `\`${tag}\``).join(', ')}\n`
+    );
   }
 
   return sections.join('\n');

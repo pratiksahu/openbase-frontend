@@ -34,12 +34,19 @@ test.describe('Goals List Page', () => {
     await expect(page.getByRole('button', { name: /Filter/i })).toBeVisible();
   });
 
-  test('should display goal cards with correct information', async ({ page }) => {
+  test('should display goal cards with correct information', async ({
+    page,
+  }) => {
     // Wait for goals to load
-    await page.waitForSelector('[data-testid="goal-card"], [data-testid="goal-list-item"]', { timeout: 10000 });
+    await page.waitForSelector(
+      '[data-testid="goal-card"], [data-testid="goal-list-item"]',
+      { timeout: 10000 }
+    );
 
     // Check that goal cards/items are present
-    const goalCards = page.locator('[data-testid="goal-card"], [data-testid="goal-list-item"]');
+    const goalCards = page.locator(
+      '[data-testid="goal-card"], [data-testid="goal-list-item"]'
+    );
     const count = await goalCards.count();
     expect(count).toBeGreaterThanOrEqual(1);
 
@@ -49,12 +56,17 @@ test.describe('Goals List Page', () => {
 
     // Goal cards should contain title, description, progress, and status
     await expect(firstGoal.locator('text=/.*[a-zA-Z]+.*/')).toBeVisible(); // Title
-    await expect(firstGoal.locator('[role="progressbar"], .progress')).toBeVisible(); // Progress bar
+    await expect(
+      firstGoal.locator('[role="progressbar"], .progress')
+    ).toBeVisible(); // Progress bar
   });
 
   test('should display statistics cards', async ({ page }) => {
     // Check for stats cards
-    const statsCards = page.locator('[data-testid="stats-card"]').or(page.locator('.grid').first().locator('.card')).first();
+    const statsCards = page
+      .locator('[data-testid="stats-card"]')
+      .or(page.locator('.grid').first().locator('.card'))
+      .first();
     await expect(statsCards).toBeVisible();
 
     // Stats should include numbers
@@ -83,11 +95,15 @@ test.describe('Goals List Page', () => {
     await expect(searchInput).toHaveValue('test search');
   });
 
-  test('should navigate to goal detail when clicking goal', async ({ page }) => {
+  test('should navigate to goal detail when clicking goal', async ({
+    page,
+  }) => {
     // Wait for goals to load and click first goal
     await page.waitForSelector('a[href*="/goals/"]', { timeout: 10000 });
 
-    const goalLinks = page.locator('a[href*="/goals/"]').filter({ hasText: /.*/ });
+    const goalLinks = page
+      .locator('a[href*="/goals/"]')
+      .filter({ hasText: /.*/ });
     const firstGoalLink = goalLinks.first();
 
     await expect(firstGoalLink).toBeVisible();
@@ -112,15 +128,21 @@ test.describe('New Goal Page', () => {
     await expect(page.locator('h1')).toContainText(/Create.*Goal/i);
 
     // Check for back button
-    await expect(page.getByRole('link', { name: /Back to Goals/i })).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: /Back to Goals/i })
+    ).toBeVisible();
   });
 
   test('should display goal wizard', async ({ page }) => {
     // Check for wizard elements
-    await expect(page.locator('[data-testid="goal-wizard"], .wizard')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="goal-wizard"], .wizard')
+    ).toBeVisible();
 
     // Should have wizard steps or navigation
-    await expect(page.locator('text=/step/i, [data-testid="wizard-step"]')).toBeVisible();
+    await expect(
+      page.locator('text=/step/i, [data-testid="wizard-step"]')
+    ).toBeVisible();
   });
 
   test('should navigate back to goals list', async ({ page }) => {
@@ -149,7 +171,9 @@ test.describe('Goal Detail Pages', () => {
     await expect(page.locator('h1, [data-testid="goal-title"]')).toBeVisible();
 
     // Check for back button
-    await expect(page.getByRole('link', { name: /Back to Goals/i })).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: /Back to Goals/i })
+    ).toBeVisible();
   });
 
   test('should display navigation tabs', async ({ page }) => {
@@ -167,13 +191,17 @@ test.describe('Goal Detail Pages', () => {
 
   test('should display goal header with key information', async ({ page }) => {
     // Check for SMART score badge
-    await expect(page.locator('[data-testid="smart-score"], .smart-score')).toBeVisible();
+    await expect(
+      page.locator('[data-testid="smart-score"], .smart-score')
+    ).toBeVisible();
 
     // Check for progress bar
     await expect(page.locator('[role="progressbar"], .progress')).toBeVisible();
 
     // Check for status badge
-    await expect(page.locator('.badge, [data-testid="status-badge"]')).toBeVisible();
+    await expect(
+      page.locator('.badge, [data-testid="status-badge"]')
+    ).toBeVisible();
   });
 
   test('should navigate between tabs', async ({ page }) => {
@@ -200,7 +228,10 @@ test.describe('Goal Detail Pages', () => {
 
   test('should display action menu', async ({ page }) => {
     // Check for actions dropdown
-    await page.getByRole('button', { name: /more/i }).or(page.locator('[data-testid="goal-actions"]')).click();
+    await page
+      .getByRole('button', { name: /more/i })
+      .or(page.locator('[data-testid="goal-actions"]'))
+      .click();
 
     // Should show action menu items
     await expect(page.getByText('Edit Goal')).toBeVisible();
@@ -260,8 +291,16 @@ test.describe('Goal Canvas Page', () => {
   });
 
   test('should display zoom controls', async ({ page }) => {
-    await expect(page.getByRole('button', { name: /zoom in/i }).or(page.locator('[data-testid="zoom-in"]'))).toBeVisible();
-    await expect(page.getByRole('button', { name: /zoom out/i }).or(page.locator('[data-testid="zoom-out"]'))).toBeVisible();
+    await expect(
+      page
+        .getByRole('button', { name: /zoom in/i })
+        .or(page.locator('[data-testid="zoom-in"]'))
+    ).toBeVisible();
+    await expect(
+      page
+        .getByRole('button', { name: /zoom out/i })
+        .or(page.locator('[data-testid="zoom-out"]'))
+    ).toBeVisible();
   });
 });
 
@@ -306,7 +345,9 @@ test.describe('Goal Metrics Page', () => {
 
   test('should display charts and visualizations', async ({ page }) => {
     // Check for chart elements (SVG or canvas)
-    await expect(page.locator('svg, canvas, [data-testid="chart"]')).toBeVisible();
+    await expect(
+      page.locator('svg, canvas, [data-testid="chart"]')
+    ).toBeVisible();
   });
 });
 
@@ -321,7 +362,9 @@ test.describe('Goal Review Page', () => {
 
   test('should display review interface', async ({ page }) => {
     // Check for review tabs
-    await expect(page.getByRole('tab', { name: /Review.*Comments/i })).toBeVisible();
+    await expect(
+      page.getByRole('tab', { name: /Review.*Comments/i })
+    ).toBeVisible();
     await expect(page.getByRole('tab', { name: /DoR.*DoD/i })).toBeVisible();
     await expect(page.getByRole('tab', { name: /History/i })).toBeVisible();
   });
@@ -332,7 +375,9 @@ test.describe('Goal Review Page', () => {
   });
 
   test('should allow adding comments', async ({ page }) => {
-    const commentBox = page.locator('textarea[placeholder*="comment"], [data-testid="comment-input"]');
+    const commentBox = page.locator(
+      'textarea[placeholder*="comment"], [data-testid="comment-input"]'
+    );
     await expect(commentBox).toBeVisible();
 
     await commentBox.fill('This is a test comment');
@@ -349,7 +394,9 @@ test.describe('Error Handling', () => {
     await page.goto(`${GOALS_BASE_URL}/non-existent-goal`);
 
     await expect(page.locator('text=/404/i, text=/not found/i')).toBeVisible();
-    await expect(page.getByRole('button', { name: /View All Goals/i })).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /View All Goals/i })
+    ).toBeVisible();
   });
 
   test('should handle loading states', async ({ page }) => {
@@ -362,7 +409,8 @@ test.describe('Error Handling', () => {
     await page.goto(GOALS_BASE_URL);
 
     // Should show loading skeletons (at least briefly)
-    const skeletons = page.locator('.animate-pulse, [data-testid="skeleton"]');
+    // Removed unused variable - skeleton verification can be done directly if needed
+    // const skeletons = page.locator('.animate-pulse, [data-testid="skeleton"]');
     // Note: This might be flaky due to timing, but worth testing
   });
 });
@@ -419,9 +467,12 @@ test.describe('Accessibility', () => {
 
     for (let i = 0; i < inputCount; i++) {
       const input = inputs.nth(i);
-      const hasLabel = await input.getAttribute('aria-label') ||
-                     await input.getAttribute('aria-labelledby') ||
-                     await page.locator(`label[for="${await input.getAttribute('id')}"]`).count() > 0;
+      const hasLabel =
+        (await input.getAttribute('aria-label')) ||
+        (await input.getAttribute('aria-labelledby')) ||
+        (await page
+          .locator(`label[for="${await input.getAttribute('id')}"]`)
+          .count()) > 0;
 
       // This is a basic accessibility check
       if (await input.isVisible()) {
@@ -456,7 +507,9 @@ test.describe('Performance', () => {
     const startTime = Date.now();
 
     await page.goto(GOALS_BASE_URL);
-    await page.waitForSelector('[data-testid="goal-card"], .card', { timeout: 5000 });
+    await page.waitForSelector('[data-testid="goal-card"], .card', {
+      timeout: 5000,
+    });
 
     const loadTime = Date.now() - startTime;
     expect(loadTime).toBeLessThan(5000); // Should load within 5 seconds

@@ -41,7 +41,6 @@ import {
 } from 'lucide-react';
 import React, { useState, useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-
 // UI Components
 import { toast } from 'sonner';
 
@@ -51,18 +50,19 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-
-
 // Types and utilities
 import { TaskStatus, GoalPriority } from '@/types/smart-goals.types';
 import type { Subtask } from '@/types/smart-goals.types';
 
-import {
-  SubtaskListProps,
-  SubtaskFormData,
-} from './TaskEditor.types';
+import { SubtaskListProps, SubtaskFormData } from './TaskEditor.types';
 import {
   subtaskFormSchema,
   getStatusColor,
@@ -135,7 +135,9 @@ function SortableSubtaskItem({
     onSave(data);
   };
 
-  const assigneeName = availableAssignees.find(a => a.id === subtask.assignedTo)?.name;
+  const assigneeName = availableAssignees.find(
+    a => a.id === subtask.assignedTo
+  )?.name;
 
   if (isEditing) {
     return (
@@ -146,13 +148,13 @@ function SortableSubtaskItem({
       >
         <CardContent className="p-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="mb-4 flex items-center gap-2">
               <div
                 {...attributes}
                 {...listeners}
                 className="cursor-grab hover:cursor-grabbing"
               >
-                <GripVertical className="h-4 w-4 text-muted-foreground" />
+                <GripVertical className="text-muted-foreground h-4 w-4" />
               </div>
               <h4 className="font-medium">Edit Subtask</h4>
             </div>
@@ -173,7 +175,9 @@ function SortableSubtaskItem({
                 )}
               />
               {errors.title && (
-                <p className="text-sm text-destructive">{errors.title.message}</p>
+                <p className="text-destructive text-sm">
+                  {errors.title.message}
+                </p>
               )}
             </div>
 
@@ -207,10 +211,12 @@ function SortableSubtaskItem({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.values(TaskStatus).map((status) => (
+                        {Object.values(TaskStatus).map(status => (
                           <SelectItem key={status} value={status}>
                             <div className="flex items-center gap-2">
-                              <span className={`w-2 h-2 rounded-full ${getStatusColor(status)}`} />
+                              <span
+                                className={`h-2 w-2 rounded-full ${getStatusColor(status)}`}
+                              />
                               {status.replace('_', ' ')}
                             </div>
                           </SelectItem>
@@ -233,10 +239,12 @@ function SortableSubtaskItem({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.values(GoalPriority).map((priority) => (
+                        {Object.values(GoalPriority).map(priority => (
                           <SelectItem key={priority} value={priority}>
                             <div className="flex items-center gap-2">
-                              <span className={`w-2 h-2 rounded-full ${getPriorityColor(priority)}`} />
+                              <span
+                                className={`h-2 w-2 rounded-full ${getPriorityColor(priority)}`}
+                              />
                               {priority}
                             </div>
                           </SelectItem>
@@ -256,13 +264,16 @@ function SortableSubtaskItem({
                   name="assignedTo"
                   control={control}
                   render={({ field }) => (
-                    <Select value={field.value || ''} onValueChange={field.onChange}>
+                    <Select
+                      value={field.value || ''}
+                      onValueChange={field.onChange}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Unassigned" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="">Unassigned</SelectItem>
-                        {availableAssignees.map((assignee) => (
+                        {availableAssignees.map(assignee => (
                           <SelectItem key={assignee.id} value={assignee.id}>
                             {assignee.name}
                           </SelectItem>
@@ -286,7 +297,13 @@ function SortableSubtaskItem({
                       step="0.5"
                       min="0"
                       value={value || ''}
-                      onChange={(e) => onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                      onChange={e =>
+                        onChange(
+                          e.target.value
+                            ? parseFloat(e.target.value)
+                            : undefined
+                        )
+                      }
                       placeholder="0"
                     />
                   )}
@@ -304,8 +321,14 @@ function SortableSubtaskItem({
                   <Input
                     {...field}
                     type="datetime-local"
-                    value={value ? new Date(value).toISOString().slice(0, 16) : ''}
-                    onChange={(e) => onChange(e.target.value ? new Date(e.target.value) : undefined)}
+                    value={
+                      value ? new Date(value).toISOString().slice(0, 16) : ''
+                    }
+                    onChange={e =>
+                      onChange(
+                        e.target.value ? new Date(e.target.value) : undefined
+                      )
+                    }
                   />
                 )}
               />
@@ -313,11 +336,11 @@ function SortableSubtaskItem({
 
             <div className="flex items-center justify-end gap-2">
               <Button type="button" variant="outline" onClick={onCancel}>
-                <X className="h-4 w-4 mr-2" />
+                <X className="mr-2 h-4 w-4" />
                 Cancel
               </Button>
               <Button type="submit">
-                <Check className="h-4 w-4 mr-2" />
+                <Check className="mr-2 h-4 w-4" />
                 Save
               </Button>
             </div>
@@ -331,38 +354,46 @@ function SortableSubtaskItem({
     <Card
       ref={setNodeRef}
       style={style}
-      className={`${isDragging ? 'opacity-50' : ''} ${subtask.status === TaskStatus.COMPLETED ? 'bg-green-50 border-green-200' : ''}`}
+      className={`${isDragging ? 'opacity-50' : ''} ${subtask.status === TaskStatus.COMPLETED ? 'border-green-200 bg-green-50' : ''}`}
     >
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
           <div
             {...attributes}
             {...listeners}
-            className="cursor-grab hover:cursor-grabbing mt-1"
+            className="mt-1 cursor-grab hover:cursor-grabbing"
           >
-            <GripVertical className="h-4 w-4 text-muted-foreground" />
+            <GripVertical className="text-muted-foreground h-4 w-4" />
           </div>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-2">
-              <h4 className={`font-medium ${subtask.status === TaskStatus.COMPLETED ? 'line-through text-muted-foreground' : ''}`}>
+          <div className="min-w-0 flex-1">
+            <div className="mb-2 flex items-center gap-2">
+              <h4
+                className={`font-medium ${subtask.status === TaskStatus.COMPLETED ? 'text-muted-foreground line-through' : ''}`}
+              >
                 {subtask.title}
               </h4>
-              <Badge variant="outline" className={getStatusColor(subtask.status)}>
+              <Badge
+                variant="outline"
+                className={getStatusColor(subtask.status)}
+              >
                 {subtask.status}
               </Badge>
-              <Badge variant="outline" className={getPriorityColor(subtask.priority)}>
+              <Badge
+                variant="outline"
+                className={getPriorityColor(subtask.priority)}
+              >
                 {subtask.priority}
               </Badge>
             </div>
 
             {subtask.description && (
-              <p className="text-sm text-muted-foreground mb-2">
+              <p className="text-muted-foreground mb-2 text-sm">
                 {subtask.description}
               </p>
             )}
 
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-4 text-sm">
               {assigneeName && (
                 <div className="flex items-center gap-1">
                   <User className="h-3 w-3" />
@@ -383,14 +414,15 @@ function SortableSubtaskItem({
               )}
             </div>
 
-            {subtask.progress > 0 && subtask.status !== TaskStatus.COMPLETED && (
-              <div className="mt-2">
-                <Progress value={subtask.progress} className="h-2" />
-                <p className="text-xs text-muted-foreground mt-1">
-                  {subtask.progress}% complete
-                </p>
-              </div>
-            )}
+            {subtask.progress > 0 &&
+              subtask.status !== TaskStatus.COMPLETED && (
+                <div className="mt-2">
+                  <Progress value={subtask.progress} className="h-2" />
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    {subtask.progress}% complete
+                  </p>
+                </div>
+              )}
           </div>
 
           {!isReadOnly && (
@@ -407,7 +439,7 @@ function SortableSubtaskItem({
                 variant="ghost"
                 size="sm"
                 onClick={onDelete}
-                className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                className="text-destructive hover:text-destructive h-8 w-8 p-0"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -425,6 +457,7 @@ function SortableSubtaskItem({
 
 export function SubtaskList({
   subtasks,
+  taskId,
   onSubtasksChange: _onSubtasksChange,
   onSubtaskAdd,
   onSubtaskUpdate,
@@ -471,26 +504,32 @@ export function SubtaskList({
   // Handlers
   // =============================================================================
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    const { active, over } = event;
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-    if (over && active.id !== over.id) {
-      const oldIndex = subtasks.findIndex(item => item.id === active.id);
-      const newIndex = subtasks.findIndex(item => item.id === over.id);
+      if (over && active.id !== over.id) {
+        const oldIndex = subtasks.findIndex(item => item.id === active.id);
+        const newIndex = subtasks.findIndex(item => item.id === over.id);
 
-      onSubtaskReorder(oldIndex, newIndex);
-    }
-  }, [subtasks, onSubtaskReorder]);
+        onSubtaskReorder(oldIndex, newIndex);
+      }
+    },
+    [subtasks, onSubtaskReorder]
+  );
 
   const handleEdit = useCallback((subtaskId: string) => {
     setEditingId(subtaskId);
   }, []);
 
-  const handleSave = useCallback((subtaskId: string, data: SubtaskFormData) => {
-    onSubtaskUpdate(subtaskId, data);
-    setEditingId(null);
-    toast.success('Subtask updated');
-  }, [onSubtaskUpdate]);
+  const handleSave = useCallback(
+    (subtaskId: string, data: SubtaskFormData) => {
+      onSubtaskUpdate(subtaskId, data);
+      setEditingId(null);
+      toast.success('Subtask updated');
+    },
+    [onSubtaskUpdate]
+  );
 
   const handleCancel = useCallback(() => {
     setEditingId(null);
@@ -498,43 +537,60 @@ export function SubtaskList({
     resetAddForm();
   }, [resetAddForm]);
 
-  const handleDelete = useCallback((subtaskId: string, subtaskTitle: string) => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete subtask "${subtaskTitle}"?`
-    );
+  const handleDelete = useCallback(
+    (subtaskId: string, subtaskTitle: string) => {
+      const confirmDelete = window.confirm(
+        `Are you sure you want to delete subtask "${subtaskTitle}"?`
+      );
 
-    if (!confirmDelete) return;
+      if (!confirmDelete) return;
 
-    onSubtaskDelete(subtaskId);
-    toast.success('Subtask deleted');
-  }, [onSubtaskDelete]);
+      onSubtaskDelete(subtaskId);
+      toast.success('Subtask deleted');
+    },
+    [onSubtaskDelete]
+  );
 
-  const handleStatusChange = useCallback((subtaskId: string, status: TaskStatus) => {
-    onSubtaskUpdate(subtaskId, { status });
-    toast.success(`Subtask status updated to ${status}`);
-  }, [onSubtaskUpdate]);
+  const handleStatusChange = useCallback(
+    (subtaskId: string, status: TaskStatus) => {
+      onSubtaskUpdate(subtaskId, { status });
+      toast.success(`Subtask status updated to ${status}`);
+    },
+    [onSubtaskUpdate]
+  );
 
-  const handleAddNew = useCallback((data: SubtaskFormData) => {
-    const newSubtask: Omit<Subtask, 'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'> = {
-      ...data,
-      progress: 0,
-      checklist: [],
-      taskId,
-      isDeleted: false,
-      comments: []
-    };
-    onSubtaskAdd(newSubtask);
-    setIsAddingNew(false);
-    resetAddForm();
-    toast.success('Subtask added');
-  }, [onSubtaskAdd, resetAddForm, taskId]);
+  const handleAddNew = useCallback(
+    (data: SubtaskFormData) => {
+      const newSubtask: Omit<
+        Subtask,
+        'id' | 'createdAt' | 'updatedAt' | 'createdBy' | 'updatedBy'
+      > = {
+        ...data,
+        progress: 0,
+        checklist: [],
+        taskId,
+        isDeleted: false,
+        comments: [],
+      };
+      onSubtaskAdd(newSubtask);
+      setIsAddingNew(false);
+      resetAddForm();
+      toast.success('Subtask added');
+    },
+    [onSubtaskAdd, resetAddForm, taskId]
+  );
 
   // =============================================================================
   // Computed Values
   // =============================================================================
 
-  const completedCount = subtasks.filter(s => s.status === TaskStatus.COMPLETED).length;
-  const totalEstimatedHours = subtasks.reduce((sum, s) => sum + (s.estimatedHours || 0), 0);
+  const completedCount = subtasks.filter(
+    s => s.status === TaskStatus.COMPLETED
+  ).length;
+  const totalEstimatedHours = subtasks.reduce(
+    (sum, s) => sum + (s.estimatedHours || 0),
+    0
+  );
 
   // =============================================================================
   // Render
@@ -542,20 +598,18 @@ export function SubtaskList({
 
   return (
     <div className={className}>
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="space-y-1">
           <h3 className="text-lg font-semibold">Subtasks</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             {completedCount} of {subtasks.length} completed
-            {totalEstimatedHours > 0 && ` • ${formatDuration(totalEstimatedHours)} total estimated`}
+            {totalEstimatedHours > 0 &&
+              ` • ${formatDuration(totalEstimatedHours)} total estimated`}
           </p>
         </div>
         {!isReadOnly && (
-          <Button
-            onClick={() => setIsAddingNew(true)}
-            disabled={isAddingNew}
-          >
-            <Plus className="h-4 w-4 mr-2" />
+          <Button onClick={() => setIsAddingNew(true)} disabled={isAddingNew}>
+            <Plus className="mr-2 h-4 w-4" />
             Add Subtask
           </Button>
         )}
@@ -563,7 +617,10 @@ export function SubtaskList({
 
       {subtasks.length > 0 && (
         <div className="mb-4">
-          <Progress value={(completedCount / subtasks.length) * 100} className="h-2" />
+          <Progress
+            value={(completedCount / subtasks.length) * 100}
+            className="h-2"
+          />
         </div>
       )}
 
@@ -572,8 +629,11 @@ export function SubtaskList({
         {isAddingNew && (
           <Card>
             <CardContent className="p-4">
-              <form onSubmit={handleAddSubmit(handleAddNew)} className="space-y-4">
-                <h4 className="font-medium mb-4">Add New Subtask</h4>
+              <form
+                onSubmit={handleAddSubmit(handleAddNew)}
+                className="space-y-4"
+              >
+                <h4 className="mb-4 font-medium">Add New Subtask</h4>
 
                 {/* Title */}
                 <div className="space-y-2">
@@ -591,7 +651,9 @@ export function SubtaskList({
                     )}
                   />
                   {addErrors.title && (
-                    <p className="text-sm text-destructive">{addErrors.title.message}</p>
+                    <p className="text-destructive text-sm">
+                      {addErrors.title.message}
+                    </p>
                   )}
                 </div>
 
@@ -620,15 +682,20 @@ export function SubtaskList({
                       name="priority"
                       control={addControl}
                       render={({ field }) => (
-                        <Select value={field.value} onValueChange={field.onChange}>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {Object.values(GoalPriority).map((priority) => (
+                            {Object.values(GoalPriority).map(priority => (
                               <SelectItem key={priority} value={priority}>
                                 <div className="flex items-center gap-2">
-                                  <span className={`w-2 h-2 rounded-full ${getPriorityColor(priority)}`} />
+                                  <span
+                                    className={`h-2 w-2 rounded-full ${getPriorityColor(priority)}`}
+                                  />
                                   {priority}
                                 </div>
                               </SelectItem>
@@ -652,7 +719,13 @@ export function SubtaskList({
                           step="0.5"
                           min="0"
                           value={value || ''}
-                          onChange={(e) => onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
+                          onChange={e =>
+                            onChange(
+                              e.target.value
+                                ? parseFloat(e.target.value)
+                                : undefined
+                            )
+                          }
                           placeholder="0"
                         />
                       )}
@@ -661,12 +734,16 @@ export function SubtaskList({
                 </div>
 
                 <div className="flex items-center justify-end gap-2">
-                  <Button type="button" variant="outline" onClick={handleCancel}>
-                    <X className="h-4 w-4 mr-2" />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleCancel}
+                  >
+                    <X className="mr-2 h-4 w-4" />
                     Cancel
                   </Button>
                   <Button type="submit">
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Plus className="mr-2 h-4 w-4" />
                     Add Subtask
                   </Button>
                 </div>
@@ -682,17 +759,22 @@ export function SubtaskList({
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext items={subtasks.map(s => s.id)} strategy={verticalListSortingStrategy}>
-              {subtasks.map((subtask) => (
+            <SortableContext
+              items={subtasks.map(s => s.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {subtasks.map(subtask => (
                 <SortableSubtaskItem
                   key={subtask.id}
                   subtask={subtask}
                   isEditing={editingId === subtask.id}
                   onEdit={() => handleEdit(subtask.id)}
-                  onSave={(data) => handleSave(subtask.id, data)}
+                  onSave={data => handleSave(subtask.id, data)}
                   onCancel={handleCancel}
                   onDelete={() => handleDelete(subtask.id, subtask.title)}
-                  onStatusChange={(status) => handleStatusChange(subtask.id, status)}
+                  onStatusChange={status =>
+                    handleStatusChange(subtask.id, status)
+                  }
                   availableAssignees={availableAssignees}
                   isReadOnly={isReadOnly}
                 />
@@ -702,14 +784,16 @@ export function SubtaskList({
         ) : !isAddingNew ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <AlertCircle className="h-8 w-8 mx-auto text-muted-foreground mb-4" />
-              <h4 className="font-medium text-muted-foreground mb-2">No subtasks yet</h4>
-              <p className="text-sm text-muted-foreground mb-4">
+              <AlertCircle className="text-muted-foreground mx-auto mb-4 h-8 w-8" />
+              <h4 className="text-muted-foreground mb-2 font-medium">
+                No subtasks yet
+              </h4>
+              <p className="text-muted-foreground mb-4 text-sm">
                 Break down this task into smaller, manageable subtasks.
               </p>
               {!isReadOnly && (
                 <Button onClick={() => setIsAddingNew(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="mr-2 h-4 w-4" />
                   Add First Subtask
                 </Button>
               )}
