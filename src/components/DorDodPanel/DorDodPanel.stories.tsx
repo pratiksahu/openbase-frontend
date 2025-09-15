@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 // Action utilities not available in Storybook 9
 // Removed unused action function - can be re-enabled if needed for debugging
-// const action = (name: string) => (...args: any[]) => console.log(name, ...args);
 import { defaultTemplates } from './defaultTemplates';
 import { DorDodPanel } from './DorDodPanel';
 import type { Criterion } from './DorDodPanel.types';
