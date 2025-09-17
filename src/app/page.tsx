@@ -20,8 +20,8 @@ export default function HomePage() {
           <div className="space-y-8 text-center">
             <div className="space-y-4">
               <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-                Build Amazing Apps
-                <span className="text-primary block">Faster Than Ever</span>
+                Transform Your Ideas
+                <span className="text-primary block">Into Reality</span>
               </h1>
               <p className="text-muted-foreground mx-auto max-w-2xl text-xl">
                 A modern Next.js starter with everything you need to build
