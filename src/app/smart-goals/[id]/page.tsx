@@ -109,17 +109,17 @@ const calculateSmartCompleteness = (goal: SmartGoal): number => {
   if (goal.description && goal.description.length > 50) score += 20;
 
   // Measurable (20%)
-  if (goal.measurable && goal.measurable.metrics && goal.measurable.metrics.length > 0) {
+  if (goal.measurable && goal.measurable.targetValue > 0) {
     score += 20;
   }
 
   // Achievable (20%)
-  if (goal.achievable && goal.achievable.resources && goal.achievable.resources.length > 0) {
+  if (goal.achievability && goal.achievability.requiredResources && goal.achievability.requiredResources.length > 0) {
     score += 20;
   }
 
   // Relevant (20%)
-  if (goal.relevant && goal.relevant.rationale) {
+  if (goal.relevance && goal.relevance.rationale) {
     score += 20;
   }
 
@@ -412,18 +412,21 @@ export default function SmartGoalDetailPage() {
             title="Measurable"
             icon={BarChart3}
             color="bg-green-500"
-            score={goal.measurable?.metrics ? 100 : 0}
+            score={goal.measurable ? 100 : 0}
           >
             <div className="space-y-2">
-              {goal.measurable?.metrics?.map((metric, index) => (
-                <div key={index}>
-                  <p className="text-sm font-medium">{metric.name}</p>
+              {goal.measurable ? (
+                <div>
+                  <p className="text-sm font-medium">{goal.measurable.metricType}</p>
                   <p className="text-xs text-muted-foreground">
-                    {metric.currentValue}/{metric.targetValue} {metric.unit}
+                    {goal.measurable.currentValue}/{goal.measurable.targetValue} {goal.measurable.unit}
                   </p>
+                  <Progress
+                    value={(goal.measurable.currentValue / goal.measurable.targetValue) * 100}
+                    className="mt-2 h-2"
+                  />
                 </div>
-              ))}
-              {!goal.measurable?.metrics && (
+              ) : (
                 <p className="text-sm text-muted-foreground">No metrics defined</p>
               )}
             </div>
@@ -434,14 +437,19 @@ export default function SmartGoalDetailPage() {
             title="Achievable"
             icon={CheckCircle2}
             color="bg-yellow-500"
-            score={goal.achievable?.resources ? 100 : 0}
+            score={goal.achievability ? goal.achievability.score * 100 : 0}
           >
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Resources</p>
-              {goal.achievable?.resources?.map((resource, index) => (
-                <p key={index} className="text-xs">• {resource}</p>
+              {goal.achievability?.requiredResources?.map((resource, index) => (
+                <p key={index} className="text-xs">• {resource.name}</p>
               ))}
-              {!goal.achievable?.resources && (
+              {goal.achievability && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Success Probability: {Math.round((goal.achievability.successProbability || 0) * 100)}%
+                </p>
+              )}
+              {!goal.achievability && (
                 <p className="text-sm text-muted-foreground">Not assessed</p>
               )}
             </div>
@@ -452,13 +460,18 @@ export default function SmartGoalDetailPage() {
             title="Relevant"
             icon={Lightbulb}
             color="bg-purple-500"
-            score={goal.relevant?.rationale ? 100 : 0}
+            score={goal.relevance ? goal.relevance.relevanceScore * 100 : 0}
           >
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Alignment</p>
               <p className="text-sm">
-                {goal.relevant?.rationale || 'Not specified'}
+                {goal.relevance?.rationale || 'Not specified'}
               </p>
+              {goal.relevance && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Value Score: {Math.round((goal.relevance.valueScore || 0) * 100)}%
+                </p>
+              )}
             </div>
           </SmartCriteriaCard>
 
@@ -499,24 +512,28 @@ export default function SmartGoalDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {goal.timebound?.milestones?.map((milestone, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Trophy className={`h-5 w-5 ${milestone.completed ? 'text-green-600' : 'text-gray-400'}`} />
-                      <div>
-                        <p className="font-medium">{milestone.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          Due: {formatDate(milestone.date)}
-                        </p>
+                {goal.checkpoints && goal.checkpoints.length > 0 ? (
+                  goal.checkpoints.map((checkpoint) => (
+                    <div key={checkpoint.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <Trophy className={`h-5 w-5 ${checkpoint.value >= goal.measurable.targetValue ? 'text-green-600' : 'text-gray-400'}`} />
+                        <div>
+                          <p className="font-medium">Checkpoint: {checkpoint.value} {goal.measurable.unit}</p>
+                          <p className="text-sm text-muted-foreground">
+                            Recorded: {formatDate(checkpoint.recordedDate)}
+                          </p>
+                          {checkpoint.note && (
+                            <p className="text-xs text-muted-foreground">{checkpoint.note}</p>
+                          )}
+                        </div>
                       </div>
+                      <Badge variant={checkpoint.value >= goal.measurable.targetValue ? 'default' : 'secondary'}>
+                        {Math.round((checkpoint.value / goal.measurable.targetValue) * 100)}%
+                      </Badge>
                     </div>
-                    <Badge variant={milestone.completed ? 'default' : 'secondary'}>
-                      {milestone.completed ? 'Completed' : 'Pending'}
-                    </Badge>
-                  </div>
-                ))}
-                {!goal.timebound?.milestones?.length && (
-                  <p className="text-muted-foreground">No milestones defined</p>
+                  ))
+                ) : (
+                  <p className="text-muted-foreground">No checkpoints recorded</p>
                 )}
               </div>
             </CardContent>
@@ -616,25 +633,29 @@ export default function SmartGoalDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {goal.measurable?.metrics?.map((metric, index) => (
-                  <div key={index} className="space-y-2">
+                {goal.measurable ? (
+                  <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <h4 className="font-medium">{metric.name}</h4>
+                      <h4 className="font-medium">{goal.measurable.metricType} Metric</h4>
                       <Badge variant="outline">
-                        {Math.round((metric.currentValue / metric.targetValue) * 100)}%
+                        {Math.round((goal.measurable.currentValue / goal.measurable.targetValue) * 100)}%
                       </Badge>
                     </div>
                     <Progress
-                      value={(metric.currentValue / metric.targetValue) * 100}
+                      value={(goal.measurable.currentValue / goal.measurable.targetValue) * 100}
                       className="h-2"
                     />
                     <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>Current: {metric.currentValue} {metric.unit}</span>
-                      <span>Target: {metric.targetValue} {metric.unit}</span>
+                      <span>Current: {goal.measurable.currentValue} {goal.measurable.unit}</span>
+                      <span>Target: {goal.measurable.targetValue} {goal.measurable.unit}</span>
                     </div>
+                    {goal.measurable.minimumValue !== undefined && (
+                      <p className="text-xs text-muted-foreground">
+                        Minimum: {goal.measurable.minimumValue} {goal.measurable.unit}
+                      </p>
+                    )}
                   </div>
-                ))}
-                {!goal.measurable?.metrics?.length && (
+                ) : (
                   <p className="text-muted-foreground text-center py-4">
                     No metrics defined. Add measurable indicators to track progress.
                   </p>
@@ -673,20 +694,20 @@ export default function SmartGoalDetailPage() {
 
                 <div className="space-y-3">
                   <h4 className="text-sm font-medium">Collaborators</h4>
-                  {goal.collaborators?.map((collaborator, index) => (
+                  {goal.collaborators?.map((collaboratorId, index) => (
                     <div key={index} className="flex items-center space-x-3">
                       <Avatar>
                         <AvatarImage
-                          src={`https://api.dicebear.com/7.x/avatars/svg?seed=${collaborator.userId}`}
+                          src={`https://api.dicebear.com/7.x/avatars/svg?seed=${collaboratorId}`}
                         />
                         <AvatarFallback>
-                          {collaborator.userId.slice(0, 2).toUpperCase()}
+                          {collaboratorId.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium">{collaborator.userId}</p>
-                        <p className="text-sm text-muted-foreground capitalize">
-                          {collaborator.role.replace('_', ' ')}
+                        <p className="font-medium">{collaboratorId}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Team Member
                         </p>
                       </div>
                     </div>

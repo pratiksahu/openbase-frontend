@@ -109,16 +109,16 @@ const calculateSmartScore = (goal: SmartGoal): number => {
   if (goal.description && goal.description.length > 50) score += 20;
 
   // Measurable (20 points)
-  if (goal.measurable?.metrics && goal.measurable.metrics.length > 0) score += 20;
+  if (goal.measurable && goal.measurable.targetValue > 0) score += 20;
 
   // Achievable (20 points)
-  if (goal.achievable?.resources && goal.achievable.resources.length > 0) score += 20;
+  if (goal.achievability && goal.achievability.requiredResources && goal.achievability.requiredResources.length > 0) score += 20;
 
   // Relevant (20 points)
-  if (goal.relevant?.rationale) score += 20;
+  if (goal.relevance && goal.relevance.rationale) score += 20;
 
   // Time-bound (20 points)
-  if (goal.timebound?.targetDate) score += 20;
+  if (goal.timebound && goal.timebound.targetDate) score += 20;
 
   return score;
 };
@@ -235,7 +235,7 @@ const SmartGoalCard: React.FC<SmartGoalCardProps> = ({ goal, view }) => {
               </div>
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                  goal.measurable?.metrics ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'
+                  goal.measurable && goal.measurable.targetValue > 0 ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'
                 }`}
                 title="Measurable"
               >
@@ -243,7 +243,7 @@ const SmartGoalCard: React.FC<SmartGoalCardProps> = ({ goal, view }) => {
               </div>
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                  goal.achievable?.resources ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-400'
+                  goal.achievability && goal.achievability.requiredResources?.length > 0 ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-400'
                 }`}
                 title="Achievable"
               >
@@ -251,7 +251,7 @@ const SmartGoalCard: React.FC<SmartGoalCardProps> = ({ goal, view }) => {
               </div>
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                  goal.relevant?.rationale ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-400'
+                  goal.relevance && goal.relevance.rationale ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-400'
                 }`}
                 title="Relevant"
               >
@@ -334,13 +334,13 @@ export default function SmartGoalsPage() {
       if (filters.smart.hasSpecific && (!goal.description || goal.description.length < 50)) {
         return false;
       }
-      if (filters.smart.hasMeasurable && (!goal.measurable?.metrics || goal.measurable.metrics.length === 0)) {
+      if (filters.smart.hasMeasurable && (!goal.measurable || goal.measurable.targetValue <= 0)) {
         return false;
       }
-      if (filters.smart.hasAchievable && (!goal.achievable?.resources || goal.achievable.resources.length === 0)) {
+      if (filters.smart.hasAchievable && (!goal.achievability || !goal.achievability.requiredResources || goal.achievability.requiredResources.length === 0)) {
         return false;
       }
-      if (filters.smart.hasRelevant && !goal.relevant?.rationale) {
+      if (filters.smart.hasRelevant && !goal.relevance?.rationale) {
         return false;
       }
       if (filters.smart.hasTimebound && !goal.timebound?.targetDate) {
